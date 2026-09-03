@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { calcCoerencia, calcPeso, calcularPlacar, concord, forca, forcaDoCampo, pautasDoBolso, scoreBolso, scoreCamisa, veredito } from '../src/lib/motor';
+import { TOLERANCIA_CAMISA, calcCoerencia, calcPeso, calcularPlacar, concord, forca, forcaDoCampo, leituraDaForca, pautasDoBolso, scoreBolso, scoreCamisa, sugerirTrocas, veredito } from '../src/lib/motor';
 import type { Candidato, Cargo, Dataset, Lado, Tema } from '../src/lib/tipos';
 
 const temas: Tema[] = [
@@ -117,5 +117,66 @@ describe('placar completo', () => {
     expect(p.linhas).toHaveLength(5);
     expect(p.linhas[0].camisa).toBe(100);
     expect(p.forca).toBe(forca(p.coerencia, p.peso));
+  });
+});
+
+describe('leitura da força', () => {
+  const esc = [A, B, C, D, E].map((c, i) => ({ cargo: ds.cargos[i], candidato: c }));
+  const base = calcularPlacar({ perfil: {}, respostas: { ir: 'F', arma: 'C', sus: 'F' }, decisivas: ['ir'], time: { presidente: 'a', governador: 'b', senador: 'c', federal: 'd', estadual: 'e' } }, ds)!;
+  it('aponta o eixo que segura a força e o teto de cada um', () => {
+    const l = leituraDaForca({ ...base, coerencia: 80, peso: 20 });
+    expect(l.gargalo).toBe('peso');
+    expect(l.seCoerencia100).toBe(forca(100, 20)); expect(l.sePeso100).toBe(forca(80, 100));
+    expect(leituraDaForca({ ...base, coerencia: 20, peso: 80 }).gargalo).toBe('coerencia');
+    expect(leituraDaForca({ ...base, coerencia: 50, peso: 55 }).gargalo).toBeNull();
+  });
+  it('mede o ganho marginal de +10 em cada eixo sem passar de 100', () => {
+    const l = leituraDaForca({ ...base, coerencia: 80, peso: 20 });
+    expect(l.ganho10.peso).toBe(forca(80, 30) - forca(80, 20));
+    expect(l.ganho10.coerencia).toBe(forca(90, 20) - forca(80, 20));
+    expect(leituraDaForca({ ...base, coerencia: 100, peso: 95 }).ganho10.peso).toBe(forca(100, 100) - forca(100, 95));
+  });
+  it('acha o cargo que mais deixa peso na mesa e quem mais faz gol contra', () => {
+    const l = leituraDaForca(base);
+    // federal (30% do placar) com PT 64/257 = 25 → perde 75 × .3 ≈ 23 pontos; é o maior vazamento
+    expect(l.vazaPeso?.cargo).toBe('federal'); expect(l.vazaPeso?.perdido).toBe(Math.round(75 * .3));
+    // B (PL) está nos 3 gols contra; A, D, E em 1 cada; C em nenhum
+    expect(l.golsPorCargo[0]).toMatchObject({ n: 3 }); expect(l.golsPorCargo[0].cargo.id).toBe('governador');
+    expect(l.golsPorCargo.some(x => x.cargo.id === 'senador')).toBe(false);
+    expect(leituraDaForca({ ...base, gols: [], detalhePeso: base.detalhePeso.map(d => ({ ...d, v: 100 })), escalados: esc }).vazaPeso).toBeNull();
+  });
+});
+
+describe('sugestões de troca', () => {
+  const B2 = cand('b2', 'PT', 'governador', { ir: 'F', arma: 'C', sus: 'F' });        // governador alinhado com o resto
+  const C2 = cand('c2', 'PL', 'senador', { ir: 'C', arma: 'F', sus: 'C' });           // senador que veste a camisa oposta
+  const C3 = cand('c3', 'PT', 'senador', { ir: 'F', arma: 'C', sus: 'F' });
+  const C4 = { ...cand('c4', 'PT', 'senador', { ir: 'F', arma: 'C', sus: 'F' }), nominais: 2 };  // mesmas posições que C3, com voto real
+  const ds2: Dataset = { ...ds, cargos: [ds.cargos[0], { ...ds.cargos[1], candidatos: [B, B2] }, { ...ds.cargos[2], candidatos: [C, C2, C3, C4] }, ds.cargos[3], ds.cargos[4]] };
+  const st = { perfil: {}, respostas: { ir: 'F' as const, arma: 'C' as const, sus: 'F' as const }, decisivas: ['ir'], time: { presidente: 'a', governador: 'b', senador: 'c', federal: 'd', estadual: 'e' } };
+  const atual = calcularPlacar(st, ds2)!;
+  const sug = sugerirTrocas(st, ds2, atual);
+  it('só sugere troca que sobe a força, uma por cargo, ordenada pelo ganho', () => {
+    expect(sug.length).toBeGreaterThan(0);
+    expect(new Set(sug.map(s => s.cargo.id)).size).toBe(sug.length);
+    for (const s of sug) { expect(s.delta.forca).toBeGreaterThan(0); expect(s.placar.forca).toBe(atual.forca + s.delta.forca); }
+    for (let i = 1; i < sug.length; i++) expect(sug[i - 1].delta.forca).toBeGreaterThanOrEqual(sug[i].delta.forca);
+    // trocar o governador PL por um PT tira os 3 gols contra
+    const gov = sug.find(s => s.cargo.id === 'governador')!;
+    expect(gov.para.id).toBe('b2'); expect(gov.delta.gols).toBe(-3); expect(gov.placar.gols).toHaveLength(0);
+  });
+  it('não sugere quem veste menos a camisa do que o atual', () => {
+    for (const s of sug) if (s.camisa.de !== null && s.camisa.para !== null) expect(s.camisa.para).toBeGreaterThanOrEqual(s.camisa.de - TOLERANCIA_CAMISA);
+    expect(sug.some(s => s.para.id === 'c2')).toBe(false);
+  });
+  it('agrupa candidatos com as mesmas posições e representa pelo que tem voto nominal', () => {
+    const sen = sug.find(s => s.cargo.id === 'senador')!;
+    expect(sen.para.id).toBe('c4'); expect(sen.iguais).toBe(1);
+  });
+  it('devolve vazio com time incompleto ou já no teto', () => {
+    expect(sugerirTrocas({ ...st, time: { presidente: 'a' } }, ds2, atual)).toEqual([]);
+    const topo = { ...st, time: { ...st.time, governador: 'b2', senador: 'c4' } };
+    const p2 = calcularPlacar(topo, ds2)!;
+    expect(sugerirTrocas(topo, ds2, p2)).toEqual([]);
   });
 });

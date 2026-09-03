@@ -151,3 +151,73 @@ export function calcularPlacar(st: EstadoEleitor, ds: Dataset): Placar | null {
   if (divergencia !== null && Math.abs(divergencia.d) < 15) divergencia = null;
   return { forca: forca(coerencia, peso), coerencia, peso, veredito: veredito(coerencia, peso), gols: unicos, detalhePeso: detalhe, linhas, divergencia, bolso, escalados, decisivas: [...decisivas] };
 }
+
+/* ==========================================================================
+   LEITURA DA FORÇA — por que o número é esse e o que mexe nele
+   ========================================================================== */
+export interface Leitura {
+  gargalo: 'coerencia' | 'peso' | null;            // eixo que mais segura a força (null = os dois andam juntos)
+  seCoerencia100: number;                          // força se a coerência fosse 100 e o peso ficasse como está
+  sePeso100: number;                               // força se o peso fosse 100 e a coerência ficasse como está
+  ganho10: { coerencia: number; peso: number };    // quanto a força sobe com +10 pontos em cada eixo, hoje
+  vazaPeso: (DetalhePeso & { pesoNoPlacar: number; entrega: number; perdido: number }) | null;  // cargo que mais deixa peso na mesa
+  golsPorCargo: { cargo: Cargo; n: number }[];     // quem mais aparece nos gols contra (só quem aparece)
+}
+export const GARGALO_MIN = 10;                     // diferença mínima entre os eixos pra apontar um gargalo
+export function leituraDaForca(p: Pick<Placar, 'coerencia' | 'peso' | 'detalhePeso' | 'gols' | 'escalados'>): Leitura {
+  const { coerencia: c, peso: w } = p;
+  const gargalo = Math.abs(c - w) < GARGALO_MIN ? null : c < w ? 'coerencia' : 'peso';
+  const ganho10 = { coerencia: forca(Math.min(100, c + 10), w) - forca(c, w), peso: forca(c, Math.min(100, w + 10)) - forca(c, w) };
+  let vazaPeso: Leitura['vazaPeso'] = null;
+  for (const d of p.detalhePeso) {
+    const cargo = p.escalados.find(e => e.cargo.id === d.cargo)?.cargo; if (!cargo) continue;
+    const entrega = Math.round(d.v * cargo.pesoNoPlacar), perdido = Math.round((100 - d.v) * cargo.pesoNoPlacar);
+    if (perdido > 0 && (!vazaPeso || perdido > vazaPeso.perdido)) vazaPeso = { ...d, pesoNoPlacar: cargo.pesoNoPlacar, entrega, perdido };
+  }
+  const conta = new Map<CargoId, number>();
+  for (const g of p.gols) for (const e of [g.a, g.b]) conta.set(e.cargo.id, (conta.get(e.cargo.id) ?? 0) + 1);
+  const golsPorCargo = p.escalados.map(e => ({ cargo: e.cargo, n: conta.get(e.cargo.id) ?? 0 })).filter(x => x.n > 0).sort((a, b) => b.n - a.n);
+  return { gargalo, seCoerencia100: forca(100, w), sePeso100: forca(c, 100), ganho10, vazaPeso, golsPorCargo };
+}
+
+/* ==========================================================================
+   SUGESTÕES — que troca de UM jogador deixa o time mais forte?
+   Mantém os outros quatro, recalcula o placar inteiro e só considera quem veste a camisa
+   da pessoa tanto quanto o atual (tolerância de TOLERANCIA_CAMISA pontos). Não é recomendação
+   de voto: é o que o placar faria. Candidatos do mesmo partido com posições idênticas têm o
+   mesmo efeito, então entram como um grupo (`iguais`) com um representante.
+   ========================================================================== */
+export const TOLERANCIA_CAMISA = 5;
+export interface Sugestao {
+  cargo: Cargo;
+  de: Candidato;
+  para: Candidato;                                 // representante do grupo (mais votos nominais, depois nome)
+  iguais: number;                                  // outros candidatos do mesmo partido com as mesmas posições
+  placar: Placar;
+  delta: { forca: number; coerencia: number; peso: number; gols: number };
+  camisa: { de: number | null; para: number | null };
+}
+function assinatura(c: Candidato, temas: Tema[]): string { return c.partido + '|' + temas.map(t => posicaoDe(c, t.id)).join(''); }
+export function sugerirTrocas(st: EstadoEleitor, ds: Dataset, atual: Placar, tolerancia = TOLERANCIA_CAMISA): Sugestao[] {
+  const decisivas = new Set(st.decisivas);
+  const out: Sugestao[] = [];
+  for (const cargo of ds.cargos) {
+    const de = cargo.candidatos.find(c => c.id === st.time[cargo.id]); if (!de) continue;
+    const camisaDe = scoreCamisa(de, st.respostas, decisivas, ds.temas);
+    const grupos = new Map<string, Candidato[]>();
+    for (const c of cargo.candidatos) { if (c.id === de.id) continue; const k = assinatura(c, ds.temas); grupos.set(k, [...(grupos.get(k) ?? []), c]); }
+    let melhor: Sugestao | null = null;
+    for (const grupo of grupos.values()) {
+      const para = [...grupo].sort((a, b) => b.nominais - a.nominais || a.nome.localeCompare(b.nome))[0];
+      const camisaPara = scoreCamisa(para, st.respostas, decisivas, ds.temas);
+      if (camisaDe !== null && camisaPara !== null && camisaPara < camisaDe - tolerancia) continue;
+      const placar = calcularPlacar({ ...st, time: { ...st.time, [cargo.id]: para.id } }, ds); if (!placar) continue;
+      const delta = { forca: placar.forca - atual.forca, coerencia: placar.coerencia - atual.coerencia, peso: placar.peso - atual.peso, gols: placar.gols.length - atual.gols.length };
+      if (delta.forca <= 0) continue;
+      const s: Sugestao = { cargo, de, para, iguais: grupo.length - 1, placar, delta, camisa: { de: camisaDe, para: camisaPara } };
+      if (!melhor || delta.forca > melhor.delta.forca || (delta.forca === melhor.delta.forca && (delta.gols < melhor.delta.gols || (delta.gols === melhor.delta.gols && (camisaPara ?? 0) > (melhor.camisa.para ?? 0))))) melhor = s;
+    }
+    if (melhor) out.push(melhor);
+  }
+  return out.sort((a, b) => b.delta.forca - a.delta.forca || a.delta.gols - b.delta.gols);
+}

@@ -29,7 +29,7 @@ scripts/fetch-tse.ts         consulta_cand_2026 → tse-2026.json · consulta_ca
 scripts/build-dataset.ts     casa candidato ↔ mandato (CPF na Câmara, nome no Senado), resolve votos, gera 27 datasets + índice
 scripts/validate-dataset.ts  zod + invariantes em cada UF (soma de bancadas, quórum, ids, UF dos candidatos)
 
-src/lib/motor.ts             cálculo puro: camisa, bolso, coerência, gol contra, peso, força, veredito
+src/lib/motor.ts             cálculo puro: camisa, bolso, coerência, gol contra, peso, força, veredito, leitura da força, sugestões de troca
 src/lib/dataset.ts           carrega /dados/<UF>.json e hidrata posições (voto real > estimativa do partido)
 src/lib/estado.ts            persistência local + link compartilhável (#s=…, com a UF)
 src/lib/stories.ts           imagem 1080×1920 pros stories (canvas, no navegador; Web Share ou download)

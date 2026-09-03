@@ -6,7 +6,7 @@ import perfilJson from '../data/perfil.json';
 import ufsJson from '../data/ufs.json';
 import temasJson from '../data/temas.json';
 import type { Candidato, Cargo, CargoId, Dataset, EstadoEleitor, Resposta, Tema } from './tipos';
-import { calcularPlacar, type Placar } from './motor';
+import { TOLERANCIA_CAMISA, calcularPlacar, leituraDaForca, sugerirTrocas, type Placar } from './motor';
 import { carregarDataset } from './dataset';
 import { carregar, codificar, decodificar, estadoVazio, limpar, salvar } from './estado';
 import { esc } from './formato';
@@ -24,6 +24,7 @@ let st: EstadoEleitor = estadoVazio();
 let passoAtual = 0;
 let alheio = false;                             // placar aberto por link de outra pessoa
 let placarAtual: Placar | null = null;
+let trocas: { cargo: CargoId; de: string; para: string; forcaAntes: number }[] = [];   // trocas de teste feitas a partir das sugestões
 
 type Passo =
   | { fase: string; tipo: 'uf'; h: string; d: string }
@@ -66,7 +67,7 @@ function mostrar(sec: 'wizard' | 'resultado') {
 }
 function comecar(zerar = false) {
   if (zerar) { st = estadoVazio(); ds = null; limpar(); }
-  alheio = false; passoAtual = 0; render(); mostrar('wizard');
+  alheio = false; trocas = []; passoAtual = 0; render(); mostrar('wizard');
 }
 /* retoma de onde a pessoa parou; com o time completo, vai direto pro placar */
 async function continuar() {
@@ -76,7 +77,7 @@ async function continuar() {
   if (passoAtual < 0) { passoAtual = PASSOS.length - 1; calcular(); return; }
   render(); mostrar('wizard');
 }
-function reescalar() { alheio = false; passoAtual = PASSOS.length - 2; render(); mostrar('wizard'); }
+function reescalar() { alheio = false; trocas = []; passoAtual = PASSOS.length - 2; render(); mostrar('wizard'); }
 function voltar() { if (passoAtual === 0) return; passoAtual--; render(); }
 function avancar() { if (passoAtual < PASSOS.length - 1) { passoAtual++; render(); } else calcular(); }
 function talvezAvancar(eraCompleto: boolean) { salvar(st); atualizarNav(); if (!eraCompleto && completo(passoAtual)) setTimeout(avancar, 350); }
@@ -103,7 +104,7 @@ async function escolherUf(uf: string, avancarDepois = true) {
 
 /* ---------- render das telas ---------- */
 function seloCand(c: Candidato): string {
-  return c.nominais > 0 ? `<span class="selo real">${c.nominais} voto${c.nominais > 1 ? 's' : ''} nominal${c.nominais > 1 ? 'is' : ''}</span>` : `<span class="selo est">estimativa</span>`;
+  return c.nominais > 0 ? `<span class="selo real">${c.nominais} ${c.nominais > 1 ? 'votos nominais' : 'voto nominal'}</span>` : `<span class="selo est">estimativa</span>`;
 }
 function rotuloCand(c: Candidato): string {
   return `${esc(c.nome)} · ${esc(c.partido)}${c.numero ? ' · ' + esc(c.numero) : ''}${c.mandato ? ' · mandato atual' : ''}`;
@@ -287,6 +288,8 @@ function renderResultado(p: Placar, d: Dataset) {
   $('vereditoDesc').textContent = p.veredito.d;
   $('coerH').textContent = p.decisivas.length ? `medida só nas ${p.decisivas.length} pautas que você marcou como decisivas` : `medida nas ${TEMAS.length} pautas`;
   $('pesoH').textContent = 'quanto do quórum de aprovação seu time cobre';
+  renderTeste(p);
+  renderLeitura(p, d);
 
   const g = $('gols'); g.className = 'gols' + (p.gols.length ? '' : ' zero');
   if (!p.gols.length) {
@@ -298,6 +301,7 @@ function renderResultado(p: Placar, d: Dataset) {
         <span class="vs">${esc(x.a.candidato.nome)} (${esc(x.a.candidato.partido)}) ${LADO(x.pa)} ${fonteTag(x.a.candidato, x.tema.id)} &nbsp;×&nbsp; ${esc(x.b.candidato.nome)} (${esc(x.b.candidato.partido)}) ${LADO(x.pb)} ${fonteTag(x.b.candidato, x.tema.id)}</span></div>`).join('') +
       (p.gols.length > 6 ? `<div class="gol" style="color:var(--muted)">+ ${p.gols.length - 6} outros embates no mesmo time.</div>` : '');
   }
+  renderSugestoes(p, d);
 
   const linhas = p.linhas.map(l => {
     const c = l.e.candidato;
@@ -332,11 +336,86 @@ function renderResultado(p: Placar, d: Dataset) {
       : `a bancada do ${esc(x.partido)} tem <b>${x.cadeiras}</b> das <b>${x.quorum}</b> cadeiras da maioria ${casaNome(x.casa, d)}`} → <code>${x.v}</code></li>`).join('')}</ul>
     Média ponderada: ${d.cargos.map(c => `${c.curto} ${Math.round(c.pesoNoPlacar * 100)}%`).join(', ')}. Bancadas da ${esc(d.casaEstadual)}: composição eleita em 2022.
     <h4>Força do time</h4>
-    <code>força = 2 × (coerência × peso) ÷ (coerência + peso)</code> — média harmônica. Ela <b>derruba</b> quem é ótimo num eixo e péssimo no outro. Um time 100% coerente e 10% pesado dá <code>18</code>, não <code>55</code>.
+    <code>força = 2 × (coerência × peso) ÷ (coerência + peso)</code> — média harmônica. Ela <b>derruba</b> quem é ótimo num eixo e péssimo no outro. Um time 100% coerente e 10% pesado dá <code>18</code>, não <code>55</code>. A leitura logo abaixo do placar diz qual eixo está segurando o seu e quanto cada 10 pontos valeriam hoje.
+    <h4>Sugestões de troca</h4>
+    Simulação, não recomendação de voto. Pra cada cargo, trocamos o escalado por cada candidato (quem tem partido e posições idênticos entra como um grupo), mantemos os outros quatro, recalculamos o placar inteiro e mostramos a troca que mais sobe a força — desde que o novo vista a sua camisa pelo menos tanto quanto o atual (tolerância de <code>${TOLERANCIA_CAMISA}</code> pontos). Quem deixaria o time mais forte te afastando do que você pensa não aparece.
     Método completo, votações usadas e cobertura por pauta em <a href="/metodo/">/metodo</a>.`;
 
   const fontes = document.getElementById('fontes');
   if (fontes) fontes.innerHTML = '<b>Fontes:</b> ' + d.fontes.map(f => `<b>${esc(f.rotulo)}:</b> ${esc(f.detalhe)}`).join(' · ') + '. Método completo e lista das votações usadas em <a href="/metodo/">/metodo</a>.';
+}
+
+/* ---------- leitura da força: por que o número é esse ---------- */
+const CAMPO_NOME = (c?: string) => c === 'esq' ? 'da esquerda' : c === 'dir' ? 'da direita' : 'do centro';
+function renderLeitura(p: Placar, d: Dataset) {
+  const l = leituraDaForca(p);
+  let abre: string;
+  if (l.gargalo === 'peso') abre = `O que segura seu time é o <b>peso</b>. A força é a média harmônica dos dois eixos, e ela puxa pro mais fraco: com peso <b>${p.peso}</b>, até uma coerência de 100 daria força <b>${l.seCoerencia100}</b>. O que falta aqui é cadeira.`;
+  else if (l.gargalo === 'coerencia') abre = `O que segura seu time é a <b>coerência</b>. A força é a média harmônica dos dois eixos, e ela puxa pro mais fraco: com coerência <b>${p.coerencia}</b>, até um peso de 100 daria força <b>${l.sePeso100}</b>. Seu time tem cadeira e gasta o voto brigando entre si.`;
+  else abre = `Coerência (<b>${p.coerencia}</b>) e peso (<b>${p.peso}</b>) andam juntos: nenhum dos dois está derrubando o outro. A força é a média harmônica deles, então pra subir de verdade os dois precisam subir.`;
+  const itens = [`<b>Cada 10 pontos</b> a mais de peso valem <b>+${l.ganho10.peso}</b> na força agora; 10 de coerência, <b>+${l.ganho10.coerencia}</b>.`];
+  if (l.vazaPeso) {
+    const x = l.vazaPeso, curto = p.escalados.find(e => e.cargo.id === x.cargo)?.cargo.curto ?? x.k;
+    const motivo = x.porCampo
+      ? (x.campo ? `o campo ${CAMPO_NOME(x.campo)} tem ${x.cadeiras} das ${x.quorum} cadeiras da maioria ${casaNome(x.casa, d)}` : `o ${esc(x.partido)} não está classificado em campo nenhum e entra com zero`)
+      : `a bancada do ${esc(x.partido)} tem ${x.cadeiras} das ${x.quorum} cadeiras da maioria ${casaNome(x.casa, d)}`;
+    itens.push(`<b>Onde o peso vaza:</b> seu ${esc(curto)} (${esc(x.partido)}) — ${motivo}. Esse cargo vale até <b>${Math.round(x.pesoNoPlacar * 100)}</b> pontos do peso e está entregando <b>${x.entrega}</b>.`);
+  }
+  if (l.golsPorCargo.length && p.gols.length) {
+    const g = l.golsPorCargo[0];
+    itens.push(`<b>Quem mais faz gol contra:</b> seu ${esc(g.cargo.curto)} está em <b>${g.n}</b> dos ${p.gols.length} gol${p.gols.length > 1 ? 's' : ''} contra.`);
+  }
+  $('leitura').innerHTML = `<div class="leitura-h">Lendo o placar</div><p>${abre}</p><ul>${itens.map(i => `<li>${i}</li>`).join('')}</ul>`;
+}
+
+/* ---------- sugestões: que troca de um jogador deixa o time mais forte ---------- */
+function renderSugestoes(p: Placar, d: Dataset) {
+  const sug = sugerirTrocas(st, d, p);
+  const intro = `<div class="sug-h">Como deixar o time <span>mais forte</span></div>
+    <p class="sug-d">Simulação, não recomendação de voto: a gente troca <b>um jogador por vez</b>, mantém os outros quatro e recalcula tudo. Só entra quem veste a sua camisa tanto quanto o atual (tolerância de ${TOLERANCIA_CAMISA} pontos) — ficar forte trocando de lado não vale.</p>`;
+  if (!sug.length) {
+    $('sugestoes').innerHTML = intro + `<div class="sug vazio">Nenhuma troca de um jogador só deixa seu time mais forte sem te afastar do que você pensa. Ou ele já está no teto do que as suas respostas permitem, ou o que falta é cadeira — e cadeira não se inventa.</div>`;
+    return;
+  }
+  const seta = (a: number, b: number) => `${a} → <b>${b}</b>`;
+  $('sugestoes').innerHTML = intro + sug.map(s => {
+    const quem = s.iguais > 0 ? `alguém do <b>${esc(s.para.partido)}</b>` : `<b>${esc(s.para.nome)}</b> (${esc(s.para.partido)})`;
+    const nota = s.iguais > 0 ? `${s.iguais + 1} candidatos do ${esc(s.para.partido)} entram com as mesmas posições — pro placar, tanto faz qual. Pra testar, a gente escala ${esc(s.para.nome)}; depois você troca por quem quiser.` : '';
+    const camisa = s.camisa.para === null ? '' : `veste sua camisa em <b>${s.camisa.para}</b>${s.camisa.de !== null ? ` (o atual: ${s.camisa.de})` : ''}`;
+    const vira = s.placar.veredito.chave !== p.veredito.chave ? ` · vira <b>${esc(s.placar.veredito.t)}</b>` : '';
+    return `<div class="sug">
+      <div class="sug-ganho">+${s.delta.forca}</div>
+      <div class="sug-corpo">
+        <div class="sug-t">Trocar seu ${esc(s.cargo.curto)} por ${quem}</div>
+        <div class="sug-l">no lugar de ${esc(s.de.nome)} (${esc(s.de.partido)})</div>
+        <div class="sug-num">força ${seta(p.forca, s.placar.forca)} · coerência ${seta(p.coerencia, s.placar.coerencia)} · peso ${seta(p.peso, s.placar.peso)} · gols contra ${seta(p.gols.length, s.placar.gols.length)}${vira}</div>
+        ${camisa ? `<div class="sug-cam">${camisa} ${seloCand(s.para)}</div>` : ''}
+        ${nota ? `<div class="sug-nota">${nota}</div>` : ''}
+        ${alheio ? '' : `<button class="sug-btn" type="button" data-troca="${esc(s.cargo.id)}" data-para="${esc(s.para.id)}">Testar essa troca</button>`}
+      </div></div>`;
+  }).join('');
+}
+function testarTroca(cargoId: CargoId, paraId: string) {
+  if (!ds || !placarAtual || alheio) return;
+  const de = st.time[cargoId]; if (!de || de === paraId) return;
+  trocas.push({ cargo: cargoId, de, para: paraId, forcaAntes: placarAtual.forca });
+  st.time[cargoId] = paraId;
+  calcular();
+}
+function desfazerTroca() {
+  const t = trocas.pop(); if (!t) return;
+  st.time[t.cargo] = t.de;
+  calcular();
+}
+function renderTeste(p: Placar) {
+  const box = $('teste'), t = trocas[trocas.length - 1];
+  box.hidden = !t; if (!t) return;
+  const cargo = cargoDe(t.cargo), de = cargo?.candidatos.find(c => c.id === t.de), para = cargo?.candidatos.find(c => c.id === t.para);
+  const delta = p.forca - t.forcaAntes;
+  box.innerHTML = `<span><b>Troca de teste:</b> ${esc(para?.nome)} (${esc(para?.partido)}) entrou no lugar de ${esc(de?.nome)} (${esc(de?.partido)}) como ${esc(cargo?.curto)}. Força: ${t.forcaAntes} → <b>${p.forca}</b> (${delta >= 0 ? '+' : ''}${delta}).</span>
+    <span class="acoes"><button class="picker-x" id="btnDesfazer" type="button">desfazer</button><button class="picker-x" id="btnManter" type="button">manter</button></span>`;
+  $('btnDesfazer').addEventListener('click', desfazerTroca);
+  $('btnManter').addEventListener('click', () => { trocas = []; box.hidden = true; });
 }
 
 /* ---------- compartilhar ---------- */
@@ -448,6 +527,10 @@ export async function iniciar() {
   $('btnStoriesFechar').addEventListener('click', () => { $('stories').hidden = true; });
   $('tela').addEventListener('click', onClickTela);
   $('tela').addEventListener('change', onChangeTela);
+  $('sugestoes').addEventListener('click', e => {
+    const b = (e.target as HTMLElement).closest<HTMLElement>('[data-troca]'); if (!b) return;
+    testarTroca(b.dataset.troca as CargoId, b.dataset.para!);
+  });
   document.querySelector('.brand')?.addEventListener('click', e => { e.preventDefault(); alheio = false; passoAtual = 0; render(); mostrar('wizard'); });
   document.addEventListener('keydown', e => {
     if ($('wizard').hidden || (e.target as HTMLElement).tagName === 'INPUT') return;
