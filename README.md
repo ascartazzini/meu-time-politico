@@ -32,6 +32,7 @@ scripts/validate-dataset.ts  zod + invariantes em cada UF (soma de bancadas, qu�
 src/lib/motor.ts             cálculo puro: camisa, bolso, coerência, gol contra, peso, força, veredito
 src/lib/dataset.ts           carrega /dados/<UF>.json e hidrata posições (voto real > estimativa do partido)
 src/lib/estado.ts            persistência local + link compartilhável (#s=…, com a UF)
+src/lib/stories.ts           imagem 1080×1920 pros stories (canvas, no navegador; Web Share ou download)
 src/lib/wizard.ts            camada de DOM do app (escolha de UF → perfil → pautas → escalação → placar)
 src/pages/index.astro        landing · app.astro · metodo.astro
 ```

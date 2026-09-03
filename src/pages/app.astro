@@ -54,9 +54,22 @@ const pautasNominais = indice.cobertura.filter(c => c.nominal > 0).length;
     <details class="metodo" id="metodo"><summary>Como esses números são calculados</summary><div class="body" id="metodoBody"></div></details>
     <div class="res-acoes">
       <button class="share" id="btnCopiar" type="button">Copiar meu placar</button>
-      <button class="share" id="btnLink" type="button">Copiar link do placar</button>
+      <button class="share" id="btnStories" type="button">Imagem pros stories</button>
+      <button class="share sec" id="btnLink" type="button">Copiar link do placar</button>
       <button class="share sec" id="btnReescalar" type="button">Mudar minha escalação</button>
-      <button class="share sec" id="btnZerar" type="button">Refazer do zero</button>
+      <button class="share sec wide" id="btnZerar" type="button">Refazer do zero</button>
+    </div>
+    <div class="stories" id="stories" hidden>
+      <div class="stories-prev"><img id="storiesImg" alt="Prévia da imagem do placar no formato dos stories (1080 por 1920)" width="1080" height="1920" /></div>
+      <div class="stories-side">
+        <div class="stories-h">Pronta pros <span>stories</span></div>
+        <p class="stories-d" id="storiesDica"></p>
+        <button class="share" id="btnStoriesShare" type="button" hidden>Compartilhar imagem</button>
+        <button class="share" id="btnStoriesBaixar" type="button">Baixar imagem</button>
+        <button class="share sec" id="btnStoriesLink" type="button">Copiar link do placar</button>
+        <button class="picker-x" id="btnStoriesFechar" type="button">fechar</button>
+        <p class="stories-nota">1080 × 1920 · gerada aqui no seu navegador · sem cadastro, nada é enviado</p>
+      </div>
     </div>
   </section>
 
