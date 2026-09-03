@@ -3,7 +3,6 @@ import Base from '../layouts/Base.astro';
 import '../styles/app.css';
 import indice from '../data/generated/indice.json';
 const n = indice.nacional;
-const pautasNominais = indice.cobertura.filter(c => c.nominal > 0).length;
 ---
 <Base title="Meu Time Político 2026 — escale seu time" badge="beta" description="Escale seus cinco votos de 2026 e descubra se o time joga junto — e se tem cadeira pra aprovar alguma coisa.">
   <section class="hero" id="intro">
@@ -13,20 +12,9 @@ const pautasNominais = indice.cobertura.filter(c => c.nominal > 0).length;
     como um time. Aqui você escala, e a gente responde três coisas: <b>quem veste sua camisa</b>,
     <b>quem mexe no seu bolso</b> e — a que ninguém te conta — <b>se esse time tem peso pra aprovar
     alguma coisa</b>.</p>
-    <div class="intro-acoes">
-      <button class="cta" id="btnComecar" type="button">Começar →</button>
-      <button class="cta sec" id="btnContinuar" type="button" hidden>Continuar de onde parei</button>
-    </div>
-    <span class="cta-note">11 telas · ~2 minutos · sem cadastro · nada sai do seu navegador</span>
-    <div class="stats">
-      <div class="stat"><div class="n">{n.candidatos.toLocaleString('pt-BR')}</div><div class="l">candidatos no país<br />disputando 4 de outubro</div></div>
-      <div class="stat"><div class="n">{n.federais.toLocaleString('pt-BR')}</div><div class="l">candidatos a deputado federal<br />para 513 vagas</div></div>
-      <div class="stat"><div class="n">{n.comVotoNominal}</div><div class="l">candidatos com voto nominal<br />registrado nas pautas</div></div>
-      <div class="stat"><div class="n">{pautasNominais}</div><div class="l">das 14 pautas<br />com voto nominal real</div></div>
-    </div>
   </section>
 
-  <div id="wizard" hidden>
+  <div id="wizard">
     <div class="prog-top"><span class="prog-fase" id="progFase">—</span><span class="prog-n" id="progN">—</span></div>
     <div class="prog" id="prog"></div>
     <div class="tela" id="tela"></div>

@@ -58,8 +58,10 @@ function completo(i: number): boolean {
   if (p.tipo === 'escala') return p.cargos.every(c => st.time[c]);
   return false;
 }
-function mostrar(sec: 'intro' | 'wizard' | 'resultado') {
-  $('intro').hidden = sec !== 'intro'; $('wizard').hidden = sec !== 'wizard'; $('resultado').hidden = sec !== 'resultado';
+/* a capa (#intro) só acompanha a primeira tela do wizard */
+function mostrar(sec: 'wizard' | 'resultado') {
+  $('wizard').hidden = sec !== 'wizard'; $('resultado').hidden = sec !== 'resultado';
+  $('intro').hidden = sec !== 'wizard' || passoAtual !== 0;
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 function comecar(zerar = false) {
@@ -75,7 +77,7 @@ async function continuar() {
   render(); mostrar('wizard');
 }
 function reescalar() { alheio = false; passoAtual = PASSOS.length - 2; render(); mostrar('wizard'); }
-function voltar() { if (passoAtual === 0) { mostrar('intro'); return; } passoAtual--; render(); }
+function voltar() { if (passoAtual === 0) return; passoAtual--; render(); }
 function avancar() { if (passoAtual < PASSOS.length - 1) { passoAtual++; render(); } else calcular(); }
 function talvezAvancar(eraCompleto: boolean) { salvar(st); atualizarNav(); if (!eraCompleto && completo(passoAtual)) setTimeout(avancar, 350); }
 function atualizarNav() {
@@ -158,7 +160,7 @@ function render() {
   tela.classList.remove('enter');
   tela.innerHTML = `<div class="tela-h">${esc(p.h)}</div>` + (p.d ? `<p class="tela-d">${p.d}</p>` : '<div style="height:10px"></div>') + corpo;
   void tela.offsetWidth; tela.classList.add('enter');
-  $('btnVoltar').hidden = false; $('btnVoltar').textContent = passoAtual === 0 ? '← Início' : '← Voltar';
+  $('btnVoltar').hidden = passoAtual === 0; $('btnVoltar').textContent = '← Voltar'; $('intro').hidden = passoAtual !== 0;
   atualizarNav();
   window.scrollTo({ top: 0, behavior: 'smooth' });
   if (p.tipo === 'escala') tela.querySelectorAll<HTMLElement>('[data-picker]').forEach(montarPicker);
@@ -433,8 +435,6 @@ async function abrirLinkCompartilhado(): Promise<boolean> {
   } catch { return false; }
 }
 export async function iniciar() {
-  $('btnComecar').addEventListener('click', () => comecar(false));
-  $('btnContinuar').addEventListener('click', () => { void continuar(); });
   $('btnVoltar').addEventListener('click', voltar);
   $('btnProx').addEventListener('click', avancar);
   $('btnReescalar').addEventListener('click', reescalar);
@@ -448,7 +448,7 @@ export async function iniciar() {
   $('btnStoriesFechar').addEventListener('click', () => { $('stories').hidden = true; });
   $('tela').addEventListener('click', onClickTela);
   $('tela').addEventListener('change', onChangeTela);
-  document.querySelector('.brand')?.addEventListener('click', e => { e.preventDefault(); mostrar('intro'); });
+  document.querySelector('.brand')?.addEventListener('click', e => { e.preventDefault(); alheio = false; passoAtual = 0; render(); mostrar('wizard'); });
   document.addEventListener('keydown', e => {
     if ($('wizard').hidden || (e.target as HTMLElement).tagName === 'INPUT') return;
     if (e.key === 'ArrowLeft') voltar();
@@ -457,11 +457,8 @@ export async function iniciar() {
 
   if (await abrirLinkCompartilhado()) return;
   window.addEventListener('hashchange', () => { void abrirLinkCompartilhado(); });
-  // tela de abertura: quem já começou ganha o botão de continuar (ou de rever o placar)
+  // a capa já vem com a primeira pergunta; quem já começou retoma de onde parou (time completo vai pro placar)
   const salvo = carregar();
-  if (salvo && (salvo.uf || Object.keys(salvo.perfil).length || Object.keys(salvo.respostas).length)) {
-    st = salvo; $('btnContinuar').hidden = false;
-    if (st.uf && Object.keys(st.time).length === 5) $('btnContinuar').textContent = 'Ver meu placar de novo';
-  }
-  if (location.hash === '#app') comecar(false);
+  if (salvo && (salvo.uf || Object.keys(salvo.perfil).length || Object.keys(salvo.respostas).length)) { st = salvo; await continuar(); }
+  else comecar(false);
 }
