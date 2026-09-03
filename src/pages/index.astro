@@ -1,147 +1,70 @@
 ---
 import Base from '../layouts/Base.astro';
-import '../styles/landing.css';
+import '../styles/app.css';
 import indice from '../data/generated/indice.json';
-const n = indice.nacional;
-const nominais = indice.cobertura.filter(c => c.nominal > 0).length;
-const fontes = [
-  { rotulo: 'Quem é candidato', detalhe: `TSE — Portal de Dados Abertos, consulta_cand_2026 (gerado em ${indice.dataTse}): ${n.candidatos.toLocaleString('pt-BR')} candidaturas nos 5 cargos, 27 estados` },
-  { rotulo: 'Quanto vale um voto', detalhe: `Câmara: 513 cadeiras, maioria absoluta 257 — bancadas via API de Dados Abertos (${indice.atualizacoes.camara.slice(0, 10)})` },
-  { rotulo: 'Peso no Senado', detalhe: `Senado: 81 cadeiras, maioria absoluta 41 — via API de Dados Abertos (${indice.atualizacoes.senado.slice(0, 10)})` },
-  { rotulo: 'Peso nas assembleias', detalhe: '27 assembleias: composição eleita em 2022 (TSE), quórum = maioria absoluta de cada casa' }
-];
 ---
-<Base title="Meu Time Político 2026 — escale seus 5 votos e veja quantos gols contra o time faz" badge="beta">
-  <header class="hero">
-    <div class="kicker">Brasil · 27 estados · 4 de outubro de 2026</div>
-    <h1>Você escala 5.<br /><span class="hl">Quantos jogam<br />contra você?</span></h1>
-    <p class="lead">Presidente, governador, senador, deputado federal, deputado estadual.
-      Você decide <b>um de cada vez</b>, em telas separadas, meses diferentes — e nunca viu os
-      cinco juntos. Aqui você escala o time e a gente responde a pergunta que ninguém faz:
-      <b>esse time joga junto? E ele consegue aprovar alguma coisa?</b></p>
-    <a class="cta" href="/app/">Escalar meu time →</a>
-    <span class="cta-note">sem cadastro · sem e-mail · nada sai do seu navegador</span>
-
-    <div class="stats">
-      <div class="stat"><div class="n" data-count>{n.candidatos.toLocaleString('pt-BR')}</div><div class="l">candidatos no país<br />disputando 4 de outubro</div></div>
-      <div class="stat"><div class="n" data-count>{n.federais.toLocaleString('pt-BR')}</div><div class="l">candidatos a deputado federal<br />para 513 vagas</div></div>
-      <div class="stat"><div class="n" data-count>257</div><div class="l">votos na Câmara<br />pra aprovar qualquer coisa</div></div>
-      <div class="stat"><div class="n" data-count>{n.partidosCamara}</div><div class="l">partidos dividindo<br />a Câmara hoje</div></div>
+<Base title="Meu Time Político 2026 — escale seu time" badge="beta" description="Escale seus cinco votos de 2026 e descubra se o time joga junto — e se tem cadeira pra aprovar alguma coisa.">
+  <div id="wizard">
+    <div class="prog-top"><span class="prog-fase" id="progFase">—</span><span class="prog-n" id="progN">—</span></div>
+    <div class="prog" id="prog"></div>
+    <div class="tela" id="tela"></div>
+    <div class="navbar">
+      <button class="nav-b" id="btnVoltar" type="button">← Voltar</button>
+      <span class="nav-hint" id="navHint">avança sozinho quando você responde tudo</span>
+      <button class="nav-b prox" id="btnProx" type="button" hidden>Próxima →</button>
     </div>
-  </header>
+  </div>
 
-  <section>
-    <h2>Três placares.<br /><span class="out">Um time.</span></h2>
-    <p class="sec-lead">Todo teste eleitoral que existe te dá uma nota por candidato, um de cada vez.
-      Aqui a nota é do <b>conjunto</b> — porque é o conjunto que governa.</p>
+  <section id="resultado" hidden>
+    <div class="alheio" id="alheio" hidden></div>
+    <div class="placar">
+      <div class="lbl">Força do time</div>
+      <div class="num" id="forcaNum">0<small>/100</small></div>
+      <div class="veredito" id="veredito">—</div>
+      <p class="veredito-d" id="vereditoDesc">—</p>
+    </div>
     <div class="eixos">
-      <div class="ex" style="--c:#00E676">
-        <div class="tag">Eixo 1</div><h3>Camisa</h3>
-        <p>Quanto ele <b>pensa como você</b>. Quatorze pautas que estão na mesa em 2026 —
-          jornada 6x1, imposto de renda, SUS, estatais, porte de arma, emendas. Você marca até
-          <b>três decisivas</b>, e elas pesam três vezes mais.</p>
-        <div class="frm">suas respostas × posição do candidato<br />igual = 1 · dividido = 0,5 · oposto = 0</div>
+      <div class="eixo coer"><div class="lbl">Coerência</div><div class="v" id="coerNum">0</div><div class="h" id="coerH">—</div></div>
+      <div class="eixo peso"><div class="lbl">Peso de aprovação</div><div class="v" id="pesoNum">0</div><div class="h" id="pesoH">—</div></div>
+    </div>
+    <div class="gols" id="gols"></div>
+    <div class="tabela" id="tabela"></div>
+    <details class="metodo" id="metodo"><summary>Como esses números são calculados</summary><div class="body" id="metodoBody"></div></details>
+    <div class="res-acoes">
+      <button class="share" id="btnCopiar" type="button">Copiar meu placar</button>
+      <button class="share" id="btnStories" type="button">Imagem pros stories</button>
+      <button class="share sec" id="btnLink" type="button">Copiar link do placar</button>
+      <button class="share sec" id="btnReescalar" type="button">Mudar minha escalação</button>
+      <button class="share sec wide" id="btnZerar" type="button">Refazer do zero</button>
+    </div>
+    <div class="stories" id="stories" hidden>
+      <div class="stories-prev"><img id="storiesImg" alt="Prévia da imagem do placar no formato dos stories (1080 por 1920)" width="1080" height="1920" /></div>
+      <div class="stories-side">
+        <div class="stories-h">Pronta pros <span>stories</span></div>
+        <p class="stories-d" id="storiesDica"></p>
+        <button class="share" id="btnStoriesShare" type="button" hidden>Mandar pro Instagram<small>abre a folha de compartilhar do celular</small></button>
+        <div class="stories-desktop" id="storiesDesktop" hidden>No celular esse botão vira <b>mandar pro Instagram</b> direto. Aqui no computador o navegador não abre a folha de compartilhar, então: baixa e manda pra você mesmo.</div>
+        <button class="share" id="btnStoriesBaixar" type="button">Baixar imagem</button>
+        <button class="share sec" id="btnStoriesLink" type="button">Copiar link do placar</button>
+        <button class="picker-x" id="btnStoriesFechar" type="button">fechar</button>
+        <p class="stories-nota">1080 × 1920 · gerada aqui no seu navegador · sem cadastro, nada é enviado</p>
       </div>
-      <div class="ex" style="--c:#FFD100">
-        <div class="tag">Eixo 2</div><h3>Bolso</h3>
-        <p>Quanto ele <b>mexe na sua vida</b>. Sua renda, seu trabalho, se você usa SUS, se seu
-          filho está na escola pública, se você mora de aluguel. Só as pautas que batem em você
-          entram nessa conta. <b>Concordar não é a mesma coisa que ser defendido.</b></p>
-        <div class="frm">fração das pautas que te atingem<br />em que ele está do lado que te protege</div>
-      </div>
-      <div class="ex" style="--c:#FF3B30">
-        <div class="tag">Eixo 3 — o que ninguém te conta</div><h3>Força</h3>
-        <p>Se o time <b>aprova alguma coisa</b>. Coerência entre os cinco, cruzada com o peso real
-          deles nas casas: um deputado sozinho vale 1 voto em 513. O que aprova é a <b>bancada</b>.</p>
-        <div class="frm">força = média harmônica (coerência, peso)<br />ela derruba quem é bom só num eixo</div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <h2>O gol contra</h2>
-    <p class="sec-lead">A parte que dói. Nas pautas que <b>você marcou como decisivas</b>, a gente
-      cruza os cinco escalados par a par. Onde um está a favor e o outro está contra, é gol contra
-      — <b>dois dos seus votos anulando um ao outro</b>. Você pagou os dois.</p>
-    <div class="golbox">
-      <div class="n" data-count>8</div>
-      <h3>gols contra num time real</h3>
-      <p>Um eleitor que escala um presidente de esquerda e um governador de direita — combinação que
-        existe e não é rara em vários estados — pode sair daqui com o time fazendo gol contra em
-        <b>saúde</b>, <b>jornada</b> e <b>segurança</b> ao mesmo tempo. Veredito típico: time rachado ou rebaixado.</p>
-      <div class="ex-real">
-        saúde &nbsp;→&nbsp; presidente <span class="f">A FAVOR</span> × governador <span class="c">CONTRA</span><br />
-        jornada 6x1 &nbsp;→&nbsp; presidente <span class="f">A FAVOR</span> × deputado estadual <span class="c">CONTRA</span><br />
-        segurança &nbsp;→&nbsp; presidente <span class="c">CONTRA</span> × governador <span class="f">A FAVOR</span>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <h2>Quatro finais<br />possíveis</h2>
-    <p class="sec-lead">Coerência num eixo, peso no outro. É aqui que mora o resultado que
-      incomoda: <b>concordar não é o mesmo que conseguir</b>.</p>
-    <div class="quad">
-      <div class="q campeao"><div class="cond">coerente + pesado</div><div class="nm">Time campeão</div><p>Joga junto e tem cadeira pra transformar acordo em lei. É raro.</p></div>
-      <div class="q rachado"><div class="cond">rachado + pesado</div><div class="nm">Elenco caro,<br />time rachado</div><p>Poder de verdade — gasto na briga entre eles mesmos.</p></div>
-      <div class="q torcida"><div class="cond">coerente + leve</div><div class="nm">Torcida organizada</div><p>Vocês concordam em quase tudo e não aprovam quase nada. Coerente e impotente.</p></div>
-      <div class="q rebaixado"><div class="cond">rachado + leve</div><div class="nm">Time rebaixado</div><p>Se contradiz e não tem peso. Os cinco votos trabalham um contra o outro.</p></div>
-    </div>
-  </section>
-
-  <section>
-    <h2>De onde<br /><span class="out">vem o dado</span></h2>
-    <p class="sec-lead">Nada aqui é opinião nossa sobre candidato. Cada número tem fonte pública
-      e cada critério está aberto dentro do app, no botão <b>"como esse número é calculado"</b>,
-      e na página <a href="/metodo/">método</a>.</p>
-    <div class="fontes">
-      {fontes.map(f => <div class="fo"><div class="k">{f.rotulo}</div><div class="v">{f.detalhe}</div></div>)}
-    </div>
-    <div class="honesto">
-      <h3>O que já é real e o que ainda é estimativa</h3>
-      <p>Os nomes, partidos, números e cargos são os do registro de candidaturas do TSE, nos 27 estados.
-        As bancadas da Câmara e do Senado vêm das APIs oficiais, atualizadas a cada build. Em <b>{nominais} das 14 pautas</b>
-        há votação nominal mapeada: <b>{n.comVotoNominal} candidatos</b> com mandato recebem a posição do <b>voto real</b>,
-        com o selo na tela e o link da votação.</p>
-      <p>Pra quem não tem mandato, ou nas pautas que ainda não foram a plenário, a posição é
-        <b>estimada pela orientação pública do partido</b> — e cada card diz isso. Nenhum voto
-        individual é atribuído a ninguém sem registro nominal. As bancadas das assembleias são a composição
-        eleita em 2022, porque nenhuma assembleia tem API — trocas de partido desde então não aparecem.</p>
-    </div>
-  </section>
-
-  <section class="fecho">
-    <h2>Escale seu time.<br /><span class="hl">Conte os gols contra.</span></h2>
-    <p class="sec-lead" style="margin:24px auto 0">Leva dois minutos. Não pede seu nome, seu e-mail, nem seu título de eleitor.</p>
-    <div class="acoes">
-      <a class="cta" href="/app/">Abrir o app →</a>
-      <a class="cta ghost" href="/metodo/">Ver o método</a>
     </div>
   </section>
 
   <footer>
-    <b>Meu Time Político 2026</b> — tech cívica, código aberto, sem vínculo com partido, campanha ou
-    candidato. Cobre os 26 estados e o Distrito Federal.<br /><br />
-    <b>Fontes:</b> TSE (Portal de Dados Abertos, consulta_cand_2026 e consulta_cand_2022) · Câmara dos Deputados (API de Dados Abertos) ·
-    Senado Federal (API de Dados Abertos). Dataset gerado em {indice.geradoEm.slice(0, 10)}.
+    <div class="aviso">
+      <b>Leia antes de acreditar no número.</b><br />
+      Nomes, partidos, números e cargos vêm do registro de candidaturas do TSE (gerado em {indice.dataTse}; registros ainda em julgamento).
+      Bancadas da Câmara e do Senado vêm das APIs oficiais; as das assembleias são a composição eleita em 2022.
+      Onde há <span class="selo real">voto nominal</span>, a posição é o voto registrado da pessoa em plenário.
+      Onde aparece <span class="selo est">estimativa</span>, é a orientação pública do partido — não um voto individual.
+    </div>
+    <div id="fontes"><b>Fontes:</b> TSE (consulta_cand_2026 e 2022) · Câmara dos Deputados · Senado Federal. Método completo e lista das votações usadas em <a href="/metodo/">/metodo</a>.</div>
   </footer>
 
   <script>
-    const vistos = new WeakSet<Element>();
-    const io = new IntersectionObserver(es => {
-      es.forEach(e => {
-        if (!e.isIntersecting || vistos.has(e.target)) return;
-        vistos.add(e.target);
-        const el = e.target as HTMLElement;
-        const alvo = parseInt(el.textContent!.replace(/\D/g, ''), 10), ini = performance.now();
-        const step = (now: number) => {
-          const p = Math.min(1, (now - ini) / 1000), k = 1 - Math.pow(1 - p, 3);
-          el.textContent = Math.round(alvo * k).toLocaleString('pt-BR');
-          if (p < 1) requestAnimationFrame(step);
-        };
-        requestAnimationFrame(step);
-      });
-    }, { threshold: .5 });
-    document.querySelectorAll('[data-count]').forEach(n => io.observe(n));
+    import { iniciar } from '../lib/wizard';
+    void iniciar();
   </script>
 </Base>

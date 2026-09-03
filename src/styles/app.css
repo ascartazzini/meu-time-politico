@@ -33,6 +33,9 @@ h1{font-family:var(--display);font-size:clamp(42px,8.4vw,86px);line-height:.92;t
 .chip{font-family:var(--body);font-size:15px;font-weight:600;cursor:pointer;background:var(--surface);color:#A9B5A2;border:1px solid var(--line);border-radius:3px;padding:12px 16px;transition:.14s}
 .chip:hover{border-color:var(--data);color:var(--ink)}
 .chip[aria-pressed="true"]{background:var(--data);border-color:var(--data);color:#06210F}
+.leia{display:inline-block;margin:-6px 0 14px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--muted);text-decoration:none;border-bottom:1px dotted #3D4A36;padding-bottom:1px}
+.leia span{color:#4E5C47}
+.leia:hover{color:var(--data);border-bottom-color:var(--data)}
 .tb-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 .tb{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.08em;cursor:pointer;background:var(--surface);border:1px solid var(--line);color:#9BA894;border-radius:3px;padding:15px 6px;transition:.14s}
 .tb:hover{color:var(--ink);border-color:var(--muted)}

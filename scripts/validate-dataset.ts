@@ -11,7 +11,7 @@ const Candidato = z.object({
   mandato: z.object({ casa: z.enum(['camara', 'senado']), id: z.number(), nome: z.string() }).optional(),
   votos: z.record(z.string(), z.object({ lado: Lado, detalhe: z.string() })).optional()
 });
-const Tema = z.object({ id: z.string(), s: z.string(), t: z.string(), impacto: z.record(z.string(), Lado), votacoes: z.array(z.object({ casa: z.enum(['camara', 'senado']), ladoSim: z.enum(['F', 'C']), rotulo: z.string() }).loose()) });
+const Tema = z.object({ id: z.string(), s: z.string(), t: z.string(), leia: z.object({ rotulo: z.string(), url: z.url(), fonte: z.string() }).optional(), impacto: z.record(z.string(), Lado), votacoes: z.array(z.object({ casa: z.enum(['camara', 'senado']), ladoSim: z.enum(['F', 'C']), rotulo: z.string() }).loose()) });
 const Cargo = z.object({
   id: z.enum(['presidente', 'governador', 'senador', 'federal', 'estadual']), nome: z.string(), curto: z.string(), casa: z.enum(['camara', 'senado', 'assembleia']),
   porCampo: z.boolean(), pesoNoPlacar: z.number().min(0).max(1), meta: z.string(), candidatos: z.array(Candidato).min(1)

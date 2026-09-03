@@ -1,10 +1,15 @@
 {
- "$comment": "As 14 pautas de 2026. `impacto` mapeia opção do perfil → lado da pauta que protege quem está nessa situação (F = a favor da frase, C = contra). É um juízo explícito e está aberto no painel 'Como é calculado'. `votacoes` liga a pauta a votações nominais reais; `ladoSim` diz o que um voto SIM naquela votação significa em relação à frase da pauta.",
+ "$comment": "As 14 pautas de 2026. `leia` é o link discreto (matéria institucional ou explicativa) pra quem quer entender a pauta antes de responder. `impacto` mapeia opção do perfil → lado da pauta que protege quem está nessa situação (F = a favor da frase, C = contra). É um juízo explícito e está aberto no painel 'Como é calculado'. `votacoes` liga a pauta a votações nominais reais; `ladoSim` diz o que um voto SIM naquela votação significa em relação à frase da pauta.",
  "temas": [
   {
    "id": "ir",
    "s": "Imposto de renda",
    "t": "Isentar o IR até R$ 5 mil e taxar quem ganha acima de R$ 50 mil por mês",
+   "leia": {
+    "rotulo": "Isenção de IR para quem ganha até R$ 5 mil entra em vigor",
+    "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2025-12/isencao-de-ir-para-quem-ganha-ate-r-5-mil-entra-em-vigor",
+    "fonte": "Agência Brasil"
+   },
    "impacto": {
     "renda_1": "F",
     "renda_2": "F",
@@ -27,6 +32,11 @@
    "id": "escala",
    "s": "Jornada de trabalho",
    "t": "Acabar com a escala 6x1 e reduzir a jornada sem cortar salário",
+   "leia": {
+    "rotulo": "Comissão aprova o fim da escala 6x1 e a redução da jornada de 44 para 40 horas",
+    "url": "https://www.camara.leg.br/noticias/1277012-comissao-aprova-o-fim-da-escala-6x1-e-reducao-da-jornada-de-44-para-40-horas-semanais/",
+    "fonte": "Agência Câmara"
+   },
    "impacto": {
     "clt": "F",
     "mei": "F",
@@ -51,6 +61,11 @@
    "id": "sus",
    "s": "Saúde",
    "t": "Ampliar o orçamento do SUS, mesmo que isso limite outras despesas",
+   "leia": {
+    "rotulo": "IFI lança estudo com alerta sobre subfinanciamento e espaço fiscal do SUS",
+    "url": "https://www12.senado.leg.br/noticias/materias/2025/07/07/ifi-lanca-estudo-com-alerta-sobre-subfinanciamento-e-espaco-fiscal-do-sus",
+    "fonte": "Agência Senado"
+   },
    "impacto": {
     "sus": "F",
     "sus_plano": "F",
@@ -63,6 +78,11 @@
    "id": "escola",
    "s": "Educação",
    "t": "Mais verba pra escola pública e piso salarial cheio do professor",
+   "leia": {
+    "rotulo": "Governo fixa em R$ 5,1 mil novo piso nacional do magistério",
+    "url": "https://agenciabrasil.ebc.com.br/educacao/noticia/2026-06/governo-fixa-em-r-51-mil-novo-piso-nacional-do-magisterio",
+    "fonte": "Agência Brasil"
+   },
    "impacto": {
     "esc_publica": "F",
     "renda_1": "F",
@@ -74,6 +94,11 @@
    "id": "servidor",
    "s": "Serviço público",
    "t": "Reforma administrativa que acaba com a estabilidade do servidor",
+   "leia": {
+    "rotulo": "Reforma administrativa avança na Câmara e servidores temem retrocessos",
+    "url": "https://agenciabrasil.ebc.com.br/politica/noticia/2025-08/reforma-administrativa-avanca-na-camara-e-servidores-temem-retrocessos",
+    "fonte": "Agência Brasil"
+   },
    "impacto": {
     "servidor": "C",
     "empresa": "F"
@@ -91,6 +116,11 @@
    "id": "privatiza",
    "s": "Estatais",
    "t": "Privatizar estatais como Correios e Banrisul",
+   "leia": {
+    "rotulo": "Privatização: desmonte do Estado ou modernização de empresas ineficientes?",
+    "url": "https://www12.senado.leg.br/noticias/infomaterias/2023/02/privatizacao-desmonte-do-estado-ou-modernizacao-de-empresas-ineficientes",
+    "fonte": "Agência Senado"
+   },
    "impacto": {
     "servidor": "C",
     "renda_1": "C",
@@ -103,6 +133,11 @@
    "id": "tarifa",
    "s": "Transporte público",
    "t": "Tarifa zero no transporte público, bancada por imposto",
+   "leia": {
+    "rotulo": "Governo estuda viabilidade de Tarifa Zero no transporte público",
+    "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-02/governo-estuda-viabilidade-de-tarifa-zero-no-transporte-publico",
+    "fonte": "Agência Brasil"
+   },
    "impacto": {
     "onibus": "F",
     "renda_1": "F",
@@ -114,6 +149,11 @@
    "id": "combustivel",
    "s": "Combustível",
    "t": "Cortar imposto sobre combustível, mesmo com queda de arrecadação",
+   "leia": {
+    "rotulo": "Como é a composição do preço dos combustíveis",
+    "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2021-02/agencia-brasil-explica-como-e-composicao-do-preco-dos-combustiveis",
+    "fonte": "Agência Brasil"
+   },
    "impacto": {
     "carro": "F",
     "moto": "F",
@@ -142,6 +182,11 @@
    "id": "aluguel",
    "s": "Moradia",
    "t": "Limitar reajuste de aluguel e taxar imóvel vazio pra segurar o preço",
+   "leia": {
+    "rotulo": "Projeto limita reajustes de aluguel residencial e comercial ao IPCA",
+    "url": "https://www.camara.leg.br/noticias/744099-PROJETO-LIMITA-REAJUSTES-DE-ALUGUEL-RESIDENCIAL-E-COMERCIAL-AO-IPCA",
+    "fonte": "Agência Câmara"
+   },
    "impacto": {
     "aluguel": "F",
     "renda_1": "F",
@@ -153,6 +198,11 @@
    "id": "juros",
    "s": "Juros e dívida",
    "t": "Teto de juros no cartão de crédito e no cheque especial",
+   "leia": {
+    "rotulo": "Sem acordo com bancos, CMN limita juros do rotativo a 100% da dívida",
+    "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2023-12/sem-acordo-com-bancos-cmn-limita-juros-do-rotativo-100-da-divida",
+    "fonte": "Agência Brasil"
+   },
    "impacto": {
     "renda_1": "F",
     "renda_2": "F",
@@ -168,6 +218,11 @@
    "id": "emendas",
    "s": "Transparência",
    "t": "Rastreabilidade total das emendas parlamentares, com autor e destino",
+   "leia": {
+    "rotulo": "Para atender STF, Congresso aprova ajustes nas regras sobre emendas",
+    "url": "https://www12.senado.leg.br/noticias/materias/2025/06/17/para-atender-stf-congresso-aprova-ajustes-nas-regras-sobre-emendas",
+    "fonte": "Agência Senado"
+   },
    "impacto": {
     "renda_1": "F",
     "renda_2": "F",
@@ -182,6 +237,11 @@
    "id": "arma",
    "s": "Segurança",
    "t": "Facilitar o porte de arma para o cidadão comum",
+   "leia": {
+    "rotulo": "Porte de arma no Brasil: como funciona?",
+    "url": "https://www.politize.com.br/porte-de-arma-no-brasil/",
+    "fonte": "Politize!"
+   },
    "impacto": {},
    "votacoes": [
     {
@@ -196,6 +256,11 @@
    "id": "anistia",
    "s": "Democracia",
    "t": "Anistiar os condenados pelos atos de 8 de janeiro",
+   "leia": {
+    "rotulo": "PL da Anistia: entenda o projeto de lei e o debate no Congresso",
+    "url": "https://www.politize.com.br/pl-da-anistia/",
+    "fonte": "Politize!"
+   },
    "impacto": {},
    "votacoes": [
     {
@@ -225,6 +290,11 @@
    "id": "ambiente",
    "s": "Meio ambiente",
    "t": "Flexibilizar o licenciamento ambiental para destravar obras",
+   "leia": {
+    "rotulo": "Lei do licenciamento ambiental entra em vigor com ações no STF",
+    "url": "https://agenciabrasil.ebc.com.br/meio-ambiente/noticia/2026-02/lei-do-licenciamento-ambiental-entra-em-vigor-com-acoes-no-stf-0",
+    "fonte": "Agência Brasil"
+   },
    "impacto": {},
    "votacoes": [
     {
