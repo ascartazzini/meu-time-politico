@@ -9,6 +9,7 @@ Astro 7 estático + TypeScript + vitest + scripts tsx. Leia o README antes de me
 - `src/lib/motor.ts` é puro (sem DOM) e coberto por `tests/motor.test.ts`. Mudança de regra de cálculo = teste junto.
 - Textos em pt-BR, tom direto, metáfora de futebol; sem promessa de precisão que o dado não sustenta.
 - Os fetches são passo separado do build; `src/data/generated/*.json` é versionado.
+- Domínio canônico: `https://www.meutimepolitico.com`. Vive em `astro.config.mjs`, `public/robots.txt`, `public/llms.txt` e `nginx.conf` (redirects); mudou um, muda todos.
 
 ## Comandos
 `npm run editor:partidos` abre o editor local de estimativas (partido × pauta, com evidência das votações reais). Prefira alinhar estimativa a voto real; onde não há votação, é juízo editorial e deve ficar visível como tal.

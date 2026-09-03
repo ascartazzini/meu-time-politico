@@ -16,7 +16,7 @@ const ordenar = (o: object) => Object.entries(o as Record<string, number>).filte
 const bancCam = ordenar(indice.bancadas.camara), bancSen = ordenar(indice.bancadas.senado);
 const n = indice.nacional;
 ---
-<Base title="Meu Time Político 2026 — método e fontes" badge="método">
+<Base title="Método e fontes — Meu Time Político 2026" badge="método" description="Como o placar é calculado: camisa, bolso, coerência, peso e força, com as fórmulas abertas. Votações nominais mapeadas por pauta e bancadas da Câmara, do Senado e das 27 assembleias.">
   <style>
     .m{padding:48px 0 0}
     .m h2{margin-top:56px}
@@ -98,5 +98,5 @@ const n = indice.nacional;
     <p>Lista oficial do TSE (<code>consulta_cand_2026</code>, gerada em {indice.dataTse}): {n.candidatos.toLocaleString('pt-BR')} candidaturas aos 5 cargos nos 27 estados, mais {n.presidenciais} presidenciais. Vices e suplentes de senador ficam de fora. Todos os registros ainda estão em julgamento pela Justiça Eleitoral; inaptos, renúncias, indeferidos e cassados são excluídos a cada reimportação.</p>
     <p style="margin-top:28px"><a class="cta ghost" href="/app/">Escalar meu time →</a></p>
   </div>
-  <footer><b>Meu Time Político 2026</b> — dataset gerado em {indice.geradoEm.slice(0, 19).replace('T', ' ')} UTC. Código aberto; sem vínculo com partido, campanha ou candidato.</footer>
+  <footer><b>Meu Time Político 2026</b> — dataset gerado em {indice.geradoEm.slice(0, 19).replace('T', ' ')} UTC. Código aberto; sem vínculo com partido, campanha ou candidato. Projeto criado por <a href="https://arturscartazzini.com" rel="author">Artur Scartazzini</a> (Mnova Solutions).</footer>
 </Base>

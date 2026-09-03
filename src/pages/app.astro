@@ -4,7 +4,7 @@ import '../styles/app.css';
 import indice from '../data/generated/indice.json';
 const n = indice.nacional;
 ---
-<Base title="Meu Time Político 2026 — escale seu time" badge="beta" description="Escale seus cinco votos de 2026 e descubra se o time joga junto — e se tem cadeira pra aprovar alguma coisa.">
+<Base title="Escale seu time — Meu Time Político 2026" badge="beta" description="Responda 14 pautas, escolha seu estado e escale seus cinco votos de 2026. O placar diz se o time joga junto, quantos gols contra faz e se tem cadeira pra aprovar alguma coisa.">
   <section class="hero" id="intro">
     <div class="kicker">Brasil · {n.candidatos.toLocaleString('pt-BR')} candidatos · 27 estados · 4 de outubro</div>
     <h1>Escale seu time<br />e descubra <span class="hl">quantos<br />gols contra</span> ele faz.</h1>
@@ -74,6 +74,7 @@ const n = indice.nacional;
       Onde aparece <span class="selo est">estimativa</span>, é a orientação pública do partido — não um voto individual.
     </div>
     <div id="fontes"><b>Fontes:</b> TSE (consulta_cand_2026 e 2022) · Câmara dos Deputados · Senado Federal. Método completo e lista das votações usadas em <a href="/metodo/">/metodo</a>.</div>
+    <div style="margin-top:14px">Projeto criado por <a href="https://arturscartazzini.com" rel="author">Artur Scartazzini</a> (Mnova Solutions).</div>
   </footer>
 
   <script>

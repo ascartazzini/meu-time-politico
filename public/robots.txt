@@ -1,3 +1,22 @@
+# Meu Time Político 2026 — https://www.meutimepolitico.com
+# Site público, sem área logada. Tudo pode ser indexado, inclusive por assistentes de IA.
+
 User-agent: *
 Allow: /
-Sitemap: https://meu-time-politico.labs.arturscartazzini.com/sitemap-index.xml
+
+# Assistentes de IA e buscadores generativos: podem ler e citar o site.
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-SearchBot
+User-agent: PerplexityBot
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: CCBot
+Allow: /
+
+# Descrição do site pra modelos de linguagem (padrão llmstxt.org)
+# https://www.meutimepolitico.com/llms.txt
+
+Sitemap: https://www.meutimepolitico.com/sitemap-index.xml

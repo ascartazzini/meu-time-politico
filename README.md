@@ -66,6 +66,29 @@ Em `src/data/temas.json`, adicione em `votacoes` da pauta:
 
 `ladoSim` diz o que um voto SIM significa em relação à frase da pauta. Depois `npm run fetch-data && npm run build`.
 
-## Deploy
+## Deploy e domínio
 
-Astro estático; Vercel detecta sozinho (`vercel --prod`). Ajustar `site` em `astro.config.mjs` quando houver domínio.
+Endereço canônico: **https://www.meutimepolitico.com**. O site está no ar pelo **Deploya** (`deploya deploy` na raiz; app `meu-time-politico`, config em `.deploya.json`), com Dockerfile de dois estágios (build do Astro → nginx sem privilégio na porta 3000). `deploya domain status` mostra o domínio próprio e o certificado.
+
+O domínio aparece em quatro lugares, que precisam andar juntos:
+
+| onde | o que |
+| --- | --- |
+| `astro.config.mjs` (`site`) | canonical, `og:url` e URLs do sitemap |
+| `public/robots.txt` | linha `Sitemap:` |
+| `public/llms.txt` | descrição do site pra assistentes de IA, com links absolutos |
+| `nginx.conf` | apex `meutimepolitico.com` e o subdomínio antigo `meu-time-politico.labs.arturscartazzini.com` respondem 301 pro `www` |
+
+O link de placar compartilhado (`/app/#s=…`) e a URL impressa na imagem dos stories usam `location.origin`, então seguem o host que serviu a página sem configuração.
+
+### SEO, compartilhamento e analytics
+
+`src/layouts/Base.astro` gera título, descrição, canonical, Open Graph, Twitter card, JSON-LD (`WebSite`, `WebApplication`, `Person`, `WebPage`) e a tag do Google Analytics 4 (`G-EQMVHHWH9C`). O sitemap sai do `@astrojs/sitemap` em `/sitemap-index.xml` (sem `/sobre/`, que é só redirecionamento com `noindex`).
+
+A imagem de compartilhamento `public/og.png` (1200×630) e o `public/apple-touch-icon.png` são renderizados a partir de `scripts/og/*.html` com o Chrome headless:
+
+```
+sh scripts/og/render.sh
+```
+
+Os PNGs ficam versionados; rode o script só quando mudar o desenho.

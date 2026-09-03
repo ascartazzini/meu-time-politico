@@ -11,7 +11,7 @@ const fontes = [
   { rotulo: 'Peso nas assembleias', detalhe: '27 assembleias: composição eleita em 2022 (TSE), quórum = maioria absoluta de cada casa' }
 ];
 ---
-<Base title="Meu Time Político 2026 — escale seus 5 votos e veja quantos gols contra o time faz" badge="beta" description="Escale seus cinco votos de 2026 e descubra se o time joga junto — e se tem cadeira pra aprovar alguma coisa.">
+<Base title="Meu Time Político 2026 — seus 5 votos jogam juntos?" badge="beta" description="Escale presidente, governador, senador e deputados como um time e veja se eles jogam juntos, quantos gols contra fazem e se têm bancada pra aprovar alguma coisa. Grátis, sem cadastro, 27 estados.">
   <script is:inline>if (location.hash.startsWith('#s=')) location.replace('/app/' + location.hash);</script>
   <header class="hero">
     <div class="kicker">Brasil · 27 estados · 4 de outubro de 2026</div>
@@ -124,7 +124,8 @@ const fontes = [
     <b>Meu Time Político 2026</b> — tech cívica, código aberto, sem vínculo com partido, campanha ou
     candidato. Cobre os 26 estados e o Distrito Federal.<br /><br />
     <b>Fontes:</b> TSE (Portal de Dados Abertos, consulta_cand_2026 e consulta_cand_2022) · Câmara dos Deputados (API de Dados Abertos) ·
-    Senado Federal (API de Dados Abertos). Dataset gerado em {indice.geradoEm.slice(0, 10)}.
+    Senado Federal (API de Dados Abertos). Dataset gerado em {indice.geradoEm.slice(0, 10)}.<br /><br />
+    Projeto criado por <a href="https://arturscartazzini.com" rel="author">Artur Scartazzini</a> (Mnova Solutions).
   </footer>
 
   <script>

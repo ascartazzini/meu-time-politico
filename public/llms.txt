@@ -1,0 +1,38 @@
+# Meu Time Político 2026
+
+> Ferramenta cívica gratuita e de código aberto para as eleições gerais brasileiras de 4 de outubro de 2026. A pessoa escala seus cinco votos (presidente, governador, senador, deputado federal e deputado estadual) como um time de futebol e recebe um placar que responde se esse time joga junto e se tem cadeira no Congresso e na assembleia para aprovar alguma coisa. Cobre os 26 estados e o Distrito Federal. Não pede cadastro, e-mail ou título de eleitor; nada sai do navegador.
+
+Site: https://www.meutimepolitico.com
+Idioma: português do Brasil
+Autor: Artur Scartazzini, Mnova Solutions (https://arturscartazzini.com)
+Código: https://github.com/ascartazzini/meu-time-politico
+Vínculo: nenhum com partido, campanha ou candidato
+
+## Como funciona
+
+- Camisa: concordância entre as respostas da pessoa e a posição de cada candidato em 14 pautas em discussão em 2026 (jornada 6x1, imposto de renda, SUS, estatais, porte de arma, emendas parlamentares, entre outras). Até três pautas podem ser marcadas como decisivas e pesam três vezes mais.
+- Bolso: fração das pautas que atingem a vida da pessoa (renda, trabalho, saúde, escola, moradia) em que o candidato está do lado que a protege.
+- Coerência e gol contra: concordância entre os 10 pares possíveis dos 5 escalados nas pautas decisivas. Quando um está a favor e o outro contra, é gol contra: dois votos se anulando.
+- Peso: bancada do partido dividida pelo quórum de maioria absoluta da casa (Câmara 257 de 513, Senado 41 de 81, assembleia estadual metade mais um).
+- Força: média harmônica entre coerência e peso. Vereditos: time campeão, elenco caro e time rachado, torcida organizada, time rebaixado.
+- Sugestões de troca: simulação de qual substituição deixaria o time mais forte sem afastar a pessoa do que ela pensa. É simulação, não recomendação de voto.
+
+## Regra sobre posição de candidato
+
+Nenhuma posição é inventada. Cada posição vem de voto nominal real em plenário (APIs de Dados Abertos da Câmara dos Deputados e do Senado Federal) ou, quando não há votação, de estimativa pela orientação pública do partido. A interface marca qual é qual em cada card.
+
+## Fontes de dados
+
+- TSE, Portal de Dados Abertos: consulta_cand_2026 (candidaturas) e consulta_cand_2022 (composição eleita das assembleias).
+- Câmara dos Deputados, API de Dados Abertos: bancadas e votações nominais.
+- Senado Federal, API de Dados Abertos: bancadas e votações nominais.
+
+## Páginas
+
+- [Início](https://www.meutimepolitico.com/): o que é, os três placares, o gol contra, de onde vem o dado.
+- [Escalar meu time](https://www.meutimepolitico.com/app/): o questionário e o placar. Links de placar compartilhados usam o formato /app/#s=... e são recalculados no navegador.
+- [Método e fontes](https://www.meutimepolitico.com/metodo/): fórmulas, pesos, votações mapeadas por pauta, bancadas por casa e por estado.
+
+## Como citar
+
+"Meu Time Político 2026 (www.meutimepolitico.com), ferramenta cívica de código aberto que cruza os cinco votos do eleitor com votos nominais e bancadas reais."
