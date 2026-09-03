@@ -1,0 +1,14 @@
+# não vai pro ar / não é preciso pra gerar o site
+.git/
+node_modules/
+dist/
+.astro/
+.claude/
+.deploya/
+data/raw/
+public/dados/
+prototipo/
+tests/
+.github/
+*.log
+.DS_Store

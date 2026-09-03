@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 
 // Atualizar quando um domínio próprio for configurado no Vercel.
 export default defineConfig({
-  site: 'https://meu-time-politico.vercel.app',
+  site: 'https://meu-time-politico.labs.arturscartazzini.com',
   integrations: [sitemap()],
   build: { inlineStylesheets: 'auto' }
 });

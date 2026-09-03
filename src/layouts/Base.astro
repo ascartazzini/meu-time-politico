@@ -2,7 +2,7 @@
 import '../styles/tokens.css';
 interface Props { title: string; description?: string; badge?: string; wide?: boolean }
 const { title, description = 'Você vota em cinco cargos e decide um de cada vez. Aqui você escala os cinco como um time e descobre se eles jogam juntos — e se têm cadeira pra aprovar alguma coisa.', badge } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://meu-time-politico.vercel.app').toString();
+const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://meu-time-politico.labs.arturscartazzini.com').toString();
 ---
 <!doctype html>
 <html lang="pt-BR">
