@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meu Time Político 2026 — escale seus 5 votos e veja quantos gols contra o time faz</title>
+<meta name="description" content="Você vota em cinco cargos e decide um de cada vez. Aqui você escala os cinco como um time e descobre se eles jogam juntos — e se têm cadeira pra aprovar alguma coisa.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Chivo+Mono:wght@400;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --stance:#FFD100; --ink:#F2F5F0; --bg:#080A08; --surface:#12160F;
+    --muted:#78876F; --data:#00E676; --danger:#FF3B30; --line:#243020;
+    --display:'Anton', Impact, sans-serif;
+    --mono:'Chivo Mono', monospace;
+    --body:'Barlow', system-ui, sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.5;
+       -webkit-font-smoothing:antialiased;overflow-x:hidden}
+  body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+    background:repeating-linear-gradient(115deg,transparent 0 70px,rgba(0,230,118,.022) 70px 140px)}
+  body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:998;
+    background:repeating-linear-gradient(transparent 0 2px,rgba(0,0,0,.16) 2px 4px)}
+  .wrap{max-width:980px;margin:0 auto;padding:0 20px;position:relative;z-index:1}
+  a{color:inherit}
+
+  /* ---- nav ---- */
+  nav{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 0;flex-wrap:wrap}
+  .brand{font-family:var(--display);font-size:21px;text-transform:uppercase;line-height:1}
+  .brand span{color:var(--stance)}
+  .brand em{font-style:normal;font-family:var(--mono);font-weight:700;font-size:14px;color:var(--data);
+    letter-spacing:-.03em;vertical-align:2px;margin-left:4px}
+  .cd{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em}
+  .cd b{color:var(--stance)}
+
+  /* ---- hero fullbleed ---- */
+  .hero{padding:70px 0 60px;border-bottom:1px solid var(--line)}
+  .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--data);margin-bottom:22px}
+  h1{font-family:var(--display);font-size:clamp(46px,10.5vw,120px);line-height:.88;
+     text-transform:uppercase;letter-spacing:-.008em}
+  h1 .hl{color:var(--bg);background:var(--stance);padding:0 .1em;
+    box-decoration-break:clone;-webkit-box-decoration-break:clone}
+  .lead{margin-top:26px;max-width:640px;font-size:18px;color:#C2CCBB}
+  .lead b{color:var(--ink)}
+  .cta{display:inline-block;margin-top:30px;font-family:var(--display);
+    font-size:clamp(20px,4.4vw,28px);text-transform:uppercase;letter-spacing:.015em;
+    background:var(--stance);color:#0B0D08;text-decoration:none;padding:19px 34px;border-radius:3px;transition:.15s}
+  .cta:hover{background:#fff;transform:translateY(-2px)}
+  .cta.ghost{background:transparent;color:var(--stance);border:2px solid var(--stance)}
+  .cta.ghost:hover{background:var(--stance);color:var(--bg)}
+  .cta-note{display:block;margin-top:12px;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em}
+
+  /* ---- números de abertura ---- */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;
+    background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden;margin-top:44px}
+  .stat{background:var(--surface);padding:20px 18px}
+  .stat .n{font-family:var(--display);font-size:44px;line-height:1;color:var(--stance)}
+  .stat .l{font-size:12.5px;color:var(--muted);margin-top:5px;line-height:1.35}
+
+  /* ---- seções ---- */
+  section{padding:64px 0;border-bottom:1px solid var(--line)}
+  h2{font-family:var(--display);font-size:clamp(30px,6.2vw,54px);text-transform:uppercase;line-height:.95}
+  h2 .out{color:transparent;-webkit-text-stroke:2px var(--data)}
+  .sec-lead{margin-top:18px;max-width:620px;color:#B9C4B2;font-size:16px}
+  .sec-lead b{color:var(--ink)}
+
+  /* ---- 3 eixos ---- */
+  .eixos{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:14px;margin-top:36px}
+  .ex{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:22px;position:relative;overflow:hidden}
+  .ex::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--c)}
+  .ex .tag{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--c)}
+  .ex h3{font-family:var(--display);font-size:27px;text-transform:uppercase;margin:8px 0 10px;line-height:1}
+  .ex p{font-size:14.5px;color:#B4BFAD}
+  .ex p b{color:var(--ink)}
+  .ex .frm{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:14px;
+    border-top:1px dashed var(--line);padding-top:12px;line-height:1.6}
+
+  /* ---- 2x2 dos vereditos ---- */
+  .quad{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);
+    border:1px solid var(--line);border-radius:4px;overflow:hidden;margin-top:36px}
+  @media(max-width:600px){.quad{grid-template-columns:1fr}}
+  .q{background:var(--surface);padding:24px 20px;min-height:172px;display:flex;flex-direction:column;justify-content:center}
+  .q .cond{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .q .nm{font-family:var(--display);font-size:26px;text-transform:uppercase;line-height:1;margin:9px 0 8px}
+  .q p{font-size:13.5px;color:#A9B5A2}
+  .q.campeao .nm{color:var(--data)}
+  .q.torcida .nm{color:var(--stance)}
+  .q.rachado .nm{color:var(--stance)}
+  .q.rebaixado .nm{color:var(--danger)}
+
+  /* ---- gol contra: destaque ---- */
+  .golbox{margin-top:36px;background:#1A0A08;border:1px solid #3D1512;border-left:4px solid var(--danger);
+    border-radius:4px;padding:26px 24px}
+  .golbox .n{font-family:var(--display);font-size:66px;line-height:.9;color:var(--danger)}
+  .golbox h3{font-family:var(--display);font-size:24px;text-transform:uppercase;margin:4px 0 10px}
+  .golbox p{font-size:15px;color:#D6BCB8;max-width:560px}
+  .golbox .ex-real{font-family:var(--mono);font-size:12.5px;color:var(--muted);margin-top:16px;
+    border-top:1px dashed #3D1512;padding-top:14px;line-height:1.7}
+  .golbox .ex-real .f{color:var(--data)}
+  .golbox .ex-real .c{color:var(--danger)}
+
+  /* ---- lastro ---- */
+  .fontes{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:32px}
+  .fo{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--data);
+    border-radius:3px;padding:16px}
+  .fo .k{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--data)}
+  .fo .v{font-size:14px;margin-top:6px;color:#C2CCBB}
+
+  .honesto{background:#1A1405;border:1px solid #3D3110;border-left:4px solid var(--stance);
+    border-radius:4px;padding:24px;margin-top:32px}
+  .honesto h3{font-family:var(--display);font-size:21px;text-transform:uppercase;color:var(--stance);margin-bottom:12px}
+  .honesto p{font-size:14.5px;color:#D4CDA8;max-width:640px}
+  .honesto p + p{margin-top:10px}
+
+  /* ---- fecho ---- */
+  .fecho{text-align:center;padding:82px 0 70px;border-bottom:0}
+  .fecho h2{font-size:clamp(34px,8vw,76px)}
+  footer{padding:30px 0 70px;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line)}
+  footer b{color:#B9C4B2}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav>
+    <div class="brand">MEU TIME <span>POLÍTICO</span><em>2026</em></div>
+    <div class="cd" id="cd">—</div>
+  </nav>
+
+  <!-- ================= HERO ================= -->
+  <header class="hero">
+    <div class="kicker">Rio Grande do Sul · 4 de outubro de 2026</div>
+    <h1>Você escala 5.<br><span class="hl">Quantos jogam<br>contra você?</span></h1>
+    <p class="lead">Presidente, governador, senador, deputado federal, deputado estadual.
+      Você decide <b>um de cada vez</b>, em telas separadas, meses diferentes — e nunca viu os
+      cinco juntos. Aqui você escala o time e a gente responde a pergunta que ninguém faz:
+      <b>esse time joga junto? E ele consegue aprovar alguma coisa?</b></p>
+    <a class="cta" href="#app">Escalar meu time →</a>
+    <span class="cta-note">sem cadastro · sem e-mail · nada sai do seu navegador</span>
+
+    <div class="stats">
+      <div class="stat"><div class="n">1.048</div><div class="l">candidatos no RS<br>disputando 4 de outubro</div></div>
+      <div class="stat"><div class="n">455</div><div class="l">candidatos a deputado federal<br>para 31 vagas</div></div>
+      <div class="stat"><div class="n">257</div><div class="l">votos na Câmara<br>pra aprovar qualquer coisa</div></div>
+      <div class="stat"><div class="n">22</div><div class="l">partidos dividindo<br>o Congresso hoje</div></div>
+    </div>
+  </header>
+
+  <!-- ================= O QUE ELE MEDE ================= -->
+  <section>
+    <h2>Três placares.<br><span class="out">Um time.</span></h2>
+    <p class="sec-lead">Todo teste eleitoral que existe te dá uma nota por candidato, um de cada vez.
+      Aqui a nota é do <b>conjunto</b> — porque é o conjunto que governa.</p>
+
+    <div class="eixos">
+      <div class="ex" style="--c:#00E676">
+        <div class="tag">Eixo 1</div>
+        <h3>Camisa</h3>
+        <p>Quanto ele <b>pensa como você</b>. Quatorze pautas que estão na mesa em 2026 —
+          jornada 6x1, imposto de renda, SUS, estatais, porte de arma, emendas. Você marca até
+          <b>três decisivas</b>, e elas pesam três vezes mais.</p>
+        <div class="frm">suas respostas × posição do partido<br>igual = 1 · dividido = 0,5 · oposto = 0</div>
+      </div>
+      <div class="ex" style="--c:#FFD100">
+        <div class="tag">Eixo 2</div>
+        <h3>Bolso</h3>
+        <p>Quanto ele <b>mexe na sua vida</b>. Sua renda, seu trabalho, se você usa SUS, se seu
+          filho está na escola pública, se você mora de aluguel. Só as pautas que batem em você
+          entram nessa conta. <b>Concordar não é a mesma coisa que ser defendido.</b></p>
+        <div class="frm">fração das pautas que te atingem<br>em que ele está do lado que te protege</div>
+      </div>
+      <div class="ex" style="--c:#FF3B30">
+        <div class="tag">Eixo 3 — o que ninguém te conta</div>
+        <h3>Força</h3>
+        <p>Se o time <b>aprova alguma coisa</b>. Coerência entre os cinco, cruzada com o peso real
+          deles nas casas: um deputado sozinho vale 1 voto em 513. O que aprova é a <b>bancada</b>.</p>
+        <div class="frm">força = média harmônica (coerência, peso)<br>ela derruba quem é bom só num eixo</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= GOL CONTRA ================= -->
+  <section>
+    <h2>O gol contra</h2>
+    <p class="sec-lead">A parte que dói. Nas pautas que <b>você marcou como decisivas</b>, a gente
+      cruza os cinco escalados par a par. Onde um está a favor e o outro está contra, é gol contra
+      — <b>dois dos seus votos anulando um ao outro</b>. Você pagou os dois.</p>
+
+    <div class="golbox">
+      <div class="n">8</div>
+      <h3>gols contra num time real</h3>
+      <p>Um eleitor que escala Lula na presidência e Zucco no governo do RS — combinação que
+        existe e não é rara — sai daqui com <b>coerência 47</b>, <b>peso 38</b> e
+        <b>oito embates internos</b>. Veredito: time rebaixado.</p>
+      <div class="ex-real">
+        imposto de renda &nbsp;→&nbsp; presidente <span class="f">A FAVOR</span> × governador <span class="c">CONTRA</span><br>
+        saúde &nbsp;→&nbsp; presidente <span class="f">A FAVOR</span> × governador <span class="c">CONTRA</span><br>
+        segurança &nbsp;→&nbsp; presidente <span class="c">CONTRA</span> × governador <span class="f">A FAVOR</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= OS 4 VEREDITOS ================= -->
+  <section>
+    <h2>Quatro finais<br>possíveis</h2>
+    <p class="sec-lead">Coerência num eixo, peso no outro. É aqui que mora o resultado que
+      incomoda: <b>concordar não é o mesmo que conseguir</b>.</p>
+
+    <div class="quad">
+      <div class="q campeao">
+        <div class="cond">coerente + pesado</div>
+        <div class="nm">Time campeão</div>
+        <p>Joga junto e tem cadeira pra transformar acordo em lei. É raro.</p>
+      </div>
+      <div class="q rachado">
+        <div class="cond">rachado + pesado</div>
+        <div class="nm">Elenco caro,<br>time rachado</div>
+        <p>Poder de verdade — gasto na briga entre eles mesmos.</p>
+      </div>
+      <div class="q torcida">
+        <div class="cond">coerente + leve</div>
+        <div class="nm">Torcida organizada</div>
+        <p>Vocês concordam em quase tudo e não aprovam quase nada. Coerente e impotente.</p>
+      </div>
+      <div class="q rebaixado">
+        <div class="cond">rachado + leve</div>
+        <div class="nm">Time rebaixado</div>
+        <p>Se contradiz e não tem peso. Os cinco votos trabalham um contra o outro.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= LASTRO ================= -->
+  <section>
+    <h2>De onde<br><span class="out">vem o dado</span></h2>
+    <p class="sec-lead">Nada aqui é opinião nossa sobre candidato. Cada número tem fonte pública
+      e cada critério está aberto dentro do app, no botão <b>"como esse número é calculado"</b>.</p>
+
+    <div class="fontes">
+      <div class="fo"><div class="k">Quem é candidato</div><div class="v">TSE — Portal de Dados Abertos,
+        base <em>consulta_cand_2026</em> e DivulgaCandContas</div></div>
+      <div class="fo"><div class="k">Quanto vale um voto</div><div class="v">Câmara: 513 cadeiras,
+        maioria absoluta 257, PEC 308</div></div>
+      <div class="fo"><div class="k">Peso no Senado</div><div class="v">Senado Federal: 81 cadeiras,
+        maioria absoluta 41 · o RS elege 2 em 2026</div></div>
+      <div class="fo"><div class="k">Peso no estado</div><div class="v">Assembleia Legislativa do RS:
+        55 cadeiras, maioria 28</div></div>
+    </div>
+
+    <div class="honesto">
+      <h3>O que ainda não está pronto</h3>
+      <p>Esta é uma <b>demonstração</b>, e a gente prefere dizer isso na cara do que esconder no rodapé.
+        Os nomes, partidos e cargos são reais. <b>As posições por pauta ainda são estimadas pela
+        orientação pública do partido</b> — não são votos individuais nominais, e cada card diz isso.</p>
+      <p>A versão de produção troca essa estimativa por <b>votação nominal de verdade</b>, puxada da
+        API da Câmara e do Senado pra quem já tem mandato, mantendo a estimativa partidária só pros
+        estreantes — sempre com o selo visível. Nenhum voto individual foi atribuído a nenhuma pessoa
+        nomeada aqui.</p>
+    </div>
+  </section>
+
+  <!-- ================= FECHO ================= -->
+  <section class="fecho" id="app">
+    <h2>Escale seu time.<br><span class="hl" style="color:#080A08;background:#FFD100;padding:0 .08em">Conte os gols contra.</span></h2>
+    <p class="sec-lead" style="margin:24px auto 0">Leva dois minutos. Não pede seu nome, seu e-mail,
+      nem seu título de eleitor.</p>
+    <div style="margin-top:32px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a class="cta" href="app-meu-time-2026.html">Abrir o app →</a>
+      <a class="cta ghost" href="app-meu-time-2026.html#metodo">Ver o método</a>
+    </div>
+  </section>
+
+  <footer>
+    <b>Meu Time Político 2026</b> — protótipo de tech cívica, código aberto, sem vínculo com
+    partido, campanha ou candidato. Recorte de estreia: Rio Grande do Sul. Estado por estado
+    depois disso é só trocar a sigla.<br><br>
+    <b>Fontes:</b> TSE (Portal de Dados Abertos · DivulgaCandContas, ago/2026) ·
+    Câmara dos Deputados · Senado Federal · Assembleia Legislativa do RS ·
+    Congresso em Foco (455 candidatos a deputado federal no RS, ago/2026).
+  </footer>
+
+</div>
+
+<script>
+  document.documentElement.lang = 'pt-BR';
+  (function(){
+    var pleito = new Date('2026-10-04T08:00:00-03:00');
+    var dias = Math.max(0, Math.ceil((pleito - new Date())/86400000));
+    document.getElementById('cd').innerHTML = 'faltam <b>'+dias+'</b> dias pro 1º turno';
+  })();
+  // contador dos números de abertura
+  var vistos = new WeakSet();
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(!e.isIntersecting || vistos.has(e.target)) return;
+      vistos.add(e.target);
+      var alvo = parseInt(e.target.textContent.replace(/\D/g,''),10), ini = performance.now();
+      (function step(now){
+        var p = Math.min(1,(now-ini)/1000), k = 1-Math.pow(1-p,3);
+        e.target.textContent = Math.round(alvo*k).toLocaleString('pt-BR');
+        if(p<1) requestAnimationFrame(step);
+      })(ini);
+    });
+  },{threshold:.5});
+  document.querySelectorAll('.stat .n, .golbox .n').forEach(function(n){ io.observe(n); });
+</script>
+</body>
+</html>

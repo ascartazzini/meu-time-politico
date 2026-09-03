@@ -1,0 +1,47 @@
+.hero{padding:70px 0 60px;border-bottom:1px solid var(--line)}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--data);margin-bottom:22px}
+h1{font-family:var(--display);font-size:clamp(46px,10.5vw,120px);line-height:.88;text-transform:uppercase;letter-spacing:-.008em}
+.lead{margin-top:26px;max-width:640px;font-size:18px;color:#C2CCBB}
+.lead b{color:var(--ink)}
+.hero .cta{margin-top:30px;padding:19px 34px}
+.stat .n{font-size:44px}
+section{padding:64px 0;border-bottom:1px solid var(--line)}
+h2{font-family:var(--display);font-size:clamp(30px,6.2vw,54px);text-transform:uppercase;line-height:.95}
+h2 .out{color:transparent;-webkit-text-stroke:2px var(--data)}
+.sec-lead{margin-top:18px;max-width:620px;color:#B9C4B2;font-size:16px}
+.sec-lead b{color:var(--ink)}
+.eixos{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:14px;margin-top:36px}
+.ex{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:22px;position:relative;overflow:hidden}
+.ex::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--c)}
+.ex .tag{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--c)}
+.ex h3{font-family:var(--display);font-size:27px;text-transform:uppercase;margin:8px 0 10px;line-height:1}
+.ex p{font-size:14.5px;color:#B4BFAD}
+.ex p b{color:var(--ink)}
+.ex .frm{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:14px;border-top:1px dashed var(--line);padding-top:12px;line-height:1.6}
+.quad{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden;margin-top:36px}
+@media(max-width:600px){.quad{grid-template-columns:1fr}}
+.q{background:var(--surface);padding:24px 20px;min-height:172px;display:flex;flex-direction:column;justify-content:center}
+.q .cond{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.q .nm{font-family:var(--display);font-size:26px;text-transform:uppercase;line-height:1;margin:9px 0 8px}
+.q p{font-size:13.5px;color:#A9B5A2}
+.q.campeao .nm{color:var(--data)}
+.q.torcida .nm,.q.rachado .nm{color:var(--stance)}
+.q.rebaixado .nm{color:var(--danger)}
+.golbox{margin-top:36px;background:#1A0A08;border:1px solid #3D1512;border-left:4px solid var(--danger);border-radius:4px;padding:26px 24px}
+.golbox .n{font-family:var(--display);font-size:66px;line-height:.9;color:var(--danger)}
+.golbox h3{font-family:var(--display);font-size:24px;text-transform:uppercase;margin:4px 0 10px}
+.golbox p{font-size:15px;color:#D6BCB8;max-width:560px}
+.golbox .ex-real{font-family:var(--mono);font-size:12.5px;color:var(--muted);margin-top:16px;border-top:1px dashed #3D1512;padding-top:14px;line-height:1.7}
+.golbox .ex-real .f{color:var(--data)}
+.golbox .ex-real .c{color:var(--danger)}
+.fontes{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:32px}
+.fo{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--data);border-radius:3px;padding:16px}
+.fo .k{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--data)}
+.fo .v{font-size:14px;margin-top:6px;color:#C2CCBB}
+.honesto{background:#1A1405;border:1px solid #3D3110;border-left:4px solid var(--stance);border-radius:4px;padding:24px;margin-top:32px}
+.honesto h3{font-family:var(--display);font-size:21px;text-transform:uppercase;color:var(--stance);margin-bottom:12px}
+.honesto p{font-size:14.5px;color:#D4CDA8;max-width:640px}
+.honesto p + p{margin-top:10px}
+.fecho{text-align:center;padding:82px 0 70px;border-bottom:0}
+.fecho h2{font-size:clamp(34px,8vw,76px)}
+.fecho .acoes{margin-top:32px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}

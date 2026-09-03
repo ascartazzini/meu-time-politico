@@ -1,0 +1,78 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/app.css';
+import indice from '../data/generated/indice.json';
+const n = indice.nacional;
+const pautasNominais = indice.cobertura.filter(c => c.nominal > 0).length;
+---
+<Base title="Meu Time Político 2026 — escale seu time" badge="beta">
+  <section class="hero" id="intro">
+    <div class="kicker">Brasil · {n.candidatos.toLocaleString('pt-BR')} candidatos · 27 estados · 4 de outubro</div>
+    <h1>Escale seu time<br />e descubra <span class="hl">quantos<br />gols contra</span> ele faz.</h1>
+    <p class="sub">Você vota em <b>cinco cargos</b> e decide um de cada vez, isolado. Nunca viu os cinco
+    como um time. Aqui você escala, e a gente responde três coisas: <b>quem veste sua camisa</b>,
+    <b>quem mexe no seu bolso</b> e — a que ninguém te conta — <b>se esse time tem peso pra aprovar
+    alguma coisa</b>.</p>
+    <div class="intro-acoes">
+      <button class="cta" id="btnComecar" type="button">Começar →</button>
+      <button class="cta sec" id="btnContinuar" type="button" hidden>Continuar de onde parei</button>
+    </div>
+    <span class="cta-note">11 telas · ~2 minutos · sem cadastro · nada sai do seu navegador</span>
+    <div class="stats">
+      <div class="stat"><div class="n">{n.candidatos.toLocaleString('pt-BR')}</div><div class="l">candidatos no país<br />disputando 4 de outubro</div></div>
+      <div class="stat"><div class="n">{n.federais.toLocaleString('pt-BR')}</div><div class="l">candidatos a deputado federal<br />para 513 vagas</div></div>
+      <div class="stat"><div class="n">{n.comVotoNominal}</div><div class="l">candidatos com voto nominal<br />registrado nas pautas</div></div>
+      <div class="stat"><div class="n">{pautasNominais}</div><div class="l">das 14 pautas<br />com voto nominal real</div></div>
+    </div>
+  </section>
+
+  <div id="wizard" hidden>
+    <div class="prog-top"><span class="prog-fase" id="progFase">—</span><span class="prog-n" id="progN">—</span></div>
+    <div class="prog" id="prog"></div>
+    <div class="tela" id="tela"></div>
+    <div class="navbar">
+      <button class="nav-b" id="btnVoltar" type="button">← Voltar</button>
+      <span class="nav-hint" id="navHint">avança sozinho quando você responde tudo</span>
+      <button class="nav-b prox" id="btnProx" type="button" hidden>Próxima →</button>
+    </div>
+  </div>
+
+  <section id="resultado" hidden>
+    <div class="alheio" id="alheio" hidden></div>
+    <div class="placar">
+      <div class="lbl">Força do time</div>
+      <div class="num" id="forcaNum">0<small>/100</small></div>
+      <div class="veredito" id="veredito">—</div>
+      <p class="veredito-d" id="vereditoDesc">—</p>
+    </div>
+    <div class="eixos">
+      <div class="eixo coer"><div class="lbl">Coerência</div><div class="v" id="coerNum">0</div><div class="h" id="coerH">—</div></div>
+      <div class="eixo peso"><div class="lbl">Peso de aprovação</div><div class="v" id="pesoNum">0</div><div class="h" id="pesoH">—</div></div>
+    </div>
+    <div class="gols" id="gols"></div>
+    <div class="tabela" id="tabela"></div>
+    <details class="metodo" id="metodo"><summary>Como esses números são calculados</summary><div class="body" id="metodoBody"></div></details>
+    <div class="res-acoes">
+      <button class="share" id="btnCopiar" type="button">Copiar meu placar</button>
+      <button class="share" id="btnLink" type="button">Copiar link do placar</button>
+      <button class="share sec" id="btnReescalar" type="button">Mudar minha escalação</button>
+      <button class="share sec" id="btnZerar" type="button">Refazer do zero</button>
+    </div>
+  </section>
+
+  <footer>
+    <div class="aviso">
+      <b>Leia antes de acreditar no número.</b><br />
+      Nomes, partidos, números e cargos vêm do registro de candidaturas do TSE (gerado em {indice.dataTse}; registros ainda em julgamento).
+      Bancadas da Câmara e do Senado vêm das APIs oficiais; as das assembleias são a composição eleita em 2022.
+      Onde há <span class="selo real">voto nominal</span>, a posição é o voto registrado da pessoa em plenário.
+      Onde aparece <span class="selo est">estimativa</span>, é a orientação pública do partido — não um voto individual.
+    </div>
+    <div id="fontes"><b>Fontes:</b> TSE (consulta_cand_2026 e 2022) · Câmara dos Deputados · Senado Federal. Método completo e lista das votações usadas em <a href="/metodo">/metodo</a>.</div>
+  </footer>
+
+  <script>
+    import { iniciar } from '../lib/wizard';
+    void iniciar();
+  </script>
+</Base>

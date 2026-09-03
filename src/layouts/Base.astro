@@ -1,0 +1,46 @@
+---
+import '../styles/tokens.css';
+interface Props { title: string; description?: string; badge?: string; wide?: boolean }
+const { title, description = 'Você vota em cinco cargos e decide um de cada vez. Aqui você escala os cinco como um time e descobre se eles jogam juntos — e se têm cadeira pra aprovar alguma coisa.', badge } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://meu-time-politico.vercel.app').toString();
+---
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Chivo+Mono:wght@400;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <meta name="theme-color" content="#080A08" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <a class="brand" href="/">MEU TIME <span>POLÍTICO</span><em>2026</em></a>
+      <div style="display:flex;align-items:center;gap:14px">
+        <div class="countdown" data-countdown>—</div>
+        {badge && <div class="badge beta">{badge}</div>}
+      </div>
+    </header>
+    <slot />
+  </div>
+  <script>
+    import { diasParaOPleito } from '../lib/formato';
+    const el = document.querySelector('[data-countdown]');
+    if (el) {
+      const d = diasParaOPleito();
+      el.innerHTML = d > 0 ? `faltam <b>${d}</b> dias pro 1º turno` : 'dia de eleição';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+{
+ "$comment": "As 14 pautas de 2026. `impacto` mapeia opção do perfil → lado da pauta que protege quem está nessa situação (F = a favor da frase, C = contra). É um juízo explícito e está aberto no painel 'Como é calculado'. `votacoes` liga a pauta a votações nominais reais; `ladoSim` diz o que um voto SIM naquela votação significa em relação à frase da pauta.",
+ "temas": [
+  {
+   "id": "ir",
+   "s": "Imposto de renda",
+   "t": "Isentar o IR até R$ 5 mil e taxar quem ganha acima de R$ 50 mil por mês",
+   "impacto": {
+    "renda_1": "F",
+    "renda_2": "F",
+    "clt": "F",
+    "mei": "F",
+    "sem_trab": "F",
+    "renda_4": "C",
+    "empresa": "C"
+   },
+   "votacoes": [
+    {
+     "casa": "camara",
+     "id": "2487436-169",
+     "ladoSim": "F",
+     "rotulo": "PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+    }
+   ]
+  },
+  {
+   "id": "escala",
+   "s": "Jornada de trabalho",
+   "t": "Acabar com a escala 6x1 e reduzir a jornada sem cortar salário",
+   "impacto": {
+    "clt": "F",
+    "mei": "F",
+    "empresa": "C"
+   },
+   "votacoes": [
+    {
+     "casa": "camara",
+     "id": "2233802-424",
+     "ladoSim": "F",
+     "rotulo": "PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026"
+    },
+    {
+     "casa": "camara",
+     "id": "2233802-438",
+     "ladoSim": "F",
+     "rotulo": "PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+    }
+   ]
+  },
+  {
+   "id": "sus",
+   "s": "Saúde",
+   "t": "Ampliar o orçamento do SUS, mesmo que isso limite outras despesas",
+   "impacto": {
+    "sus": "F",
+    "sus_plano": "F",
+    "renda_1": "F",
+    "renda_2": "F"
+   },
+   "votacoes": []
+  },
+  {
+   "id": "escola",
+   "s": "Educação",
+   "t": "Mais verba pra escola pública e piso salarial cheio do professor",
+   "impacto": {
+    "esc_publica": "F",
+    "renda_1": "F",
+    "renda_2": "F"
+   },
+   "votacoes": []
+  },
+  {
+   "id": "servidor",
+   "s": "Serviço público",
+   "t": "Reforma administrativa que acaba com a estabilidade do servidor",
+   "impacto": {
+    "servidor": "C",
+    "empresa": "F"
+   },
+   "votacoes": [
+    {
+     "casa": "camara",
+     "id": "2262083-597",
+     "ladoSim": "F",
+     "rotulo": "PEC 32/2020 (reforma administrativa) — parecer na Comissão Especial, 23/09/2021 (só 46 votantes)"
+    }
+   ]
+  },
+  {
+   "id": "privatiza",
+   "s": "Estatais",
+   "t": "Privatizar estatais como Correios e Banrisul",
+   "impacto": {
+    "servidor": "C",
+    "renda_1": "C",
+    "empresa": "F",
+    "renda_4": "F"
+   },
+   "votacoes": []
+  },
+  {
+   "id": "tarifa",
+   "s": "Transporte público",
+   "t": "Tarifa zero no transporte público, bancada por imposto",
+   "impacto": {
+    "onibus": "F",
+    "renda_1": "F",
+    "renda_2": "F"
+   },
+   "votacoes": []
+  },
+  {
+   "id": "combustivel",
+   "s": "Combustível",
+   "t": "Cortar imposto sobre combustível, mesmo com queda de arrecadação",
+   "impacto": {
+    "carro": "F",
+    "moto": "F",
+    "mei": "F",
+    "empresa": "F"
+   },
+   "votacoes": [
+    {
+     "casa": "camara",
+     "id": "2317648-72",
+     "ladoSim": "F",
+     "rotulo": "PLP 18/2022 (teto do ICMS sobre combustíveis) — emendas do Senado, Plenário, 15/06/2022"
+    },
+    {
+     "casa": "senado",
+     "sigla": "PLP",
+     "numero": 18,
+     "ano": 2022,
+     "codigoSessaoVotacao": 6612,
+     "ladoSim": "F",
+     "rotulo": "PLP 18/2022 (teto do ICMS sobre combustíveis) — Plenário do Senado, 13/06/2022"
+    }
+   ]
+  },
+  {
+   "id": "aluguel",
+   "s": "Moradia",
+   "t": "Limitar reajuste de aluguel e taxar imóvel vazio pra segurar o preço",
+   "impacto": {
+    "aluguel": "F",
+    "renda_1": "F",
+    "renda_2": "F"
+   },
+   "votacoes": []
+  },
+  {
+   "id": "juros",
+   "s": "Juros e dívida",
+   "t": "Teto de juros no cartão de crédito e no cheque especial",
+   "impacto": {
+    "renda_1": "F",
+    "renda_2": "F",
+    "renda_3": "F",
+    "clt": "F",
+    "mei": "F",
+    "sem_trab": "F",
+    "financiada": "F"
+   },
+   "votacoes": []
+  },
+  {
+   "id": "emendas",
+   "s": "Transparência",
+   "t": "Rastreabilidade total das emendas parlamentares, com autor e destino",
+   "impacto": {
+    "renda_1": "F",
+    "renda_2": "F",
+    "renda_3": "F",
+    "renda_4": "F",
+    "sus": "F",
+    "esc_publica": "F"
+   },
+   "votacoes": []
+  },
+  {
+   "id": "arma",
+   "s": "Segurança",
+   "t": "Facilitar o porte de arma para o cidadão comum",
+   "impacto": {},
+   "votacoes": [
+    {
+     "casa": "camara",
+     "id": "2209381-100",
+     "ladoSim": "F",
+     "rotulo": "PL 3723/2019 (posse e porte de armas, substitutivo) — Plenário, 05/11/2019"
+    }
+   ]
+  },
+  {
+   "id": "anistia",
+   "s": "Democracia",
+   "t": "Anistiar os condenados pelos atos de 8 de janeiro",
+   "impacto": {},
+   "votacoes": [
+    {
+     "casa": "camara",
+     "id": "2562149-7",
+     "ladoSim": "F",
+     "rotulo": "Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025"
+    },
+    {
+     "casa": "camara",
+     "id": "2358548-89",
+     "ladoSim": "F",
+     "rotulo": "PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+    },
+    {
+     "casa": "senado",
+     "sigla": "PL",
+     "numero": 2162,
+     "ano": 2023,
+     "ladoSim": "F",
+     "rotulo": "PL 2162/2023 (redução de penas do 8 de janeiro), Plenário do Senado, 17/12/2025",
+     "codigoSessaoVotacao": 7041
+    }
+   ]
+  },
+  {
+   "id": "ambiente",
+   "s": "Meio ambiente",
+   "t": "Flexibilizar o licenciamento ambiental para destravar obras",
+   "impacto": {},
+   "votacoes": [
+    {
+     "casa": "camara",
+     "id": "257161-454",
+     "ladoSim": "F",
+     "rotulo": "PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+    },
+    {
+     "casa": "senado",
+     "sigla": "PL",
+     "numero": 2159,
+     "ano": 2021,
+     "ladoSim": "F",
+     "rotulo": "PL 2159/2021 (licenciamento ambiental), Plenário do Senado, 21/05/2025",
+     "codigoSessaoVotacao": 6935
+    }
+   ]
+  }
+ ]
+}

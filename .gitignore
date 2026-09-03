@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.astro/
+.vercel/
+.env
+.env.*
+.DS_Store
+# dados brutos baixados (grandes) — o dataset gerado em src/data/generated é versionado
+data/raw/
+# gerado por build-data a partir de src/data/generated
+public/dados/

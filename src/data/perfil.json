@@ -1,0 +1,23 @@
+{
+  "grupos": [
+    {"id":"renda","label":"Qual a renda da sua casa?","hint":"Renda","ops":[
+      {"v":"renda_1","l":"até 2 salários"},{"v":"renda_2","l":"2 a 5"},{"v":"renda_3","l":"5 a 10"},{"v":"renda_4","l":"mais de 10"}]},
+    {"id":"trabalho","label":"Como você trabalha hoje?","hint":"Trabalho","ops":[
+      {"v":"clt","l":"CLT"},{"v":"mei","l":"MEI / autônomo"},{"v":"servidor","l":"servidor público"},{"v":"empresa","l":"tenho empresa"},{"v":"sem_trab","l":"desempregado"}]},
+    {"id":"saude","label":"Quando você adoece, vai onde?","hint":"Saúde","ops":[
+      {"v":"sus","l":"só SUS"},{"v":"sus_plano","l":"SUS + plano"},{"v":"plano","l":"só plano"}]},
+    {"id":"escola","label":"Tem alguém estudando na sua casa?","hint":"Educação","ops":[
+      {"v":"esc_publica","l":"em escola pública"},{"v":"esc_privada","l":"em escola privada"},{"v":"esc_nenhuma","l":"ninguém estuda"}]},
+    {"id":"transporte","label":"Como você se locomove?","hint":"Transporte","ops":[
+      {"v":"onibus","l":"ônibus / trem"},{"v":"carro","l":"carro"},{"v":"moto","l":"moto"},{"v":"ape","l":"bike / a pé"}]},
+    {"id":"moradia","label":"E a casa onde você mora?","hint":"Moradia","ops":[
+      {"v":"aluguel","l":"é alugada"},{"v":"financiada","l":"é financiada"},{"v":"quitada","l":"é quitada"}]}
+  ],
+  "rotulos": {
+    "renda_1":"renda até 2 salários","renda_2":"renda de 2 a 5","renda_3":"renda de 5 a 10","renda_4":"renda acima de 10",
+    "sus":"usar só o SUS","sus_plano":"SUS + plano","plano":"só plano","clt":"ser CLT","mei":"ser MEI/autônomo","servidor":"ser servidor",
+    "empresa":"ter empresa","sem_trab":"estar desempregado","esc_publica":"filho em escola pública","esc_privada":"filho em escola privada",
+    "esc_nenhuma":"ninguém estudando","onibus":"andar de ônibus","carro":"andar de carro","moto":"andar de moto","ape":"ir a pé ou de bike",
+    "aluguel":"morar de aluguel","financiada":"ter casa financiada","quitada":"ter casa quitada"
+  }
+}

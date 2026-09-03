@@ -1,0 +1,5748 @@
+{
+ "uf": "RS",
+ "geradoEm": "2026-09-02T22:17:14.462Z",
+ "origemCandidatos": "manual",
+ "temas": [
+  {
+   "id": "ir",
+   "s": "Imposto de renda",
+   "t": "Isentar o IR até R$ 5 mil e taxar quem ganha acima de R$ 50 mil por mês",
+   "impacto": {
+    "renda_1": "F",
+    "renda_2": "F",
+    "clt": "F",
+    "mei": "F",
+    "sem_trab": "F",
+    "renda_4": "C",
+    "empresa": "C"
+   },
+   "votacoes": [
+    {
+     "casa": "camara",
+     "id": "2487436-169",
+     "ladoSim": "F",
+     "rotulo": "PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+    }
+   ]
+  },
+  {
+   "id": "escala",
+   "s": "Jornada de trabalho",
+   "t": "Acabar com a escala 6x1 e reduzir a jornada sem cortar salário",
+   "impacto": {
+    "clt": "F",
+    "mei": "F",
+    "empresa": "C"
+   },
+   "votacoes": [
+    {
+     "casa": "camara",
+     "id": "2233802-424",
+     "ladoSim": "F",
+     "rotulo": "PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026"
+    },
+    {
+     "casa": "camara",
+     "id": "2233802-438",
+     "ladoSim": "F",
+     "rotulo": "PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+    }
+   ]
+  },
+  {
+   "id": "sus",
+   "s": "Saúde",
+   "t": "Ampliar o orçamento do SUS, mesmo que isso limite outras despesas",
+   "impacto": {
+    "sus": "F",
+    "sus_plano": "F",
+    "renda_1": "F",
+    "renda_2": "F"
+   },
+   "votacoes": []
+  },
+  {
+   "id": "escola",
+   "s": "Educação",
+   "t": "Mais verba pra escola pública e piso salarial cheio do professor",
+   "impacto": {
+    "esc_publica": "F",
+    "renda_1": "F",
+    "renda_2": "F"
+   },
+   "votacoes": []
+  },
+  {
+   "id": "servidor",
+   "s": "Serviço público",
+   "t": "Reforma administrativa que acaba com a estabilidade do servidor",
+   "impacto": {
+    "servidor": "C",
+    "empresa": "F"
+   },
+   "votacoes": [
+    {
+     "casa": "camara",
+     "id": "2262083-597",
+     "ladoSim": "F",
+     "rotulo": "PEC 32/2020 (reforma administrativa) — parecer na Comissão Especial, 23/09/2021 (só 46 votantes)"
+    }
+   ]
+  },
+  {
+   "id": "privatiza",
+   "s": "Estatais",
+   "t": "Privatizar estatais como Correios e Banrisul",
+   "impacto": {
+    "servidor": "C",
+    "renda_1": "C",
+    "empresa": "F",
+    "renda_4": "F"
+   },
+   "votacoes": []
+  },
+  {
+   "id": "tarifa",
+   "s": "Transporte público",
+   "t": "Tarifa zero no transporte público, bancada por imposto",
+   "impacto": {
+    "onibus": "F",
+    "renda_1": "F",
+    "renda_2": "F"
+   },
+   "votacoes": []
+  },
+  {
+   "id": "combustivel",
+   "s": "Combustível",
+   "t": "Cortar imposto sobre combustível, mesmo com queda de arrecadação",
+   "impacto": {
+    "carro": "F",
+    "moto": "F",
+    "mei": "F",
+    "empresa": "F"
+   },
+   "votacoes": [
+    {
+     "casa": "camara",
+     "id": "2317648-72",
+     "ladoSim": "F",
+     "rotulo": "PLP 18/2022 (teto do ICMS sobre combustíveis) — emendas do Senado, Plenário, 15/06/2022"
+    },
+    {
+     "casa": "senado",
+     "sigla": "PLP",
+     "numero": 18,
+     "ano": 2022,
+     "codigoSessaoVotacao": 6612,
+     "ladoSim": "F",
+     "rotulo": "PLP 18/2022 (teto do ICMS sobre combustíveis) — Plenário do Senado, 13/06/2022"
+    }
+   ]
+  },
+  {
+   "id": "aluguel",
+   "s": "Moradia",
+   "t": "Limitar reajuste de aluguel e taxar imóvel vazio pra segurar o preço",
+   "impacto": {
+    "aluguel": "F",
+    "renda_1": "F",
+    "renda_2": "F"
+   },
+   "votacoes": []
+  },
+  {
+   "id": "juros",
+   "s": "Juros e dívida",
+   "t": "Teto de juros no cartão de crédito e no cheque especial",
+   "impacto": {
+    "renda_1": "F",
+    "renda_2": "F",
+    "renda_3": "F",
+    "clt": "F",
+    "mei": "F",
+    "sem_trab": "F",
+    "financiada": "F"
+   },
+   "votacoes": []
+  },
+  {
+   "id": "emendas",
+   "s": "Transparência",
+   "t": "Rastreabilidade total das emendas parlamentares, com autor e destino",
+   "impacto": {
+    "renda_1": "F",
+    "renda_2": "F",
+    "renda_3": "F",
+    "renda_4": "F",
+    "sus": "F",
+    "esc_publica": "F"
+   },
+   "votacoes": []
+  },
+  {
+   "id": "arma",
+   "s": "Segurança",
+   "t": "Facilitar o porte de arma para o cidadão comum",
+   "impacto": {},
+   "votacoes": [
+    {
+     "casa": "camara",
+     "id": "2209381-100",
+     "ladoSim": "F",
+     "rotulo": "PL 3723/2019 (posse e porte de armas, substitutivo) — Plenário, 05/11/2019"
+    }
+   ]
+  },
+  {
+   "id": "anistia",
+   "s": "Democracia",
+   "t": "Anistiar os condenados pelos atos de 8 de janeiro",
+   "impacto": {},
+   "votacoes": [
+    {
+     "casa": "camara",
+     "id": "2562149-7",
+     "ladoSim": "F",
+     "rotulo": "Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025"
+    },
+    {
+     "casa": "camara",
+     "id": "2358548-89",
+     "ladoSim": "F",
+     "rotulo": "PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+    },
+    {
+     "casa": "senado",
+     "sigla": "PL",
+     "numero": 2162,
+     "ano": 2023,
+     "ladoSim": "F",
+     "rotulo": "PL 2162/2023 (redução de penas do 8 de janeiro), Plenário do Senado, 17/12/2025",
+     "codigoSessaoVotacao": 7041
+    }
+   ]
+  },
+  {
+   "id": "ambiente",
+   "s": "Meio ambiente",
+   "t": "Flexibilizar o licenciamento ambiental para destravar obras",
+   "impacto": {},
+   "votacoes": [
+    {
+     "casa": "camara",
+     "id": "257161-454",
+     "ladoSim": "F",
+     "rotulo": "PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+    },
+    {
+     "casa": "senado",
+     "sigla": "PL",
+     "numero": 2159,
+     "ano": 2021,
+     "ladoSim": "F",
+     "rotulo": "PL 2159/2021 (licenciamento ambiental), Plenário do Senado, 21/05/2025",
+     "codigoSessaoVotacao": 6935
+    }
+   ]
+  }
+ ],
+ "cargos": [
+  {
+   "id": "presidente",
+   "cdTse": 1,
+   "nome": "Presidente da República",
+   "curto": "presidente",
+   "casa": "camara",
+   "porCampo": true,
+   "pesoNoPlacar": 0.25,
+   "abrangencia": "BR",
+   "meta": "7 candidaturas registradas no país · 1 com voto nominal",
+   "candidatos": [
+    {
+     "id": "presidente-edmilson-costa",
+     "nome": "Edmilson Costa",
+     "partido": "PCB",
+     "cargo": "presidente",
+     "uf": "RS",
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCB"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCB"
+      },
+      "sus": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCB"
+      },
+      "escola": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCB"
+      },
+      "servidor": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCB"
+      },
+      "privatiza": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCB"
+      },
+      "tarifa": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCB"
+      },
+      "combustivel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCB"
+      },
+      "aluguel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCB"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCB"
+      },
+      "emendas": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCB"
+      },
+      "arma": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCB"
+      },
+      "anistia": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCB"
+      },
+      "ambiente": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCB"
+      }
+     },
+     "nominais": 0
+    },
+    {
+     "id": "presidente-flavio-bolsonaro",
+     "nome": "Flávio Bolsonaro",
+     "partido": "PL",
+     "cargo": "presidente",
+     "uf": "RS",
+     "mandato": {
+      "casa": "senado",
+      "id": 5894,
+      "nome": "Flávio Bolsonaro"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "escala": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "sus": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "escola": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "servidor": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "privatiza": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "tarifa": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PLP 18/2022 (teto do ICMS sobre combustíveis) — Plenário do Senado, 13/06/2022"
+      },
+      "aluguel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "juros": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "anistia": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 2162/2023 (redução de penas do 8 de janeiro), Plenário do Senado, 17/12/2025"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 2159/2021 (licenciamento ambiental), Plenário do Senado, 21/05/2025"
+      }
+     },
+     "nominais": 3
+    },
+    {
+     "id": "presidente-hertz-dias",
+     "nome": "Hertz Dias",
+     "partido": "PSTU",
+     "cargo": "presidente",
+     "uf": "RS",
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSTU"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSTU"
+      },
+      "sus": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSTU"
+      },
+      "escola": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSTU"
+      },
+      "servidor": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSTU"
+      },
+      "privatiza": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSTU"
+      },
+      "tarifa": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSTU"
+      },
+      "combustivel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSTU"
+      },
+      "aluguel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSTU"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSTU"
+      },
+      "emendas": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSTU"
+      },
+      "arma": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSTU"
+      },
+      "anistia": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSTU"
+      },
+      "ambiente": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSTU"
+      }
+     },
+     "nominais": 0
+    },
+    {
+     "id": "presidente-luiz-inacio-lula-da-silva",
+     "nome": "Luiz Inácio Lula da Silva",
+     "partido": "PT",
+     "cargo": "presidente",
+     "uf": "RS",
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "sus": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "escola": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "servidor": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "privatiza": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "tarifa": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "combustivel": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "aluguel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "emendas": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "arma": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "anistia": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "ambiente": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      }
+     },
+     "nominais": 0
+    },
+    {
+     "id": "presidente-romeu-zema",
+     "nome": "Romeu Zema",
+     "partido": "NOVO",
+     "cargo": "presidente",
+     "uf": "RS",
+     "posicoes": {
+      "ir": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "escala": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "sus": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "escola": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "servidor": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "privatiza": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "tarifa": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "aluguel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "juros": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "emendas": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "anistia": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      }
+     },
+     "nominais": 0
+    },
+    {
+     "id": "presidente-ronaldo-caiado",
+     "nome": "Ronaldo Caiado",
+     "partido": "UNIÃO",
+     "cargo": "presidente",
+     "uf": "RS",
+     "posicoes": {
+      "ir": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "escala": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "sus": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "escola": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "servidor": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "privatiza": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "tarifa": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "aluguel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "juros": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "anistia": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      }
+     },
+     "nominais": 0
+    },
+    {
+     "id": "presidente-rui-costa-pimenta",
+     "nome": "Rui Costa Pimenta",
+     "partido": "PCO",
+     "cargo": "presidente",
+     "uf": "RS",
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCO"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCO"
+      },
+      "sus": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCO"
+      },
+      "escola": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCO"
+      },
+      "servidor": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCO"
+      },
+      "privatiza": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCO"
+      },
+      "tarifa": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCO"
+      },
+      "combustivel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCO"
+      },
+      "aluguel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCO"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCO"
+      },
+      "emendas": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCO"
+      },
+      "arma": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCO"
+      },
+      "anistia": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCO"
+      },
+      "ambiente": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCO"
+      }
+     },
+     "nominais": 0
+    }
+   ]
+  },
+  {
+   "id": "governador",
+   "cdTse": 3,
+   "nome": "Governador do RS",
+   "curto": "governador",
+   "casa": "alrs",
+   "porCampo": true,
+   "pesoNoPlacar": 0.15,
+   "abrangencia": "UF",
+   "meta": "7 candidatos ao Piratini · 1 com voto nominal",
+   "candidatos": [
+    {
+     "id": "governador-cesar-pontes",
+     "nome": "Cesar Pontes",
+     "partido": "PCO",
+     "cargo": "governador",
+     "uf": "RS",
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCO"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCO"
+      },
+      "sus": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCO"
+      },
+      "escola": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCO"
+      },
+      "servidor": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCO"
+      },
+      "privatiza": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCO"
+      },
+      "tarifa": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCO"
+      },
+      "combustivel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCO"
+      },
+      "aluguel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCO"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCO"
+      },
+      "emendas": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCO"
+      },
+      "arma": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCO"
+      },
+      "anistia": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCO"
+      },
+      "ambiente": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCO"
+      }
+     },
+     "nominais": 0
+    },
+    {
+     "id": "governador-gabriel-souza",
+     "nome": "Gabriel Souza",
+     "partido": "MDB",
+     "cargo": "governador",
+     "uf": "RS",
+     "posicoes": {
+      "ir": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "escala": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "sus": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "escola": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "servidor": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "privatiza": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "tarifa": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "aluguel": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "arma": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "anistia": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      }
+     },
+     "nominais": 0
+    },
+    {
+     "id": "governador-juliana-brizola",
+     "nome": "Juliana Brizola",
+     "partido": "PDT",
+     "cargo": "governador",
+     "uf": "RS",
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "sus": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "escola": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "servidor": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "privatiza": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "tarifa": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "combustivel": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "aluguel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "emendas": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "arma": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "anistia": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "ambiente": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      }
+     },
+     "nominais": 0
+    },
+    {
+     "id": "governador-luciano-zucco",
+     "nome": "Luciano Zucco",
+     "partido": "PL",
+     "cargo": "governador",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 220552,
+      "nome": "Zucco"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou SIM em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "escola": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "servidor": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "privatiza": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "tarifa": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "aluguel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "juros": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "anistia": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou SIM em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 4
+    },
+    {
+     "id": "governador-marcelo-maranata",
+     "nome": "Marcelo Maranata",
+     "partido": "PSDB",
+     "cargo": "governador",
+     "uf": "RS",
+     "posicoes": {
+      "ir": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "escala": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "sus": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "escola": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "servidor": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "privatiza": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "tarifa": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "aluguel": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "juros": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "emendas": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "arma": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "anistia": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "ambiente": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      }
+     },
+     "nominais": 0
+    },
+    {
+     "id": "governador-priscila-voigt",
+     "nome": "Priscila Voigt",
+     "partido": "UP",
+     "cargo": "governador",
+     "uf": "RS",
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Unidade Popular"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Unidade Popular"
+      },
+      "sus": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Unidade Popular"
+      },
+      "escola": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Unidade Popular"
+      },
+      "servidor": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Unidade Popular"
+      },
+      "privatiza": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Unidade Popular"
+      },
+      "tarifa": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Unidade Popular"
+      },
+      "combustivel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Unidade Popular"
+      },
+      "aluguel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Unidade Popular"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Unidade Popular"
+      },
+      "emendas": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Unidade Popular"
+      },
+      "arma": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Unidade Popular"
+      },
+      "anistia": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Unidade Popular"
+      },
+      "ambiente": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Unidade Popular"
+      }
+     },
+     "nominais": 0
+    },
+    {
+     "id": "governador-rejane-de-oliveira",
+     "nome": "Rejane de Oliveira",
+     "partido": "PSTU",
+     "cargo": "governador",
+     "uf": "RS",
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSTU"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSTU"
+      },
+      "sus": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSTU"
+      },
+      "escola": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSTU"
+      },
+      "servidor": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSTU"
+      },
+      "privatiza": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSTU"
+      },
+      "tarifa": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSTU"
+      },
+      "combustivel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSTU"
+      },
+      "aluguel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSTU"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSTU"
+      },
+      "emendas": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSTU"
+      },
+      "arma": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSTU"
+      },
+      "anistia": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSTU"
+      },
+      "ambiente": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSTU"
+      }
+     },
+     "nominais": 0
+    }
+   ]
+  },
+  {
+   "id": "senador",
+   "cdTse": 5,
+   "nome": "Senador pelo RS",
+   "curto": "senador",
+   "casa": "senado",
+   "porCampo": false,
+   "pesoNoPlacar": 0.2,
+   "abrangencia": "UF",
+   "meta": "2 vagas · 5 candidatos · 3 com voto nominal",
+   "candidatos": [
+    {
+     "id": "senador-germano-rigotto",
+     "nome": "Germano Rigotto",
+     "partido": "MDB",
+     "cargo": "senador",
+     "uf": "RS",
+     "posicoes": {
+      "ir": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "escala": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "sus": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "escola": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "servidor": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "privatiza": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "tarifa": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "aluguel": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "arma": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "anistia": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      }
+     },
+     "nominais": 0
+    },
+    {
+     "id": "senador-manuela-d-avila",
+     "nome": "Manuela D'Ávila",
+     "partido": "PSOL",
+     "cargo": "senador",
+     "uf": "RS",
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "sus": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "escola": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "servidor": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "privatiza": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "tarifa": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "combustivel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "aluguel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "emendas": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "arma": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "anistia": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "ambiente": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      }
+     },
+     "nominais": 0
+    },
+    {
+     "id": "senador-marcel-van-hattem",
+     "nome": "Marcel van Hattem",
+     "partido": "NOVO",
+     "cargo": "senador",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 156190,
+      "nome": "Marcel van Hattem"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou NÃO em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "escola": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "servidor": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 32/2020 (reforma administrativa) — parecer na Comissão Especial, 23/09/2021 (só 46 votantes)"
+      },
+      "privatiza": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "tarifa": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PLP 18/2022 (teto do ICMS sobre combustíveis) — emendas do Senado, Plenário, 15/06/2022"
+      },
+      "aluguel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "juros": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "emendas": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 3723/2019 (posse e porte de armas, substitutivo) — Plenário, 05/11/2019"
+      },
+      "anistia": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou SIM em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 7
+    },
+    {
+     "id": "senador-paulo-pimenta",
+     "nome": "Paulo Pimenta",
+     "partido": "PT",
+     "cargo": "senador",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 74400,
+      "nome": "Paulo Pimenta"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou SIM em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "escola": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "servidor": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "privatiza": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "tarifa": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PLP 18/2022 (teto do ICMS sobre combustíveis) — emendas do Senado, Plenário, 15/06/2022"
+      },
+      "aluguel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "emendas": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "arma": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "anistia": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou NÃO em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 5
+    },
+    {
+     "id": "senador-sanderson",
+     "nome": "Sanderson",
+     "partido": "PL",
+     "cargo": "senador",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 204416,
+      "nome": "Sanderson"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou SIM em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "escola": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "servidor": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "privatiza": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "tarifa": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PLP 18/2022 (teto do ICMS sobre combustíveis) — emendas do Senado, Plenário, 15/06/2022"
+      },
+      "aluguel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "juros": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 3723/2019 (posse e porte de armas, substitutivo) — Plenário, 05/11/2019"
+      },
+      "anistia": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou SIM em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 6
+    }
+   ]
+  },
+  {
+   "id": "federal",
+   "cdTse": 6,
+   "nome": "Deputado federal",
+   "curto": "deputado federal",
+   "casa": "camara",
+   "porCampo": false,
+   "pesoNoPlacar": 0.3,
+   "abrangencia": "UF",
+   "meta": "31 vagas · por enquanto, só os 31 deputados gaúchos em exercício (lista completa vem do TSE) · 31 com voto nominal",
+   "candidatos": [
+    {
+     "id": "cam-136811",
+     "nome": "Afonso Hamm",
+     "partido": "PP",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 136811,
+      "nome": "Afonso Hamm"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou SIM em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "escola": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "servidor": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "privatiza": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "tarifa": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PLP 18/2022 (teto do ICMS sobre combustíveis) — emendas do Senado, Plenário, 15/06/2022"
+      },
+      "aluguel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "juros": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 3723/2019 (posse e porte de armas, substitutivo) — Plenário, 05/11/2019"
+      },
+      "anistia": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou SIM em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 6
+    },
+    {
+     "id": "cam-178835",
+     "nome": "Afonso Motta",
+     "partido": "PDT",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 178835,
+      "nome": "Afonso Motta"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "escola": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "servidor": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "privatiza": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "tarifa": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PLP 18/2022 (teto do ICMS sobre combustíveis) — emendas do Senado, Plenário, 15/06/2022"
+      },
+      "aluguel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "emendas": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 3723/2019 (posse e porte de armas, substitutivo) — Plenário, 05/11/2019"
+      },
+      "anistia": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou NÃO em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 6
+    },
+    {
+     "id": "cam-160559",
+     "nome": "Alceu Moreira",
+     "partido": "MDB",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 160559,
+      "nome": "Alceu Moreira"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou SIM em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "escola": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "servidor": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 32/2020 (reforma administrativa) — parecer na Comissão Especial, 23/09/2021 (só 46 votantes)"
+      },
+      "privatiza": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "tarifa": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PLP 18/2022 (teto do ICMS sobre combustíveis) — emendas do Senado, Plenário, 15/06/2022"
+      },
+      "aluguel": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 3723/2019 (posse e porte de armas, substitutivo) — Plenário, 05/11/2019"
+      },
+      "anistia": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou SIM em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 7
+    },
+    {
+     "id": "cam-220554",
+     "nome": "Alexandre Lindenmeyer",
+     "partido": "PT",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 220554,
+      "nome": "Alexandre Lindenmeyer"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou SIM em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "escola": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "servidor": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "privatiza": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "tarifa": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "combustivel": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "aluguel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "emendas": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "arma": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "anistia": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou NÃO em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 4
+    },
+    {
+     "id": "cam-220549",
+     "nome": "Any Ortiz",
+     "partido": "PP",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 220549,
+      "nome": "Any Ortiz"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou SIM em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "escola": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "servidor": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "privatiza": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "tarifa": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "aluguel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "juros": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "anistia": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou SIM em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 4
+    },
+    {
+     "id": "cam-204388",
+     "nome": "Bibo Nunes",
+     "partido": "PL",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 204388,
+      "nome": "Bibo Nunes"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou NÃO em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "escola": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "servidor": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "privatiza": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "tarifa": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PLP 18/2022 (teto do ICMS sobre combustíveis) — emendas do Senado, Plenário, 15/06/2022"
+      },
+      "aluguel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "juros": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 3723/2019 (posse e porte de armas, substitutivo) — Plenário, 05/11/2019"
+      },
+      "anistia": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou SIM em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 6
+    },
+    {
+     "id": "cam-160538",
+     "nome": "Bohn Gass",
+     "partido": "PT",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 160538,
+      "nome": "Bohn Gass"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou SIM em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "escola": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "servidor": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "privatiza": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "tarifa": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PLP 18/2022 (teto do ICMS sobre combustíveis) — emendas do Senado, Plenário, 15/06/2022"
+      },
+      "aluguel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "emendas": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "arma": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em PL 3723/2019 (posse e porte de armas, substitutivo) — Plenário, 05/11/2019"
+      },
+      "anistia": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou NÃO em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 6
+    },
+    {
+     "id": "cam-178962",
+     "nome": "Carlos Gomes",
+     "partido": "REPUBLICANOS",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 178962,
+      "nome": "Carlos Gomes"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou SIM em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "escola": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "servidor": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "privatiza": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "tarifa": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PLP 18/2022 (teto do ICMS sobre combustíveis) — emendas do Senado, Plenário, 15/06/2022"
+      },
+      "aluguel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 3723/2019 (posse e porte de armas, substitutivo) — Plenário, 05/11/2019"
+      },
+      "anistia": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      }
+     },
+     "nominais": 3
+    },
+    {
+     "id": "cam-178963",
+     "nome": "Covatti Filho",
+     "partido": "PP",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 178963,
+      "nome": "Covatti Filho"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "sus": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "escola": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "servidor": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "privatiza": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "tarifa": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "aluguel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "juros": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "anistia": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou SIM em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 3
+    },
+    {
+     "id": "cam-220555",
+     "nome": "Daiana Santos",
+     "partido": "PCdoB",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 220555,
+      "nome": "Daiana Santos"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou SIM em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCdoB"
+      },
+      "escola": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCdoB"
+      },
+      "servidor": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCdoB"
+      },
+      "privatiza": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCdoB"
+      },
+      "tarifa": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCdoB"
+      },
+      "combustivel": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCdoB"
+      },
+      "aluguel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCdoB"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCdoB"
+      },
+      "emendas": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCdoB"
+      },
+      "arma": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCdoB"
+      },
+      "anistia": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou NÃO em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PCdoB"
+      }
+     },
+     "nominais": 3
+    },
+    {
+     "id": "cam-204409",
+     "nome": "Daniel Trzeciak",
+     "partido": "PSDB",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 204409,
+      "nome": "Daniel Trzeciak"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou SIM em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "escola": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "servidor": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "privatiza": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "tarifa": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PLP 18/2022 (teto do ICMS sobre combustíveis) — emendas do Senado, Plenário, 15/06/2022"
+      },
+      "aluguel": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "juros": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "emendas": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 3723/2019 (posse e porte de armas, substitutivo) — Plenário, 05/11/2019"
+      },
+      "anistia": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou SIM em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 6
+    },
+    {
+     "id": "cam-160552",
+     "nome": "Danrlei de Deus Hinterholz",
+     "partido": "PSD",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 160552,
+      "nome": "Danrlei de Deus Hinterholz"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou SIM em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "escola": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "servidor": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "privatiza": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "tarifa": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "aluguel": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "juros": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 3723/2019 (posse e porte de armas, substitutivo) — Plenário, 05/11/2019"
+      },
+      "anistia": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou SIM em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 5
+    },
+    {
+     "id": "cam-220553",
+     "nome": "Denise Pessôa",
+     "partido": "PT",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 220553,
+      "nome": "Denise Pessôa"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou SIM em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "escola": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "servidor": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "privatiza": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "tarifa": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "combustivel": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "aluguel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "emendas": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "arma": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "anistia": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou NÃO em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 4
+    },
+    {
+     "id": "cam-204407",
+     "nome": "Fernanda Melchionna",
+     "partido": "PSOL",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 204407,
+      "nome": "Fernanda Melchionna"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou SIM em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "escola": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "servidor": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "privatiza": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "tarifa": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PLP 18/2022 (teto do ICMS sobre combustíveis) — emendas do Senado, Plenário, 15/06/2022"
+      },
+      "aluguel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "emendas": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "arma": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em PL 3723/2019 (posse e porte de armas, substitutivo) — Plenário, 05/11/2019"
+      },
+      "anistia": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou NÃO em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 6
+    },
+    {
+     "id": "cam-220551",
+     "nome": "Franciane Bayer",
+     "partido": "REPUBLICANOS",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 220551,
+      "nome": "Franciane Bayer"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou SIM em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "escola": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "servidor": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "privatiza": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "tarifa": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "aluguel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "anistia": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou SIM em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 4
+    },
+    {
+     "id": "cam-160673",
+     "nome": "Giovani Cherini",
+     "partido": "PL",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 160673,
+      "nome": "Giovani Cherini"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou SIM em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "escola": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "servidor": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 32/2020 (reforma administrativa) — parecer na Comissão Especial, 23/09/2021 (só 46 votantes)"
+      },
+      "privatiza": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "tarifa": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PLP 18/2022 (teto do ICMS sobre combustíveis) — emendas do Senado, Plenário, 15/06/2022"
+      },
+      "aluguel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "juros": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 3723/2019 (posse e porte de armas, substitutivo) — Plenário, 05/11/2019"
+      },
+      "anistia": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou SIM em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 7
+    },
+    {
+     "id": "cam-178964",
+     "nome": "Heitor Schuch",
+     "partido": "PSD",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 178964,
+      "nome": "Heitor Schuch"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou SIM em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "escola": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "servidor": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "privatiza": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "tarifa": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PLP 18/2022 (teto do ICMS sobre combustíveis) — emendas do Senado, Plenário, 15/06/2022"
+      },
+      "aluguel": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "juros": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "arma": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em PL 3723/2019 (posse e porte de armas, substitutivo) — Plenário, 05/11/2019"
+      },
+      "anistia": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou NÃO em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      }
+     },
+     "nominais": 5
+    },
+    {
+     "id": "cam-204404",
+     "nome": "Lucas Redecker",
+     "partido": "PSD",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 204404,
+      "nome": "Lucas Redecker"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou NÃO em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "escola": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "servidor": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "privatiza": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "tarifa": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PLP 18/2022 (teto do ICMS sobre combustíveis) — emendas do Senado, Plenário, 15/06/2022"
+      },
+      "aluguel": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "juros": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 3723/2019 (posse e porte de armas, substitutivo) — Plenário, 05/11/2019"
+      },
+      "anistia": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou SIM em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 6
+    },
+    {
+     "id": "cam-141485",
+     "nome": "Luiz Carlos Busato",
+     "partido": "UNIÃO",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 141485,
+      "nome": "Luiz Carlos Busato"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou SIM em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "escola": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "servidor": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "privatiza": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "tarifa": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "aluguel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "juros": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "anistia": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou SIM em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 4
+    },
+    {
+     "id": "cam-156190",
+     "nome": "Marcel van Hattem",
+     "partido": "NOVO",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 156190,
+      "nome": "Marcel van Hattem"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou NÃO em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "escola": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "servidor": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 32/2020 (reforma administrativa) — parecer na Comissão Especial, 23/09/2021 (só 46 votantes)"
+      },
+      "privatiza": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "tarifa": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PLP 18/2022 (teto do ICMS sobre combustíveis) — emendas do Senado, Plenário, 15/06/2022"
+      },
+      "aluguel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "juros": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "emendas": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 3723/2019 (posse e porte de armas, substitutivo) — Plenário, 05/11/2019"
+      },
+      "anistia": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou SIM em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 7
+    },
+    {
+     "id": "cam-133810",
+     "nome": "Marcelo Moraes",
+     "partido": "PL",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 133810,
+      "nome": "Marcelo Moraes"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou SIM em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "escola": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "servidor": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 32/2020 (reforma administrativa) — parecer na Comissão Especial, 23/09/2021 (só 46 votantes)"
+      },
+      "privatiza": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "tarifa": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PLP 18/2022 (teto do ICMS sobre combustíveis) — emendas do Senado, Plenário, 15/06/2022"
+      },
+      "aluguel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "juros": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 3723/2019 (posse e porte de armas, substitutivo) — Plenário, 05/11/2019"
+      },
+      "anistia": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou SIM em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 7
+    },
+    {
+     "id": "cam-179001",
+     "nome": "Márcio Biolchi",
+     "partido": "MDB",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 179001,
+      "nome": "Márcio Biolchi"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou SIM em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "escola": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "servidor": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "privatiza": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "tarifa": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PLP 18/2022 (teto do ICMS sobre combustíveis) — emendas do Senado, Plenário, 15/06/2022"
+      },
+      "aluguel": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 3723/2019 (posse e porte de armas, substitutivo) — Plenário, 05/11/2019"
+      },
+      "anistia": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      }
+     },
+     "nominais": 5
+    },
+    {
+     "id": "cam-160535",
+     "nome": "Marcon",
+     "partido": "PT",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 160535,
+      "nome": "Marcon"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou SIM em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "escola": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "servidor": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "privatiza": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "tarifa": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "combustivel": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "aluguel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "emendas": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "arma": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em PL 3723/2019 (posse e porte de armas, substitutivo) — Plenário, 05/11/2019"
+      },
+      "anistia": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou NÃO em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 5
+    },
+    {
+     "id": "cam-74398",
+     "nome": "Maria do Rosário",
+     "partido": "PT",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 74398,
+      "nome": "Maria do Rosário"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou SIM em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "escola": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "servidor": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "privatiza": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "tarifa": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PLP 18/2022 (teto do ICMS sobre combustíveis) — emendas do Senado, Plenário, 15/06/2022"
+      },
+      "aluguel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "emendas": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "arma": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em PL 3723/2019 (posse e porte de armas, substitutivo) — Plenário, 05/11/2019"
+      },
+      "anistia": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou NÃO em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 6
+    },
+    {
+     "id": "cam-220550",
+     "nome": "Mauricio Marcon",
+     "partido": "PL",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 220550,
+      "nome": "Mauricio Marcon"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou NÃO em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "escola": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "servidor": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "privatiza": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "tarifa": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "aluguel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "juros": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "anistia": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou SIM em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 4
+    },
+    {
+     "id": "cam-73692",
+     "nome": "Osmar Terra",
+     "partido": "PL",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 73692,
+      "nome": "Osmar Terra"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou SIM em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "escola": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "servidor": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "privatiza": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "tarifa": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "aluguel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "juros": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "anistia": {
+       "lado": "D",
+       "fonte": "voto_nominal",
+       "detalhe": "votou dos dois lados: votou SIM em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou NÃO em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 4
+    },
+    {
+     "id": "cam-74400",
+     "nome": "Paulo Pimenta",
+     "partido": "PT",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 74400,
+      "nome": "Paulo Pimenta"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou SIM em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "escola": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "servidor": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "privatiza": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "tarifa": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PLP 18/2022 (teto do ICMS sobre combustíveis) — emendas do Senado, Plenário, 15/06/2022"
+      },
+      "aluguel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "emendas": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "arma": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "anistia": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou NÃO em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 5
+    },
+    {
+     "id": "cam-204406",
+     "nome": "Pedro Westphalen",
+     "partido": "PP",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 204406,
+      "nome": "Pedro Westphalen"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou SIM em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "escola": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "servidor": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "privatiza": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "tarifa": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PLP 18/2022 (teto do ICMS sobre combustíveis) — emendas do Senado, Plenário, 15/06/2022"
+      },
+      "aluguel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "juros": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 3723/2019 (posse e porte de armas, substitutivo) — Plenário, 05/11/2019"
+      },
+      "anistia": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou SIM em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 6
+    },
+    {
+     "id": "cam-73486",
+     "nome": "Pompeo de Mattos",
+     "partido": "PDT",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 73486,
+      "nome": "Pompeo de Mattos"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou SIM em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "escola": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "servidor": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "privatiza": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "tarifa": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PLP 18/2022 (teto do ICMS sobre combustíveis) — emendas do Senado, Plenário, 15/06/2022"
+      },
+      "aluguel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "emendas": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 3723/2019 (posse e porte de armas, substitutivo) — Plenário, 05/11/2019"
+      },
+      "anistia": {
+       "lado": "C",
+       "fonte": "voto_nominal",
+       "detalhe": "votou NÃO em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou NÃO em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 6
+    },
+    {
+     "id": "cam-204416",
+     "nome": "Sanderson",
+     "partido": "PL",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 204416,
+      "nome": "Sanderson"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou SIM em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "escola": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "servidor": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "privatiza": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "tarifa": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PLP 18/2022 (teto do ICMS sobre combustíveis) — emendas do Senado, Plenário, 15/06/2022"
+      },
+      "aluguel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "juros": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 3723/2019 (posse e porte de armas, substitutivo) — Plenário, 05/11/2019"
+      },
+      "anistia": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou SIM em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 6
+    },
+    {
+     "id": "cam-220552",
+     "nome": "Zucco",
+     "partido": "PL",
+     "cargo": "federal",
+     "uf": "RS",
+     "mandato": {
+      "casa": "camara",
+      "id": 220552,
+      "nome": "Zucco"
+     },
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 1087/2025 — isenção do IR até R$ 5 mil (substitutivo), Plenário, 01/10/2025"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PEC 221/2019 (fim da 6x1, apensada a PEC 8/2025) — 1º turno, Plenário, 27/05/2026 · votou SIM em PEC 221/2019 (fim da 6x1) — 2º turno, Plenário, 27/05/2026"
+      },
+      "sus": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "escola": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "servidor": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "privatiza": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "tarifa": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "aluguel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "juros": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "anistia": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em Urgência do PL 2162/2023 (anistia do 8 de janeiro) — Plenário, 17/09/2025 · votou SIM em PL 2162/2023 (redução de penas do 8 de janeiro, substitutivo) — Plenário, 09/12/2025"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "voto_nominal",
+       "detalhe": "votou SIM em PL 2159/2021 (lei geral do licenciamento ambiental) — Plenário, 16/07/2025"
+      }
+     },
+     "nominais": 4
+    }
+   ]
+  },
+  {
+   "id": "estadual",
+   "cdTse": 7,
+   "nome": "Deputado estadual",
+   "curto": "deputado estadual",
+   "casa": "alrs",
+   "porCampo": false,
+   "pesoNoPlacar": 0.1,
+   "abrangencia": "UF",
+   "meta": "55 cadeiras · por partido, enquanto a lista do TSE não chega",
+   "candidatos": [
+    {
+     "id": "est-mdb",
+     "nome": "candidato(a) do MDB",
+     "partido": "MDB",
+     "cargo": "estadual",
+     "uf": "RS",
+     "placeholder": true,
+     "posicoes": {
+      "ir": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "escala": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "sus": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "escola": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "servidor": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "privatiza": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "tarifa": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "aluguel": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "arma": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "anistia": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do MDB"
+      }
+     },
+     "nominais": 0
+    },
+    {
+     "id": "est-pt",
+     "nome": "candidato(a) do Partido dos Trabalhadores",
+     "partido": "PT",
+     "cargo": "estadual",
+     "uf": "RS",
+     "placeholder": true,
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "sus": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "escola": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "servidor": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "privatiza": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "tarifa": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "combustivel": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "aluguel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "emendas": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "arma": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "anistia": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      },
+      "ambiente": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido dos Trabalhadores"
+      }
+     },
+     "nominais": 0
+    },
+    {
+     "id": "est-pl",
+     "nome": "candidato(a) do Partido Liberal",
+     "partido": "PL",
+     "cargo": "estadual",
+     "uf": "RS",
+     "placeholder": true,
+     "posicoes": {
+      "ir": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "escala": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "sus": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "escola": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "servidor": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "privatiza": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "tarifa": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "aluguel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "juros": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "anistia": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Liberal"
+      }
+     },
+     "nominais": 0
+    },
+    {
+     "id": "est-novo",
+     "nome": "candidato(a) do Partido Novo",
+     "partido": "NOVO",
+     "cargo": "estadual",
+     "uf": "RS",
+     "placeholder": true,
+     "posicoes": {
+      "ir": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "escala": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "sus": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "escola": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "servidor": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "privatiza": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "tarifa": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "aluguel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "juros": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "emendas": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "anistia": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Partido Novo"
+      }
+     },
+     "nominais": 0
+    },
+    {
+     "id": "est-pdt",
+     "nome": "candidato(a) do PDT",
+     "partido": "PDT",
+     "cargo": "estadual",
+     "uf": "RS",
+     "placeholder": true,
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "sus": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "escola": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "servidor": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "privatiza": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "tarifa": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "combustivel": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "aluguel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "emendas": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "arma": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "anistia": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      },
+      "ambiente": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PDT"
+      }
+     },
+     "nominais": 0
+    },
+    {
+     "id": "est-pp",
+     "nome": "candidato(a) do Progressistas",
+     "partido": "PP",
+     "cargo": "estadual",
+     "uf": "RS",
+     "placeholder": true,
+     "posicoes": {
+      "ir": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "escala": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "sus": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "escola": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "servidor": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "privatiza": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "tarifa": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "aluguel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "juros": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "anistia": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Progressistas"
+      }
+     },
+     "nominais": 0
+    },
+    {
+     "id": "est-psb",
+     "nome": "candidato(a) do PSB",
+     "partido": "PSB",
+     "cargo": "estadual",
+     "uf": "RS",
+     "placeholder": true,
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSB"
+      },
+      "escala": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSB"
+      },
+      "sus": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSB"
+      },
+      "escola": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSB"
+      },
+      "servidor": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSB"
+      },
+      "privatiza": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSB"
+      },
+      "tarifa": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSB"
+      },
+      "combustivel": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSB"
+      },
+      "aluguel": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSB"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSB"
+      },
+      "emendas": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSB"
+      },
+      "arma": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSB"
+      },
+      "anistia": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSB"
+      },
+      "ambiente": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSB"
+      }
+     },
+     "nominais": 0
+    },
+    {
+     "id": "est-psd",
+     "nome": "candidato(a) do PSD",
+     "partido": "PSD",
+     "cargo": "estadual",
+     "uf": "RS",
+     "placeholder": true,
+     "posicoes": {
+      "ir": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "escala": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "sus": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "escola": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "servidor": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "privatiza": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "tarifa": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "aluguel": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "juros": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "arma": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "anistia": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSD"
+      }
+     },
+     "nominais": 0
+    },
+    {
+     "id": "est-psdb",
+     "nome": "candidato(a) do PSDB",
+     "partido": "PSDB",
+     "cargo": "estadual",
+     "uf": "RS",
+     "placeholder": true,
+     "posicoes": {
+      "ir": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "escala": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "sus": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "escola": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "servidor": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "privatiza": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "tarifa": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "aluguel": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "juros": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "emendas": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "arma": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "anistia": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      },
+      "ambiente": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSDB"
+      }
+     },
+     "nominais": 0
+    },
+    {
+     "id": "est-psol",
+     "nome": "candidato(a) do PSOL",
+     "partido": "PSOL",
+     "cargo": "estadual",
+     "uf": "RS",
+     "placeholder": true,
+     "posicoes": {
+      "ir": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "escala": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "sus": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "escola": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "servidor": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "privatiza": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "tarifa": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "combustivel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "aluguel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "emendas": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "arma": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "anistia": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      },
+      "ambiente": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do PSOL"
+      }
+     },
+     "nominais": 0
+    },
+    {
+     "id": "est-republicanos",
+     "nome": "candidato(a) do Republicanos",
+     "partido": "REPUBLICANOS",
+     "cargo": "estadual",
+     "uf": "RS",
+     "placeholder": true,
+     "posicoes": {
+      "ir": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "escala": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "sus": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "escola": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "servidor": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "privatiza": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "tarifa": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "aluguel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "juros": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "anistia": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do Republicanos"
+      }
+     },
+     "nominais": 0
+    },
+    {
+     "id": "est-uniao",
+     "nome": "candidato(a) do União Brasil",
+     "partido": "UNIÃO",
+     "cargo": "estadual",
+     "uf": "RS",
+     "placeholder": true,
+     "posicoes": {
+      "ir": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "escala": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "sus": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "escola": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "servidor": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "privatiza": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "tarifa": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "combustivel": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "aluguel": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "juros": {
+       "lado": "D",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "emendas": {
+       "lado": "C",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "arma": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "anistia": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      },
+      "ambiente": {
+       "lado": "F",
+       "fonte": "estimativa_partido",
+       "detalhe": "estimativa pela orientação pública do União Brasil"
+      }
+     },
+     "nominais": 0
+    }
+   ]
+  }
+ ],
+ "bancadas": {
+  "camara": {
+   "AVANTE": 5,
+   "CIDADANIA": 2,
+   "DC": 0,
+   "MDB": 38,
+   "MISSÃO": 1,
+   "NOVO": 5,
+   "PCdoB": 11,
+   "PDT": 10,
+   "PL": 98,
+   "PODE": 27,
+   "PP": 46,
+   "PRD": 3,
+   "PSB": 17,
+   "PSD": 48,
+   "PSDB": 18,
+   "PSOL": 13,
+   "PT": 64,
+   "PV": 6,
+   "REDE": 3,
+   "REPUBLICANOS": 42,
+   "SOLIDARIEDADE": 4,
+   "UNIÃO": 52
+  },
+  "senado": {
+   "REPUBLICANOS": 6,
+   "MDB": 9,
+   "PL": 16,
+   "PT": 9,
+   "PSD": 14,
+   "PSB": 7,
+   "PP": 7,
+   "UNIÃO": 3,
+   "PSDB": 4,
+   "PODE": 3,
+   "PDT": 2,
+   "AVANTE": 1
+  },
+  "alrs": {
+   "PL": 8,
+   "PT": 8,
+   "MDB": 8,
+   "PP": 6,
+   "REPUBLICANOS": 5,
+   "PSDB": 4,
+   "PDT": 4,
+   "PSOL": 4,
+   "NOVO": 3,
+   "PSD": 3,
+   "PSB": 2
+  }
+ },
+ "quorum": {
+  "camara": 257,
+  "senado": 41,
+  "alrs": 28
+ },
+ "cadeiras": {
+  "camara": 513,
+  "senado": 81,
+  "alrs": 55
+ },
+ "partidos": {
+  "PT": {
+   "nome": "Partido dos Trabalhadores",
+   "campo": "esq"
+  },
+  "PCdoB": {
+   "nome": "PCdoB",
+   "campo": "esq"
+  },
+  "PV": {
+   "nome": "Partido Verde",
+   "campo": "esq"
+  },
+  "PSOL": {
+   "nome": "PSOL",
+   "campo": "esq"
+  },
+  "REDE": {
+   "nome": "Rede Sustentabilidade",
+   "campo": "esq"
+  },
+  "PDT": {
+   "nome": "PDT",
+   "campo": "esq"
+  },
+  "PSB": {
+   "nome": "PSB",
+   "campo": "esq"
+  },
+  "PSTU": {
+   "nome": "PSTU",
+   "campo": "esq"
+  },
+  "PCO": {
+   "nome": "PCO",
+   "campo": "esq"
+  },
+  "UP": {
+   "nome": "Unidade Popular",
+   "campo": "esq"
+  },
+  "PCB": {
+   "nome": "PCB",
+   "campo": "esq"
+  },
+  "CIDADANIA": {
+   "nome": "Cidadania",
+   "campo": "centro"
+  },
+  "MDB": {
+   "nome": "MDB",
+   "campo": "centro"
+  },
+  "PSD": {
+   "nome": "PSD",
+   "campo": "centro"
+  },
+  "PSDB": {
+   "nome": "PSDB",
+   "campo": "centro"
+  },
+  "PODE": {
+   "nome": "Podemos",
+   "campo": "centro"
+  },
+  "AVANTE": {
+   "nome": "Avante",
+   "campo": "centro"
+  },
+  "SOLIDARIEDADE": {
+   "nome": "Solidariedade",
+   "campo": "centro"
+  },
+  "AGIR": {
+   "nome": "Agir",
+   "campo": "centro"
+  },
+  "MOBILIZA": {
+   "nome": "Mobiliza",
+   "campo": "centro"
+  },
+  "PMB": {
+   "nome": "PMB",
+   "campo": "centro"
+  },
+  "UNIÃO": {
+   "nome": "União Brasil",
+   "campo": "dir"
+  },
+  "PP": {
+   "nome": "Progressistas",
+   "campo": "dir"
+  },
+  "REPUBLICANOS": {
+   "nome": "Republicanos",
+   "campo": "dir"
+  },
+  "PL": {
+   "nome": "Partido Liberal",
+   "campo": "dir"
+  },
+  "NOVO": {
+   "nome": "Partido Novo",
+   "campo": "dir"
+  },
+  "PRD": {
+   "nome": "PRD",
+   "campo": "dir"
+  },
+  "PRTB": {
+   "nome": "PRTB / Missão",
+   "campo": "dir"
+  },
+  "DC": {
+   "nome": "Democracia Cristã",
+   "campo": "dir"
+  }
+ },
+ "fontes": [
+  {
+   "rotulo": "Quem é candidato",
+   "detalhe": "Lista manual conferida no DivulgaCandContas em 2026-08-18 + bancada gaúcha em exercício (API da Câmara, 2026-09-02)"
+  },
+  {
+   "rotulo": "Bancadas na Câmara",
+   "detalhe": "API de Dados Abertos da Câmara, 2026-09-02 — 513 de 513 cadeiras contadas"
+  },
+  {
+   "rotulo": "Bancadas no Senado",
+   "detalhe": "API de Dados Abertos do Senado, 2026-09-02 — 81 senadores em exercício"
+  },
+  {
+   "rotulo": "Bancadas na Assembleia (RS)",
+   "detalhe": "Assembleia Legislativa do RS — https://www.al.rs.gov.br/deputados/, conferido em 2026-08-18"
+  },
+  {
+   "rotulo": "Votos nominais",
+   "detalhe": "9 votações da Câmara e 3 do Senado, listadas em /metodo"
+  }
+ ],
+ "cobertura": [
+  {
+   "temaId": "ir",
+   "nominal": 34,
+   "estimativa": 28
+  },
+  {
+   "temaId": "escala",
+   "nominal": 34,
+   "estimativa": 28
+  },
+  {
+   "temaId": "sus",
+   "nominal": 0,
+   "estimativa": 62
+  },
+  {
+   "temaId": "escola",
+   "nominal": 0,
+   "estimativa": 62
+  },
+  {
+   "temaId": "servidor",
+   "nominal": 5,
+   "estimativa": 57
+  },
+  {
+   "temaId": "privatiza",
+   "nominal": 0,
+   "estimativa": 62
+  },
+  {
+   "temaId": "tarifa",
+   "nominal": 0,
+   "estimativa": 62
+  },
+  {
+   "temaId": "combustivel",
+   "nominal": 23,
+   "estimativa": 39
+  },
+  {
+   "temaId": "aluguel",
+   "nominal": 0,
+   "estimativa": 62
+  },
+  {
+   "temaId": "juros",
+   "nominal": 0,
+   "estimativa": 62
+  },
+  {
+   "temaId": "emendas",
+   "nominal": 0,
+   "estimativa": 62
+  },
+  {
+   "temaId": "arma",
+   "nominal": 22,
+   "estimativa": 40
+  },
+  {
+   "temaId": "anistia",
+   "nominal": 35,
+   "estimativa": 27
+  },
+  {
+   "temaId": "ambiente",
+   "nominal": 32,
+   "estimativa": 30
+  }
+ ],
+ "stats": {
+  "candidatos": 62,
+  "federais": 31
+ }
+}

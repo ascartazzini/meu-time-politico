@@ -1,0 +1,35 @@
+{
+  "name": "meu-time-politico",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "npm run build-data && npm run validate-data && astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "fetch:tse": "tsx scripts/fetch-tse.ts",
+    "fetch:camara": "tsx scripts/fetch-camara.ts",
+    "fetch:senado": "tsx scripts/fetch-senado.ts",
+    "fetch-data": "npm run fetch:camara && npm run fetch:senado && npm run fetch:tse",
+    "build-data": "tsx scripts/build-dataset.ts",
+    "validate-data": "tsx scripts/validate-dataset.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "^7.2.10"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "happy-dom": "^20.13.2",
+    "tsx": "^4.23.13",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.11",
+    "zod": "^4.5.4"
+  }
+}

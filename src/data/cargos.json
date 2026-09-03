@@ -1,0 +1,58 @@
+{
+ "$comment": "Os 5 cargos em disputa em 2026 e como cada um entra no eixo PESO. `casa` diz em que casa a bancada do partido conta; `porCampo` diz que o que conta é o campo ideológico inteiro (presidente e governador não têm bancada própria — têm base). Nome do governador e da casa estadual são preenchidos por UF no build.",
+ "quorum": {
+  "camara": 257,
+  "senado": 41
+ },
+ "cadeiras": {
+  "camara": 513,
+  "senado": 81
+ },
+ "cargos": [
+  {
+   "id": "presidente",
+   "nome": "Presidente da República",
+   "curto": "presidente",
+   "casa": "camara",
+   "porCampo": true,
+   "pesoNoPlacar": 0.25,
+   "abrangencia": "BR"
+  },
+  {
+   "id": "governador",
+   "nome": "Governador",
+   "curto": "governador",
+   "casa": "assembleia",
+   "porCampo": true,
+   "pesoNoPlacar": 0.15,
+   "abrangencia": "UF"
+  },
+  {
+   "id": "senador",
+   "nome": "Senador",
+   "curto": "senador",
+   "casa": "senado",
+   "porCampo": false,
+   "pesoNoPlacar": 0.2,
+   "abrangencia": "UF"
+  },
+  {
+   "id": "federal",
+   "nome": "Deputado federal",
+   "curto": "deputado federal",
+   "casa": "camara",
+   "porCampo": false,
+   "pesoNoPlacar": 0.3,
+   "abrangencia": "UF"
+  },
+  {
+   "id": "estadual",
+   "nome": "Deputado estadual",
+   "curto": "deputado estadual",
+   "casa": "assembleia",
+   "porCampo": false,
+   "pesoNoPlacar": 0.1,
+   "abrangencia": "UF"
+  }
+ ]
+}

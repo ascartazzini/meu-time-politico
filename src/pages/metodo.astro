@@ -1,0 +1,98 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/landing.css';
+import indice from '../data/generated/indice.json';
+import temasJson from '../data/temas.json';
+import camara from '../data/generated/camara.json';
+import senado from '../data/generated/senado.json';
+import type { Tema } from '../lib/tipos';
+const temas = temasJson.temas as Tema[];
+const cob = Object.fromEntries(indice.cobertura.map(c => [c.temaId, c]));
+const camaraVot = camara.votacoes as Record<string, { data: string; descricao: string; totais: Record<string, number> }>;
+const senadoVot = senado.votacoes as Record<string, { data: string; identificacao: string; descricao: string; totais: Record<string, number> }>;
+const somaCam = Object.values(indice.bancadas.camara).reduce((a, b) => a + b, 0);
+const somaSen = Object.values(indice.bancadas.senado).reduce((a, b) => a + b, 0);
+const ordenar = (o: object) => Object.entries(o as Record<string, number>).filter(([, n]) => n > 0).sort((a, b) => b[1] - a[1]);
+const bancCam = ordenar(indice.bancadas.camara), bancSen = ordenar(indice.bancadas.senado);
+const n = indice.nacional;
+---
+<Base title="Meu Time Político 2026 — método e fontes" badge="método">
+  <style>
+    .m{padding:48px 0 0}
+    .m h2{margin-top:56px}
+    .m h2:first-of-type{margin-top:0}
+    .m p{margin-top:14px;max-width:680px;color:#B9C4B2;font-size:15.5px}
+    .m p b,.m li b{color:var(--ink)}
+    .m code{font-family:var(--mono);font-size:12.5px;color:var(--data);background:#0B0E09;padding:1px 6px;border-radius:2px}
+    .tab{width:100%;border-collapse:collapse;margin-top:22px;font-size:13.5px}
+    .tab th{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:left;padding:10px 8px;border-bottom:1px solid var(--line)}
+    .tab td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top;color:#C2CCBB}
+    .tab td.n{font-family:var(--display);font-size:22px;color:var(--stance);text-align:right;white-space:nowrap}
+    .tab td.n.real{color:var(--data)}
+    .tab small{display:block;font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:4px;line-height:1.6}
+    .tab.ufs td{padding:7px 8px;font-family:var(--mono);font-size:12px}
+    .tab.ufs td.n{font-size:16px}
+    .scroll{overflow-x:auto}
+    .bancadas{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:22px}
+    .banc{background:var(--surface);border:1px solid var(--line);border-radius:3px;padding:14px 16px;font-family:var(--mono);font-size:12px;line-height:1.9;color:#C2CCBB}
+    .banc h4{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--data);margin-bottom:6px}
+    .banc span{color:var(--stance)}
+  </style>
+  <div class="m">
+    <div class="kicker">Método · fontes · o que é real e o que é estimativa</div>
+    <h2>Como o placar<br /><span class="out">é calculado</span></h2>
+    <p>Este app não tem opinião sobre candidato. Ele cruza <b>três coisas públicas</b>: o que você respondeu, a posição registrada (ou estimada) de cada candidato em 14 pautas, e o tamanho das bancadas nas casas que aprovam lei. Cada critério está aberto aqui, de propósito. Critério escondido é editorial disfarçado de dado.</p>
+
+    <h2>1. Camisa</h2>
+    <p>Concordância ponderada entre as suas respostas e a posição do candidato. Igual = <code>1</code>, candidato/partido dividido = <code>0,5</code>, oposto = <code>0</code>. As três pautas que você marca como decisivas pesam <code>3×</code>. "Tanto faz" sai da conta em vez de virar meio-termo falso.</p>
+
+    <h2>2. Bolso</h2>
+    <p>Seu perfil (renda, trabalho, saúde, escola, transporte, moradia) ativa só as pautas que batem em você, e pra cada uma há um juízo explícito de <b>qual lado protege quem está na sua situação</b>. O score é a fração dessas pautas em que o candidato está do seu lado (dividido conta metade). Se a sua própria vida puxa pros dois lados numa pauta — renda baixa contra privatizar, ter empresa a favor — ela sai do score e vira "pauta que divide você". A tabela completa de impactos está em <code>src/data/temas.json</code>.</p>
+
+    <h2>3. Coerência e gol contra</h2>
+    <p>Concordância média entre os <b>10 pares</b> possíveis dos 5 escalados, medida nas suas pautas decisivas. Onde um está a favor e o outro contra, é gol contra: dois dos seus votos anulando um ao outro.</p>
+
+    <h2>4. Peso</h2>
+    <p>Um deputado sozinho vale 1 voto em 513. O que aprova é a bancada. Pra deputado federal, senador e deputado estadual, o peso é <code>bancada do partido ÷ quórum de maioria absoluta</code> na casa respectiva (Câmara 257 de 513, Senado 41 de 81, assembleia: metade mais um das cadeiras do estado). Pra presidente e governador, que não têm bancada própria, conta o <b>campo ideológico inteiro</b> (esquerda, centro, direita) na Câmara e na assembleia do estado. Partido novo ou sem orientação pública consolidada não é classificado em campo nenhum e entra com zero, em vez de chute. Média ponderada: presidente 25%, governador 15%, senador 20%, deputado federal 30%, deputado estadual 10%.</p>
+
+    <h2>5. Força</h2>
+    <p><code>força = 2 × (coerência × peso) ÷ (coerência + peso)</code> — média harmônica, escolhida porque derruba quem é ótimo num eixo e péssimo no outro. Um time 100% coerente e 10% pesado dá 18, não 55. Veredito: coerência ≥ 55 e peso ≥ 55 é <b>time campeão</b>; só coerência é <b>torcida organizada</b>; só peso é <b>elenco caro, time rachado</b>; nenhum dos dois é <b>time rebaixado</b>.</p>
+
+    <h2>De onde vem<br /><span class="out">a posição de cada um</span></h2>
+    <p>Regra: <b>voto nominal real</b> sempre que existe; <b>estimativa pela orientação pública do partido</b> quando não existe — e cada card diz qual é qual. Quem tem mandato na Câmara é casado com o registro do TSE pelo <b>CPF</b> (a API da Câmara publica o CPF do deputado); no Senado, pelo nome completo. Abstenção, obstrução e ausência não contam como posição. Se a pessoa votou dos dois lados em votações da mesma pauta, fica "dividido". No país, <b>{n.comMandato}</b> candidatos têm mandato casado e <b>{n.comVotoNominal}</b> têm ao menos um voto nominal nas pautas.</p>
+    <div class="scroll"><table class="tab">
+      <thead><tr><th>pauta</th><th>votações nominais mapeadas</th><th style="text-align:right">candidatos com voto real</th><th style="text-align:right">estimados</th></tr></thead>
+      <tbody>{temas.map(t => <tr>
+        <td><b>{t.s}</b><small>{t.t}</small></td>
+        <td>{t.votacoes.length ? t.votacoes.map(v => {
+              const det = v.casa === 'camara' ? camaraVot[v.id!] : senadoVot[String(v.codigoSessaoVotacao)];
+              const tot = det ? Object.entries(det.totais).filter(([k]) => k === 'Sim' || k === 'Não').map(([k, x]) => `${k} ${x}`).join(' · ') : 'sem registro';
+              const link = v.casa === 'camara' ? `https://dadosabertos.camara.leg.br/api/v2/votacoes/${v.id}/votos` : `https://legis.senado.leg.br/dadosabertos/votacao?sigla=${v.sigla}&numero=${v.numero}&ano=${v.ano}`;
+              return <div>{v.rotulo}<small>SIM = {v.ladoSim === 'F' ? 'a favor' : 'contra'} da pauta · {tot} · <a href={link} target="_blank" rel="noopener">dados abertos ↗</a></small></div>;
+            }) : <small>nenhuma votação nominal em plenário nesta legislatura — só estimativa partidária</small>}</td>
+        <td class={'n' + (cob[t.id].nominal ? ' real' : '')}>{cob[t.id].nominal}</td>
+        <td class="n">{cob[t.id].estimativa.toLocaleString('pt-BR')}</td>
+      </tr>)}</tbody>
+    </table></div>
+    <p>A tabela de estimativas por partido está em <code>src/data/partidos.json</code>, aberta a revisão. Sugestão de votação nominal que falta pra alguma pauta é o pull request mais útil que este projeto pode receber.</p>
+
+    <h2>Bancadas<br /><span class="out">usadas no peso</span></h2>
+    <div class="bancadas">
+      <div class="banc"><h4>Câmara · {somaCam} cadeiras · API {indice.atualizacoes.camara.slice(0, 10)}</h4>{bancCam.map(([s, x]) => <div>{s} <span>{x}</span></div>)}</div>
+      <div class="banc"><h4>Senado · {somaSen} cadeiras · API {indice.atualizacoes.senado.slice(0, 10)}</h4>{bancSen.map(([s, x]) => <div>{s} <span>{x}</span></div>)}</div>
+    </div>
+    <p>{indice.avisoAssembleias} Fonte: TSE, consulta_cand_2022, situação "eleito".</p>
+    <div class="scroll"><table class="tab ufs">
+      <thead><tr><th>UF</th><th style="text-align:right">candidatos</th><th style="text-align:right">federais</th><th style="text-align:right">estaduais</th><th style="text-align:right">com mandato</th><th style="text-align:right">cadeiras na assembleia</th><th>maiores bancadas (eleitas em 2022)</th></tr></thead>
+      <tbody>{indice.ufs.map(u => <tr>
+        <td><b>{u.uf}</b> {u.nome}</td><td class="n">{u.candidatos.toLocaleString('pt-BR')}</td><td class="n">{u.federais}</td><td class="n">{u.estaduais}</td><td class="n real">{u.comMandato}</td><td class="n">{u.cadeirasAssembleia}</td>
+        <td>{ordenar(u.bancadasAssembleia).slice(0, 6).map(([s, x]) => `${s} ${x}`).join(' · ')}</td>
+      </tr>)}</tbody>
+    </table></div>
+
+    <h2>Candidatos</h2>
+    <p>Lista oficial do TSE (<code>consulta_cand_2026</code>, gerada em {indice.dataTse}): {n.candidatos.toLocaleString('pt-BR')} candidaturas aos 5 cargos nos 27 estados, mais {n.presidenciais} presidenciais. Vices e suplentes de senador ficam de fora. Todos os registros ainda estão em julgamento pela Justiça Eleitoral; inaptos, renúncias, indeferidos e cassados são excluídos a cada reimportação.</p>
+    <p style="margin-top:28px"><a class="cta ghost" href="/app">Escalar meu time →</a></p>
+  </div>
+  <footer><b>Meu Time Político 2026</b> — dataset gerado em {indice.geradoEm.slice(0, 19).replace('T', ' ')} UTC. Código aberto; sem vínculo com partido, campanha ou candidato.</footer>
+</Base>

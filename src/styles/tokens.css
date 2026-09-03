@@ -1,0 +1,70 @@
+/* Meu Time Político 2026 — tokens de design (placar de estádio) */
+:root{
+  --stance:#FFD100;      /* amarelo-placar */
+  --ink:#F2F5F0;
+  --bg:#080A08;          /* preto-estádio */
+  --surface:#12160F;
+  --muted:#78876F;
+  --data:#00E676;        /* verde-gramado */
+  --danger:#FF3B30;      /* gol contra */
+  --line:#243020;
+  --display:'Anton', Impact, 'Arial Narrow', sans-serif;
+  --mono:'Chivo Mono', ui-monospace, Menlo, monospace;
+  --body:'Barlow', system-ui, -apple-system, sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+[hidden]{display:none !important}
+html{scroll-behavior:smooth;color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.5;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+/* MOTIVO 1 — listras de gramado cortado */
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+  background:repeating-linear-gradient(115deg,transparent 0 70px,rgba(0,230,118,.022) 70px 140px)}
+/* MOTIVO 2 — scanline de placar de LED */
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:998;
+  background:repeating-linear-gradient(transparent 0 2px,rgba(0,0,0,.16) 2px 4px)}
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} *{animation:none !important;transition:none !important} }
+.wrap{max-width:940px;margin:0 auto;padding:0 20px;position:relative;z-index:1}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--stance);outline-offset:2px}
+
+/* ---- header ---- */
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 0;
+  border-bottom:1px solid var(--line);flex-wrap:wrap}
+.brand{font-family:var(--display);font-size:21px;text-transform:uppercase;line-height:1;text-decoration:none;cursor:pointer}
+.brand span{color:var(--stance)}
+.brand em{font-style:normal;font-family:var(--mono);font-weight:700;font-size:14px;color:var(--data);
+  letter-spacing:-.03em;vertical-align:2px;margin-left:4px}
+.countdown{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em}
+.countdown b{color:var(--stance)}
+.badge{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  border:1px solid var(--line);color:var(--muted);border-radius:2px;padding:5px 8px}
+.badge.beta{border-color:#3D3110;color:var(--stance)}
+
+/* ---- destaque amarelo em título (faixa por linha, mais baixa que a altura de linha) ---- */
+.hl{color:var(--bg);padding:0 .1em;box-decoration-break:clone;-webkit-box-decoration-break:clone;
+  background:linear-gradient(var(--stance),var(--stance)) 0 42%/100% .94em no-repeat}
+
+/* ---- botões ---- */
+.cta{display:inline-block;font-family:var(--display);font-size:clamp(20px,4.4vw,28px);text-transform:uppercase;
+  letter-spacing:.015em;cursor:pointer;background:var(--stance);color:#0B0D08;border:0;border-radius:3px;
+  padding:19px 30px;text-decoration:none;transition:.15s}
+.cta:hover{background:#fff;transform:translateY(-2px)}
+.cta.ghost{background:transparent;color:var(--stance);border:2px solid var(--stance)}
+.cta.ghost:hover{background:var(--stance);color:var(--bg)}
+.cta-note{display:block;margin-top:12px;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em}
+
+/* ---- stats ---- */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;
+  background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden;margin-top:36px}
+.stat{background:var(--surface);padding:18px 16px}
+.stat .n{font-family:var(--display);font-size:38px;line-height:1;color:var(--stance)}
+.stat .l{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.35}
+
+/* ---- avisos ---- */
+.aviso{background:#1A1405;border:1px solid #3D3110;border-left:3px solid var(--stance);border-radius:3px;
+  padding:14px 16px;margin-bottom:18px;color:#D4CDA8;font-size:13px}
+.aviso b{color:var(--stance)}
+footer{margin-top:44px;padding:26px 0 60px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+footer b{color:#B9C4B2}
+footer a{color:#B9C4B2}

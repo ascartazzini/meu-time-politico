@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meu Time Político 2026 — protótipo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Chivo+Mono:wght@400;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --stance:#FFD100;      /* amarelo-placar */
+    --ink:#F2F5F0;
+    --bg:#080A08;          /* preto-estádio */
+    --surface:#12160F;
+    --muted:#78876F;
+    --data:#00E676;        /* verde-gramado */
+    --danger:#FF3B30;      /* gol contra */
+    --line:#243020;
+    --display:'Anton', Impact, sans-serif;
+    --mono:'Chivo Mono', monospace;
+    --body:'Barlow', system-ui, sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  [hidden]{display:none !important}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.5;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+  /* MOTIVO 1 — listras de gramado cortado */
+  body::before{
+    content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+    background:repeating-linear-gradient(115deg,transparent 0 70px,rgba(0,230,118,.022) 70px 140px);
+  }
+  /* MOTIVO 2 — scanline de placar de LED */
+  body::after{
+    content:'';position:fixed;inset:0;pointer-events:none;z-index:998;
+    background:repeating-linear-gradient(transparent 0 2px,rgba(0,0,0,.16) 2px 4px);
+  }
+  .wrap{max-width:940px;margin:0 auto;padding:0 20px;position:relative;z-index:1}
+
+  /* ============ HEADER ============ */
+  header{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    padding:18px 0;border-bottom:1px solid var(--line);flex-wrap:wrap;
+  }
+  .brand{font-family:var(--display);font-size:23px;letter-spacing:.01em;text-transform:uppercase;line-height:1;cursor:pointer}
+  .brand span{color:var(--stance)}
+  .brand em{font-style:normal;font-family:var(--mono);font-weight:700;font-size:15px;color:var(--data);
+    letter-spacing:-.03em;vertical-align:2px;margin-left:4px}
+  .badge{
+    font-family:var(--mono);font-weight:700;font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+    border:1px solid var(--stance);color:var(--stance);padding:5px 9px;border-radius:2px;
+  }
+  .countdown{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em}
+  .countdown b{color:var(--ink)}
+
+  /* ============ INTRO ============ */
+  .hero{padding:56px 0 40px}
+  .kicker{
+    font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--data);margin-bottom:18px;
+  }
+  h1{
+    font-family:var(--display);font-size:clamp(42px,8.4vw,86px);line-height:.92;
+    text-transform:uppercase;letter-spacing:-.005em;
+  }
+  h1 .hl{
+    color:var(--bg);background:var(--stance);padding:0 .12em;
+    box-decoration-break:clone;-webkit-box-decoration-break:clone;
+  }
+  .sub{margin-top:20px;max-width:590px;color:#B9C4B2;font-size:16.5px}
+  .sub b{color:var(--ink)}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;
+    background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden;margin-top:36px}
+  .stat{background:var(--surface);padding:18px 16px}
+  .stat .n{font-family:var(--display);font-size:38px;line-height:1;color:var(--stance)}
+  .stat .l{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.35}
+
+  /* ============ BOTÃO GRANDE ============ */
+  .act{
+    font-family:var(--display);font-size:clamp(20px,4.4vw,28px);
+    text-transform:uppercase;letter-spacing:.015em;cursor:pointer;
+    background:var(--stance);color:#0B0D08;border:0;border-radius:3px;padding:19px 30px;
+    transition:.15s;
+  }
+  .act:hover{background:#fff;transform:translateY(-2px)}
+  .act-note{display:block;margin-top:12px;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em}
+
+  /* ============ WIZARD ============ */
+  #wizard{padding:26px 0 40px;min-height:70vh;display:flex;flex-direction:column}
+  .prog-top{display:flex;align-items:center;gap:14px;margin-bottom:6px;flex-wrap:wrap}
+  .prog-n{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+  .prog-n b{color:var(--stance)}
+  .prog-fase{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--data)}
+  .prog{display:flex;gap:3px;margin-bottom:34px}
+  .seg{flex:1;height:4px;background:#1B2317;border-radius:2px;transition:background .3s}
+  .seg.feito{background:var(--data)}
+  .seg.atual{background:var(--stance)}
+
+  .tela{max-width:640px;margin:0 auto;width:100%;flex:1}
+  .tela.enter{animation:slide .32s cubic-bezier(.16,1,.3,1) both}
+  @keyframes slide{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .tela-h{font-family:var(--display);font-size:clamp(26px,5.4vw,38px);text-transform:uppercase;
+    line-height:1;margin-bottom:8px}
+  .tela-d{color:var(--muted);font-size:14.5px;margin-bottom:30px}
+  .tela-d b{color:#B9C4B2}
+
+  /* --- pergunta genérica --- */
+  .q{margin-bottom:26px;padding-bottom:26px;border-bottom:1px solid var(--line)}
+  .q:last-child{border-bottom:0;padding-bottom:0;margin-bottom:0}
+  .q-n{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--data);margin-bottom:8px}
+  .q-t{font-size:19px;line-height:1.32;margin-bottom:14px;font-weight:500}
+  .q-t small{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted);font-weight:400;margin-bottom:7px}
+
+  /* --- chips (perfil) --- */
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{
+    font-family:var(--body);font-size:15px;font-weight:600;cursor:pointer;
+    background:var(--surface);color:#A9B5A2;border:1px solid var(--line);border-radius:3px;
+    padding:12px 16px;transition:.14s;
+  }
+  .chip:hover{border-color:var(--data);color:var(--ink)}
+  .chip[aria-pressed="true"]{background:var(--data);border-color:var(--data);color:#06210F}
+
+  /* --- 3 botões de posição (pautas) --- */
+  .tb-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .tb{
+    font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.08em;cursor:pointer;
+    background:var(--surface);border:1px solid var(--line);color:#9BA894;border-radius:3px;
+    padding:15px 6px;transition:.14s;
+  }
+  .tb:hover{color:var(--ink);border-color:var(--muted)}
+  .tb[aria-pressed="true"][data-v="F"]{background:var(--data);border-color:var(--data);color:#06210F}
+  .tb[aria-pressed="true"][data-v="C"]{background:var(--danger);border-color:var(--danger);color:#fff}
+  .tb[aria-pressed="true"][data-v="N"]{background:var(--muted);border-color:var(--muted);color:var(--bg)}
+
+  /* --- decisivas --- */
+  .dec-list{display:grid;gap:8px}
+  .dec{
+    display:flex;align-items:center;gap:13px;cursor:pointer;text-align:left;width:100%;
+    background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--line);
+    border-radius:3px;padding:13px 15px;transition:.14s;color:inherit;font-family:inherit;
+  }
+  .dec:hover{border-color:var(--stance)}
+  .dec[aria-pressed="true"]{border-left-color:var(--stance);background:#1B1F11;border-color:#3D3110}
+  .dec .st{font-size:17px;color:#2E3A28;transition:.14s;line-height:1}
+  .dec[aria-pressed="true"] .st{color:var(--stance)}
+  .dec .tx{font-size:14.5px;line-height:1.3}
+  .dec .tx b{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted);font-weight:400;margin-bottom:3px}
+  .dec.travado{opacity:.36;cursor:not-allowed}
+  .dec-c{font-family:var(--mono);font-size:12px;color:var(--stance);margin-top:16px;text-align:center}
+
+  /* --- selects (escalação) --- */
+  select{
+    width:100%;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:3px;
+    padding:15px 14px;font-family:var(--body);font-size:15.5px;font-weight:600;cursor:pointer;
+    appearance:none;
+    background-image:linear-gradient(45deg,transparent 50%,var(--stance) 50%),linear-gradient(135deg,var(--stance) 50%,transparent 50%);
+    background-position:calc(100% - 19px) 50%,calc(100% - 14px) 50%;
+    background-size:6px 6px,6px 6px;background-repeat:no-repeat;
+  }
+  select:focus{outline:none;border-color:var(--stance)}
+  select.ok{border-color:var(--data)}
+
+  /* --- navbar do wizard --- */
+  .navbar{max-width:640px;margin:38px auto 0;width:100%;display:flex;align-items:center;
+    justify-content:space-between;gap:12px;border-top:1px solid var(--line);padding-top:18px}
+  .nav-b{
+    font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+    cursor:pointer;background:transparent;border:1px solid var(--line);color:var(--muted);
+    border-radius:3px;padding:12px 16px;transition:.14s;
+  }
+  .nav-b:hover{color:var(--ink);border-color:var(--muted)}
+  .nav-b.prox{background:var(--stance);border-color:var(--stance);color:#0B0D08}
+  .nav-b.prox:hover{background:#fff;border-color:#fff}
+  .nav-hint{font-family:var(--mono);font-size:10.5px;color:#3D4A36;letter-spacing:.08em;text-align:right}
+
+  /* ============ RESULTADO ============ */
+  #resultado{padding:20px 0 10px}
+  #resultado.on{animation:reveal .55s cubic-bezier(.16,1,.3,1) both}
+  @keyframes reveal{from{clip-path:inset(100% 0 0 0);opacity:0}to{clip-path:inset(0 0 0 0);opacity:1}}
+  .placar{
+    background:#050703;border:1px solid var(--line);border-radius:4px;padding:28px 22px;text-align:center;
+    box-shadow:inset 0 0 90px rgba(0,230,118,.05);
+  }
+  .placar .lbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted)}
+  .placar .num{
+    font-family:var(--display);font-size:clamp(76px,19vw,158px);line-height:.84;color:var(--stance);
+    margin:10px 0 4px;text-shadow:0 0 44px rgba(255,209,0,.28);
+  }
+  .placar .num small{font-size:.28em;color:var(--muted);vertical-align:.9em;margin-left:6px}
+  .veredito{font-family:var(--display);font-size:clamp(24px,5.6vw,42px);text-transform:uppercase;
+    line-height:1;margin-top:6px}
+  .veredito.v-bom{color:var(--data)}
+  .veredito.v-medio{color:var(--stance)}
+  .veredito.v-ruim{color:var(--danger)}
+  .veredito-d{color:#B9C4B2;max-width:520px;margin:14px auto 0;font-size:15px}
+
+  .eixos{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  @media(max-width:560px){.eixos{grid-template-columns:1fr}}
+  .eixo{background:var(--surface);border:1px solid var(--line);border-radius:3px;padding:16px}
+  .eixo .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  .eixo .v{font-family:var(--display);font-size:46px;line-height:1;margin:6px 0 4px}
+  .eixo .h{font-size:12.5px;color:var(--muted)}
+  .eixo.coer .v{color:var(--data)}
+  .eixo.peso .v{color:var(--stance)}
+
+  .gols{margin-top:12px;background:#1A0A08;border:1px solid #3D1512;border-left:3px solid var(--danger);border-radius:3px;padding:18px}
+  .gols.zero{background:#08170D;border-color:#12351F;border-left-color:var(--data)}
+  .gols-h{display:flex;align-items:center;gap:11px;margin-bottom:10px;flex-wrap:wrap}
+  .gols-n{font-family:var(--display);font-size:44px;line-height:1;color:var(--danger)}
+  .gols.zero .gols-n{color:var(--data)}
+  .gols-t{font-family:var(--display);font-size:19px;text-transform:uppercase;letter-spacing:.01em}
+  .gol{border-top:1px dashed #3D1512;padding:10px 0;font-size:13.5px}
+  .gols.zero .gol{border-top-color:#12351F}
+  .gol:first-of-type{border-top:0}
+  .gol b{color:var(--stance)}
+  .gol .vs{font-family:var(--mono);font-size:11.5px;color:var(--muted);display:block;margin-top:3px}
+  .gol .vs .f{color:var(--data)}
+  .gol .vs .c{color:var(--danger)}
+
+  .tabela{margin-top:12px;background:var(--surface);border:1px solid var(--line);border-radius:3px;overflow:hidden}
+  .tabela h3{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
+    padding:14px 16px 0;font-weight:400}
+  .row{display:grid;grid-template-columns:1fr 74px 74px;gap:10px;align-items:center;padding:13px 16px;border-top:1px solid var(--line)}
+  .row.head{border-top:0;padding-bottom:8px}
+  .row.head span{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-align:center}
+  .row.head span:first-child{text-align:left}
+  .row .who{font-size:14px;font-weight:600;line-height:1.25}
+  .row .who small{display:block;font-family:var(--mono);font-size:10px;color:var(--muted);font-weight:400;margin-top:2px;letter-spacing:.04em}
+  .sc{text-align:center;font-family:var(--display);font-size:26px;line-height:1}
+  .sc.camisa{color:var(--data)}
+  .sc.bolso{color:var(--stance)}
+  .divergencia{padding:13px 16px;border-top:1px solid var(--line);background:#171B10;font-size:13px;color:#C6D0BF}
+  .divergencia b{color:var(--stance)}
+
+  .metodo{margin-top:12px}
+  .metodo summary{cursor:pointer;list-style:none;background:var(--surface);border:1px solid var(--line);border-radius:3px;
+    padding:14px 16px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--data)}
+  .metodo summary::-webkit-details-marker{display:none}
+  .metodo summary::after{content:' ▾';color:var(--muted)}
+  .metodo[open] summary::after{content:' ▴'}
+  .metodo .body{border:1px solid var(--line);border-top:0;border-radius:0 0 3px 3px;padding:18px 16px;font-size:13.5px;color:#B9C4B2}
+  .metodo .body h4{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--stance);margin:16px 0 6px}
+  .metodo .body h4:first-child{margin-top:0}
+  .metodo .body code{font-family:var(--mono);font-size:12px;color:var(--data);background:#0B0E09;padding:1px 5px;border-radius:2px}
+  .metodo .body ul{margin:6px 0 0 18px}
+  .metodo .body li{margin-bottom:4px}
+
+  .res-acoes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+  @media(max-width:560px){.res-acoes{grid-template-columns:1fr}}
+  .share{font-family:var(--display);font-size:18px;text-transform:uppercase;letter-spacing:.02em;
+    cursor:pointer;background:transparent;color:var(--stance);border:2px solid var(--stance);
+    border-radius:3px;padding:16px;transition:.15s}
+  .share:hover{background:var(--stance);color:var(--bg)}
+  .share.sec{color:var(--muted);border-color:var(--line)}
+  .share.sec:hover{background:transparent;color:var(--ink);border-color:var(--muted)}
+
+  /* ============ RODAPÉ ============ */
+  footer{margin-top:44px;padding:26px 0 60px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+  footer b{color:#B9C4B2}
+  .aviso{background:#1A1405;border:1px solid #3D3110;border-left:3px solid var(--stance);border-radius:3px;
+    padding:14px 16px;margin-bottom:18px;color:#D4CDA8;font-size:13px}
+  .aviso b{color:var(--stance)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand" onclick="voltarAoInicio()">MEU TIME <span>POLÍTICO</span><em>2026</em></div>
+    <div style="display:flex;align-items:center;gap:14px">
+      <div class="countdown" id="countdown">—</div>
+      <div class="badge">protótipo</div>
+    </div>
+  </header>
+
+  <!-- ===================== INTRO ===================== -->
+  <section class="hero" id="intro">
+    <div class="kicker">Rio Grande do Sul · 1.048 candidatos · 4 de outubro</div>
+    <h1>Escale seu time<br>e descubra <span class="hl">quantos<br>gols contra</span> ele faz.</h1>
+    <p class="sub">Você vota em <b>cinco cargos</b> e decide um de cada vez, isolado. Nunca viu os cinco
+    como um time. Aqui você escala, e a gente responde três coisas: <b>quem veste sua camisa</b>,
+    <b>quem mexe no seu bolso</b> e — a que ninguém te conta — <b>se esse time tem peso pra aprovar
+    alguma coisa</b>.</p>
+
+    <div style="margin-top:32px">
+      <button class="act" onclick="comecar()">Começar →</button>
+      <span class="act-note">10 telas · ~2 minutos · sem cadastro · nada sai do seu navegador</span>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="n">1.048</div><div class="l">candidatos no RS<br>disputando 4 de outubro</div></div>
+      <div class="stat"><div class="n">455</div><div class="l">candidatos a deputado federal<br>para 31 vagas</div></div>
+      <div class="stat"><div class="n">257</div><div class="l">votos na Câmara<br>pra aprovar qualquer coisa</div></div>
+      <div class="stat"><div class="n">22</div><div class="l">partidos dividindo<br>o Congresso hoje</div></div>
+    </div>
+  </section>
+
+  <!-- ===================== WIZARD ===================== -->
+  <div id="wizard" hidden>
+    <div class="prog-top">
+      <span class="prog-fase" id="progFase">—</span>
+      <span class="prog-n" id="progN">—</span>
+    </div>
+    <div class="prog" id="prog"></div>
+    <div class="tela" id="tela"></div>
+    <div class="navbar">
+      <button class="nav-b" id="btnVoltar" onclick="voltar()">← Voltar</button>
+      <span class="nav-hint" id="navHint">avança sozinho quando você responde tudo</span>
+      <button class="nav-b prox" id="btnProx" onclick="avancar()" hidden>Próxima →</button>
+    </div>
+  </div>
+
+  <!-- ===================== RESULTADO ===================== -->
+  <section id="resultado" hidden>
+    <div class="placar">
+      <div class="lbl">Força do time</div>
+      <div class="num" id="forcaNum">0<small>/100</small></div>
+      <div class="veredito" id="veredito">—</div>
+      <p class="veredito-d" id="vereditoDesc">—</p>
+    </div>
+
+    <div class="eixos">
+      <div class="eixo coer">
+        <div class="lbl">Coerência</div>
+        <div class="v" id="coerNum">0</div>
+        <div class="h" id="coerH">—</div>
+      </div>
+      <div class="eixo peso">
+        <div class="lbl">Peso de aprovação</div>
+        <div class="v" id="pesoNum">0</div>
+        <div class="h" id="pesoH">—</div>
+      </div>
+    </div>
+
+    <div class="gols" id="gols"></div>
+    <div class="tabela" id="tabela"></div>
+
+    <details class="metodo" id="metodo">
+      <summary>Como esses números são calculados</summary>
+      <div class="body" id="metodoBody"></div>
+    </details>
+
+    <div class="res-acoes">
+      <button class="share" onclick="compartilhar()">Copiar meu placar</button>
+      <button class="share sec" onclick="reescalar()">Mudar minha escalação</button>
+    </div>
+  </section>
+
+  <footer>
+    <div class="aviso">
+      <b>MODO DEMONSTRAÇÃO — leia antes de acreditar no número.</b><br>
+      Os <b>nomes, partidos e cargos</b> são reais: chapas majoritárias do RS registradas no TSE
+      (DivulgaCand, dados de 18/08/2026) e a bancada federal gaúcha atual, da qual 26 dos 31
+      pediram registro para a reeleição. <b>As posições por pauta são estimadas pela orientação
+      pública do partido</b> — não são votos individuais nominais, e estão marcadas como estimativa
+      em cada card. Os tamanhos de bancada são a composição atual aproximada. Nenhum voto
+      individual foi atribuído a nenhuma pessoa nomeada aqui.
+    </div>
+    <b>Fontes:</b> TSE — Portal de Dados Abertos, base <em>consulta_cand_2026</em> e DivulgaCandContas ·
+    Câmara dos Deputados (513 cadeiras, maioria absoluta 257, PEC 308) ·
+    Senado Federal (81 cadeiras, maioria absoluta 41) ·
+    Assembleia Legislativa do RS (55 cadeiras, maioria 28) ·
+    Congresso em Foco, ago/2026 (455 candidatos a deputado federal no RS para 31 vagas).<br><br>
+    <b>O que falta pra virar produção:</b> puxar os 1.048 candidatos do RS direto do
+    <em>consulta_cand_2026</em>; trocar posição-por-partido por <b>votação nominal real</b> via API
+    da Câmara e do Senado para quem tem mandato; manter a estimativa partidária só para estreantes,
+    sempre com o selo visível. Estado por estado depois disso é só trocar a sigla.
+  </footer>
+
+</div>
+
+<script>
+/* ==========================================================================
+   MEU TIME POLÍTICO 2026 — protótipo single-file
+   ========================================================================== */
+
+document.documentElement.lang = 'pt-BR';
+
+/* ---------- contagem regressiva ---------- */
+(function(){
+  var pleito = new Date('2026-10-04T08:00:00-03:00');
+  var dias = Math.max(0, Math.ceil((pleito - new Date())/86400000));
+  document.getElementById('countdown').innerHTML = 'faltam <b>'+dias+'</b> dias';
+})();
+
+/* ---------- 1. TEMAS ----------
+   impacto: mapa {opção do seu perfil → lado da pauta que protege quem está nessa situação}.
+   É um juízo explícito, e está aberto no painel "Como é calculado" — de propósito.
+   Se o seu perfil aponta lados opostos na mesma pauta, ela não entra no score:
+   vira "pauta que divide você". Critério escondido é editorial disfarçado de dado.  */
+const TEMAS = [
+  {id:'ir',       t:'Isentar o IR até R$ 5 mil e taxar quem ganha acima de R$ 50 mil por mês', s:'Imposto de renda',
+    impacto:{renda_1:'F',renda_2:'F',clt:'F',mei:'F',sem_trab:'F',renda_4:'C',empresa:'C'}},
+  {id:'escala',   t:'Acabar com a escala 6x1 e reduzir a jornada sem cortar salário', s:'Jornada de trabalho',
+    impacto:{clt:'F',mei:'F',empresa:'C'}},
+  {id:'sus',      t:'Ampliar o orçamento do SUS, mesmo que isso limite outras despesas', s:'Saúde',
+    impacto:{sus:'F',sus_plano:'F',renda_1:'F',renda_2:'F'}},
+  {id:'escola',   t:'Mais verba pra escola pública e piso salarial cheio do professor', s:'Educação',
+    impacto:{esc_publica:'F',renda_1:'F',renda_2:'F'}},
+  {id:'servidor', t:'Reforma administrativa que acaba com a estabilidade do servidor', s:'Serviço público',
+    impacto:{servidor:'C',empresa:'F'}},
+  {id:'privatiza',t:'Privatizar estatais como Correios e Banrisul', s:'Estatais',
+    impacto:{servidor:'C',renda_1:'C',empresa:'F',renda_4:'F'}},
+  {id:'tarifa',   t:'Tarifa zero no transporte público, bancada por imposto', s:'Transporte público',
+    impacto:{onibus:'F',renda_1:'F',renda_2:'F'}},
+  {id:'combustivel',t:'Cortar imposto sobre combustível, mesmo com queda de arrecadação', s:'Combustível',
+    impacto:{carro:'F',moto:'F',mei:'F',empresa:'F'}},
+  {id:'aluguel',  t:'Limitar reajuste de aluguel e taxar imóvel vazio pra segurar o preço', s:'Moradia',
+    impacto:{aluguel:'F',renda_1:'F',renda_2:'F'}},
+  {id:'juros',    t:'Teto de juros no cartão de crédito e no cheque especial', s:'Juros e dívida',
+    impacto:{renda_1:'F',renda_2:'F',renda_3:'F',clt:'F',mei:'F',sem_trab:'F',financiada:'F'}},
+  {id:'emendas',  t:'Rastreabilidade total das emendas parlamentares, com autor e destino', s:'Transparência',
+    impacto:{renda_1:'F',renda_2:'F',renda_3:'F',renda_4:'F',sus:'F',esc_publica:'F'}},
+  {id:'arma',     t:'Facilitar o porte de arma para o cidadão comum', s:'Segurança', impacto:{}},
+  {id:'anistia',  t:'Anistiar os condenados pelos atos de 8 de janeiro', s:'Democracia', impacto:{}},
+  {id:'ambiente', t:'Flexibilizar o licenciamento ambiental para destravar obras', s:'Meio ambiente', impacto:{}}
+];
+
+/* ---------- 2. PERFIL ---------- */
+const PERFIL = [
+  {id:'renda', label:'Qual a renda da sua casa?', hint:'Renda', ops:[
+    {v:'renda_1', l:'até 2 salários'},{v:'renda_2', l:'2 a 5'},{v:'renda_3', l:'5 a 10'},{v:'renda_4', l:'mais de 10'}]},
+  {id:'trabalho', label:'Como você trabalha hoje?', hint:'Trabalho', ops:[
+    {v:'clt', l:'CLT'},{v:'mei', l:'MEI / autônomo'},{v:'servidor', l:'servidor público'},{v:'empresa', l:'tenho empresa'},{v:'sem_trab', l:'desempregado'}]},
+  {id:'saude', label:'Quando você adoece, vai onde?', hint:'Saúde', ops:[
+    {v:'sus', l:'só SUS'},{v:'sus_plano', l:'SUS + plano'},{v:'plano', l:'só plano'}]},
+  {id:'escola', label:'Tem alguém estudando na sua casa?', hint:'Educação', ops:[
+    {v:'esc_publica', l:'em escola pública'},{v:'esc_privada', l:'em escola privada'},{v:'esc_nenhuma', l:'ninguém estuda'}]},
+  {id:'transporte', label:'Como você se locomove?', hint:'Transporte', ops:[
+    {v:'onibus', l:'ônibus / trem'},{v:'carro', l:'carro'},{v:'moto', l:'moto'},{v:'ape', l:'bike / a pé'}]},
+  {id:'moradia', label:'E a casa onde você mora?', hint:'Moradia', ops:[
+    {v:'aluguel', l:'é alugada'},{v:'financiada', l:'é financiada'},{v:'quitada', l:'é quitada'}]}
+];
+
+/* ---------- 3. POSIÇÕES POR PARTIDO ----------
+   F = a favor · C = contra · D = dividido / sem posição fechada
+   Estimativa a partir de programa partidário e orientação pública de bancada.
+   NÃO é voto nominal individual. Ver aviso no rodapé.                        */
+const ORDEM = ['ir','escala','sus','escola','servidor','privatiza','tarifa','combustivel','aluguel','juros','emendas','arma','anistia','ambiente'];
+const P = {
+  //             ir  esc sus  edu srv prv tar cmb alu jur eme arm ani amb
+  'PT'          :['F','F','F','F','C','C','F','D','F','F','D','C','C','D'],
+  'PCdoB'       :['F','F','F','F','C','C','F','D','F','F','F','C','C','D'],
+  'PV'          :['F','F','F','F','C','C','F','C','F','F','F','C','C','C'],
+  'PSOL'        :['F','F','F','F','C','C','F','C','F','F','F','C','C','C'],
+  'PDT'         :['F','F','F','F','C','C','F','D','F','F','D','C','C','D'],
+  'PSB'         :['F','D','F','F','D','D','F','D','D','F','D','C','C','D'],
+  'Cidadania'   :['F','D','F','F','D','D','D','D','D','F','F','C','C','D'],
+  'PSTU'        :['F','F','F','F','C','C','F','C','F','F','F','C','C','C'],
+  'PCO'         :['F','F','F','F','C','C','F','C','F','F','F','C','C','C'],
+  'UP'          :['F','F','F','F','C','C','F','C','F','F','F','C','C','C'],
+  'PCB'         :['F','F','F','F','C','C','F','C','F','F','F','C','C','C'],
+  'MDB'         :['D','C','D','D','D','D','D','F','D','F','C','D','D','F'],
+  'PSD'         :['D','C','D','D','D','D','D','F','D','D','C','D','D','F'],
+  'PSDB'        :['D','C','D','D','F','F','C','F','D','D','F','D','D','D'],
+  'Podemos'     :['D','C','D','D','F','F','C','F','C','F','D','F','F','F'],
+  'União Brasil':['D','C','D','D','F','F','C','F','C','D','C','F','F','F'],
+  'PP'          :['D','C','D','C','F','F','C','F','C','D','C','F','F','F'],
+  'Republicanos':['D','C','D','C','D','F','C','F','C','F','C','F','F','F'],
+  'PL'          :['C','C','C','C','F','F','C','F','C','D','C','F','F','F'],
+  'NOVO'        :['C','C','C','C','F','F','C','F','C','C','F','F','D','F']
+};
+function pos(partido, temaId){
+  const arr = P[partido]; if(!arr) return 'D';
+  return arr[ORDEM.indexOf(temaId)] || 'D';
+}
+
+/* ---------- 4. CAMPO IDEOLÓGICO E BANCADAS ---------- */
+const CAMPO_PARTIDO = {
+  'PT':'esq','PCdoB':'esq','PV':'esq','PSOL':'esq','PDT':'esq','PSB':'esq','PSTU':'esq','PCO':'esq','UP':'esq','PCB':'esq',
+  'MDB':'centro','PSD':'centro','PSDB':'centro','Cidadania':'centro','Podemos':'centro',
+  'União Brasil':'dir','PP':'dir','Republicanos':'dir','PL':'dir','NOVO':'dir'
+};
+/* composição atual aproximada — trocar por API oficial em produção */
+const BANCADA = {
+  camara:{'PL':92,'União Brasil':59,'PP':50,'PSD':46,'Republicanos':45,'MDB':44,'PT':59,'PCdoB':6,'PV':6,
+          'PSDB':13,'Cidadania':5,'PSOL':12,'PDT':17,'PSB':14,'Podemos':11,'NOVO':4,
+          'PSTU':0,'PCO':0,'UP':0,'PCB':0},
+  senado:{'PSD':15,'PL':14,'União Brasil':10,'MDB':10,'PT':9,'PP':6,'Republicanos':5,'PSDB':3,'PDT':3,
+          'PSB':2,'Podemos':2,'NOVO':1,'PSOL':1,'PCdoB':0,'PV':0,'Cidadania':0,'PSTU':0,'PCO':0,'UP':0,'PCB':0},
+  alrs:{'PL':8,'PT':8,'MDB':8,'PP':6,'Republicanos':5,'PSDB':4,'PDT':4,'PSOL':4,'NOVO':3,'PSD':3,'PSB':2,
+        'União Brasil':0,'PCdoB':0,'PV':0,'Cidadania':0,'Podemos':0,'PSTU':0,'PCO':0,'UP':0,'PCB':0}
+};
+const CAMPO_FORCA = {
+  camara:{esq:128,centro:131,dir:254},   /* soma = 513 */
+  alrs:{esq:18,centro:15,dir:22}         /* soma = 55  */
+};
+const QUORUM = {camara:257, senado:41, alrs:28};
+
+/* ---------- 5. CANDIDATOS ---------- */
+const CARGOS = [
+  {id:'presidente', nome:'Presidente da República', meta:'13 chapas registradas no país', cands:[
+    {n:'Luiz Inácio Lula da Silva', p:'PT'},
+    {n:'Flávio Bolsonaro', p:'PL'},
+    {n:'Ronaldo Caiado', p:'União Brasil'},
+    {n:'Romeu Zema', p:'NOVO'},
+    {n:'Edmilson Costa', p:'PCB'},
+    {n:'Hertz Dias', p:'PSTU'},
+    {n:'Rui Costa Pimenta', p:'PCO'}
+  ]},
+  {id:'governador', nome:'Governador do RS', meta:'7 candidatos ao Piratini · sem Eduardo Leite', cands:[
+    {n:'Juliana Brizola', p:'PDT'},
+    {n:'Luciano Zucco', p:'PL'},
+    {n:'Gabriel Souza', p:'MDB'},
+    {n:'Marcelo Maranata', p:'PSDB'},
+    {n:'Rejane de Oliveira', p:'PSTU'},
+    {n:'Cesar Pontes', p:'PCO'},
+    {n:'Priscila Voigt', p:'UP'}
+  ]},
+  {id:'senador', nome:'Senador pelo RS', meta:'2 vagas · Heinze e Paim se aposentam', cands:[
+    {n:'Manuela D’Ávila', p:'PSOL'},
+    {n:'Marcel van Hattem', p:'NOVO'},
+    {n:'Paulo Pimenta', p:'PT'},
+    {n:'Sanderson', p:'PL'},
+    {n:'Germano Rigotto', p:'MDB'}
+  ]},
+  {id:'federal', nome:'Deputado federal', meta:'31 vagas · 455 candidatos no RS', cands:[
+    {n:'Maria do Rosário', p:'PT', b:'mandato atual'},
+    {n:'Bohn Gass', p:'PT', b:'mandato atual'},
+    {n:'Fernanda Melchionna', p:'PSOL', b:'mandato atual'},
+    {n:'Heitor Schuch', p:'PSB', b:'mandato atual'},
+    {n:'Any Ortiz', p:'Cidadania', b:'mandato atual'},
+    {n:'Lucas Redecker', p:'PSDB', b:'mandato atual'},
+    {n:'Alceu Moreira', p:'MDB', b:'mandato atual'},
+    {n:'Osmar Terra', p:'MDB', b:'mandato atual'},
+    {n:'Afonso Hamm', p:'PP', b:'mandato atual'},
+    {n:'Covatti Filho', p:'PP', b:'mandato atual'},
+    {n:'Giovani Cherini', p:'PL', b:'mandato atual'},
+    {n:'Carlos Gomes', p:'Republicanos', b:'mandato atual'}
+  ]},
+  {id:'estadual', nome:'Deputado estadual', meta:'55 cadeiras na Assembleia', cands:[
+    {n:'candidato do PT', p:'PT'},
+    {n:'candidato do PSOL', p:'PSOL'},
+    {n:'candidato do PDT', p:'PDT'},
+    {n:'candidato do MDB', p:'MDB'},
+    {n:'candidato do PSDB', p:'PSDB'},
+    {n:'candidato do PP', p:'PP'},
+    {n:'candidato do Republicanos', p:'Republicanos'},
+    {n:'candidato do PL', p:'PL'},
+    {n:'candidato do NOVO', p:'NOVO'}
+  ]}
+];
+
+/* ---------- ESTADO ---------- */
+const st = {perfil:{}, respostas:{}, decisivas:new Set(), time:{}};
+
+/* ==========================================================================
+   WIZARD — 2 a 3 perguntas por tela
+   ========================================================================== */
+const PASSOS = [];
+PASSOS.push({fase:'Sua vida', tipo:'perfil', h:'Quem é você',
+  d:'Isso define o eixo <b>BOLSO</b>: quais pautas batem direto na sua rotina. Nada sai do seu navegador.',
+  itens:PERFIL.slice(0,3)});
+PASSOS.push({fase:'Sua vida', tipo:'perfil', h:'Sua rotina',
+  d:'Mais três. Depois disso a gente já sabe que pautas mexem com você de verdade.',
+  itens:PERFIL.slice(3,6)});
+const TITULOS_PAUTAS = [
+  {h:'Dinheiro e saúde',      d:'Quatorze pautas que estão na mesa em 2026, três por vez. "Tanto faz" é resposta válida — ela sai da conta em vez de virar meio-termo falso.'},
+  {h:'O que é do Estado',     d:''},
+  {h:'O custo de viver',      d:''},
+  {h:'Juros, emendas e armas',d:''},
+  {h:'As duas últimas',       d:''}
+];
+for(let i=0, k=0; i<TEMAS.length; i+=3, k++){
+  PASSOS.push({fase:'Suas posições', tipo:'pautas',
+    h: TITULOS_PAUTAS[k].h, d: TITULOS_PAUTAS[k].d,
+    itens:TEMAS.slice(i,i+3)});
+}
+PASSOS.push({fase:'O que decide seu voto', tipo:'decisivas', h:'Escolha suas três',
+  d:'Dessas quatorze, quais <b>três</b> realmente decidem seu voto? É nelas que a gente vai caçar o gol contra — e elas pesam três vezes mais no eixo CAMISA.'});
+PASSOS.push({fase:'A escalação', tipo:'escala', h:'Escale o time',
+  d:'Seus votos de 4 de outubro. Os três primeiros.', itens:CARGOS.slice(0,3)});
+PASSOS.push({fase:'A escalação', tipo:'escala', h:'Fechando o time',
+  d:'Os dois últimos — e são eles que mais pesam no placar de força.', itens:CARGOS.slice(3)});
+
+let passoAtual = 0;
+
+function completo(i){
+  const p = PASSOS[i];
+  if(p.tipo==='perfil')    return p.itens.every(g => st.perfil[g.id]);
+  if(p.tipo==='pautas')    return p.itens.every(t => st.respostas[t.id]);
+  if(p.tipo==='decisivas') return st.decisivas.size === 3;
+  if(p.tipo==='escala')    return p.itens.every(c => st.time[c.id]);
+  return false;
+}
+
+function comecar(){
+  document.getElementById('intro').hidden = true;
+  document.getElementById('wizard').hidden = false;
+  passoAtual = 0;
+  render();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function voltarAoInicio(){
+  document.getElementById('wizard').hidden = true;
+  document.getElementById('resultado').hidden = true;
+  document.getElementById('intro').hidden = false;
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function reescalar(){
+  document.getElementById('resultado').hidden = true;
+  document.getElementById('wizard').hidden = false;
+  passoAtual = PASSOS.length - 2;
+  render();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function voltar(){
+  if(passoAtual === 0){ voltarAoInicio(); return; }
+  passoAtual--; render();
+}
+function avancar(){
+  if(passoAtual < PASSOS.length - 1){ passoAtual++; render(); }
+  else calcular();
+}
+/* auto-avanço: só quando ESTA interação completou a tela (não em revisita) */
+function talvezAvancar(eraCompleto){
+  atualizarNav();
+  if(!eraCompleto && completo(passoAtual)) setTimeout(avancar, 350);
+}
+function atualizarNav(){
+  document.getElementById('btnProx').hidden = !completo(passoAtual);
+  document.getElementById('btnProx').textContent =
+    (passoAtual === PASSOS.length-1) ? 'Ver o placar →' : 'Próxima →';
+  document.getElementById('navHint').textContent = completo(passoAtual)
+    ? '' : 'avança sozinho quando você responde tudo';
+}
+
+function render(){
+  const p = PASSOS[passoAtual];
+
+  // progresso
+  document.getElementById('progFase').textContent = p.fase;
+  document.getElementById('progN').innerHTML = 'tela <b>'+(passoAtual+1)+'</b> de '+PASSOS.length;
+  document.getElementById('prog').innerHTML = PASSOS.map((_,i)=>
+    `<div class="seg ${i<passoAtual?'feito':(i===passoAtual?'atual':'')}"></div>`).join('');
+
+  let corpo = '';
+  if(p.tipo === 'perfil'){
+    corpo = p.itens.map((g,k)=>`
+      <div class="q">
+        <div class="q-n">${g.hint}</div>
+        <div class="q-t">${g.label}</div>
+        <div class="chips">${g.ops.map(o=>`
+          <button class="chip" type="button" aria-pressed="${st.perfil[g.id]===o.v}"
+            onclick="setPerfil('${g.id}','${o.v}',this)">${o.l}</button>`).join('')}
+        </div>
+      </div>`).join('');
+  }
+  else if(p.tipo === 'pautas'){
+    corpo = p.itens.map(t=>`
+      <div class="q">
+        <div class="q-t"><small>${t.s}</small>${t.t}</div>
+        <div class="tb-row">
+          <button class="tb" data-v="F" type="button" aria-pressed="${st.respostas[t.id]==='F'}" onclick="setResp('${t.id}','F',this)">A FAVOR</button>
+          <button class="tb" data-v="C" type="button" aria-pressed="${st.respostas[t.id]==='C'}" onclick="setResp('${t.id}','C',this)">CONTRA</button>
+          <button class="tb" data-v="N" type="button" aria-pressed="${st.respostas[t.id]==='N'}" onclick="setResp('${t.id}','N',this)">TANTO FAZ</button>
+        </div>
+      </div>`).join('');
+  }
+  else if(p.tipo === 'decisivas'){
+    corpo = `<div class="dec-list">${TEMAS.map(t=>{
+      const on = st.decisivas.has(t.id);
+      const travado = !on && st.decisivas.size >= 3;
+      return `<button class="dec${travado?' travado':''}" type="button" aria-pressed="${on}"
+        onclick="toggleDecisiva('${t.id}')">
+        <span class="st">${on?'★':'☆'}</span>
+        <span class="tx"><b>${t.s}</b>${t.t}</span></button>`;
+    }).join('')}</div>
+    <div class="dec-c" id="decC">${st.decisivas.size} de 3 escolhidas</div>`;
+  }
+  else if(p.tipo === 'escala'){
+    corpo = p.itens.map(c=>`
+      <div class="q">
+        <div class="q-n">${c.meta}</div>
+        <div class="q-t">${c.nome}</div>
+        <select id="sel-${c.id}" class="${st.time[c.id]?'ok':''}" onchange="setVoto('${c.id}',this)">
+          <option value="">— escolher —</option>
+          ${c.cands.map(k=>{const v=k.p+'|'+k.n;
+            return `<option value="${v}" ${st.time[c.id]===v?'selected':''}>${k.n} · ${k.p}${k.b?' · '+k.b:''}</option>`;}).join('')}
+        </select>
+      </div>`).join('');
+  }
+
+  const tela = document.getElementById('tela');
+  tela.classList.remove('enter');
+  tela.innerHTML = `<div class="tela-h">${p.h}</div>` +
+                   (p.d ? `<p class="tela-d">${p.d}</p>` : '<div style="height:10px"></div>') + corpo;
+  void tela.offsetWidth;           // reinicia a animação
+  tela.classList.add('enter');
+
+  document.getElementById('btnVoltar').textContent = passoAtual===0 ? '← Início' : '← Voltar';
+  atualizarNav();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ---------- handlers ---------- */
+function setPerfil(grupo, valor, el){
+  const antes = completo(passoAtual);
+  st.perfil[grupo] = valor;
+  el.parentNode.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed','false'));
+  el.setAttribute('aria-pressed','true');
+  talvezAvancar(antes);
+}
+function setResp(id, v, el){
+  const antes = completo(passoAtual);
+  st.respostas[id] = v;
+  el.parentNode.querySelectorAll('.tb').forEach(b=>b.setAttribute('aria-pressed','false'));
+  el.setAttribute('aria-pressed','true');
+  talvezAvancar(antes);
+}
+function setVoto(cargoId, el){
+  const antes = completo(passoAtual);
+  st.time[cargoId] = el.value;
+  el.classList.toggle('ok', !!el.value);
+  talvezAvancar(antes);
+}
+function toggleDecisiva(id){
+  const antes = completo(passoAtual);
+  if(st.decisivas.has(id)) st.decisivas.delete(id);
+  else{
+    if(st.decisivas.size >= 3) return;
+    st.decisivas.add(id);
+  }
+  // redesenha só a lista, sem re-render da tela inteira (não perde o scroll)
+  const lista = document.querySelector('.dec-list');
+  TEMAS.forEach((t,i)=>{
+    const b = lista.children[i], on = st.decisivas.has(t.id);
+    b.setAttribute('aria-pressed', on);
+    b.classList.toggle('travado', !on && st.decisivas.size>=3);
+    b.querySelector('.st').textContent = on ? '★' : '☆';
+  });
+  document.getElementById('decC').textContent = st.decisivas.size + ' de 3 escolhidas';
+  talvezAvancar(antes);
+}
+
+/* ---------- teclado ---------- */
+document.addEventListener('keydown', function(e){
+  if(document.getElementById('wizard').hidden) return;
+  if(e.key === 'ArrowLeft')  voltar();
+  if(e.key === 'ArrowRight' || e.key === 'Enter'){ if(completo(passoAtual)) avancar(); }
+});
+
+/* ==========================================================================
+   MOTOR DE CÁLCULO
+   ========================================================================== */
+
+/* concordância entre duas posições: 1 = igual, .5 = uma indefinida, 0 = oposta */
+function concord(a,b){
+  if(a==='N'||b==='N') return null;
+  if(a===b) return 1;
+  if(a==='D'||b==='D') return .5;
+  return 0;
+}
+
+/* ---- EIXO CAMISA: você × candidato ---- */
+function scoreCamisa(partido){
+  let soma=0, total=0;
+  TEMAS.forEach(t=>{
+    const minha = st.respostas[t.id];
+    if(!minha || minha==='N') return;
+    const dele = pos(partido, t.id);
+    const c = concord(minha, dele);
+    if(c===null) return;
+    const peso = st.decisivas.has(t.id) ? 3 : 1;
+    soma += c*peso; total += peso;
+  });
+  return total ? Math.round(soma/total*100) : null;
+}
+
+/* ---- EIXO BOLSO: só as pautas que a SUA vida ativa ----
+   Se o seu perfil aponta lados opostos na mesma pauta (ex.: renda baixa puxa contra
+   privatizar, ter empresa puxa a favor), a pauta não entra no score — vira conflito
+   declarado. Média silenciosa de tensão real é como se mente com dado.            */
+function pautasDoBolso(){
+  const marcados = Object.values(st.perfil);
+  const ativas = [], conflitos = [];
+  TEMAS.forEach(t=>{
+    const lados = marcados.map(m => t.impacto[m]).filter(Boolean);
+    if(!lados.length) return;
+    const unico = lados.every(l => l === lados[0]);
+    if(unico) ativas.push({tema:t, lado:lados[0]});
+    else conflitos.push({tema:t, lados:marcados.filter(m=>t.impacto[m]).map(m=>({perfil:m, lado:t.impacto[m]}))});
+  });
+  return {ativas, conflitos};
+}
+function scoreBolso(partido){
+  const {ativas} = pautasDoBolso();
+  if(!ativas.length) return null;
+  let acertos = 0;
+  ativas.forEach(a=>{
+    const dele = pos(partido, a.tema.id);
+    if(dele === a.lado) acertos += 1;
+    else if(dele === 'D') acertos += .5;
+  });
+  return {score: Math.round(acertos/ativas.length*100), defende: Math.round(acertos*10)/10, total: ativas.length};
+}
+const ROTULO_PERFIL = {renda_1:'renda até 2 salários',renda_2:'renda de 2 a 5',renda_3:'renda de 5 a 10',renda_4:'renda acima de 10',
+  sus:'usar só o SUS',sus_plano:'SUS + plano',plano:'só plano',clt:'ser CLT',mei:'ser MEI/autônomo',servidor:'ser servidor',
+  empresa:'ter empresa',sem_trab:'estar desempregado',esc_publica:'filho em escola pública',esc_privada:'filho em escola privada',
+  esc_nenhuma:'ninguém estudando',onibus:'andar de ônibus',carro:'andar de carro',moto:'andar de moto',ape:'ir a pé ou de bike',
+  aluguel:'morar de aluguel',financiada:'ter casa financiada',quitada:'ter casa quitada'};
+
+/* ---- COERÊNCIA: concordância par a par entre os 5 escalados ---- */
+function calcCoerencia(escalados){
+  const pautas = st.decisivas.size ? TEMAS.filter(t=>st.decisivas.has(t.id)) : TEMAS;
+  let soma=0, n=0; const gols=[];
+  for(let i=0;i<escalados.length;i++){
+    for(let j=i+1;j<escalados.length;j++){
+      const A = escalados[i], B = escalados[j];
+      pautas.forEach(t=>{
+        const pa = pos(A.partido, t.id), pb = pos(B.partido, t.id);
+        const c = concord(pa, pb);
+        if(c===null) return;
+        soma += c; n++;
+        if(c===0) gols.push({tema:t, a:A, b:B, pa:pa, pb:pb});
+      });
+    }
+  }
+  return {coerencia: n ? Math.round(soma/n*100) : 0, gols: gols};
+}
+
+/* ---- PESO: quanto do quórum o time cobre ---- */
+function calcPeso(escalados){
+  const by = {}; escalados.forEach(e=>by[e.cargo]=e);
+  const det = [];
+  function pct(x){ return Math.max(0, Math.min(100, Math.round(x*100))); }
+
+  const bf = BANCADA.camara[by.federal.partido] || 0;
+  const sFed = pct(bf/QUORUM.camara);
+  det.push({k:'Deputado federal', v:sFed, txt:`a bancada do ${by.federal.partido} tem <b>${bf}</b> das <b>257</b> cadeiras da maioria absoluta`});
+
+  const bs = BANCADA.senado[by.senador.partido] || 0;
+  const sSen = pct(bs/QUORUM.senado);
+  det.push({k:'Senador', v:sSen, txt:`a bancada do ${by.senador.partido} tem <b>${bs}</b> das <b>41</b> cadeiras da maioria no Senado`});
+
+  const ba = BANCADA.alrs[by.estadual.partido] || 0;
+  const sEst = pct(ba/QUORUM.alrs);
+  det.push({k:'Deputado estadual', v:sEst, txt:`a bancada do ${by.estadual.partido} tem <b>${ba}</b> das <b>28</b> cadeiras da maioria na Assembleia`});
+
+  const cp = CAMPO_PARTIDO[by.presidente.partido];
+  const fp = CAMPO_FORCA.camara[cp] || 0;
+  const sPre = pct(fp/QUORUM.camara);
+  det.push({k:'Presidente', v:sPre, txt:`o campo dele soma <b>${fp}</b> deputados na Câmara — é com isso que ele aprova ou trava`});
+
+  const cg = CAMPO_PARTIDO[by.governador.partido];
+  const fg = CAMPO_FORCA.alrs[cg] || 0;
+  const sGov = pct(fg/QUORUM.alrs);
+  det.push({k:'Governador', v:sGov, txt:`o campo dele soma <b>${fg}</b> deputados na Assembleia gaúcha`});
+
+  const peso = Math.round(sPre*.25 + sGov*.15 + sSen*.20 + sFed*.30 + sEst*.10);
+  return {peso: peso, detalhe: det};
+}
+
+/* ---- VEREDITO 2x2 ---- */
+function veredito(coer, peso){
+  const C = coer >= 55, Pz = peso >= 55;
+  if(C && Pz)   return {t:'TIME CAMPEÃO', c:'v-bom',
+    d:'Seu time joga junto e tem cadeira pra transformar acordo em lei. É raro. Confira o gol contra mesmo assim.'};
+  if(C && !Pz)  return {t:'TORCIDA ORGANIZADA', c:'v-medio',
+    d:'Vocês concordam em quase tudo — e não aprovam quase nada. Seu time é coerente e impotente: falta cadeira pra chegar no quórum.'};
+  if(!C && Pz)  return {t:'ELENCO CARO, TIME RACHADO', c:'v-medio',
+    d:'Você escalou gente com poder de verdade. O problema é que esse poder vai ser gasto na briga entre eles.'};
+  return {t:'TIME REBAIXADO', c:'v-ruim',
+    d:'Seu time se contradiz e ainda não tem peso pra aprovar nada. Os cinco votos estão trabalhando um contra o outro.'};
+}
+
+function counter(el, ate, sufixo){
+  const dur = 900, ini = performance.now();
+  function step(now){
+    const p = Math.min(1,(now-ini)/dur), e = 1-Math.pow(1-p,3);
+    el.innerHTML = Math.round(ate*e) + (sufixo||'');
+    if(p<1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+/* ==========================================================================
+   RESULTADO
+   ========================================================================== */
+function calcular(){
+  const faltando = CARGOS.filter(c=>!st.time[c.id]);
+  if(faltando.length){ passoAtual = PASSOS.length-2; render(); return; }
+
+  const escalados = CARGOS.map(c=>{
+    const [partido, nome] = st.time[c.id].split('|');
+    return {cargo:c.id, cargoNome:c.nome, partido:partido, nome:nome};
+  });
+
+  const {coerencia, gols} = calcCoerencia(escalados);
+  const {peso, detalhe}   = calcPeso(escalados);
+  const forca = (coerencia+peso) ? Math.round(2*coerencia*peso/(coerencia+peso)) : 0;
+  const vd = veredito(coerencia, peso);
+
+  document.getElementById('wizard').hidden = true;
+  const res = document.getElementById('resultado');
+  res.hidden = false;
+  res.classList.add('on');
+
+  counter(document.getElementById('forcaNum'), forca, '<small>/100</small>');
+  counter(document.getElementById('coerNum'), coerencia);
+  counter(document.getElementById('pesoNum'), peso);
+  const vEl = document.getElementById('veredito');
+  vEl.className = 'veredito ' + vd.c;
+  vEl.textContent = vd.t;
+  document.getElementById('vereditoDesc').textContent = vd.d;
+  document.getElementById('coerH').textContent = st.decisivas.size
+    ? 'medida só nas '+st.decisivas.size+' pautas que você marcou como decisivas'
+    : 'medida nas '+TEMAS.length+' pautas';
+  document.getElementById('pesoH').textContent = 'quanto do quórum de aprovação seu time cobre';
+
+  // --- gols contra ---
+  const golsEl = document.getElementById('gols');
+  const unicos = [];
+  gols.forEach(g=>{ if(!unicos.some(u=>u.tema.id===g.tema.id && u.a.cargo===g.a.cargo && u.b.cargo===g.b.cargo)) unicos.push(g); });
+  golsEl.className = 'gols' + (unicos.length ? '' : ' zero');
+  if(!unicos.length){
+    golsEl.innerHTML = `<div class="gols-h"><span class="gols-n">0</span>
+      <span class="gols-t">gol contra</span></div>
+      <div class="gol">Nas pautas que você marcou como decisivas, ninguém do seu time joga contra o outro.
+      Coerência não é pouco — mas confira o peso ao lado antes de comemorar.</div>`;
+  }else{
+    golsEl.innerHTML = `<div class="gols-h"><span class="gols-n">${unicos.length}</span>
+      <span class="gols-t">gol${unicos.length>1?'s':''} contra</span></div>` +
+      unicos.slice(0,6).map(g=>`
+        <div class="gol">
+          Em <b>${g.tema.s.toLowerCase()}</b>, seu ${g.a.cargoNome.toLowerCase()} e seu ${g.b.cargoNome.toLowerCase()} votam em lados opostos.
+          <span class="vs">${g.a.nome} (${g.a.partido}) <span class="${g.pa==='F'?'f':'c'}">${g.pa==='F'?'A FAVOR':'CONTRA'}</span>
+          &nbsp;×&nbsp; ${g.b.nome} (${g.b.partido}) <span class="${g.pb==='F'?'f':'c'}">${g.pb==='F'?'A FAVOR':'CONTRA'}</span></span>
+        </div>`).join('') +
+      (unicos.length>6 ? `<div class="gol" style="color:var(--muted)">+ ${unicos.length-6} outros embates no mesmo time.</div>`:'');
+  }
+
+  // --- tabela do time ---
+  let maiorDiv = null;
+  const linhas = escalados.map(e=>{
+    const cam = scoreCamisa(e.partido);
+    const bol = scoreBolso(e.partido);
+    if(cam!==null && bol){
+      const d = cam - bol.score;
+      if(!maiorDiv || d > maiorDiv.d) maiorDiv = {d:d, e:e, cam:cam, bol:bol};
+    }
+    return `<div class="row">
+      <div class="who">${e.nome}<small>${e.cargoNome.toUpperCase()} · ${e.partido} · POSIÇÃO ESTIMADA PELO PARTIDO</small></div>
+      <div class="sc camisa">${cam===null?'—':cam}</div>
+      <div class="sc bolso">${bol===null?'—':bol.score}</div>
+    </div>`;
+  }).join('');
+
+  let divTxt = '';
+  if(maiorDiv && maiorDiv.d >= 15){
+    divTxt = `<div class="divergencia">O buraco do seu time: você concorda com <b>${maiorDiv.e.nome}</b>
+      em <b>${maiorDiv.cam}%</b> das ideias — mas das <b>${maiorDiv.bol.total}</b> pautas que batem direto
+      na sua vida, ele defende <b>${maiorDiv.bol.defende}</b>. Você veste a camisa dele. Ele não veste a sua.</div>`;
+  } else if(maiorDiv && maiorDiv.d <= -15){
+    divTxt = `<div class="divergencia">Curioso: <b>${maiorDiv.e.nome}</b> defende mais pautas que mexem no seu
+      bolso (<b>${maiorDiv.bol.score}</b>) do que ideias com que você concorda (<b>${maiorDiv.cam}</b>).
+      Seu voto de consciência e seu voto de sobrevivência não são a mesma pessoa.</div>`;
+  }
+
+  document.getElementById('tabela').innerHTML =
+    `<h3>Seu time, candidato por candidato</h3>
+     <div class="row head"><span>quem</span><span>camisa</span><span>bolso</span></div>` + linhas + divTxt;
+
+  // --- método ---
+  const {ativas, conflitos} = pautasDoBolso();
+  document.getElementById('metodoBody').innerHTML = `
+    <h4>Eixo CAMISA — você e ele pensam igual?</h4>
+    Concordância ponderada entre as suas respostas e a posição do partido nas ${TEMAS.length} pautas.
+    Igual = <code>1</code>, partido dividido = <code>0.5</code>, oposto = <code>0</code>.
+    Pauta marcada como decisiva pesa <code>3×</code>. "Tanto faz" sai da conta.
+
+    <h4>Eixo BOLSO — as pautas dele mexem na sua vida?</h4>
+    Seu perfil ativou <b>${ativas.length}</b> das ${TEMAS.length} pautas. Pra cada uma a gente marca
+    <b>qual lado protege quem está na sua situação</b> — e o critério está aqui, aberto:
+    <ul>${ativas.map(a=>`<li><b>${a.tema.s}</b>: no seu caso protege quem é
+      <code>${a.lado==='F'?'a favor':'contra'}</code> — "${a.tema.t}"</li>`).join('')}</ul>
+    ${conflitos.length ? `<h4>Pauta que divide você mesmo</h4>
+      ${conflitos.map(c=>`<b>${c.tema.s}</b> ficou de fora do score: ${c.lados.map(l=>
+        `<code>${ROTULO_PERFIL[l.perfil]||l.perfil}</code> puxa <b>${l.lado==='F'?'a favor':'contra'}</b>`).join(' e ')}.
+        Sua própria vida joga nos dois times aqui — então a gente não escolhe por você.`).join('<br>')}` : ''}
+    Discorda de algum critério? Ótimo — ele está exposto de propósito. Critério escondido é editorial disfarçado de dado.
+
+    <h4>Coerência — seu time joga junto?</h4>
+    Concordância média entre <b>todos os 10 pares</b> possíveis dos 5 escalados,
+    ${st.decisivas.size ? 'medida só nas <b>'+st.decisivas.size+'</b> pautas que você marcou como decisivas' : 'medida nas '+TEMAS.length+' pautas'}.
+    Onde um está a favor e o outro contra, é <b>gol contra</b>.
+
+    <h4>Peso — seu time consegue aprovar?</h4>
+    Um deputado sozinho vale 1 voto em 513. O que aprova é a <b>bancada</b>. Então o peso mede
+    quanto do quórum o time cobre:
+    <ul>${detalhe.map(d=>`<li><b>${d.k}</b> — ${d.txt} → <code>${d.v}</code></li>`).join('')}</ul>
+    Média ponderada: deputado federal 30%, presidente 25%, senador 20%, governador 15%, estadual 10%.
+
+    <h4>Força do time</h4>
+    <code>força = 2 × (coerência × peso) ÷ (coerência + peso)</code> — média harmônica.
+    Escolha proposital: ela <b>derruba</b> quem é ótimo num eixo e péssimo no outro.
+    Um time 100% coerente e 10% pesado dá <code>18</code>, não <code>55</code>.
+    É assim que "coerente e impotente" aparece como número, e não como opinião.`;
+
+  st._share = {forca, coerencia, peso, vd, gols:unicos.length, escalados};
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ---------- compartilhar ---------- */
+function compartilhar(){
+  const s = st._share; if(!s) return;
+  const txt =
+`⚽ MEU TIME POLÍTICO 2026 — meu placar
+
+Força do time: ${s.forca}/100
+${s.vd.t}
+
+Coerência: ${s.coerencia}/100 — eles jogam junto?
+Peso: ${s.peso}/100 — eles aprovam alguma coisa?
+Gols contra: ${s.gols}
+
+Minha escalação:
+${s.escalados.map(e=>'· '+e.cargoNome+': '+e.nome+' ('+e.partido+')').join('\n')}
+
+Escala o teu e me diz quantos gols contra deu 👇`;
+
+  navigator.clipboard.writeText(txt).then(()=>{
+    const b = document.querySelector('.share'), o = b.textContent;
+    b.textContent = '✓ copiado — cola no zap';
+    setTimeout(()=>{ b.textContent = o; }, 2600);
+  }).catch(()=>{ prompt('Copie seu placar:', txt); });
+}
+</script>
+</body>
+</html>

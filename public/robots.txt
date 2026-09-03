@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://meu-time-politico.vercel.app/sitemap-index.xml

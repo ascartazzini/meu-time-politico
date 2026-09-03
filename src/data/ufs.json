@@ -1,0 +1,32 @@
+{
+  "$comment": "As 27 unidades federativas. `casaEstadual` é o nome da casa legislativa estadual; cadeiras e composição vêm de src/data/generated/assembleias.json (eleitos em 2022, TSE).",
+  "ufs": [
+    {"sigla":"AC","nome":"Acre","casaEstadual":"Assembleia Legislativa do Acre"},
+    {"sigla":"AL","nome":"Alagoas","casaEstadual":"Assembleia Legislativa de Alagoas"},
+    {"sigla":"AM","nome":"Amazonas","casaEstadual":"Assembleia Legislativa do Amazonas"},
+    {"sigla":"AP","nome":"Amapá","casaEstadual":"Assembleia Legislativa do Amapá"},
+    {"sigla":"BA","nome":"Bahia","casaEstadual":"Assembleia Legislativa da Bahia"},
+    {"sigla":"CE","nome":"Ceará","casaEstadual":"Assembleia Legislativa do Ceará"},
+    {"sigla":"DF","nome":"Distrito Federal","casaEstadual":"Câmara Legislativa do Distrito Federal"},
+    {"sigla":"ES","nome":"Espírito Santo","casaEstadual":"Assembleia Legislativa do Espírito Santo"},
+    {"sigla":"GO","nome":"Goiás","casaEstadual":"Assembleia Legislativa de Goiás"},
+    {"sigla":"MA","nome":"Maranhão","casaEstadual":"Assembleia Legislativa do Maranhão"},
+    {"sigla":"MG","nome":"Minas Gerais","casaEstadual":"Assembleia Legislativa de Minas Gerais"},
+    {"sigla":"MS","nome":"Mato Grosso do Sul","casaEstadual":"Assembleia Legislativa de Mato Grosso do Sul"},
+    {"sigla":"MT","nome":"Mato Grosso","casaEstadual":"Assembleia Legislativa de Mato Grosso"},
+    {"sigla":"PA","nome":"Pará","casaEstadual":"Assembleia Legislativa do Pará"},
+    {"sigla":"PB","nome":"Paraíba","casaEstadual":"Assembleia Legislativa da Paraíba"},
+    {"sigla":"PE","nome":"Pernambuco","casaEstadual":"Assembleia Legislativa de Pernambuco"},
+    {"sigla":"PI","nome":"Piauí","casaEstadual":"Assembleia Legislativa do Piauí"},
+    {"sigla":"PR","nome":"Paraná","casaEstadual":"Assembleia Legislativa do Paraná"},
+    {"sigla":"RJ","nome":"Rio de Janeiro","casaEstadual":"Assembleia Legislativa do Rio de Janeiro"},
+    {"sigla":"RN","nome":"Rio Grande do Norte","casaEstadual":"Assembleia Legislativa do Rio Grande do Norte"},
+    {"sigla":"RO","nome":"Rondônia","casaEstadual":"Assembleia Legislativa de Rondônia"},
+    {"sigla":"RR","nome":"Roraima","casaEstadual":"Assembleia Legislativa de Roraima"},
+    {"sigla":"RS","nome":"Rio Grande do Sul","casaEstadual":"Assembleia Legislativa do Rio Grande do Sul"},
+    {"sigla":"SC","nome":"Santa Catarina","casaEstadual":"Assembleia Legislativa de Santa Catarina"},
+    {"sigla":"SE","nome":"Sergipe","casaEstadual":"Assembleia Legislativa de Sergipe"},
+    {"sigla":"SP","nome":"São Paulo","casaEstadual":"Assembleia Legislativa de São Paulo"},
+    {"sigla":"TO","nome":"Tocantins","casaEstadual":"Assembleia Legislativa do Tocantins"}
+  ]
+}
