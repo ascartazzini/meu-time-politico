@@ -70,6 +70,8 @@ Em `src/data/temas.json`, adicione em `votacoes` da pauta:
 
 Endereço canônico: **https://www.meutimepolitico.com**. O site está no ar pelo **Deploya** (`deploya deploy` na raiz; app `meu-time-politico`, config em `.deploya.json`), com Dockerfile de dois estágios (build do Astro → nginx sem privilégio na porta 3000). `deploya domain status` mostra o domínio próprio e o certificado.
 
+O certificado TLS é emitido pelo acme-companion do nginx-proxy a partir das variáveis do container, e o Deploya não repassou o domínio próprio pra elas sozinho. Por isso a app tem duas variáveis definidas com `deploya env set`, com os três nomes separados por vírgula: `VIRTUAL_HOST` e `LETSENCRYPT_HOST` = `meu-time-politico.labs.arturscartazzini.com,www.meutimepolitico.com,meutimepolitico.com`. Mudou de domínio? Atualize as duas e faça `deploya deploy` (um `restart` não recria o container e não basta).
+
 O domínio aparece em quatro lugares, que precisam andar juntos:
 
 | onde | o que |
