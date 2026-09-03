@@ -34,7 +34,7 @@ button:disabled{opacity:.4;cursor:default}
 .wrap{overflow:auto;padding:0 0 60px}
 table{border-collapse:separate;border-spacing:0;min-width:100%}
 th,td{border-bottom:1px solid var(--line);padding:0;vertical-align:top}
-thead th{position:sticky;top:53px;background:#0B0E09;z-index:3;font:600 10px/1.3 ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:10px 6px;text-align:center;max-width:92px}
+thead th{position:sticky;top:var(--hh,53px);background:#0B0E09;z-index:3;font:600 10px/1.3 ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:10px 6px;text-align:center;max-width:92px}
 thead th small{display:block;color:#3D4A36;text-transform:none;letter-spacing:0;font-weight:400}
 tbody th{position:sticky;left:0;background:var(--surface);z-index:2;text-align:left;padding:8px 10px;min-width:200px;border-right:1px solid var(--line)}
 tbody th b{font-size:14px}tbody th small{display:block;font:10px ui-monospace,monospace;color:var(--muted);letter-spacing:.06em;margin-top:3px}
@@ -67,6 +67,8 @@ let D, orig, P, mods = new Set();
 const CAMPOS = [['esq','Esquerda'],['centro','Centro'],['dir','Direita'],[null,'Sem campo classificado']];
 const $ = s => document.querySelector(s);
 const ciclo = { F:'D', D:'C', C:'F' };
+function ajustarCabecalho(){ document.documentElement.style.setProperty('--hh', document.querySelector('header').offsetHeight + 'px'); }
+addEventListener('resize', ajustarCabecalho);
 async function carregar(){ D = await (await fetch('/dados')).json(); P = D.partidos; orig = JSON.stringify(P); mods.clear(); render(); }
 function ev(t, sg){ return (D.evidencia.evidencia[t]||{})[sg]; }
 function render(){
@@ -97,7 +99,7 @@ function render(){
     }
   }
   $('#tab').innerHTML = h + '</tbody>';
-  atualizarBotoes();
+  atualizarBotoes(); ajustarCabecalho();
 }
 function esc(s){ return String(s??'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function atualizarBotoes(){ const dif = JSON.stringify(P) !== orig; $('#salvar').disabled = !dif; $('#reverter').disabled = !dif; }

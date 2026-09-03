@@ -326,10 +326,10 @@ function renderResultado(p: Placar, d: Dataset) {
     Média ponderada: ${d.cargos.map(c => `${c.curto} ${Math.round(c.pesoNoPlacar * 100)}%`).join(', ')}. Bancadas da ${esc(d.casaEstadual)}: composição eleita em 2022.
     <h4>Força do time</h4>
     <code>força = 2 × (coerência × peso) ÷ (coerência + peso)</code> — média harmônica. Ela <b>derruba</b> quem é ótimo num eixo e péssimo no outro. Um time 100% coerente e 10% pesado dá <code>18</code>, não <code>55</code>.
-    Método completo, votações usadas e cobertura por pauta em <a href="/metodo">/metodo</a>.`;
+    Método completo, votações usadas e cobertura por pauta em <a href="/metodo/">/metodo</a>.`;
 
   const fontes = document.getElementById('fontes');
-  if (fontes) fontes.innerHTML = '<b>Fontes:</b> ' + d.fontes.map(f => `<b>${esc(f.rotulo)}:</b> ${esc(f.detalhe)}`).join(' · ') + '. Método completo e lista das votações usadas em <a href="/metodo">/metodo</a>.';
+  if (fontes) fontes.innerHTML = '<b>Fontes:</b> ' + d.fontes.map(f => `<b>${esc(f.rotulo)}:</b> ${esc(f.detalhe)}`).join(' · ') + '. Método completo e lista das votações usadas em <a href="/metodo/">/metodo</a>.';
 }
 
 /* ---------- compartilhar ---------- */
@@ -349,7 +349,7 @@ ${p.escalados.map(e => `· ${e.cargo.nome}: ${e.candidato.nome} (${e.candidato.p
 Escala o teu e me diz quantos gols contra deu 👇
 ${linkPlacar()}`;
 }
-function linkPlacar(): string { return `${location.origin}/app#s=${codificar(st)}`; }
+function linkPlacar(): string { return `${location.origin}/app/#s=${codificar(st)}`; }
 async function copiar(txt: string, btn: HTMLButtonElement, ok: string) {
   const o = btn.textContent;
   try { await navigator.clipboard.writeText(txt); btn.textContent = ok; }
