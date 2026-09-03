@@ -159,6 +159,9 @@ select.ok{border-color:var(--data)}
 .stories-d{font-size:14px;color:#B9C4B2}
 .stories-d b{color:var(--ink)}
 .stories-side .share{font-size:16px;padding:13px}
+.stories-side .share small{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:none;font-weight:400;margin-top:4px;opacity:.75}
+.stories-desktop{background:#1A1405;border:1px solid #3D3110;border-left:3px solid var(--stance);border-radius:3px;padding:11px 13px;font-size:13px;color:#D4CDA8}
+.stories-desktop b{color:var(--stance)}
 .stories-side .picker-x{justify-self:start}
 .stories-nota{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.06em}
 

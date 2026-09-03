@@ -383,14 +383,17 @@ async function prepararStories(btn: HTMLButtonElement) {
     }
     const box = $('stories');
     $<HTMLImageElement>('storiesImg').src = storiesPng.url;
-    $('btnStoriesShare').hidden = !podeCompartilharArquivo();
-    $('storiesDica').innerHTML = podeCompartilharArquivo()
-      ? 'Toca em <b>compartilhar</b> e escolhe o Instagram → <b>Stories</b>. Cola o <b>link do placar</b> num sticker de link pra quem vê conseguir escalar o dele.'
-      : 'Baixa a imagem, manda pro celular e posta nos <b>Stories</b>. Cola o <b>link do placar</b> num sticker de link pra quem vê conseguir escalar o dele.';
+    const celular = podeCompartilharArquivo();
+    $('btnStoriesShare').hidden = !celular;
+    $('storiesDesktop').hidden = celular;
+    $('storiesDica').innerHTML = celular
+      ? 'Toca em <b>mandar pro Instagram</b>: abre a folha de compartilhar do celular, você escolhe o Instagram e depois <b>Stories</b>. Cola o <b>link do placar</b> num sticker de link pra quem vê conseguir escalar o dele.'
+      : 'Baixa a imagem, manda pra você mesmo e posta nos <b>Stories</b> pelo celular. Cola o <b>link do placar</b> num sticker de link pra quem vê conseguir escalar o dele.';
     box.hidden = false;
     box.scrollIntoView({ behavior: 'smooth', block: 'start' });
   } catch (e) {
-    btn.textContent = `não deu (${(e as Error).message})`; setTimeout(() => { btn.textContent = o; }, 3000); btn.disabled = false; return;
+    console.error('imagem pros stories:', e);
+    btn.textContent = 'a imagem não saiu — tenta de novo'; setTimeout(() => { btn.textContent = o; }, 3500); btn.disabled = false; return;
   }
   btn.textContent = o; btn.disabled = false;
 }
