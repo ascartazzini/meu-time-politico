@@ -145,6 +145,25 @@ select.ok{border-color:var(--data)}
 .share:hover{background:var(--stance);color:var(--bg)}
 .share.sec{color:var(--muted);border-color:var(--line)}
 .share.sec:hover{background:transparent;color:var(--ink);border-color:var(--muted)}
+.share.wide{grid-column:1/-1}
+.share:disabled{opacity:.6;cursor:progress}
+.share:disabled:hover{background:transparent;color:var(--stance)}
+
+/* ---- imagem pros stories ---- */
+.stories{margin-top:12px;display:grid;grid-template-columns:minmax(180px,270px) 1fr;gap:18px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:18px}
+@media(max-width:560px){.stories{grid-template-columns:1fr}}
+.stories-prev img{display:block;width:100%;height:auto;aspect-ratio:9/16;border:1px solid var(--line);border-radius:6px;background:#050703}
+.stories-side{display:grid;gap:10px;align-content:start}
+.stories-h{font-family:var(--display);font-size:clamp(24px,5vw,34px);text-transform:uppercase;line-height:1}
+.stories-h span{color:var(--stance)}
+.stories-d{font-size:14px;color:#B9C4B2}
+.stories-d b{color:var(--ink)}
+.stories-side .share{font-size:16px;padding:13px}
+.stories-side .share small{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:none;font-weight:400;margin-top:4px;opacity:.75}
+.stories-desktop{background:#1A1405;border:1px solid #3D3110;border-left:3px solid var(--stance);border-radius:3px;padding:11px 13px;font-size:13px;color:#D4CDA8}
+.stories-desktop b{color:var(--stance)}
+.stories-side .picker-x{justify-self:start}
+.stories-nota{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.06em}
 
 /* ---- escolha de UF ---- */
 .chips-uf .chip{min-width:56px;text-align:center;font-family:var(--mono);letter-spacing:.06em}

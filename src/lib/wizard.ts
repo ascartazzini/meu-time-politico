@@ -10,6 +10,7 @@ import { calcularPlacar, type Placar } from './motor';
 import { carregarDataset } from './dataset';
 import { carregar, codificar, decodificar, estadoVazio, limpar, salvar } from './estado';
 import { esc } from './formato';
+import { gerarPngStories, montarStories, nomeArquivoStories } from './stories';
 import { normalizarNome } from './nomes';
 
 const PERFIL = perfilJson.grupos;
@@ -271,6 +272,7 @@ function calcular() {
 }
 function renderResultado(p: Placar, d: Dataset) {
   const res = $('resultado'); mostrar('resultado'); res.classList.add('on');
+  limparStories();                               // a imagem é do placar anterior
   $('alheio').hidden = !alheio;
   if (alheio) $('alheio').innerHTML = `Você abriu o <b>placar de outra pessoa</b> (${esc(d.nomeUf)}). As respostas e a escalação são dela. <button class="picker-x" id="btnMeu" type="button">escalar o meu</button>`;
   $('btnMeu')?.addEventListener('click', () => comecar(true));
@@ -357,6 +359,61 @@ async function copiar(txt: string, btn: HTMLButtonElement, ok: string) {
   setTimeout(() => { btn.textContent = o; }, 2600);
 }
 
+/* ---------- imagem pro stories ----------
+   Um PNG 1080×1920 desenhado no navegador (src/lib/stories.ts). No celular, o botão abre a folha
+   de compartilhar do sistema (Instagram aparece lá); onde não dá, baixa o arquivo. */
+let storiesPng: { blob: Blob; url: string } | null = null;
+function limparStories() {
+  if (storiesPng) URL.revokeObjectURL(storiesPng.url);
+  storiesPng = null;
+  const box = document.getElementById('stories'); if (box) box.hidden = true;
+}
+function arquivoStories(): File { return new File([storiesPng!.blob], nomeArquivoStories(st.uf), { type: 'image/png' }); }
+function podeCompartilharArquivo(): boolean {
+  try { return typeof navigator.share === 'function' && typeof navigator.canShare === 'function' && navigator.canShare({ files: [arquivoStories()] }); }
+  catch { return false; }
+}
+async function prepararStories(btn: HTMLButtonElement) {
+  if (!placarAtual || !ds) return;
+  const o = btn.textContent; btn.disabled = true; btn.textContent = 'montando a imagem…';
+  try {
+    if (!storiesPng) {
+      const blob = await gerarPngStories(montarStories(placarAtual, ds.nomeUf, location.host, !alheio));
+      storiesPng = { blob, url: URL.createObjectURL(blob) };
+    }
+    const box = $('stories');
+    $<HTMLImageElement>('storiesImg').src = storiesPng.url;
+    const celular = podeCompartilharArquivo();
+    $('btnStoriesShare').hidden = !celular;
+    $('storiesDesktop').hidden = celular;
+    $('storiesDica').innerHTML = celular
+      ? 'Toca em <b>mandar pro Instagram</b>: abre a folha de compartilhar do celular, você escolhe o Instagram e depois <b>Stories</b>. Cola o <b>link do placar</b> num sticker de link pra quem vê conseguir escalar o dele.'
+      : 'Baixa a imagem, manda pra você mesmo e posta nos <b>Stories</b> pelo celular. Cola o <b>link do placar</b> num sticker de link pra quem vê conseguir escalar o dele.';
+    box.hidden = false;
+    box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } catch (e) {
+    console.error('imagem pros stories:', e);
+    btn.textContent = 'a imagem não saiu — tenta de novo'; setTimeout(() => { btn.textContent = o; }, 3500); btn.disabled = false; return;
+  }
+  btn.textContent = o; btn.disabled = false;
+}
+async function compartilharStories(btn: HTMLButtonElement) {
+  if (!storiesPng || !placarAtual) return;
+  const texto = `⚽ Meu time político 2026: força ${placarAtual.forca}/100, ${placarAtual.gols.length} gol${placarAtual.gols.length === 1 ? '' : 's'} contra. Escala o teu: ${linkPlacar()}`;
+  try { await navigator.share({ files: [arquivoStories()], title: 'Meu Time Político 2026', text: texto }); }
+  catch (e) {
+    if ((e as Error).name === 'AbortError') return;   // a pessoa fechou a folha de compartilhar
+    baixarStories(btn);
+  }
+}
+function baixarStories(btn: HTMLButtonElement) {
+  if (!storiesPng) return;
+  const a = document.createElement('a');
+  a.href = storiesPng.url; a.download = nomeArquivoStories(st.uf); a.rel = 'noopener';
+  document.body.appendChild(a); a.click(); a.remove();
+  const o = btn.textContent; btn.textContent = '✓ imagem salva'; setTimeout(() => { btn.textContent = o; }, 2600);
+}
+
 /* ---------- boot ---------- */
 async function abrirLinkCompartilhado(): Promise<boolean> {
   const m = location.hash.match(/[#&]s=([A-Za-z0-9_-]+)/);
@@ -381,6 +438,11 @@ export async function iniciar() {
   $('btnZerar').addEventListener('click', () => comecar(true));
   $('btnCopiar').addEventListener('click', e => { if (placarAtual) copiar(textoPlacar(placarAtual), e.currentTarget as HTMLButtonElement, '✓ copiado — cola no zap'); });
   $('btnLink').addEventListener('click', e => copiar(linkPlacar(), e.currentTarget as HTMLButtonElement, '✓ link copiado'));
+  $('btnStories').addEventListener('click', e => { void prepararStories(e.currentTarget as HTMLButtonElement); });
+  $('btnStoriesShare').addEventListener('click', e => { void compartilharStories(e.currentTarget as HTMLButtonElement); });
+  $('btnStoriesBaixar').addEventListener('click', e => baixarStories(e.currentTarget as HTMLButtonElement));
+  $('btnStoriesLink').addEventListener('click', e => copiar(linkPlacar(), e.currentTarget as HTMLButtonElement, '✓ link copiado'));
+  $('btnStoriesFechar').addEventListener('click', () => { $('stories').hidden = true; });
   $('tela').addEventListener('click', onClickTela);
   $('tela').addEventListener('change', onChangeTela);
   document.querySelector('.brand')?.addEventListener('click', e => { e.preventDefault(); mostrar('intro'); });
