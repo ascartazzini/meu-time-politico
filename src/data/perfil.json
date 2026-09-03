@@ -8,7 +8,7 @@
       {"v":"sus","l":"só SUS"},{"v":"sus_plano","l":"SUS + plano"},{"v":"plano","l":"só plano"}]},
     {"id":"escola","label":"Tem alguém estudando na sua casa?","hint":"Educação","ops":[
       {"v":"esc_publica","l":"em escola pública"},{"v":"esc_privada","l":"em escola privada"},{"v":"esc_nenhuma","l":"ninguém estuda"}]},
-    {"id":"transporte","label":"Como você se locomove?","hint":"Transporte","ops":[
+    {"id":"transporte","label":"Qual é o seu principal meio de transporte?","hint":"Locomoção","ops":[
       {"v":"onibus","l":"ônibus / trem"},{"v":"carro","l":"carro"},{"v":"moto","l":"moto"},{"v":"ape","l":"bike / a pé"}]},
     {"id":"moradia","label":"E a casa onde você mora?","hint":"Moradia","ops":[
       {"v":"aluguel","l":"é alugada"},{"v":"financiada","l":"é financiada"},{"v":"quitada","l":"é quitada"}]}

@@ -27,7 +27,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://meu-time-po
   <div class="wrap">
     <header class="top">
       <a class="brand" href="/">MEU TIME <span>POLÍTICO</span><em>2026</em></a>
-      <div style="display:flex;align-items:center;gap:14px">
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <nav class="nav"><a href="/sobre/">como funciona</a><a href="/metodo/">método</a></nav>
         <div class="countdown" data-countdown>—</div>
         {badge && <div class="badge beta">{badge}</div>}
       </div>

@@ -33,7 +33,7 @@ type Passo =
   | { fase: string; tipo: 'escala'; h: string; d: string; cargos: CargoId[] };
 
 const PASSOS: Passo[] = [
-  { fase: 'Onde você vota', tipo: 'uf', h: 'Qual é o seu estado?', d: 'Governador, senador e deputados são do seu estado. Presidente é o mesmo pra todo mundo.' },
+  { fase: 'Onde você vota', tipo: 'uf', h: 'Qual é o seu estado?', d: 'Escale seus <b>cinco votos</b> de 4 de outubro e veja se o time joga junto. Dois minutos, sem cadastro, nada sai do seu navegador. Governador, senador e deputados são do seu estado; presidente é o mesmo pra todo mundo.' },
   { fase: 'Sua vida', tipo: 'perfil', h: 'Quem é você', d: 'Isso define o eixo <b>BOLSO</b>: quais pautas batem direto na sua rotina. Nada sai do seu navegador.', itens: PERFIL.slice(0, 3) },
   { fase: 'Sua vida', tipo: 'perfil', h: 'Sua rotina', d: 'Mais três. Depois disso a gente já sabe que pautas mexem com você de verdade.', itens: PERFIL.slice(3, 6) }
 ];
@@ -58,22 +58,24 @@ function completo(i: number): boolean {
   if (p.tipo === 'escala') return p.cargos.every(c => st.time[c]);
   return false;
 }
-function mostrar(sec: 'intro' | 'wizard' | 'resultado') {
-  $('intro').hidden = sec !== 'intro'; $('wizard').hidden = sec !== 'wizard'; $('resultado').hidden = sec !== 'resultado';
+function mostrar(sec: 'wizard' | 'resultado') {
+  $('wizard').hidden = sec !== 'wizard'; $('resultado').hidden = sec !== 'resultado';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 function comecar(zerar = false) {
   if (zerar) { st = estadoVazio(); ds = null; limpar(); }
   alheio = false; passoAtual = 0; render(); mostrar('wizard');
 }
+/* retoma de onde a pessoa parou; com o time completo, vai direto pro placar */
 async function continuar() {
   alheio = false;
   if (st.uf && (!ds || ds.uf !== st.uf)) await escolherUf(st.uf, false);
-  passoAtual = PASSOS.findIndex((_, i) => !completo(i)); if (passoAtual < 0) passoAtual = PASSOS.length - 1;
+  passoAtual = PASSOS.findIndex((_, i) => !completo(i));
+  if (passoAtual < 0) { passoAtual = PASSOS.length - 1; calcular(); return; }
   render(); mostrar('wizard');
 }
 function reescalar() { alheio = false; passoAtual = PASSOS.length - 2; render(); mostrar('wizard'); }
-function voltar() { if (passoAtual === 0) { mostrar('intro'); return; } passoAtual--; render(); }
+function voltar() { if (passoAtual === 0) return; passoAtual--; render(); }
 function avancar() { if (passoAtual < PASSOS.length - 1) { passoAtual++; render(); } else calcular(); }
 function talvezAvancar(eraCompleto: boolean) { salvar(st); atualizarNav(); if (!eraCompleto && completo(passoAtual)) setTimeout(avancar, 350); }
 function atualizarNav() {
@@ -123,6 +125,7 @@ function render() {
   } else if (p.tipo === 'pautas') {
     corpo = p.itens.map(t => `
       <div class="q"><div class="q-t"><small>${esc(t.s)}</small>${esc(t.t)}</div>
+        ${t.leia ? `<a class="leia" href="${esc(t.leia.url)}" target="_blank" rel="noopener" title="${esc(t.leia.rotulo)}">entender a pauta ↗ <span>${esc(t.leia.fonte)}</span></a>` : ''}
         <div class="tb-row">
           ${(['F', 'C', 'N'] as Resposta[]).map(v => `<button class="tb" type="button" data-v="${v}" data-resp="${t.id}" aria-pressed="${st.respostas[t.id] === v}">${v === 'F' ? 'A FAVOR' : v === 'C' ? 'CONTRA' : 'TANTO FAZ'}</button>`).join('')}
         </div>
@@ -155,7 +158,7 @@ function render() {
   tela.classList.remove('enter');
   tela.innerHTML = `<div class="tela-h">${esc(p.h)}</div>` + (p.d ? `<p class="tela-d">${p.d}</p>` : '<div style="height:10px"></div>') + corpo;
   void tela.offsetWidth; tela.classList.add('enter');
-  $('btnVoltar').textContent = passoAtual === 0 ? '← Início' : '← Voltar';
+  $('btnVoltar').hidden = passoAtual === 0; $('btnVoltar').textContent = '← Voltar';
   atualizarNav();
   window.scrollTo({ top: 0, behavior: 'smooth' });
   if (p.tipo === 'escala') tela.querySelectorAll<HTMLElement>('[data-picker]').forEach(montarPicker);
@@ -351,7 +354,7 @@ ${p.escalados.map(e => `· ${e.cargo.nome}: ${e.candidato.nome} (${e.candidato.p
 Escala o teu e me diz quantos gols contra deu 👇
 ${linkPlacar()}`;
 }
-function linkPlacar(): string { return `${location.origin}/app/#s=${codificar(st)}`; }
+function linkPlacar(): string { return `${location.origin}/#s=${codificar(st)}`; }
 async function copiar(txt: string, btn: HTMLButtonElement, ok: string) {
   const o = btn.textContent;
   try { await navigator.clipboard.writeText(txt); btn.textContent = ok; }
@@ -430,8 +433,6 @@ async function abrirLinkCompartilhado(): Promise<boolean> {
   } catch { return false; }
 }
 export async function iniciar() {
-  $('btnComecar').addEventListener('click', () => comecar(false));
-  $('btnContinuar').addEventListener('click', () => { void continuar(); });
   $('btnVoltar').addEventListener('click', voltar);
   $('btnProx').addEventListener('click', avancar);
   $('btnReescalar').addEventListener('click', reescalar);
@@ -445,7 +446,7 @@ export async function iniciar() {
   $('btnStoriesFechar').addEventListener('click', () => { $('stories').hidden = true; });
   $('tela').addEventListener('click', onClickTela);
   $('tela').addEventListener('change', onChangeTela);
-  document.querySelector('.brand')?.addEventListener('click', e => { e.preventDefault(); mostrar('intro'); });
+  document.querySelector('.brand')?.addEventListener('click', e => { e.preventDefault(); alheio = false; passoAtual = 0; render(); mostrar('wizard'); });
   document.addEventListener('keydown', e => {
     if ($('wizard').hidden || (e.target as HTMLElement).tagName === 'INPUT') return;
     if (e.key === 'ArrowLeft') voltar();
@@ -454,10 +455,8 @@ export async function iniciar() {
 
   if (await abrirLinkCompartilhado()) return;
   window.addEventListener('hashchange', () => { void abrirLinkCompartilhado(); });
+  // sem tela de abertura: quem já começou retoma de onde parou; quem chega agora cai na primeira pergunta
   const salvo = carregar();
-  if (salvo && (salvo.uf || Object.keys(salvo.perfil).length || Object.keys(salvo.respostas).length)) {
-    st = salvo; $('btnContinuar').hidden = false;
-    if (st.uf && Object.keys(st.time).length === 5) $('btnContinuar').textContent = 'Ver meu placar de novo';
-  }
-  if (location.hash === '#app') comecar(false);
+  if (salvo && (salvo.uf || Object.keys(salvo.perfil).length || Object.keys(salvo.respostas).length)) { st = salvo; await continuar(); }
+  else comecar(false);
 }

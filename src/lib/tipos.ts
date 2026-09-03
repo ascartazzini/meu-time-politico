@@ -13,6 +13,7 @@ export interface Tema {
   t: string;                  // frase da pauta
   impacto: Record<string, Lado>;
   votacoes: VotacaoRef[];
+  leia?: { rotulo: string; url: string; fonte: string };   // link discreto pra entender a pauta
 }
 export interface VotacaoRef {
   casa: 'camara' | 'senado';
