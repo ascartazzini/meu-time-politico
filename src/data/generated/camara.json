@@ -1,5 +1,5 @@
 {
- "atualizadoEm": "2026-09-02T22:22:22.600Z",
+ "atualizadoEm": "2026-09-03T07:53:05.870Z",
  "fonte": "https://dadosabertos.camara.leg.br/api/v2",
  "bancadas": {
   "AVANTE": 5,
@@ -7700,6 +7700,19 @@
      "partido": "PODE",
      "uf": "RO"
     }
+   },
+   "orientacoes": {
+    "PSB": "Sim",
+    "Governo": "Sim",
+    "Fdr PSOL-REDE": "Sim",
+    "Minoria": "Sim",
+    "Bl PlUniPpPsd...": "Sim",
+    "NOVO": "Sim",
+    "Bl AvanSolidPrd...": "Sim",
+    "PDT": "Sim",
+    "Fdr PT-PCdoB-PV": "Sim",
+    "Maioria": "Sim",
+    "Oposição": "Sim"
    }
   },
   "2233802-424": {
@@ -10686,6 +10699,23 @@
      "partido": "PSDB",
      "uf": "MG"
     }
+   },
+   "orientacoes": {
+    "Bl UniPpPsd...": "Sim",
+    "MISSÃO": "Não",
+    "SOLIDARIEDADE": "Sim",
+    "AVANTE": "Sim",
+    "Minoria": "Sim",
+    "Governo": "Sim",
+    "PDT": "Sim",
+    "PRD": "",
+    "Oposição": "Liberado",
+    "NOVO": "Não",
+    "Fdr PT-PCdoB-PV": "Sim",
+    "PL": "Sim",
+    "PSB": "Sim",
+    "Fdr PSOL-REDE": "Sim",
+    "Maioria": "Sim"
    }
   },
   "2233802-438": {
@@ -13581,6 +13611,23 @@
      "partido": "PSDB",
      "uf": "MG"
     }
+   },
+   "orientacoes": {
+    "Oposição": "Liberado",
+    "Governo": "Sim",
+    "MISSÃO": "",
+    "PDT": "Sim",
+    "PL": "Sim",
+    "NOVO": "Não",
+    "Fdr PT-PCdoB-PV": "Sim",
+    "Maioria": "Sim",
+    "SOLIDARIEDADE": "Sim",
+    "PRD": "",
+    "PSB": "Sim",
+    "Minoria": "Sim",
+    "AVANTE": "Sim",
+    "Bl UniPpPsd...": "Sim",
+    "Fdr PSOL-REDE": "Sim"
    }
   },
   "2262083-597": {
@@ -13872,6 +13919,24 @@
      "partido": "REPUBLICANOS",
      "uf": "SP"
     }
+   },
+   "orientacoes": {
+    "PL": "Não",
+    "PSB": "Sim",
+    "Minoria": "Sim",
+    "PCdoB": "Sim",
+    "MDB": "Sim",
+    "NOVO": "Não",
+    "PDT": "Sim",
+    "DEM": "Sim",
+    "REDE": "Sim",
+    "Governo": "Não",
+    "PT": "Sim",
+    "PSD": "Sim",
+    "PSOL": "Sim",
+    "PSL": "Sim",
+    "REPUBLICANOS": "Não",
+    "Oposição": "Sim"
    }
   },
   "2317648-72": {
@@ -15742,6 +15807,35 @@
      "partido": "PODE",
      "uf": "SP"
     }
+   },
+   "orientacoes": {
+    "PL": "Sim",
+    "PSB": "Sim",
+    "PDT": "Sim",
+    "PP": "Sim",
+    "PTB": "Sim",
+    "PROS": "Sim",
+    "PV": "Sim",
+    "CIDADANIA": "Sim",
+    "UNIÃO": "Sim",
+    "MDB": "Sim",
+    "Minoria": "Sim",
+    "PSD": "Sim",
+    "NOVO": "Sim",
+    "REDE": "Sim",
+    "PSC": "Sim",
+    "PCdoB": "Sim",
+    "PSDB": "Sim",
+    "PATRIOTA": "Sim",
+    "Governo": "Sim",
+    "Oposição": "Sim",
+    "PODE": "Sim",
+    "AVANTE": "Sim",
+    "REPUBLICANOS": "Sim",
+    "Maioria": "Sim",
+    "SOLIDARIEDADE": "Sim",
+    "PSOL": "Sim",
+    "PT": "Sim"
    }
   },
   "2209381-100": {
@@ -18315,6 +18409,33 @@
      "partido": "CIDADANIA",
      "uf": "MG"
     }
+   },
+   "orientacoes": {
+    "PpMdbPtb": "Sim",
+    "Governo": "Sim",
+    "PCdoB": "Não",
+    "PROS": "Sim",
+    "PL": "Sim",
+    "PSB": "Não",
+    "DEM": "Sim",
+    "REDE": "Não",
+    "Maioria": "Sim",
+    "Oposição": "Não",
+    "PSL": "Sim",
+    "PV": "Não",
+    "SOLIDARIEDADE": "Sim",
+    "PSC": "Sim",
+    "PSD": "Sim",
+    "Minoria": "Não",
+    "PODE": "Liberado",
+    "REPUBLICANOS": "Liberado",
+    "NOVO": "Sim",
+    "PSOL": "Não",
+    "PATRIOTA": "Liberado",
+    "PSDB": "Liberado",
+    "CIDADANIA": "Sim",
+    "PDT": "Liberado",
+    "PT": "Não"
    }
   },
   "2562149-7": {
@@ -21224,6 +21345,19 @@
      "partido": "PODE",
      "uf": "GO"
     }
+   },
+   "orientacoes": {
+    "Bl AvanSolidPrd...": "Sim",
+    "Bl PlUniPpPsd...": "",
+    "Maioria": "",
+    "Fdr PT-PCdoB-PV": "Não",
+    "PDT": "Não",
+    "Governo": "Não",
+    "NOVO": "Sim",
+    "Fdr PSOL-REDE": "Não",
+    "Oposição": "Sim",
+    "PSB": "Não",
+    "Minoria": "Sim"
    }
   },
   "2358548-89": {
@@ -23887,6 +24021,20 @@
      "partido": "UNIÃO",
      "uf": "CE"
     }
+   },
+   "orientacoes": {
+    "PDT": "Não",
+    "PL": "Sim",
+    "Governo": "Não",
+    "Bl AvanSolidPrd...": "Sim",
+    "Minoria": "Sim",
+    "Maioria": "Não",
+    "Bl UniPpPsd...": "Sim",
+    "Fdr PSOL-REDE": "Não",
+    "NOVO": "Sim",
+    "Fdr PT-PCdoB-PV": "Não",
+    "Oposição": "Sim",
+    "PSB": "Não"
    }
   },
   "257161-454": {
@@ -26207,6 +26355,16 @@
      "partido": "PT",
      "uf": "PR"
     }
+   },
+   "orientacoes": {
+    "Maioria": "Não",
+    "Bl PlFdrPtUniPp...": "",
+    "Minoria": "",
+    "Oposição": "Sim",
+    "Bl AvanSolidPrd...": "Não",
+    "NOVO": "Sim",
+    "Fdr PSOL-REDE": "Não",
+    "Governo": "Não"
    }
   }
  }

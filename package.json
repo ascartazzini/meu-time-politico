@@ -18,7 +18,9 @@
     "build-data": "tsx scripts/build-dataset.ts",
     "validate-data": "tsx scripts/validate-dataset.ts",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "evidencia": "tsx scripts/evidencia-partidos.ts",
+    "editor:partidos": "tsx scripts/evidencia-partidos.ts && tsx scripts/editor-partidos.ts"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

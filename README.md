@@ -46,6 +46,14 @@ O build não bate em API nenhuma: os fetches são um passo separado e o resultad
 - **Casamento candidato ↔ mandato**: CPF (TSE × API da Câmara) pra deputados; nome completo + UF pra senadores.
 - **TSE fora do Brasil**: o CDN devolve 403/404. `fetch:tse` tenta o CDN e cai pro snapshot do Wayback Machine; se nenhum funcionar, coloque os ZIPs em `data/raw/tse/` e rode de novo.
 
+## Revisar as estimativas por partido
+
+```bash
+npm run editor:partidos    # abre http://localhost:4400
+```
+
+Editor local (não vai pro ar): uma grade partido × pauta com a estimativa atual e, embaixo de cada célula, como a bancada votou de fato nas votações mapeadas e a orientação da liderança (API da Câmara). Clique na célula para alternar F → D → C; "Aplicar sugestões fortes" alinha tudo que tem ≥ 85% da bancada num lado; "Salvar + regerar datasets" grava `src/data/partidos.json` e reconstrói os 27 arquivos. A evidência é recalculada por `npm run evidencia` (`src/data/generated/evidencia-partidos.json`).
+
 ## Mapear uma votação nova
 
 Em `src/data/temas.json`, adicione em `votacoes` da pauta:

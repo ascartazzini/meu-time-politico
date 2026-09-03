@@ -1,5 +1,5 @@
 {
- "$comment": "Sigla canônica = a usada pela API da Câmara. `aliases` normaliza grafias do TSE, do Senado e do uso comum. `campo` é o campo ideológico usado no eixo PESO para presidente e governador (o campo deles na Câmara/Assembleia é o que aprova ou trava). `estimativa` é a posição estimada do partido em cada pauta, na ORDEM de temas.json: ir, escala, sus, escola, servidor, privatiza, tarifa, combustivel, aluguel, juros, emendas, arma, anistia, ambiente. F = a favor · C = contra · D = dividido/sem posição fechada. Só entra quando NÃO há voto nominal do candidato. `campo: null` = partido novo ou sem orientação pública consolidada: não entra em nenhum campo (peso 0 pra presidente/governador) e todas as posições ficam 'D'.",
+ "$comment": "Sigla canônica = a usada pela API da Câmara. `aliases` normaliza grafias do TSE, do Senado e do uso comum. `campo` é o campo ideológico usado no eixo PESO para presidente e governador (o campo deles na Câmara/Assembleia é o que aprova ou trava). `estimativa` é a posição estimada do partido em cada pauta, na ORDEM de temas.json: ir, escala, sus, escola, servidor, privatiza, tarifa, combustivel, aluguel, juros, emendas, arma, anistia, ambiente. F = a favor · C = contra · D = dividido/sem posição fechada. Só entra quando NÃO há voto nominal do candidato. `campo: null` = partido novo ou sem orientação pública consolidada: não entra em nenhum campo (peso 0 pra presidente/governador) e todas as posições ficam 'D'. REVISÃO 2026-09-03: nas 7 pautas com votação nominal, a estimativa foi alinhada a como a bancada votou de fato (regra em scripts/evidencia-partidos.ts; editor em `npm run editor:partidos`).",
  "ordemTemas": [
   "ir",
   "escala",
@@ -78,13 +78,13 @@
     "C",
     "C",
     "F",
-    "D",
+    "F",
     "F",
     "F",
     "D",
     "C",
     "C",
-    "D"
+    "C"
    ]
   },
   "PCdoB": {
@@ -98,13 +98,13 @@
     "C",
     "C",
     "F",
-    "D",
+    "F",
     "F",
     "F",
     "F",
     "C",
     "C",
-    "D"
+    "C"
    ]
   },
   "PV": {
@@ -138,7 +138,7 @@
     "C",
     "C",
     "F",
-    "C",
+    "F",
     "F",
     "F",
     "F",
@@ -158,7 +158,7 @@
     "D",
     "C",
     "F",
-    "C",
+    "F",
     "F",
     "F",
     "F",
@@ -178,7 +178,7 @@
     "C",
     "C",
     "F",
-    "D",
+    "F",
     "F",
     "F",
     "D",
@@ -192,19 +192,19 @@
    "campo": "esq",
    "estimativa": [
     "F",
+    "F",
+    "F",
+    "F",
+    "D",
     "D",
     "F",
     "F",
-    "D",
-    "D",
-    "F",
-    "D",
     "D",
     "F",
     "D",
     "C",
     "C",
-    "D"
+    "C"
    ]
   },
   "PSTU": {
@@ -298,12 +298,12 @@
     "D",
     "D",
     "D",
-    "D",
+    "F",
     "D",
     "F",
     "F",
-    "C",
-    "C",
+    "F",
+    "F",
     "D"
    ]
   },
@@ -311,18 +311,18 @@
    "nome": "MDB",
    "campo": "centro",
    "estimativa": [
+    "F",
+    "F",
     "D",
-    "C",
     "D",
-    "D",
-    "D",
+    "F",
     "D",
     "D",
     "F",
     "D",
     "F",
     "C",
-    "D",
+    "F",
     "D",
     "F"
    ]
@@ -331,18 +331,18 @@
    "nome": "PSD",
    "campo": "centro",
    "estimativa": [
+    "F",
+    "F",
     "D",
-    "C",
     "D",
-    "D",
-    "D",
+    "F",
     "D",
     "D",
     "F",
     "D",
     "D",
     "C",
-    "D",
+    "F",
     "D",
     "F"
    ]
@@ -351,8 +351,8 @@
    "nome": "PSDB",
    "campo": "centro",
    "estimativa": [
-    "D",
-    "C",
+    "F",
+    "F",
     "D",
     "D",
     "F",
@@ -363,16 +363,16 @@
     "D",
     "F",
     "D",
-    "D",
-    "D"
+    "F",
+    "F"
    ]
   },
   "PODE": {
    "nome": "Podemos",
    "campo": "centro",
    "estimativa": [
-    "D",
-    "C",
+    "F",
+    "F",
     "D",
     "D",
     "F",
@@ -391,8 +391,8 @@
    "nome": "Avante",
    "campo": "centro",
    "estimativa": [
-    "D",
-    "D",
+    "F",
+    "F",
     "D",
     "D",
     "D",
@@ -403,7 +403,7 @@
     "D",
     "D",
     "D",
-    "D",
+    "F",
     "F"
    ]
   },
@@ -412,7 +412,7 @@
    "campo": "centro",
    "estimativa": [
     "F",
-    "D",
+    "F",
     "D",
     "D",
     "D",
@@ -422,8 +422,8 @@
     "D",
     "F",
     "D",
-    "D",
-    "D",
+    "F",
+    "F",
     "F"
    ]
   },
@@ -491,8 +491,8 @@
    "nome": "União Brasil",
    "campo": "dir",
    "estimativa": [
-    "D",
-    "C",
+    "F",
+    "F",
     "D",
     "D",
     "F",
@@ -511,8 +511,8 @@
    "nome": "Progressistas",
    "campo": "dir",
    "estimativa": [
-    "D",
-    "C",
+    "F",
+    "F",
     "D",
     "C",
     "F",
@@ -531,8 +531,8 @@
    "nome": "Republicanos",
    "campo": "dir",
    "estimativa": [
-    "D",
-    "C",
+    "F",
+    "F",
     "D",
     "C",
     "D",
@@ -551,8 +551,8 @@
    "nome": "Partido Liberal",
    "campo": "dir",
    "estimativa": [
-    "C",
-    "C",
+    "F",
+    "F",
     "C",
     "C",
     "F",
@@ -571,7 +571,7 @@
    "nome": "Partido Novo",
    "campo": "dir",
    "estimativa": [
-    "C",
+    "F",
     "C",
     "C",
     "C",
@@ -583,7 +583,7 @@
     "C",
     "F",
     "F",
-    "D",
+    "F",
     "F"
    ]
   },
@@ -591,8 +591,8 @@
    "nome": "PRD",
    "campo": "dir",
    "estimativa": [
-    "D",
-    "C",
+    "F",
+    "F",
     "D",
     "D",
     "F",

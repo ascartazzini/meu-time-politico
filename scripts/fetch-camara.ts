@@ -59,7 +59,7 @@ async function main() {
   console.log(`  por UF: ${Object.entries(deputadosUF).map(([u, l]) => `${u} ${l.length}`).join(' · ')}`);
 
   // 3. votações nominais mapeadas
-  const votacoes: Record<string, { id: string; data: string; descricao: string; orgao: string; proposicao?: string; totais: Record<string, number>; votos: Record<string, string>; nomes: Record<string, { nome: string; partido: string; uf: string }> }> = {};
+  const votacoes: Record<string, { id: string; data: string; descricao: string; orgao: string; proposicao?: string; totais: Record<string, number>; votos: Record<string, string>; nomes: Record<string, { nome: string; partido: string; uf: string }>; orientacoes: Record<string, string> }> = {};
   const refs = temas.flatMap(t => t.votacoes.filter(v => v.casa === 'camara'));
   for (const ref of refs) {
     const id = ref.id!;
@@ -71,8 +71,14 @@ async function main() {
       mapa[String(v.deputado_.id)] = v.tipoVoto;
       nomes[String(v.deputado_.id)] = { nome: v.deputado_.nome, partido: v.deputado_.siglaPartido, uf: v.deputado_.siglaUf };
     }
+    // orientação oficial de cada bancada/bloco nessa votação (Sim, Não, Liberado, Obstrução…)
+    const orientacoes: Record<string, string> = {};
+    try {
+      const ori = (await fetchJson<{ dados: { siglaPartidoBloco: string; orientacaoVoto: string }[] }>(`${B}/votacoes/${id}/orientacoes`)).dados;
+      for (const o of ori) orientacoes[o.siglaPartidoBloco] = o.orientacaoVoto;
+    } catch (e) { console.warn(`  ⚠ orientações de ${id}: ${(e as Error).message}`); }
     const prop = det.proposicoesAfetadas?.[0];
-    votacoes[id] = { id, data: det.data, descricao: det.descricao, orgao: det.siglaOrgao, proposicao: prop ? `${prop.siglaTipo} ${prop.numero}/${prop.ano}` : undefined, totais, votos: mapa, nomes };
+    votacoes[id] = { id, data: det.data, descricao: det.descricao, orgao: det.siglaOrgao, proposicao: prop ? `${prop.siglaTipo} ${prop.numero}/${prop.ano}` : undefined, totais, votos: mapa, nomes, orientacoes };
     console.log(`  ${id} (${det.data}): ${votos.length} votos — ${JSON.stringify(totais)}`);
     if (!votos.length) console.warn(`  ⚠ ${id} não tem votos nominais registrados — confira o mapeamento em temas.json`);
   }

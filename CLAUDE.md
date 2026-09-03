@@ -11,6 +11,8 @@ Astro 7 estático + TypeScript + vitest + scripts tsx. Leia o README antes de me
 - Os fetches são passo separado do build; `src/data/generated/*.json` é versionado.
 
 ## Comandos
+`npm run editor:partidos` abre o editor local de estimativas (partido × pauta, com evidência das votações reais). Prefira alinhar estimativa a voto real; onde não há votação, é juízo editorial e deve ficar visível como tal.
+
 ```
 npm run dev            # astro dev
 npm run fetch-data     # Câmara + Senado + TSE
