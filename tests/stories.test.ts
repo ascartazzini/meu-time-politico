@@ -47,7 +47,7 @@ describe('conteúdo da imagem pro stories', () => {
   });
   it('nomeia o estado e o endereço sem protocolo nem barra final', () => {
     expect(c.kicker).toBe('BRASIL · RIO GRANDE DO SUL · 4 DE OUTUBRO');
-    expect(c.url).toBe('meutime.exemplo.br');
+    expect(c.url).toBe('meutime.exemplo.br/app');
   });
   it('concorda o rótulo dos gols e diz onde foram medidos', () => {
     expect(c.gols).toBe(3); expect(c.golsRotulo).toBe('GOLS CONTRA'); expect(c.golsSub).toBe('na pauta que decide o voto');

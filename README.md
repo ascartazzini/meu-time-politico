@@ -8,7 +8,7 @@ Você vota em cinco cargos e decide um de cada vez. Aqui você escala os cinco c
 npm install
 npm run fetch-data     # Câmara + Senado (APIs oficiais) + TSE (CDN, com fallback pro Wayback Machine)
 npm run build          # build-data → validate-data → astro build
-npm run dev            # servidor local em http://localhost:4321 (o app abre direto na primeira pergunta)
+npm run dev            # servidor local em http://localhost:4321
 npm test               # motor de cálculo, codificação do link, casamento de nomes
 ```
 
@@ -34,7 +34,7 @@ src/lib/dataset.ts           carrega /dados/<UF>.json e hidrata posições (voto
 src/lib/estado.ts            persistência local + link compartilhável (#s=…, com a UF)
 src/lib/stories.ts           imagem 1080×1920 pros stories (canvas, no navegador; Web Share ou download)
 src/lib/wizard.ts            camada de DOM do app (escolha de UF → perfil → pautas → escalação → placar)
-src/pages/index.astro        o app (começa direto na primeira pergunta) · sobre.astro (como funciona) · metodo.astro · app.astro (redireciona /app → /, mantendo o #s=)
+src/pages/index.astro        landing (como funciona) · app.astro (o app, com tela de abertura) · metodo.astro · sobre.astro (redireciona pra /)
 ```
 
 O build não bate em API nenhuma: os fetches são um passo separado e o resultado é versionado em `src/data/generated/`, então o deploy é reproduzível mesmo se a Câmara estiver fora do ar. O app pede `/dados/<UF>.json` só depois que a pessoa escolhe o estado.

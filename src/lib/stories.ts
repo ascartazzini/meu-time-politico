@@ -52,7 +52,7 @@ export function montarStories(p: Placar, nomeUf: string, host: string, dono = tr
     tituloEscalacao: dono ? 'MINHA ESCALAÇÃO' : 'A ESCALAÇÃO',
     escalacao: p.escalados.map(e => ({ cargo: e.cargo.curto.toUpperCase(), nome: e.candidato.nome, partido: e.candidato.partido })),
     cta: 'ESCALA O TEU E ME DIZ QUANTOS GOLS CONTRA DEU',
-    url: host.replace(/^https?:\/\//, '').replace(/\/$/, ''),
+    url: host.replace(/^https?:\/\//, '').replace(/\/$/, '') + '/app',
     rodape: 'posições por voto nominal em plenário ou estimativa do partido · TSE · Câmara · Senado'
   };
 }
