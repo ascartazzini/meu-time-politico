@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { TOLERANCIA_CAMISA, calcCoerencia, calcPeso, calcularPlacar, concord, forca, forcaDoCampo, leituraDaForca, pautasDoBolso, scoreBolso, scoreCamisa, sugerirTrocas, veredito } from '../src/lib/motor';
+import { MAX_SUGESTOES_VAGA, TOLERANCIA_CAMISA, calcCoerencia, calcPeso, calcularPlacar, concord, forca, forcaDoCampo, leituraDaForca, pautasDoBolso, scoreBolso, scoreCamisa, sugerirParaVaga, sugerirTrocas, veredito } from '../src/lib/motor';
 import type { Candidato, Cargo, Dataset, Lado, Tema } from '../src/lib/tipos';
 
 const temas: Tema[] = [
@@ -191,5 +191,45 @@ describe('sugestões de troca', () => {
     const topo = { ...st, time: { ...st.time, governador: ['b2'], senador: ['c4', 'f'] } };
     const p2 = calcularPlacar(topo, ds2)!;
     expect(sugerirTrocas(topo, ds2, p2)).toEqual([]);
+  });
+});
+
+describe('sugestões na escalação (quem mais veste a camisa em cada vaga)', () => {
+  const S1 = cand('s1', 'PT', 'senador', { ir: 'F', arma: 'C', sus: 'F' });
+  const S2 = { ...cand('s2', 'PT', 'senador', { ir: 'F', arma: 'C', sus: 'F' }), nominais: 1 };   // mesmas posições que S1, com voto real
+  const S3 = cand('s3', 'MDB', 'senador', { ir: 'D', arma: 'D', sus: 'D' });
+  const S4 = cand('s4', 'PL', 'senador', { ir: 'C', arma: 'F', sus: 'C' });
+  const S5 = cand('s5', 'PSB', 'senador', { ir: 'F', arma: 'C', sus: 'C' });
+  const cargo = { candidatos: [S1, S2, S3, S4, S5] };
+  const st = { respostas: { ir: 'F' as const, arma: 'C' as const, sus: 'F' as const }, decisivas: ['ir'] };
+  it('ordena pela camisa, agrupa iguais e representa pelo voto nominal', () => {
+    const s = sugerirParaVaga(cargo, st, temas);
+    expect(s.map(x => x.candidato.id)).toEqual(['s2', 's5', 's3']);
+    expect(s[0]).toMatchObject({ camisa: 100, iguais: 1, batem: 3, contam: 3, decisivas: { batem: 1, total: 1 } });
+    expect(s[1]).toMatchObject({ camisa: 80, iguais: 0, batem: 2, contam: 3 });   // (3·1 + 1 + 0) ÷ 5
+    expect(s[2]).toMatchObject({ camisa: 50, batem: 0 });
+    expect(s).toHaveLength(MAX_SUGESTOES_VAGA);
+    expect(s.some(x => x.candidato.id === 's4')).toBe(false);   // o quarto fica de fora
+  });
+  it('respeita o máximo e a exclusão (quem já está na outra vaga)', () => {
+    expect(sugerirParaVaga(cargo, st, temas, new Set(), 2)).toHaveLength(2);
+    const s = sugerirParaVaga(cargo, st, temas, new Set(['s2']));
+    expect(s[0].candidato.id).toBe('s1'); expect(s[0].iguais).toBe(0);
+    expect(sugerirParaVaga(cargo, st, temas, new Set(['s1', 's2', 's3', 's4', 's5']))).toEqual([]);
+  });
+  it('tanto faz sai da conta; sem nenhuma resposta não sugere ninguém', () => {
+    const s = sugerirParaVaga(cargo, { respostas: { ir: 'C', arma: 'N', sus: 'N' }, decisivas: [] }, temas);
+    expect(s[0].candidato.id).toBe('s4'); expect(s[0]).toMatchObject({ camisa: 100, batem: 1, contam: 1, decisivas: { batem: 0, total: 0 } });
+    expect(sugerirParaVaga(cargo, { respostas: {}, decisivas: [] }, temas)).toEqual([]);
+    expect(sugerirParaVaga(cargo, { respostas: { ir: 'N', arma: 'N', sus: 'N' }, decisivas: [] }, temas)).toEqual([]);
+  });
+  it('em empate na camisa, quem bate mais decisivas vem primeiro', () => {
+    // com decisiva em sus: S5 (ir=F, arma=C, sus=C) e um candidato ir=C, arma=C, sus=F têm camisa diferente; use respostas sem decisiva pra empatar
+    const T1 = cand('t1', 'PDT', 'senador', { ir: 'F', arma: 'F', sus: 'F' });
+    const T2 = cand('t2', 'PV', 'senador', { ir: 'C', arma: 'C', sus: 'F' });
+    const s = sugerirParaVaga({ candidatos: [T1, T2] }, { respostas: { ir: 'F', arma: 'C', sus: 'F' }, decisivas: [] }, temas);
+    expect(s.map(x => x.camisa)).toEqual([67, 67]);
+    const s2 = sugerirParaVaga({ candidatos: [T1, T2] }, { respostas: { ir: 'F', arma: 'C', sus: 'F' }, decisivas: ['arma'] }, temas);
+    expect(s2[0].candidato.id).toBe('t2');   // arma decisiva: T2 bate (camisa 80), T1 não (camisa 40)
   });
 });
