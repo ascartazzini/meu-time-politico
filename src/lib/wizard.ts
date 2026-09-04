@@ -6,7 +6,7 @@ import perfilJson from '../data/perfil.json';
 import ufsJson from '../data/ufs.json';
 import temasJson from '../data/temas.json';
 import type { Candidato, Cargo, CargoId, Dataset, EstadoEleitor, Resposta, Tema } from './tipos';
-import { TOLERANCIA_CAMISA, calcularPlacar, leituraDaForca, sugerirTrocas, type Placar } from './motor';
+import { MAX_SUGESTOES_VAGA, TOLERANCIA_CAMISA, calcularPlacar, leituraDaForca, sugerirParaVaga, sugerirTrocas, type Placar } from './motor';
 import { carregarDataset } from './dataset';
 import { carregar, codificar, decodificar, estadoVazio, idNaVaga, limpar, porNaVaga, salvar } from './estado';
 import { esc } from './formato';
@@ -25,6 +25,7 @@ let passoAtual = 0;
 let alheio = false;                             // placar aberto por link de outra pessoa
 let placarAtual: Placar | null = null;
 let trocas: { cargo: CargoId; vaga: number; de: string; para: string; forcaAntes: number }[] = [];   // trocas de teste feitas a partir das sugestões
+const pickers = new Map<string, { escolher(c: Candidato): void; buscar(q: string): void }>();   // `${cargo}:${vaga}` → controles do picker montado na tela
 
 type Passo =
   | { fase: string; tipo: 'uf'; h: string; d: string }
@@ -44,8 +45,8 @@ const TITULOS = [
 ];
 for (let i = 0, k = 0; i < TEMAS.length; i += 3, k++) PASSOS.push({ fase: 'Suas posições', tipo: 'pautas', h: TITULOS[k]?.h ?? 'Mais pautas', d: TITULOS[k]?.d ?? '', itens: TEMAS.slice(i, i + 3) });
 PASSOS.push({ fase: 'O que decide seu voto', tipo: 'decisivas', h: 'Escolha suas três', d: 'Dessas quatorze, quais <b>três</b> realmente decidem seu voto? É nelas que a gente vai caçar o gol contra — e elas pesam três vezes mais no eixo CAMISA.' });
-PASSOS.push({ fase: 'A escalação', tipo: 'escala', h: 'Escale o time', d: 'Seus votos de 4 de outubro: presidente, governador e os <b>dois senadores</b> — em 2026 cada estado renova duas cadeiras no Senado, então você vota em duas pessoas diferentes.', cargos: ['presidente', 'governador', 'senador'] });
-PASSOS.push({ fase: 'A escalação', tipo: 'escala', h: 'Fechando o time', d: 'Os dois últimos — e são eles que mais pesam no placar de força.', cargos: ['federal', 'estadual'] });
+PASSOS.push({ fase: 'A escalação', tipo: 'escala', h: 'Escale o time', d: 'Seus votos de 4 de outubro: presidente, governador e os <b>dois senadores</b> — em 2026 cada estado renova duas cadeiras no Senado, então você vota em duas pessoas diferentes. Em cada vaga a gente mostra <b>quem mais veste sua camisa</b> pelas pautas que você respondeu. Não é recomendação de voto: é só quem mais concorda com você — e o selo diz se é voto registrado ou estimativa do partido.', cargos: ['presidente', 'governador', 'senador'] });
+PASSOS.push({ fase: 'A escalação', tipo: 'escala', h: 'Fechando o time', d: 'Os dois últimos — e são eles que mais pesam no placar de força. As sugestões seguem o mesmo critério: quem mais veste sua camisa pelas suas respostas.', cargos: ['federal', 'estadual'] });
 
 const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
 const cargoDe = (id: CargoId): Cargo | undefined => ds?.cargos.find(c => c.id === id);
@@ -158,7 +159,7 @@ function render() {
            </select>`;
       const titulo = c.vagas > 1 ? `${esc(c.nome)}<span class="vaga">${v + 1}ª vaga de ${c.vagas}</span>` : esc(c.nome);
       const nota = c.vagas > 1 && v === 0 ? `<p class="vagas-nota">Seu estado elege <b>${c.vagas} senadores</b> este ano. Escolha duas pessoas diferentes: as duas entram no time e cada uma vale metade do peso do cargo.</p>` : '';
-      return `<div class="q"><div class="q-n">${esc(c.meta)}</div><div class="q-t">${titulo}</div>${nota}${campo}</div>`;
+      return `<div class="q"><div class="q-n">${esc(c.meta)}</div><div class="q-t">${titulo}</div>${nota}${campo}<div class="sug-vaga" data-sug="${c.id}" data-vaga="${v}" ${sel ? 'hidden' : ''}></div></div>`;
     })).join('');
   }
 
@@ -169,7 +170,43 @@ function render() {
   $('btnVoltar').hidden = passoAtual === 0; $('btnVoltar').textContent = '← Voltar'; $('intro').hidden = passoAtual !== 0;
   atualizarNav();
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  if (p.tipo === 'escala') tela.querySelectorAll<HTMLElement>('[data-picker]').forEach(montarPicker);
+  pickers.clear();
+  if (p.tipo === 'escala') { tela.querySelectorAll<HTMLElement>('[data-picker]').forEach(montarPicker); p.cargos.forEach(renderSugestoesVaga); }
+}
+
+/* ---------- sugestões na escalação: quem mais veste a camisa em cada vaga ----------
+   Ranking puro (motor.sugerirParaVaga) pelas respostas às pautas. Some quando a vaga está preenchida e
+   volta no "trocar". Nas duas vagas de senador, quem já ocupa a outra não aparece. */
+function renderSugestoesVaga(cargoId: CargoId) {
+  const cargo = cargoDe(cargoId); if (!cargo) return;
+  document.querySelectorAll<HTMLElement>(`.sug-vaga[data-sug="${cargoId}"]`).forEach(box => {
+    const vaga = Number(box.dataset.vaga ?? 0);
+    if (idNaVaga(st, cargoId, vaga)) { box.hidden = true; return; }
+    box.hidden = false;
+    const sug = sugerirParaVaga(cargo, st, TEMAS, ocupadosFora(cargoId, vaga));
+    const cab = `<div class="sug-vaga-h">Pelas suas respostas · quem mais veste sua camisa</div>`;
+    if (!sug.length) { box.innerHTML = cab + `<div class="sv-vazio">Sem sugestão aqui: você marcou "tanto faz" em todas as pautas, então não tem com o que comparar.</div>`; return; }
+    const grande = cargo.candidatos.length > LIMIAR_PICKER;
+    box.innerHTML = cab + sug.map(x => {
+      const c = x.candidato;
+      const dec = x.decisivas.total ? ` · <b>${x.decisivas.batem}</b> de ${x.decisivas.total} decisivas` : '';
+      const iguais = x.iguais > 0 ? `<div class="sv-nota">+ ${x.iguais} do ${esc(c.partido)} com as mesmas posições — pra camisa, tanto faz qual.${grande ? ` <button class="sv-ver" type="button" data-ver="${esc(c.partido)}" data-cargo="${esc(cargoId)}" data-vaga="${vaga}">ver os ${x.iguais + 1}</button>` : ''}</div>` : '';
+      return `<div class="sv"><div class="sv-num">${x.camisa}<small>camisa</small></div>
+        <div class="sv-corpo">
+          <div class="sv-t">${esc(c.nome)} <small>${esc(c.partido)}${c.numero ? ' · ' + esc(c.numero) : ''}</small> ${seloCand(c)}</div>
+          <div class="sv-l">bate em <b>${x.batem}</b> das ${x.contam} pautas que você respondeu${dec}</div>
+          ${iguais}
+          <button class="sv-btn" type="button" data-escalar="${esc(c.id)}" data-cargo="${esc(cargoId)}" data-vaga="${vaga}">escalar</button>
+        </div></div>`;
+    }).join('') + (cargo.candidatos.length > sug.length ? `<div class="sv-rodape">${sug.length === MAX_SUGESTOES_VAGA ? `As ${MAX_SUGESTOES_VAGA} melhores camisas` : 'Todas as camisas'} entre ${cargo.candidatos.length} candidatos. A lista completa está acima${grande ? ', com busca por nome, número ou partido' : ''}.</div>` : '');
+  });
+}
+function escalarSugestao(cargoId: CargoId, vaga: number, id: string) {
+  const cargo = cargoDe(cargoId), c = cargo?.candidatos.find(x => x.id === id); if (!cargo || !c) return;
+  const picker = pickers.get(`${cargoId}:${vaga}`);
+  if (picker) { picker.escolher(c); return; }
+  const sel = document.querySelector<HTMLSelectElement>(`select[data-cargo="${cargoId}"][data-vaga="${vaga}"]`); if (!sel) return;
+  sel.value = id; sel.dispatchEvent(new Event('change', { bubbles: true }));
 }
 
 /* ---------- picker com busca ---------- */
@@ -196,12 +233,15 @@ function montarPicker(el: HTMLElement) {
     selBox.hidden = false;
     selBox.innerHTML = `<div class="who">${esc(c.nome)}<small>${esc(c.partido)}${c.numero ? ' · ' + esc(c.numero) : ''} ${seloCand(c)}</small></div><button class="picker-x" type="button">trocar</button>`;
     selBox.querySelector('.picker-x')!.addEventListener('click', trocar);
+    renderSugestoesVaga(cargoId);
     talvezAvancar(antes);
   }
   function trocar() {
     porNaVaga(st, cargoId, vaga, undefined); salvar(st);
     selBox.hidden = true; input.hidden = false; input.value = ''; input.focus(); atualizarNav();
+    renderSugestoesVaga(cargoId);
   }
+  function buscar(q: string) { input.value = q; input.hidden = false; input.focus(); filtrar(); }
   input.addEventListener('focus', filtrar);
   input.addEventListener('input', filtrar);
   input.addEventListener('keydown', e => {
@@ -221,6 +261,7 @@ function montarPicker(el: HTMLElement) {
   });
   input.addEventListener('blur', () => setTimeout(() => { lista.hidden = true; input.setAttribute('aria-expanded', 'false'); }, 150));
   selBox.querySelector('.picker-x')?.addEventListener('click', trocar);
+  pickers.set(`${cargoId}:${vaga}`, { escolher, buscar });
 }
 
 /* ---------- handlers delegados ---------- */
@@ -240,6 +281,10 @@ function onClickTela(e: Event) {
     st.respostas[el.dataset.resp] = el.dataset.v as Resposta;
     el.parentElement!.querySelectorAll('.tb').forEach(b => b.setAttribute('aria-pressed', 'false'));
     el.setAttribute('aria-pressed', 'true'); talvezAvancar(antes);
+  } else if (el.dataset.escalar) {
+    escalarSugestao(el.dataset.cargo as CargoId, Number(el.dataset.vaga ?? 0), el.dataset.escalar);
+  } else if (el.dataset.ver) {
+    pickers.get(`${el.dataset.cargo}:${Number(el.dataset.vaga ?? 0)}`)?.buscar(el.dataset.ver);
   } else if (el.dataset.dec) {
     const antes = completo(passoAtual), id = el.dataset.dec;
     if (st.decisivas.includes(id)) st.decisivas = st.decisivas.filter(x => x !== id);
@@ -266,6 +311,7 @@ function onChangeTela(e: Event) {
     const outros = ocupadosFora(cargoId, Number(o.dataset.vaga ?? 0));
     for (const op of o.options) op.disabled = !!op.value && outros.has(op.value);
   });
+  renderSugestoesVaga(cargoId);
   talvezAvancar(antes);
 }
 

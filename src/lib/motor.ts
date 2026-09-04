@@ -200,6 +200,44 @@ export interface Sugestao {
   camisa: { de: number | null; para: number | null };
 }
 function assinatura(c: Candidato, temas: Tema[]): string { return c.partido + '|' + temas.map(t => posicaoDe(c, t.id)).join(''); }
+/** dentro de um grupo de iguais, quem representa: mais votos nominais, depois nome */
+function representante(grupo: Candidato[]): Candidato { return [...grupo].sort((a, b) => b.nominais - a.nominais || a.nome.localeCompare(b.nome))[0]; }
+
+/* ==========================================================================
+   SUGESTÕES NA ESCALAÇÃO — quem, em cada vaga, mais veste a camisa da pessoa
+   Ranking pelo eixo CAMISA (as respostas dela × a posição de cada candidato), calculado antes de
+   o time existir. Não é recomendação de voto: é só quem mais concorda com o que ela respondeu, e
+   a UI mostra o selo (voto nominal ou estimativa do partido) de cada um. Candidatos do mesmo
+   partido com posições idênticas têm a mesma camisa, então entram como um grupo (`iguais`).
+   ========================================================================== */
+export const MAX_SUGESTOES_VAGA = 3;
+export interface SugestaoVaga {
+  candidato: Candidato;                            // representante do grupo (mais votos nominais, depois nome)
+  iguais: number;                                  // outros candidatos do mesmo partido com as mesmas posições
+  camisa: number;                                  // scoreCamisa (0–100)
+  batem: number;                                   // pautas em que a posição dele é igual à resposta dela
+  contam: number;                                  // pautas que ela respondeu sem "tanto faz"
+  decisivas: { batem: number; total: number };     // idem, só nas decisivas
+}
+export function sugerirParaVaga(cargo: Pick<Cargo, 'candidatos'>, st: Pick<EstadoEleitor, 'respostas' | 'decisivas'>, temas: Tema[], excluir: Set<string> = new Set(), max = MAX_SUGESTOES_VAGA): SugestaoVaga[] {
+  const decisivas = new Set(st.decisivas);
+  const respondidas = temas.filter(t => st.respostas[t.id] && st.respostas[t.id] !== 'N');
+  if (!respondidas.length) return [];
+  const grupos = new Map<string, Candidato[]>();
+  for (const c of cargo.candidatos) { if (excluir.has(c.id)) continue; const k = assinatura(c, temas); grupos.set(k, [...(grupos.get(k) ?? []), c]); }
+  const out: SugestaoVaga[] = [];
+  for (const grupo of grupos.values()) {
+    const candidato = representante(grupo);
+    const camisa = scoreCamisa(candidato, st.respostas, decisivas, temas);
+    if (camisa === null) continue;
+    const bate = (t: Tema) => posicaoDe(candidato, t.id) === st.respostas[t.id];
+    const dec = respondidas.filter(t => decisivas.has(t.id));
+    out.push({ candidato, iguais: grupo.length - 1, camisa, batem: respondidas.filter(bate).length, contam: respondidas.length, decisivas: { batem: dec.filter(bate).length, total: dec.length } });
+  }
+  return out
+    .sort((a, b) => b.camisa - a.camisa || b.decisivas.batem - a.decisivas.batem || b.candidato.nominais - a.candidato.nominais || a.candidato.nome.localeCompare(b.candidato.nome))
+    .slice(0, max);
+}
 export function sugerirTrocas(st: EstadoEleitor, ds: Dataset, atual: Placar, tolerancia = TOLERANCIA_CAMISA): Sugestao[] {
   const decisivas = new Set(st.decisivas);
   const out: Sugestao[] = [];
@@ -212,7 +250,7 @@ export function sugerirTrocas(st: EstadoEleitor, ds: Dataset, atual: Placar, tol
     for (const c of cargo.candidatos) { if (ocupados.has(c.id)) continue; const k = assinatura(c, ds.temas); grupos.set(k, [...(grupos.get(k) ?? []), c]); }
     let melhor: Sugestao | null = null;
     for (const grupo of grupos.values()) {
-      const para = [...grupo].sort((a, b) => b.nominais - a.nominais || a.nome.localeCompare(b.nome))[0];
+      const para = representante(grupo);
       const camisaPara = scoreCamisa(para, st.respostas, decisivas, ds.temas);
       if (camisaDe !== null && camisaPara !== null && camisaPara < camisaDe - tolerancia) continue;
       const time = { ...st.time, [cargo.id]: (st.time[cargo.id] ?? []).map((id, i) => (i === vaga ? para.id : id)) };

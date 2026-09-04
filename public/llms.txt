@@ -15,6 +15,7 @@ Vínculo: nenhum com partido, campanha ou candidato
 - Coerência e gol contra: concordância entre os 15 pares possíveis dos 6 escalados nas pautas decisivas. Quando um está a favor e o outro contra, é gol contra: dois votos se anulando.
 - Peso: bancada do partido dividida pelo quórum de maioria absoluta da casa (Câmara 257 de 513, Senado 41 de 81, assembleia estadual metade mais um). Pesos: presidente 25%, governador 15%, senadores 20% (10% cada), deputado federal 30%, deputado estadual 10%.
 - Força: média harmônica entre coerência e peso. Vereditos: time campeão, elenco caro e time rachado, torcida organizada, time rebaixado.
+- Sugestões na escalação: em cada vaga vazia, as três melhores camisas entre os candidatos daquele cargo no estado, com o selo de voto nominal ou estimativa do partido. Não é recomendação de voto: é só quem mais concorda com as respostas dadas.
 - Sugestões de troca: simulação de qual substituição deixaria o time mais forte sem afastar a pessoa do que ela pensa. É simulação, não recomendação de voto.
 
 ## Regra sobre posição de candidato
