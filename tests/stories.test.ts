@@ -12,24 +12,24 @@ function cand(id: string, nome: string, partido: string, cargo: Candidato['cargo
   for (const t of temas) posicoes[t.id] = { lado: lados[t.id] ?? 'D', fonte: 'estimativa_partido' };
   return { id, nome, partido, cargo, uf: 'RS', posicoes, nominais: 0 };
 }
-const cargoDef = (id: Cargo['id'], nome: string, curto: string, casa: Cargo['casa'], porCampo: boolean, peso: number, c: Candidato): Cargo =>
-  ({ id, nome, curto, casa, porCampo, pesoNoPlacar: peso, abrangencia: 'UF', meta: '', candidatos: [c] });
+const cargoDef = (id: Cargo['id'], nome: string, curto: string, casa: Cargo['casa'], porCampo: boolean, peso: number, c: Candidato[]): Cargo =>
+  ({ id, nome, curto, casa, porCampo, pesoNoPlacar: peso, abrangencia: 'UF', vagas: c.length, meta: '', candidatos: c });
 
 const ds: Dataset = {
   uf: 'RS', nomeUf: 'Rio Grande do Sul', casaEstadual: 'ALRS', geradoEm: '', dataTse: '', temas, ordemTemas: temas.map(t => t.id),
   cargos: [
-    cargoDef('presidente', 'Presidente da República', 'presidente', 'camara', true, .25, cand('a', 'Ana Souza', 'PT', 'presidente', { ir: 'F', arma: 'C' })),
-    cargoDef('governador', 'Governador do RS', 'governador', 'assembleia', true, .15, cand('b', 'Beto Lima', 'PL', 'governador', { ir: 'C', arma: 'F' })),
-    cargoDef('senador', 'Senador pelo RS', 'senador', 'senado', false, .2, cand('c', 'Carla Dias', 'MDB', 'senador', {})),
-    cargoDef('federal', 'Deputado federal', 'deputado federal', 'camara', false, .3, cand('d', 'Davi Rocha', 'PT', 'federal', { ir: 'F', arma: 'C' })),
-    cargoDef('estadual', 'Deputado estadual', 'deputado estadual', 'assembleia', false, .1, cand('e', 'Eva Nunes', 'PT', 'estadual', { ir: 'F', arma: 'C' }))
+    cargoDef('presidente', 'Presidente da República', 'presidente', 'camara', true, .25, [cand('a', 'Ana Souza', 'PT', 'presidente', { ir: 'F', arma: 'C' })]),
+    cargoDef('governador', 'Governador do RS', 'governador', 'assembleia', true, .15, [cand('b', 'Beto Lima', 'PL', 'governador', { ir: 'C', arma: 'F' })]),
+    cargoDef('senador', 'Senador pelo RS', 'senador', 'senado', false, .2, [cand('c', 'Carla Dias', 'MDB', 'senador', {}), cand('f', 'Fábio Reis', 'PT', 'senador', { ir: 'F', arma: 'C' })]),
+    cargoDef('federal', 'Deputado federal', 'deputado federal', 'camara', false, .3, [cand('d', 'Davi Rocha', 'PT', 'federal', { ir: 'F', arma: 'C' })]),
+    cargoDef('estadual', 'Deputado estadual', 'deputado estadual', 'assembleia', false, .1, [cand('e', 'Eva Nunes', 'PT', 'estadual', { ir: 'F', arma: 'C' })])
   ],
   bancadas: { camara: { PT: 64, PL: 98, MDB: 38 }, senado: { PT: 9, PL: 16, MDB: 9 }, assembleia: { PT: 8, PL: 8, MDB: 8 } },
   quorum: { camara: 257, senado: 41, assembleia: 28 }, cadeiras: { camara: 513, senado: 81, assembleia: 55 },
   partidos: { PT: { nome: 'PT', campo: 'esq', estimativa: [] }, PL: { nome: 'PL', campo: 'dir', estimativa: [] }, MDB: { nome: 'MDB', campo: 'centro', estimativa: [] } },
-  fontes: [], cobertura: [], stats: { candidatos: 5, federais: 1, estaduais: 1, comMandato: 0 }
+  fontes: [], cobertura: [], stats: { candidatos: 6, federais: 1, estaduais: 1, comMandato: 0 }
 };
-const st = { uf: 'RS', perfil: { renda: 'renda_1' }, respostas: { ir: 'F' as const, arma: 'C' as const }, decisivas: ['ir'], time: { presidente: 'a', governador: 'b', senador: 'c', federal: 'd', estadual: 'e' } };
+const st = { uf: 'RS', perfil: { renda: 'renda_1' }, respostas: { ir: 'F' as const, arma: 'C' as const }, decisivas: ['ir'], time: { presidente: ['a'], governador: ['b'], senador: ['c', 'f'], federal: ['d'], estadual: ['e'] } };
 
 describe('conteúdo da imagem pro stories', () => {
   const p = calcularPlacar(st, ds)!;
@@ -40,17 +40,18 @@ describe('conteúdo da imagem pro stories', () => {
     expect(c.veredito).toBe(p.veredito.t.toUpperCase()); expect(c.classe).toBe(p.veredito.c);
     expect(c.gols).toBe(p.gols.length);
   });
-  it('escala os cinco na ordem dos cargos, com cargo curto, nome e partido', () => {
-    expect(c.escalacao).toHaveLength(5);
+  it('escala os seis na ordem dos cargos, numerando as duas vagas de senador', () => {
+    expect(c.escalacao).toHaveLength(6);
     expect(c.escalacao[0]).toEqual({ cargo: 'PRESIDENTE', nome: 'Ana Souza', partido: 'PT' });
-    expect(c.escalacao[3].cargo).toBe('DEPUTADO FEDERAL');
+    expect(c.escalacao[2].cargo).toBe('SENADOR 1'); expect(c.escalacao[3]).toEqual({ cargo: 'SENADOR 2', nome: 'Fábio Reis', partido: 'PT' });
+    expect(c.escalacao[4].cargo).toBe('DEPUTADO FEDERAL');
   });
   it('nomeia o estado e o endereço sem protocolo nem barra final', () => {
     expect(c.kicker).toBe('BRASIL · RIO GRANDE DO SUL · 4 DE OUTUBRO');
     expect(c.url).toBe('meutime.exemplo.br/app');
   });
   it('concorda o rótulo dos gols e diz onde foram medidos', () => {
-    expect(c.gols).toBe(3); expect(c.golsRotulo).toBe('GOLS CONTRA'); expect(c.golsSub).toBe('na pauta que decide o voto');
+    expect(c.gols).toBe(4); expect(c.golsRotulo).toBe('GOLS CONTRA'); expect(c.golsSub).toBe('na pauta que decide o voto');
     const semGol = montarStories({ ...p, gols: [], decisivas: [] }, ds.nomeUf, 'x.br');
     expect(semGol.golsSub).toBe('ninguém do time joga contra');
     expect(montarStories({ ...p, gols: p.gols.slice(0, 1) }, ds.nomeUf, 'x.br').golsRotulo).toBe('GOL CONTRA');

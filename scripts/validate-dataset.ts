@@ -14,7 +14,7 @@ const Candidato = z.object({
 const Tema = z.object({ id: z.string(), s: z.string(), t: z.string(), leia: z.object({ rotulo: z.string(), url: z.url(), fonte: z.string() }).optional(), impacto: z.record(z.string(), Lado), votacoes: z.array(z.object({ casa: z.enum(['camara', 'senado']), ladoSim: z.enum(['F', 'C']), rotulo: z.string() }).loose()) });
 const Cargo = z.object({
   id: z.enum(['presidente', 'governador', 'senador', 'federal', 'estadual']), nome: z.string(), curto: z.string(), casa: z.enum(['camara', 'senado', 'assembleia']),
-  porCampo: z.boolean(), pesoNoPlacar: z.number().min(0).max(1), meta: z.string(), candidatos: z.array(Candidato).min(1)
+  porCampo: z.boolean(), pesoNoPlacar: z.number().min(0).max(1), vagas: z.number().int().min(1), meta: z.string(), candidatos: z.array(Candidato).min(1)
 }).loose();
 const Dataset = z.object({
   uf: z.string().length(2), nomeUf: z.string(), casaEstadual: z.string(), geradoEm: z.string(), dataTse: z.string(),
@@ -47,6 +47,8 @@ for (const f of arquivos) {
   const ids = ds.cargos.flatMap(c => c.candidatos.map(x => x.id));
   if (new Set(ids).size !== ids.length) erros.push(`${f}: ids de candidato repetidos`);
   for (const c of ds.cargos) {
+    if (c.vagas !== (c.id === 'senador' ? 2 : 1)) erros.push(`${f}: ${c.id} com ${c.vagas} vagas (em 2026 são 2 de senador e 1 dos demais)`);
+    if (c.candidatos.length < c.vagas) erros.push(`${f}: ${c.id} tem menos candidatos do que vagas`);
     if (c.id !== 'presidente' && c.candidatos.some(x => x.uf !== ds.uf)) erros.push(`${f}: candidato de outra UF em ${c.id}`);
     if (c.id === 'presidente' && c.candidatos.some(x => x.uf !== 'BR')) erros.push(`${f}: presidenciável com UF ≠ BR`);
     for (const x of c.candidatos) for (const t of Object.keys(x.votos ?? {})) if (!temaIds.has(t)) erros.push(`${f}: ${x.nome} tem voto em tema desconhecido ${t}`);

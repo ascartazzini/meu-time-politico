@@ -50,6 +50,7 @@ export interface Candidato extends CandidatoBruto {
 export interface Cargo {
   id: CargoId; nome: string; curto: string; casa: Casa;
   porCampo: boolean; pesoNoPlacar: number; abrangencia: 'BR' | 'UF';
+  vagas: number;              // quantas pessoas a eleitora escala nesse cargo (2 pra senador em 2026); pesoNoPlacar é o total do cargo
   meta: string;
   candidatos: Candidato[];
 }
@@ -87,5 +88,5 @@ export interface EstadoEleitor {
   perfil: Record<string, string>;
   respostas: Record<string, Resposta>;
   decisivas: string[];
-  time: Partial<Record<CargoId, string>>;   // cargo → candidato.id
+  time: Partial<Record<CargoId, string[]>>; // cargo → candidato.id por vaga ('' = vaga ainda vazia)
 }

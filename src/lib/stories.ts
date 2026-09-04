@@ -50,7 +50,7 @@ export function montarStories(p: Placar, nomeUf: string, host: string, dono = tr
       ? (dec ? 'ninguém do time joga contra nas pautas decisivas' : 'ninguém do time joga contra')
       : dec === 1 ? 'na pauta que decide o voto' : dec ? `nas ${dec} pautas que decidem o voto` : 'em todas as pautas',
     tituloEscalacao: dono ? 'MINHA ESCALAÇÃO' : 'A ESCALAÇÃO',
-    escalacao: p.escalados.map(e => ({ cargo: e.cargo.curto.toUpperCase(), nome: e.candidato.nome, partido: e.candidato.partido })),
+    escalacao: p.escalados.map(e => ({ cargo: (e.cargo.vagas > 1 ? `${e.cargo.curto} ${e.vaga + 1}` : e.cargo.curto).toUpperCase(), nome: e.candidato.nome, partido: e.candidato.partido })),
     cta: 'ESCALA O TEU E ME DIZ QUANTOS GOLS CONTRA DEU',
     url: host.replace(/^https?:\/\//, '').replace(/\/$/, '') + '/app',
     rodape: 'posições por voto nominal em plenário ou estimativa do partido · TSE · Câmara · Senado'
@@ -172,7 +172,7 @@ export function desenharStories(ctx: Ctx, c: ConteudoStories): void {
   y += 112 + 30;
 
   // escalação
-  const ROW = 58, linhas = c.escalacao.slice(0, 5);
+  const linhas = c.escalacao.slice(0, 6), ROW = linhas.length > 5 ? 50 : 58;   // seis escalados (dois senadores) apertam um pouco a linha
   caixa(ctx, M, y, W, 58 + ROW * linhas.length + 12, CORES.surface, CORES.line);
   texto(ctx, c.tituloEscalacao, M + 28, y + 40, { fonte: `20px ${FONTE.mono}`, cor: CORES.muted, espaco: 4 });
   linhas.forEach((e, i) => {

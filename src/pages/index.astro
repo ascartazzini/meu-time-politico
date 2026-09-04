@@ -5,20 +5,20 @@ import indice from '../data/generated/indice.json';
 const n = indice.nacional;
 const nominais = indice.cobertura.filter(c => c.nominal > 0).length;
 const fontes = [
-  { rotulo: 'Quem é candidato', detalhe: `TSE — Portal de Dados Abertos, consulta_cand_2026 (gerado em ${indice.dataTse}): ${n.candidatos.toLocaleString('pt-BR')} candidaturas nos 5 cargos, 27 estados` },
+  { rotulo: 'Quem é candidato', detalhe: `TSE — Portal de Dados Abertos, consulta_cand_2026 (gerado em ${indice.dataTse}): ${n.candidatos.toLocaleString('pt-BR')} candidaturas aos 5 cargos, 27 estados` },
   { rotulo: 'Quanto vale um voto', detalhe: `Câmara: 513 cadeiras, maioria absoluta 257 — bancadas via API de Dados Abertos (${indice.atualizacoes.camara.slice(0, 10)})` },
   { rotulo: 'Peso no Senado', detalhe: `Senado: 81 cadeiras, maioria absoluta 41 — via API de Dados Abertos (${indice.atualizacoes.senado.slice(0, 10)})` },
   { rotulo: 'Peso nas assembleias', detalhe: '27 assembleias: composição eleita em 2022 (TSE), quórum = maioria absoluta de cada casa' }
 ];
 ---
-<Base title="Meu Time Político 2026 — seus 5 votos jogam juntos?" badge="beta" description="Escale presidente, governador, senador e deputados como um time e veja se eles jogam juntos, quantos gols contra fazem e se têm bancada pra aprovar alguma coisa. Grátis, sem cadastro, 27 estados.">
+<Base title="Meu Time Político 2026 — seus 6 votos jogam juntos?" badge="beta" description="Escale presidente, governador, dois senadores e deputados como um time e veja se eles jogam juntos, quantos gols contra fazem e se têm bancada pra aprovar alguma coisa. Grátis, sem cadastro, 27 estados.">
   <script is:inline>if (location.hash.startsWith('#s=')) location.replace('/app/' + location.hash);</script>
   <header class="hero">
     <div class="kicker">Brasil · 27 estados · 4 de outubro de 2026</div>
-    <h1>Você escala 5.<br /><span class="hl">Quantos jogam<br />contra você?</span></h1>
-    <p class="lead">Presidente, governador, senador, deputado federal, deputado estadual.
+    <h1>Você escala 6.<br /><span class="hl">Quantos jogam<br />contra você?</span></h1>
+    <p class="lead">Presidente, governador, <b>dois</b> senadores, deputado federal, deputado estadual.
       Você decide <b>um de cada vez</b>, em telas separadas, meses diferentes — e nunca viu os
-      cinco juntos. Aqui você escala o time e a gente responde a pergunta que ninguém faz:
+      seis juntos. Aqui você escala o time e a gente responde a pergunta que ninguém faz:
       <b>esse time joga junto? E ele consegue aprovar alguma coisa?</b></p>
     <a class="cta" href="/app/">Escalar meu time →</a>
     <span class="cta-note">sem cadastro · sem e-mail · nada sai do seu navegador</span>
@@ -52,7 +52,7 @@ const fontes = [
       </div>
       <div class="ex" style="--c:#FF3B30">
         <div class="tag">Eixo 3 — o que ninguém te conta</div><h3>Força</h3>
-        <p>Se o time <b>aprova alguma coisa</b>. Coerência entre os cinco, cruzada com o peso real
+        <p>Se o time <b>aprova alguma coisa</b>. Coerência entre os seis, cruzada com o peso real
           deles nas casas: um deputado sozinho vale 1 voto em 513. O que aprova é a <b>bancada</b>.</p>
         <div class="frm">força = média harmônica (coerência, peso)<br />ela derruba quem é bom só num eixo</div>
       </div>
@@ -62,7 +62,7 @@ const fontes = [
   <section>
     <h2>O gol contra</h2>
     <p class="sec-lead">A parte que dói. Nas pautas que <b>você marcou como decisivas</b>, a gente
-      cruza os cinco escalados par a par. Onde um está a favor e o outro está contra, é gol contra
+      cruza os seis escalados par a par. Onde um está a favor e o outro está contra, é gol contra
       — <b>dois dos seus votos anulando um ao outro</b>. Você pagou os dois.</p>
     <div class="golbox">
       <div class="n" data-count>8</div>
@@ -86,7 +86,7 @@ const fontes = [
       <div class="q campeao"><div class="cond">coerente + pesado</div><div class="nm">Time campeão</div><p>Joga junto e tem cadeira pra transformar acordo em lei. É raro.</p></div>
       <div class="q rachado"><div class="cond">rachado + pesado</div><div class="nm">Elenco caro,<br />time rachado</div><p>Poder de verdade — gasto na briga entre eles mesmos.</p></div>
       <div class="q torcida"><div class="cond">coerente + leve</div><div class="nm">Torcida organizada</div><p>Vocês concordam em quase tudo e não aprovam quase nada. Coerente e impotente.</p></div>
-      <div class="q rebaixado"><div class="cond">rachado + leve</div><div class="nm">Time rebaixado</div><p>Se contradiz e não tem peso. Os cinco votos trabalham um contra o outro.</p></div>
+      <div class="q rebaixado"><div class="cond">rachado + leve</div><div class="nm">Time rebaixado</div><p>Se contradiz e não tem peso. Os seis votos trabalham um contra o outro.</p></div>
     </div>
   </section>
 

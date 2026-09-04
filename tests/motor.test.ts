@@ -12,23 +12,27 @@ function cand(id: string, partido: string, cargo: Candidato['cargo'], lados: Rec
   for (const t of temas) posicoes[t.id] = { lado: lados[t.id] ?? 'D', fonte: 'estimativa_partido' };
   return { id, nome: id, partido, cargo, uf: 'RS', posicoes, nominais: 0 };
 }
-const cargoDef = (id: Cargo['id'], casa: Cargo['casa'], porCampo: boolean, peso: number, cands: Candidato[]): Cargo =>
-  ({ id, nome: id, curto: id, casa, porCampo, pesoNoPlacar: peso, abrangencia: 'UF', meta: '', candidatos: cands });
+const cargoDef = (id: Cargo['id'], casa: Cargo['casa'], porCampo: boolean, peso: number, cands: Candidato[], vagas = 1): Cargo =>
+  ({ id, nome: id, curto: id, casa, porCampo, pesoNoPlacar: peso, abrangencia: 'UF', vagas, meta: '', candidatos: cands });
 
 const A = cand('a', 'PT', 'presidente', { ir: 'F', arma: 'C', sus: 'F' });
 const B = cand('b', 'PL', 'governador', { ir: 'C', arma: 'F', sus: 'C' });
 const C = cand('c', 'MDB', 'senador', { ir: 'D', arma: 'D', sus: 'D' });
 const D = cand('d', 'PT', 'federal', { ir: 'F', arma: 'C', sus: 'F' });
 const E = cand('e', 'PT', 'estadual', { ir: 'F', arma: 'C', sus: 'F' });
+const F = cand('f', 'PT', 'senador', { ir: 'F', arma: 'C', sus: 'F' });        // segunda vaga de senador (2026 elege dois)
 
 const ds: Dataset = {
   uf: 'RS', nomeUf: 'Rio Grande do Sul', casaEstadual: 'ALRS', geradoEm: '', dataTse: '', temas, ordemTemas: temas.map(t => t.id),
-  cargos: [cargoDef('presidente', 'camara', true, .25, [A]), cargoDef('governador', 'assembleia', true, .15, [B]), cargoDef('senador', 'senado', false, .2, [C]), cargoDef('federal', 'camara', false, .3, [D]), cargoDef('estadual', 'assembleia', false, .1, [E])],
+  cargos: [cargoDef('presidente', 'camara', true, .25, [A]), cargoDef('governador', 'assembleia', true, .15, [B]), cargoDef('senador', 'senado', false, .2, [C, F], 2), cargoDef('federal', 'camara', false, .3, [D]), cargoDef('estadual', 'assembleia', false, .1, [E])],
   bancadas: { camara: { PT: 64, PL: 98, MDB: 38 }, senado: { PT: 9, PL: 16, MDB: 9 }, assembleia: { PT: 8, PL: 8, MDB: 8 } },
   quorum: { camara: 257, senado: 41, assembleia: 28 }, cadeiras: { camara: 513, senado: 81, assembleia: 55 },
   partidos: { PT: { nome: 'PT', campo: 'esq', estimativa: [] }, PL: { nome: 'PL', campo: 'dir', estimativa: [] }, MDB: { nome: 'MDB', campo: 'centro', estimativa: [] } },
-  fontes: [], cobertura: [], stats: { candidatos: 5, federais: 1, estaduais: 1, comMandato: 0 }
+  fontes: [], cobertura: [], stats: { candidatos: 6, federais: 1, estaduais: 1, comMandato: 0 }
 };
+/* escalação completa: 6 jogadores pra 5 cargos (F é o segundo senador) */
+const TIME = { presidente: ['a'], governador: ['b'], senador: ['c', 'f'], federal: ['d'], estadual: ['e'] };
+const escalados = (cs: Candidato[]) => cs.map(c => ({ cargo: ds.cargos.find(k => k.id === c.cargo)!, candidato: c, vaga: c.id === 'f' ? 1 : 0 }));
 
 describe('concord', () => {
   it('igual = 1, dividido = .5, oposto = 0, tanto faz = null', () => {
@@ -65,15 +69,16 @@ describe('eixo bolso', () => {
 });
 
 describe('coerência e gol contra', () => {
-  const esc = [A, B, C, D, E].map((c, i) => ({ cargo: ds.cargos[i], candidato: c }));
+  const esc = escalados([A, B, C, F, D, E]);
   it('conta gols contra só nos pares opostos e restringe às decisivas', () => {
     const r = calcCoerencia(esc, temas, new Set(['ir']));
-    // pares com B (PL) contra A, D, E em ir → 3 gols; C dividido não é gol
-    expect(r.gols).toHaveLength(3);
+    // pares com B (PL) contra A, F, D, E em ir → 4 gols; C dividido não é gol
+    expect(r.gols).toHaveLength(4);
     expect(r.gols.every(g => g.tema.id === 'ir')).toBe(true);
+    expect(r.gols.some(g => g.b.candidato.id === 'f' && g.b.vaga === 1)).toBe(true);
   });
   it('coerência 100 sem oposição', () => {
-    const r = calcCoerencia([esc[0], esc[3], esc[4]], temas, new Set());
+    const r = calcCoerencia(escalados([A, D, E]), temas, new Set());
     expect(r.coerencia).toBe(100); expect(r.gols).toHaveLength(0);
   });
 });
@@ -82,19 +87,20 @@ describe('peso', () => {
   it('soma o campo ideológico inteiro', () => {
     expect(forcaDoCampo(ds.bancadas.camara, ds.partidos)).toEqual({ esq: 64, centro: 38, dir: 98 });
   });
-  it('usa campo pra presidente/governador e bancada própria pros demais', () => {
-    const esc = [A, B, C, D, E].map((c, i) => ({ cargo: ds.cargos[i], candidato: c }));
-    const { peso, detalhe } = calcPeso(esc, ds);
-    const d = Object.fromEntries(detalhe.map(x => [x.cargo, x]));
-    expect(d.presidente.cadeiras).toBe(64);   // campo esq na Câmara
-    expect(d.governador.cadeiras).toBe(8);    // campo dir na ALRS
-    expect(d.senador.cadeiras).toBe(9);       // MDB no Senado
-    expect(d.federal.v).toBe(Math.round(64 / 257 * 100));
-    expect(peso).toBe(Math.round(d.presidente.v * .25 + d.governador.v * .15 + d.senador.v * .2 + d.federal.v * .3 + d.estadual.v * .1));
+  it('usa campo pra presidente/governador e bancada própria pros demais; senador vale metade por vaga', () => {
+    const { peso, detalhe } = calcPeso(escalados([A, B, C, F, D, E]), ds);
+    const d = (cargo: string, vaga = 0) => detalhe.find(x => x.cargo === cargo && x.vaga === vaga)!;
+    expect(d('presidente').cadeiras).toBe(64);   // campo esq na Câmara
+    expect(d('governador').cadeiras).toBe(8);    // campo dir na ALRS
+    expect(d('senador', 0).cadeiras).toBe(9);    // MDB no Senado
+    expect(d('senador', 1)).toMatchObject({ nome: 'f', partido: 'PT', cadeiras: 9, pesoNoPlacar: .1 });
+    expect(d('federal').v).toBe(Math.round(64 / 257 * 100));
+    expect(detalhe).toHaveLength(6);
+    expect(peso).toBe(Math.round(d('presidente').v * .25 + d('governador').v * .15 + d('senador', 0).v * .1 + d('senador', 1).v * .1 + d('federal').v * .3 + d('estadual').v * .1));
   });
   it('partido desconhecido pesa zero, não quebra', () => {
     const X = cand('x', 'PXX', 'federal', {});
-    const { detalhe } = calcPeso([{ cargo: ds.cargos[3], candidato: X }], ds);
+    const { detalhe } = calcPeso([{ cargo: ds.cargos[3], candidato: X, vaga: 0 }], ds);
     expect(detalhe[0].v).toBe(0);
   });
 });
@@ -110,19 +116,22 @@ describe('veredito e força', () => {
 });
 
 describe('placar completo', () => {
-  it('retorna null com time incompleto e calcula com time cheio', () => {
-    expect(calcularPlacar({ perfil: {}, respostas: {}, decisivas: [], time: { presidente: 'a' } }, ds)).toBeNull();
-    const p = calcularPlacar({ perfil: { renda: 'renda_1' }, respostas: { ir: 'F', arma: 'C', sus: 'F' }, decisivas: ['ir'], time: { presidente: 'a', governador: 'b', senador: 'c', federal: 'd', estadual: 'e' } }, ds)!;
-    expect(p.gols).toHaveLength(3);
-    expect(p.linhas).toHaveLength(5);
+  it('retorna null com time incompleto (inclusive só um senador) e calcula com time cheio', () => {
+    expect(calcularPlacar({ perfil: {}, respostas: {}, decisivas: [], time: { presidente: ['a'] } }, ds)).toBeNull();
+    expect(calcularPlacar({ perfil: {}, respostas: {}, decisivas: [], time: { ...TIME, senador: ['c'] } }, ds)).toBeNull();
+    expect(calcularPlacar({ perfil: {}, respostas: {}, decisivas: [], time: { ...TIME, senador: ['', 'f'] } }, ds)).toBeNull();
+    const p = calcularPlacar({ perfil: { renda: 'renda_1' }, respostas: { ir: 'F', arma: 'C', sus: 'F' }, decisivas: ['ir'], time: TIME }, ds)!;
+    expect(p.gols).toHaveLength(4);
+    expect(p.linhas).toHaveLength(6);
+    expect(p.escalados.map(e => `${e.cargo.id}${e.vaga}`)).toEqual(['presidente0', 'governador0', 'senador0', 'senador1', 'federal0', 'estadual0']);
     expect(p.linhas[0].camisa).toBe(100);
     expect(p.forca).toBe(forca(p.coerencia, p.peso));
   });
 });
 
 describe('leitura da força', () => {
-  const esc = [A, B, C, D, E].map((c, i) => ({ cargo: ds.cargos[i], candidato: c }));
-  const base = calcularPlacar({ perfil: {}, respostas: { ir: 'F', arma: 'C', sus: 'F' }, decisivas: ['ir'], time: { presidente: 'a', governador: 'b', senador: 'c', federal: 'd', estadual: 'e' } }, ds)!;
+  const esc = escalados([A, B, C, F, D, E]);
+  const base = calcularPlacar({ perfil: {}, respostas: { ir: 'F', arma: 'C', sus: 'F' }, decisivas: ['ir'], time: TIME }, ds)!;
   it('aponta o eixo que segura a força e o teto de cada um', () => {
     const l = leituraDaForca({ ...base, coerencia: 80, peso: 20 });
     expect(l.gargalo).toBe('peso');
@@ -140,9 +149,10 @@ describe('leitura da força', () => {
     const l = leituraDaForca(base);
     // federal (30% do placar) com PT 64/257 = 25 → perde 75 × .3 ≈ 23 pontos; é o maior vazamento
     expect(l.vazaPeso?.cargo).toBe('federal'); expect(l.vazaPeso?.perdido).toBe(Math.round(75 * .3));
-    // B (PL) está nos 3 gols contra; A, D, E em 1 cada; C em nenhum
-    expect(l.golsPorCargo[0]).toMatchObject({ n: 3 }); expect(l.golsPorCargo[0].cargo.id).toBe('governador');
-    expect(l.golsPorCargo.some(x => x.cargo.id === 'senador')).toBe(false);
+    // B (PL) está nos 4 gols contra; A, F, D, E em 1 cada; C (dividido) em nenhum
+    expect(l.golsPorJogador[0]).toMatchObject({ n: 4 }); expect(l.golsPorJogador[0].e.cargo.id).toBe('governador');
+    expect(l.golsPorJogador.find(x => x.e.candidato.id === 'f')?.n).toBe(1);
+    expect(l.golsPorJogador.some(x => x.e.candidato.id === 'c')).toBe(false);
     expect(leituraDaForca({ ...base, gols: [], detalhePeso: base.detalhePeso.map(d => ({ ...d, v: 100 })), escalados: esc }).vazaPeso).toBeNull();
   });
 });
@@ -152,30 +162,33 @@ describe('sugestões de troca', () => {
   const C2 = cand('c2', 'PL', 'senador', { ir: 'C', arma: 'F', sus: 'C' });           // senador que veste a camisa oposta
   const C3 = cand('c3', 'PT', 'senador', { ir: 'F', arma: 'C', sus: 'F' });
   const C4 = { ...cand('c4', 'PT', 'senador', { ir: 'F', arma: 'C', sus: 'F' }), nominais: 2 };  // mesmas posições que C3, com voto real
-  const ds2: Dataset = { ...ds, cargos: [ds.cargos[0], { ...ds.cargos[1], candidatos: [B, B2] }, { ...ds.cargos[2], candidatos: [C, C2, C3, C4] }, ds.cargos[3], ds.cargos[4]] };
-  const st = { perfil: {}, respostas: { ir: 'F' as const, arma: 'C' as const, sus: 'F' as const }, decisivas: ['ir'], time: { presidente: 'a', governador: 'b', senador: 'c', federal: 'd', estadual: 'e' } };
+  const ds2: Dataset = { ...ds, cargos: [ds.cargos[0], { ...ds.cargos[1], candidatos: [B, B2] }, { ...ds.cargos[2], candidatos: [C, C2, C3, C4, F] }, ds.cargos[3], ds.cargos[4]] };
+  const st = { perfil: {}, respostas: { ir: 'F' as const, arma: 'C' as const, sus: 'F' as const }, decisivas: ['ir'], time: TIME };
   const atual = calcularPlacar(st, ds2)!;
   const sug = sugerirTrocas(st, ds2, atual);
-  it('só sugere troca que sobe a força, uma por cargo, ordenada pelo ganho', () => {
+  it('só sugere troca que sobe a força, uma por vaga, ordenada pelo ganho', () => {
     expect(sug.length).toBeGreaterThan(0);
-    expect(new Set(sug.map(s => s.cargo.id)).size).toBe(sug.length);
+    expect(new Set(sug.map(s => `${s.cargo.id}:${s.vaga}`)).size).toBe(sug.length);
     for (const s of sug) { expect(s.delta.forca).toBeGreaterThan(0); expect(s.placar.forca).toBe(atual.forca + s.delta.forca); }
     for (let i = 1; i < sug.length; i++) expect(sug[i - 1].delta.forca).toBeGreaterThanOrEqual(sug[i].delta.forca);
-    // trocar o governador PL por um PT tira os 3 gols contra
+    // trocar o governador PL por um PT tira os 4 gols contra
     const gov = sug.find(s => s.cargo.id === 'governador')!;
-    expect(gov.para.id).toBe('b2'); expect(gov.delta.gols).toBe(-3); expect(gov.placar.gols).toHaveLength(0);
+    expect(gov.para.id).toBe('b2'); expect(gov.delta.gols).toBe(-4); expect(gov.placar.gols).toHaveLength(0);
   });
   it('não sugere quem veste menos a camisa do que o atual', () => {
     for (const s of sug) if (s.camisa.de !== null && s.camisa.para !== null) expect(s.camisa.para).toBeGreaterThanOrEqual(s.camisa.de - TOLERANCIA_CAMISA);
     expect(sug.some(s => s.para.id === 'c2')).toBe(false);
   });
-  it('agrupa candidatos com as mesmas posições e representa pelo que tem voto nominal', () => {
-    const sen = sug.find(s => s.cargo.id === 'senador')!;
-    expect(sen.para.id).toBe('c4'); expect(sen.iguais).toBe(1);
+  it('agrupa candidatos com as mesmas posições, representa pelo que tem voto nominal e nunca repete quem já está na outra vaga', () => {
+    const sen = sug.find(s => s.cargo.id === 'senador' && s.vaga === 0)!;
+    expect(sen.de.id).toBe('c'); expect(sen.para.id).toBe('c4'); expect(sen.iguais).toBe(1);   // F tem as mesmas posições mas já ocupa a 2ª vaga
+    expect(sen.placar.escalados.map(e => e.candidato.id)).toEqual(['a', 'b', 'c4', 'f', 'd', 'e']);
+    expect(sug.some(s => s.cargo.id === 'senador' && s.vaga === 1)).toBe(false);   // o segundo senador já está alinhado
+    expect(sug.some(s => s.para.id === 'f')).toBe(false);
   });
   it('devolve vazio com time incompleto ou já no teto', () => {
-    expect(sugerirTrocas({ ...st, time: { presidente: 'a' } }, ds2, atual)).toEqual([]);
-    const topo = { ...st, time: { ...st.time, governador: 'b2', senador: 'c4' } };
+    expect(sugerirTrocas({ ...st, time: { presidente: ['a'] } }, ds2, atual)).toEqual([]);
+    const topo = { ...st, time: { ...st.time, governador: ['b2'], senador: ['c4', 'f'] } };
     const p2 = calcularPlacar(topo, ds2)!;
     expect(sugerirTrocas(topo, ds2, p2)).toEqual([]);
   });

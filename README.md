@@ -1,6 +1,6 @@
 # Meu Time Político 2026
 
-Você vota em cinco cargos e decide um de cada vez. Aqui você escala os cinco como um time e descobre se eles jogam juntos — e se têm cadeira pra aprovar alguma coisa. Tech cívica, código aberto, sem vínculo com partido, campanha ou candidato. Cobre os 26 estados e o Distrito Federal.
+Você vota seis vezes em 2026 — cinco cargos, com duas vagas de senador — e decide um de cada vez. Aqui você escala os seis como um time e descobre se eles jogam juntos — e se têm cadeira pra aprovar alguma coisa. Tech cívica, código aberto, sem vínculo com partido, campanha ou candidato. Cobre os 26 estados e o Distrito Federal.
 
 ## Como roda
 
@@ -17,7 +17,7 @@ npm test               # motor de cálculo, codificação do link, casamento de 
 ```
 src/data/temas.json          14 pautas, impacto por perfil, votações nominais mapeadas
 src/data/partidos.json       siglas canônicas, aliases, campo ideológico, estimativa por pauta
-src/data/cargos.json         5 cargos, casa, quórum, peso no placar
+src/data/cargos.json         5 cargos (senador com 2 vagas), casa, quórum, peso no placar
 src/data/perfil.json         perguntas do eixo BOLSO
 src/data/ufs.json            27 UFs e o nome de cada casa legislativa
 src/data/generated/          camara.json, senado.json, tse-2026.json, assembleias.json, indice.json (versionados)
@@ -41,7 +41,7 @@ O build não bate em API nenhuma: os fetches são um passo separado e o resultad
 
 ## Dados: o que é real e o que é estimativa
 
-- **Candidatos**: registro oficial do TSE (`consulta_cand_2026`), 5 cargos, 27 UFs + presidência. Vices e suplentes ficam de fora; inaptos, renúncias, indeferidos e cassados são excluídos. Enquanto a Justiça Eleitoral julga os registros, a situação vem como "aguardando julgamento".
+- **Candidatos**: registro oficial do TSE (`consulta_cand_2026`), 5 cargos, 27 UFs + presidência. Em 2026 cada UF elege dois senadores, então o time tem seis escalados: `cargos.json` marca `vagas: 2` no senador e o estado do eleitor guarda uma lista de ids por cargo. Vices e suplentes ficam de fora; inaptos, renúncias, indeferidos e cassados são excluídos. Enquanto a Justiça Eleitoral julga os registros, a situação vem como "aguardando julgamento".
 - **Bancadas** da Câmara e do Senado: reais, via API, a cada `fetch-data`. **Assembleias**: composição eleita em 2022 (TSE, `consulta_cand_2022`, situação "eleito"), porque nenhuma assembleia tem API; trocas de partido posteriores não aparecem, e o app diz isso.
 - **Posição por pauta**: voto nominal real quando o candidato tem mandato e votou numa votação mapeada em `temas.json`; senão, estimativa pela orientação pública do partido (`partidos.json`). Partido com `campo: null` (novo, sem orientação consolidada) entra com posição "dividido" e peso zero. Cada card mostra qual é qual.
 - **Casamento candidato ↔ mandato**: CPF (TSE × API da Câmara) pra deputados; nome completo + UF pra senadores.

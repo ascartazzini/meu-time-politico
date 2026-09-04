@@ -3,7 +3,7 @@ import '../styles/tokens.css';
 interface Props { title: string; description?: string; badge?: string; wide?: boolean; noindex?: boolean }
 const {
   title,
-  description = 'Você vota em cinco cargos e decide um de cada vez. Aqui você escala os cinco como um time e descobre se eles jogam juntos — e se têm cadeira pra aprovar alguma coisa.',
+  description = 'Você vota seis vezes em 2026, dois senadores incluídos, e decide um de cada vez. Aqui você escala os seis como um time e descobre se eles jogam juntos — e se têm cadeira pra aprovar alguma coisa.',
   badge,
   noindex = false
 } = Astro.props;
@@ -22,14 +22,14 @@ const jsonLd = {
   '@graph': [
     {
       '@type': 'WebSite', '@id': `${site.origin}/#site`, url: `${site.origin}/`, name: NOME, inLanguage: 'pt-BR',
-      description: 'Escale seus cinco votos de 2026 como um time e veja se eles jogam juntos e se têm cadeira pra aprovar alguma coisa.',
+      description: 'Escale seus seis votos de 2026 (presidente, governador, dois senadores e deputados) como um time e veja se eles jogam juntos e se têm cadeira pra aprovar alguma coisa.',
       publisher: { '@id': `${site.origin}/#autor` }
     },
     {
       '@type': 'WebApplication', '@id': `${site.origin}/#app`, name: NOME, url: `${site.origin}/app/`, inLanguage: 'pt-BR',
       applicationCategory: 'Civic tech', operatingSystem: 'Web', browserRequirements: 'Requer JavaScript',
       isAccessibleForFree: true, offers: { '@type': 'Offer', price: '0', priceCurrency: 'BRL' },
-      description: 'Questionário de 14 pautas e escalação dos cinco cargos das eleições gerais brasileiras de 2026, com placar de coerência, peso e gols contra a partir de votos nominais e bancadas reais.',
+      description: 'Questionário de 14 pautas e escalação dos seis votos das eleições gerais brasileiras de 2026 (cinco cargos, com duas vagas de senador), com placar de coerência, peso e gols contra a partir de votos nominais e bancadas reais.',
       about: { '@type': 'Event', name: 'Eleições gerais no Brasil de 2026', startDate: '2026-10-04', eventStatus: 'https://schema.org/EventScheduled', location: { '@type': 'Country', name: 'Brasil' } },
       author: { '@id': `${site.origin}/#autor` }
     },
@@ -67,7 +67,7 @@ const jsonLd = {
   <meta property="og:image" content={ogImage} />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="Meu Time Político 2026 — você escala 5. Quantos jogam contra você?" />
+  <meta property="og:image:alt" content="Meu Time Político 2026 — você escala 6. Quantos jogam contra você?" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />

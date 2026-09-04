@@ -20,7 +20,7 @@ const PREP: Record<string, string> = { AC: 'do Acre', AL: 'de Alagoas', AM: 'do 
 function main() {
   const { temas } = lerJson<{ temas: Tema[] }>(resolve(RAIZ, 'src/data/temas.json'));
   const partidosJson = lerJson<{ ordemTemas: string[]; partidos: Record<string, PartidoInfo> }>(resolve(RAIZ, 'src/data/partidos.json'));
-  const cargosJson = lerJson<{ quorum: { camara: number; senado: number }; cadeiras: { camara: number; senado: number }; cargos: { id: CargoId; nome: string; curto: string; casa: 'camara' | 'senado' | 'assembleia'; porCampo: boolean; pesoNoPlacar: number; abrangencia: 'BR' | 'UF' }[] }>(resolve(RAIZ, 'src/data/cargos.json'));
+  const cargosJson = lerJson<{ quorum: { camara: number; senado: number }; cadeiras: { camara: number; senado: number }; cargos: { id: CargoId; nome: string; curto: string; casa: 'camara' | 'senado' | 'assembleia'; porCampo: boolean; pesoNoPlacar: number; abrangencia: 'BR' | 'UF'; vagas?: number }[] }>(resolve(RAIZ, 'src/data/cargos.json'));
   const { ufs } = lerJson<{ ufs: { sigla: string; nome: string; casaEstadual: string }[] }>(resolve(RAIZ, 'src/data/ufs.json'));
   const camara = lerJson<CamaraGen>(resolve(GERADO, 'camara.json'));
   const senado = lerJson<SenadoGen>(resolve(GERADO, 'senado.json'));
@@ -120,11 +120,11 @@ function main() {
       let meta = `${lista.length} candidatos`;
       if (def.id === 'presidente') meta = `${lista.length} candidaturas registradas no país`;
       if (def.id === 'governador') meta = `${lista.length} candidatos ao governo`;
-      if (def.id === 'senador') meta = `2 vagas · ${lista.length} candidatos`;
+      if (def.id === 'senador') meta = `${def.vagas ?? 1} vagas · ${lista.length} candidatos`;
       if (def.id === 'federal') meta = `${a.federais} vagas · ${lista.length} candidatos`;
       if (def.id === 'estadual') meta = `${a.cadeiras} cadeiras · ${lista.length} candidatos`;
       if (nominais) meta += ` · ${nominais} com voto nominal`;
-      return { ...def, nome, curto, meta, candidatos: lista };
+      return { ...def, vagas: def.vagas ?? 1, nome, curto, meta, candidatos: lista };
     });
     const todosDaUf = cargos.flatMap(c => c.candidatos);
     const cobertura = temas.map(t => ({ temaId: t.id, nominal: todosDaUf.filter(c => temNominal(c, t.id)).length, estimativa: todosDaUf.filter(c => !temNominal(c, t.id)).length }));

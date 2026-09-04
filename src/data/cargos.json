@@ -1,5 +1,5 @@
 {
- "$comment": "Os 5 cargos em disputa em 2026 e como cada um entra no eixo PESO. `casa` diz em que casa a bancada do partido conta; `porCampo` diz que o que conta é o campo ideológico inteiro (presidente e governador não têm bancada própria — têm base). Nome do governador e da casa estadual são preenchidos por UF no build.",
+ "$comment": "Os 5 cargos em disputa em 2026 e como cada um entra no eixo PESO. `vagas` é quantas pessoas a eleitora escala nesse cargo (em 2026 cada UF elege 2 senadores); `pesoNoPlacar` é o peso total do cargo, dividido igualmente entre as vagas. `casa` diz em que casa a bancada do partido conta; `porCampo` diz que o que conta é o campo ideológico inteiro (presidente e governador não têm bancada própria — têm base). Nome do governador e da casa estadual são preenchidos por UF no build.",
  "quorum": {
   "camara": 257,
   "senado": 41
@@ -31,6 +31,7 @@
    "id": "senador",
    "nome": "Senador",
    "curto": "senador",
+   "vagas": 2,
    "casa": "senado",
    "porCampo": false,
    "pesoNoPlacar": 0.2,
