@@ -28,12 +28,15 @@ scripts/fetch-senado.ts      senadores + bancadas + votos nominais (API do Senad
 scripts/fetch-tse.ts         consulta_cand_2026 → tse-2026.json · consulta_cand_2022 (eleitos) → assembleias.json
 scripts/build-dataset.ts     casa candidato ↔ mandato (CPF na Câmara, nome no Senado), resolve votos, gera 27 datasets + índice
 scripts/validate-dataset.ts  zod + invariantes em cada UF (soma de bancadas, quórum, ids, UF dos candidatos)
+scripts/fetch-fontes.ts      baixa os woff2 do Google pra public/fontes/ e gera src/styles/fontes.css
 
 src/lib/motor.ts             cálculo puro: camisa, bolso, coerência, gol contra, peso, força, veredito, leitura da força, sugestões na escalação e de troca
 src/lib/dataset.ts           carrega /dados/<UF>.json e hidrata posições (voto real > estimativa do partido)
 src/lib/estado.ts            persistência local + link compartilhável (#s=…, com a UF)
 src/lib/stories.ts           imagem 1080×1920 pros stories (canvas, no navegador; Web Share ou download)
 src/lib/wizard.ts            camada de DOM do app (escolha de UF → perfil → pautas → escalação → placar)
+src/lib/analytics.ts         eventos do GA4 (no-op se o gtag não carregou)
+src/lib/compartilhar.ts      botão de compartilhar: link com UTM por canal, Web Share API com fallback de copiar
 src/pages/index.astro        landing (como funciona) · app.astro (o app: capa + primeira pergunta na mesma tela) · metodo.astro · sobre.astro (redireciona pra /)
 ```
 
@@ -85,7 +88,7 @@ O link de placar compartilhado (`/app/#s=…`) e a URL impressa na imagem dos st
 
 ### SEO, compartilhamento e analytics
 
-`src/layouts/Base.astro` gera título, descrição, canonical, Open Graph, Twitter card, JSON-LD (`WebSite`, `WebApplication`, `Person`, `WebPage`) e a tag do Google Analytics 4 (`G-EQMVHHWH9C`). O sitemap sai do `@astrojs/sitemap` em `/sitemap-index.xml` (sem `/sobre/`, que é só redirecionamento com `noindex`).
+`src/layouts/Base.astro` gera título, descrição, canonical, Open Graph, Twitter card, JSON-LD (`WebSite`, `WebApplication`, `Person`, `WebPage`) e a tag do Google Analytics 4 (`G-EQMVHHWH9C`, só no domínio de produção — ver abaixo). O sitemap sai do `@astrojs/sitemap` em `/sitemap-index.xml` (sem `/sobre/`, que é só redirecionamento com `noindex`).
 
 A imagem de compartilhamento `public/og.png` (1200×630) e o `public/apple-touch-icon.png` são renderizados a partir de `scripts/og/*.html` com o Chrome headless:
 
@@ -94,3 +97,59 @@ sh scripts/og/render.sh
 ```
 
 Os PNGs ficam versionados; rode o script só quando mudar o desenho.
+
+### Fontes (servidas do nosso domínio)
+
+Anton, Barlow e Chivo Mono ficam em `public/fontes/` (woff2, subsets `latin` e `latin-ext`), com as
+regras em `src/styles/fontes.css`. Pelo CSS do Google elas seguravam a primeira pintura por ~1,4s no
+4G, com dois handshakes externos. Os arquivos e o CSS são gerados — e versionados — por:
+
+```
+npm run fetch:fontes
+```
+
+Rode só quando a lista de famílias/pesos mudar. `Base.astro` faz `preload` das quatro faces que
+aparecem na primeira dobra (Anton 400, Barlow 400 e 700, Chivo Mono 400); as outras entram com `swap`.
+
+`src/styles/fontes-fallback.css` é escrito à mão e **não** é regenerado: são faces `Barlow medidas`
+que desenham Arial local esticada até a largura e a altura de linha da Barlow. Sem elas, a troca de
+fonte mudava o número de linhas do parágrafo da capa e empurrava o resto da página (CLS 0,26). Os
+números saem de `canvas.measureText` comparando cada peso da Barlow com Arial regular; se algum dia
+trocar a fonte do corpo, refaça a medida — os valores atuais são só pra Barlow.
+
+### Analytics: eventos e tráfego interno
+
+**O GA4 só existe em `www.meutimepolitico.com`.** O measurement ID é fixo no código, então `npm run
+dev`, `astro preview`, acesso por IP e qualquer outro host mandariam hits pra propriedade real — foi
+o que sujou os relatórios em 07/09/2026. `HOSTS_ANALYTICS`, em `Base.astro`, é a lista de hosts onde
+a tag é injetada; fora dela nada é baixado, `window.gtag` não existe e todo `evento(...)` vira no-op.
+Apex e o subdomínio antigo caem em 301 pro www (`nginx.conf`), então só o www renderiza página — se
+esse redirect quebrar, a medição para junto (falha fechada, de propósito). Pra depurar em produção,
+`?internal=1` + DebugView.
+
+Eventos enviados pelo app (`src/lib/analytics.ts`; sem gtag na página, viram no-op):
+
+| evento | onde | parâmetros |
+| --- | --- | --- |
+| `cta_app_click` | home | `local` = `hero` \| `fecho` |
+| `app_open` | /app/ | `origem` = `novo` \| `retomada` \| `link_compartilhado` |
+| `share_click` | home e placar | `channel` = `whatsapp` \| `instagram` \| `linkedin`, `local` = `home` \| `placar` |
+| `placar_pronto` | /app/ | `uf`, `forca`, `coerencia`, `peso`, `gols_contra`, `veredito` |
+
+`placar_pronto` é o fim do funil — respondeu as 14 pautas, escalou os seis, viu o placar. Sobe **uma
+vez por visita**: trocas de teste recalculam o placar sem reenviar o evento. **No GA4, marque
+`placar_pronto` como evento-chave** (Admin → Eventos), senão ele não vira conversão nos relatórios.
+
+Os botões de compartilhar (`src/lib/compartilhar.ts`) geram um link por canal, com
+`utm_source=<canal>&utm_medium=share&utm_campaign=lancamento`. Um link só, sem UTM, chega no GA4 como
+Direct — que era o caso de 117 das 136 sessões da primeira semana. No placar o UTM entra antes do
+`#s=`, então o link continua abrindo a escalação de quem compartilhou. Usa Web Share API onde existe
+(celular) e cai pra copiar o link no computador.
+
+**Tráfego interno sem depender de IP:** abrir `/?internal=1` uma vez grava `mtp_internal=1` no
+`localStorage` deste navegador; `/?internal=0` desfaz. O parâmetro sai da barra de endereço (via
+`history.replaceState`) antes do `gtag('config', …)`, então o pageview sobe com a URL limpa, com
+`traffic_type: 'internal'` e sem atrapalhar UTMs que estejam na mesma URL. Funciona em qualquer
+página. **Falta o passo do outro lado: no GA4, criar o filtro de dados** (Admin → Coleta e
+modificação de dados → Filtros de dados) do tipo "tráfego interno" com `traffic_type` igual a
+`internal`. Sem esse filtro o parâmetro chega e não filtra nada.

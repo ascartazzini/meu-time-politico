@@ -15,6 +15,7 @@
     "fetch:camara": "tsx scripts/fetch-camara.ts",
     "fetch:senado": "tsx scripts/fetch-senado.ts",
     "fetch-data": "npm run fetch:camara && npm run fetch:senado && npm run fetch:tse",
+    "fetch:fontes": "tsx scripts/fetch-fontes.ts",
     "build-data": "tsx scripts/build-dataset.ts",
     "validate-data": "tsx scripts/validate-dataset.ts",
     "test": "vitest run",

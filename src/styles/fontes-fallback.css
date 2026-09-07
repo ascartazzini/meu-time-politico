@@ -1,0 +1,20 @@
+/* ==========================================================================
+   Fallback com as medidas da Barlow.
+   Enquanto o woff2 não chega, o texto sai numa fonte do sistema — e como ela
+   é mais larga, o parágrafo mudava de número de linhas na hora da troca e
+   empurrava o bloco de números pra baixo (CLS 0,19, quase todo aqui).
+   Estas faces desenham Arial local esticada até a largura e a altura de linha
+   da Barlow, então a troca não move nada.
+
+   Números medidos com canvas.measureText contra Arial regular (ver README).
+   Onde não existe Arial (parte do Android), a face é ignorada e a pilha cai
+   em system-ui, como era antes.
+   ========================================================================== */
+@font-face{font-family:'Barlow medidas';src:local('Arial'),local('Helvetica'),local('Roboto');
+  font-weight:400;size-adjust:94.00%;ascent-override:106.38%;descent-override:21.28%;line-gap-override:0%}
+@font-face{font-family:'Barlow medidas';src:local('Arial'),local('Helvetica'),local('Roboto');
+  font-weight:500;size-adjust:94.93%;ascent-override:105.34%;descent-override:21.07%;line-gap-override:0%}
+@font-face{font-family:'Barlow medidas';src:local('Arial'),local('Helvetica'),local('Roboto');
+  font-weight:600;size-adjust:95.69%;ascent-override:104.50%;descent-override:20.90%;line-gap-override:0%}
+@font-face{font-family:'Barlow medidas';src:local('Arial'),local('Helvetica'),local('Roboto');
+  font-weight:700;size-adjust:96.62%;ascent-override:103.50%;descent-override:20.70%;line-gap-override:0%}

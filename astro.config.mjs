@@ -23,5 +23,7 @@ export default defineConfig({
       }
     })
   ],
-  build: { inlineStylesheets: 'auto' }
+  // Sempre inline: os dois CSS eram render-blocking (~880ms simulados no 4G) e juntos não passam
+  // de ~23 KB antes do gzip. Uma ida a menos no caminho crítico vale mais que o cache entre páginas.
+  build: { inlineStylesheets: 'always' }
 });

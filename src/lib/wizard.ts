@@ -12,6 +12,8 @@ import { carregar, codificar, decodificar, estadoVazio, idNaVaga, limpar, porNaV
 import { esc } from './formato';
 import { gerarPngStories, montarStories, nomeArquivoStories } from './stories';
 import { normalizarNome } from './nomes';
+import { evento } from './analytics';
+import { instalarCompartilhar } from './compartilhar';
 
 const PERFIL = perfilJson.grupos;
 const ROTULO_PERFIL = perfilJson.rotulos as Record<string, string>;
@@ -25,6 +27,7 @@ let passoAtual = 0;
 let alheio = false;                             // placar aberto por link de outra pessoa
 let placarAtual: Placar | null = null;
 let trocas: { cargo: CargoId; vaga: number; de: string; para: string; forcaAntes: number }[] = [];   // trocas de teste feitas a partir das sugestões
+let placarMedido = false;                       // `placar_pronto` sobe uma vez por visita, não a cada troca de teste
 const pickers = new Map<string, { escolher(c: Candidato): void; buscar(q: string): void }>();   // `${cargo}:${vaga}` → controles do picker montado na tela
 
 type Passo =
@@ -332,6 +335,15 @@ function calcular() {
   const placar = calcularPlacar(st, ds);   // null = alguma vaga vazia (as duas de senador contam)
   if (!placar) { passoAtual = PASSOS.length - 2; render(); return; }
   placarAtual = placar; salvar(st);
+  // fim do funil: a pessoa respondeu as 14 pautas, escalou os seis e chegou no placar.
+  // É o evento de sucesso do app — marcar como conversão no GA4.
+  if (!placarMedido) {
+    placarMedido = true;
+    evento('placar_pronto', {
+      uf: st.uf, forca: placar.forca, coerencia: placar.coerencia, peso: placar.peso,
+      gols_contra: placar.gols.length, veredito: placar.veredito.chave
+    });
+  }
   renderResultado(placar, ds);
 }
 function renderResultado(p: Placar, d: Dataset) {
@@ -583,6 +595,16 @@ export async function iniciar() {
   $('btnStoriesBaixar').addEventListener('click', e => baixarStories(e.currentTarget as HTMLButtonElement));
   $('btnStoriesLink').addEventListener('click', e => copiar(linkPlacar(), e.currentTarget as HTMLButtonElement, '✓ link copiado'));
   $('btnStoriesFechar').addEventListener('click', () => { $('stories').hidden = true; });
+
+  // compartilhar o placar com link marcado por canal (o botão fica em .res-acoes e o
+  // painel logo abaixo, os dois dentro de #resultado)
+  instalarCompartilhar($('resultado'), {
+    local: 'placar',
+    link: linkPlacar,
+    texto: link => placarAtual
+      ? `⚽ Meu time político 2026: força ${placarAtual.forca}/100, ${placarAtual.gols.length} gol${placarAtual.gols.length === 1 ? '' : 's'} contra. Escala o teu e me diz quantos deu:\n${link}`
+      : `⚽ Escala teu time político de 2026 e vê quantos gols contra ele faz:\n${link}`
+  });
   $('tela').addEventListener('click', onClickTela);
   $('tela').addEventListener('change', onChangeTela);
   $('sugestoes').addEventListener('click', e => {
@@ -596,10 +618,12 @@ export async function iniciar() {
     if ((e.key === 'ArrowRight' || e.key === 'Enter') && completo(passoAtual)) avancar();
   });
 
-  if (await abrirLinkCompartilhado()) return;
+  if (await abrirLinkCompartilhado()) { evento('app_open', { origem: 'link_compartilhado' }); return; }
   window.addEventListener('hashchange', () => { void abrirLinkCompartilhado(); });
   // a capa já vem com a primeira pergunta; quem já começou retoma de onde parou (time completo vai pro placar)
   const salvo = carregar();
-  if (salvo && (salvo.uf || Object.keys(salvo.perfil).length || Object.keys(salvo.respostas).length)) { st = salvo; await continuar(); }
+  const retomando = !!salvo && (!!salvo.uf || Object.keys(salvo.perfil).length > 0 || Object.keys(salvo.respostas).length > 0);
+  evento('app_open', { origem: retomando ? 'retomada' : 'novo' });
+  if (retomando) { st = salvo!; await continuar(); }
   else comecar(false);
 }

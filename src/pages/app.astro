@@ -44,11 +44,27 @@ const n = indice.nacional;
     <div class="tabela" id="tabela"></div>
     <details class="metodo" id="metodo"><summary>Como esses números são calculados</summary><div class="body" id="metodoBody"></div></details>
     <div class="res-acoes">
+      <button class="share" id="btnCompartilhar" type="button" data-share-abrir aria-expanded="false" aria-controls="sharePainel">Compartilhar</button>
       <button class="share" id="btnCopiar" type="button">Copiar meu placar</button>
       <button class="share" id="btnStories" type="button">Imagem pros stories</button>
       <button class="share sec" id="btnLink" type="button">Copiar link do placar</button>
       <button class="share sec" id="btnReescalar" type="button">Mudar minha escalação</button>
       <button class="share sec wide" id="btnZerar" type="button">Refazer do zero</button>
+    </div>
+
+    <div class="share-box" id="compartilhar">
+      <div class="share-painel" id="sharePainel" data-share-painel hidden>
+        <div class="share-h">Manda o teu placar</div>
+        <div class="share-canais">
+          <button class="share-canal" type="button" data-canal="whatsapp">WhatsApp</button>
+          <button class="share-canal" type="button" data-canal="instagram">Instagram</button>
+          <button class="share-canal" type="button" data-canal="linkedin">LinkedIn</button>
+        </div>
+        <p class="share-aviso" data-share-aviso role="status"></p>
+        <p class="share-nota">O link leva a pessoa direto pro seu placar, e vem marcado por canal
+          — assim dá pra saber de onde veio quem chegou. No celular abre a folha de compartilhar;
+          no computador, copia o link.</p>
+      </div>
     </div>
     <div class="stories" id="stories" hidden>
       <div class="stories-prev"><img id="storiesImg" alt="Prévia da imagem do placar no formato dos stories (1080 por 1920)" width="1080" height="1920" /></div>

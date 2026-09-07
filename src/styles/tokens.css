@@ -10,7 +10,7 @@
   --line:#243020;
   --display:'Anton', Impact, 'Arial Narrow', sans-serif;
   --mono:'Chivo Mono', ui-monospace, Menlo, monospace;
-  --body:'Barlow', system-ui, -apple-system, sans-serif;
+  --body:'Barlow', 'Barlow medidas', system-ui, -apple-system, sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 [hidden]{display:none !important}
@@ -43,6 +43,14 @@ a{color:inherit}
 .nav{display:flex;gap:14px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
 .nav a{color:var(--muted);text-decoration:none}
 .nav a:hover{color:var(--ink)}
+/* No celular o cabeçalho é só marca + contagem: a navegação duplicava o caminho pro /app/
+   e empurrava o CTA da primeira dobra pra baixo. Método e app seguem linkados no corpo. */
+@media(max-width:640px){
+  .top{padding:11px 0;gap:8px}
+  .top .nav{display:none}
+  .brand{font-size:19px}
+  .countdown{font-size:10.5px;letter-spacing:.02em}
+}
 
 /* ---- destaque amarelo em título (faixa por linha, mais baixa que a altura de linha) ---- */
 .hl{color:var(--bg);padding:0 .1em;box-decoration-break:clone;-webkit-box-decoration-break:clone;
@@ -71,3 +79,16 @@ a{color:inherit}
 footer{margin-top:44px;padding:26px 0 60px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
 footer b{color:#B9C4B2}
 footer a{color:#B9C4B2}
+
+/* ---- compartilhar (home e placar) ---- */
+.share-box{margin-top:18px}
+.share-painel{margin-top:12px;background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:16px}
+.share-painel .share-h{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.share-canais{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(max-width:420px){.share-canais{grid-template-columns:1fr}}
+.share-canal{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  cursor:pointer;background:transparent;border:1px solid var(--line);color:var(--ink);border-radius:3px;
+  padding:14px 8px;min-height:48px;transition:.14s}
+.share-canal:hover{border-color:var(--data);color:var(--data)}
+.share-aviso{font-family:var(--mono);font-size:11px;color:var(--data);margin-top:10px;min-height:15px;line-height:1.4}
+.share-nota{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:8px;line-height:1.6}

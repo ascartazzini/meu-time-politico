@@ -1,5 +1,8 @@
 ---
+import '../styles/fontes.css';
+import '../styles/fontes-fallback.css';
 import '../styles/tokens.css';
+import { diasParaOPleito } from '../lib/formato';
 interface Props { title: string; description?: string; badge?: string; wide?: boolean; noindex?: boolean }
 const {
   title,
@@ -15,6 +18,24 @@ const canonical = new URL(Astro.url.pathname, site).toString();
 const ogImage = new URL('/og.png', site).toString();
 const NOME = 'Meu Time Político 2026';
 const GA_ID = 'G-EQMVHHWH9C';
+// O measurement ID é fixo no código, então dev, preview e qualquer outro host mandariam hits
+// pra propriedade real (foi o que sujou os relatórios em 07/09/2026). A tag só existe aqui.
+// Apex e o subdomínio antigo caem em 301 pro www (nginx.conf), então só o www renderiza página.
+const HOSTS_ANALYTICS = ['www.meutimepolitico.com'];
+// As quatro faces que aparecem na primeira dobra. Chegando antes da primeira pintura,
+// não existe troca de fonte depois — que era a origem do CLS. As outras (Barlow 500/600,
+// Chivo Mono 700) entram normalmente, com swap, e só aparecem mais pra baixo.
+const FONTES_CRITICAS = [
+  '/fontes/anton-400-latin.woff2',
+  '/fontes/barlow-400-latin.woff2',
+  '/fontes/barlow-700-latin.woff2',
+  '/fontes/chivo-mono-400-latin.woff2'
+];
+
+// O contador sai pronto do build: se ele chegasse vazio e fosse preenchido no cliente,
+// o cabeçalho cresceria uma linha depois da primeira pintura (salto de layout no celular).
+const diasNoBuild = diasParaOPleito();
+const contagemHtml = diasNoBuild > 0 ? `faltam <b>${diasNoBuild}</b> dias pro 1º turno` : 'dia de eleição';
 
 // Dados estruturados: quem somos, o que é o app e pra qual eleição. Ajuda buscador e assistente de IA a citar certo.
 const jsonLd = {
@@ -41,17 +62,46 @@ const jsonLd = {
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <!-- Google tag (gtag.js) -->
-  <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>
-  <script is:inline define:vars={{ GA_ID }}>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', GA_ID);
-  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title}</title>
+
+  <!-- Google tag (gtag.js) — só no domínio de produção, ver HOSTS_ANALYTICS acima -->
+  <script is:inline define:vars={{ GA_ID, HOSTS_ANALYTICS }}>
+    if (HOSTS_ANALYTICS.indexOf(location.hostname) !== -1) {
+      window.dataLayer = window.dataLayer || [];
+      // `define:vars` faz o Astro embrulhar este bloco numa IIFE, então a função não vira global
+      // sozinha — sem esta linha, todo `gtag(...)` de fora daqui (src/lib/analytics.ts) vira no-op.
+      var gtag = function () { window.dataLayer.push(arguments); };
+      window.gtag = gtag;
+      gtag('js', new Date());
+
+      /* Tráfego interno (o nosso) sem depender de IP: abrir /?internal=1 uma vez marca este
+         navegador, /?internal=0 desmarca. O parâmetro sai da barra antes do `config`, então o
+         pageview já sobe com a URL limpa e com traffic_type=internal. Do lado do GA4 tem que
+         existir o filtro de dados "internal" ATIVO (Admin → Filtros de dados). */
+      var interno = false;
+      try {
+        var q = new URLSearchParams(location.search);
+        var marca = q.get('internal');
+        if (marca === '1') localStorage.setItem('mtp_internal', '1');
+        if (marca === '0') localStorage.removeItem('mtp_internal');
+        if (marca !== null) {
+          q.delete('internal');
+          var busca = q.toString();
+          history.replaceState(null, '', location.pathname + (busca ? '?' + busca : '') + location.hash);
+        }
+        interno = localStorage.getItem('mtp_internal') === '1';
+      } catch (e) { /* navegador sem localStorage: segue como tráfego normal */ }
+
+      gtag('config', GA_ID, interno ? { traffic_type: 'internal' } : {});
+
+      var tag = document.createElement('script');
+      tag.async = true;
+      tag.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+      document.head.appendChild(tag);
+    }
+  </script>
   <meta name="description" content={description} />
   <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1'} />
   <meta name="author" content="Artur Scartazzini" />
@@ -77,9 +127,9 @@ const jsonLd = {
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="sitemap" href="/sitemap-index.xml" />
   <meta name="theme-color" content="#080A08" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Chivo+Mono:wght@400;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Fontes servidas do nosso domínio (public/fontes, geradas por scripts/fetch-fontes.ts).
+       Pelo Google elas custavam ~1,4s de render-blocking no 4G, com dois handshakes externos. -->
+  {FONTES_CRITICAS.map(f => <link rel="preload" href={f} as="font" type="font/woff2" crossorigin />)}
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 </head>
 <body>
@@ -88,18 +138,20 @@ const jsonLd = {
       <a class="brand" href="/">MEU TIME <span>POLÍTICO</span><em>2026</em></a>
       <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
         <nav class="nav"><a href="/">como funciona</a><a href="/app/">escalar</a><a href="/metodo/">método</a></nav>
-        <div class="countdown" data-countdown>—</div>
+        <div class="countdown" data-countdown set:html={contagemHtml}></div>
         {badge && <div class="badge beta">{badge}</div>}
       </div>
     </header>
     <slot />
   </div>
   <script>
+    // O texto já veio pronto do build; isto só corrige quando o build ficou velho no cache.
     import { diasParaOPleito } from '../lib/formato';
     const el = document.querySelector('[data-countdown]');
     if (el) {
       const d = diasParaOPleito();
-      el.innerHTML = d > 0 ? `faltam <b>${d}</b> dias pro 1º turno` : 'dia de eleição';
+      const txt = d > 0 ? `faltam <b>${d}</b> dias pro 1º turno` : 'dia de eleição';
+      if (el.innerHTML !== txt) el.innerHTML = txt;
     }
   </script>
 </body>

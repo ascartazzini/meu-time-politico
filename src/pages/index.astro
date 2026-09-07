@@ -17,11 +17,12 @@ const fontes = [
     <div class="kicker">Brasil · 27 estados · 4 de outubro de 2026</div>
     <h1>Você escala 6.<br /><span class="hl">Quantos jogam<br />contra você?</span></h1>
     <p class="lead">Presidente, governador, <b>dois</b> senadores, deputado federal, deputado estadual.
-      Você decide <b>um de cada vez</b>, em telas separadas, meses diferentes — e nunca viu os
-      seis juntos. Aqui você escala o time e a gente responde a pergunta que ninguém faz:
-      <b>esse time joga junto? E ele consegue aprovar alguma coisa?</b></p>
-    <a class="cta" href="/app/">Escalar meu time →</a>
-    <span class="cta-note">sem cadastro · sem e-mail · nada sai do seu navegador</span>
+      Você decide <b>um de cada vez</b> — e nunca viu os seis juntos.</p>
+    <a class="cta" href="/app/" data-cta="hero">Escalar meu time →</a>
+    <span class="cta-note">2 minutos · sem cadastro · nada sai do seu navegador</span>
+    <p class="lead lead-mais">Telas separadas, meses diferentes. Aqui você escala o time e a gente
+      responde a pergunta que ninguém faz: <b>esse time joga junto? E ele consegue aprovar
+      alguma coisa?</b></p>
 
     <div class="stats">
       <div class="stat"><div class="n" data-count>{n.candidatos.toLocaleString('pt-BR')}</div><div class="l">candidatos no país<br />disputando 4 de outubro</div></div>
@@ -115,8 +116,23 @@ const fontes = [
     <h2>Escale seu time.<br /><span class="hl">Conte os gols contra.</span></h2>
     <p class="sec-lead" style="margin:24px auto 0">Leva dois minutos. Não pede seu nome, seu e-mail, nem seu título de eleitor.</p>
     <div class="acoes">
-      <a class="cta" href="/app/">Abrir o app →</a>
+      <a class="cta" href="/app/" data-cta="fecho">Abrir o app →</a>
       <a class="cta ghost" href="/metodo/">Ver o método</a>
+    </div>
+
+    <div class="share-box" id="compartilhar">
+      <button class="cta ghost" type="button" data-share-abrir aria-expanded="false" aria-controls="sharePainel">Compartilhar</button>
+      <div class="share-painel" id="sharePainel" data-share-painel hidden>
+        <div class="share-h">Escolha por onde vai</div>
+        <div class="share-canais">
+          <button class="share-canal" type="button" data-canal="whatsapp">WhatsApp</button>
+          <button class="share-canal" type="button" data-canal="instagram">Instagram</button>
+          <button class="share-canal" type="button" data-canal="linkedin">LinkedIn</button>
+        </div>
+        <p class="share-aviso" data-share-aviso role="status"></p>
+        <p class="share-nota">Cada botão gera um link marcado, então dá pra saber por onde a
+          galera chegou. No celular abre a folha de compartilhar; no computador, copia o link.</p>
+      </div>
     </div>
   </section>
 
@@ -129,6 +145,22 @@ const fontes = [
   </footer>
 
   <script>
+    import { instalarCompartilhar } from '../lib/compartilhar';
+    import { evento } from '../lib/analytics';
+
+    // compartilhar a home: link marcado por canal, pra parar de cair tudo em Direct no GA4
+    const caixa = document.getElementById('compartilhar');
+    if (caixa) instalarCompartilhar(caixa, {
+      local: 'home',
+      link: () => `${location.origin}/`,
+      texto: link => `⚽ Você vota 6 vezes em 2026 e nunca viu os seis juntos. Escala teu time político e vê quantos gols contra dá:\n${link}`
+    });
+
+    // qual CTA da home leva pro app (dobra ou fecho) — a home é onde 2 em cada 3 param
+    document.querySelectorAll<HTMLAnchorElement>('[data-cta]').forEach(a => {
+      a.addEventListener('click', () => evento('cta_app_click', { local: a.dataset.cta ?? 'home' }));
+    });
+
     const vistos = new WeakSet<Element>();
     const io = new IntersectionObserver(es => {
       es.forEach(e => {
