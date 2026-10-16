@@ -21,6 +21,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "evidencia": "tsx scripts/evidencia-partidos.ts",
+    "prova": "tsx scripts/prova/rodar.ts",
     "editor:partidos": "tsx scripts/evidencia-partidos.ts && tsx scripts/editor-partidos.ts"
   },
   "dependencies": {

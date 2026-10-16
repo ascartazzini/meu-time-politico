@@ -1,0 +1,2241 @@
+{
+ "rodadoEm": "2026-10-16T19:13:09.938Z",
+ "origem": "máquina local (IP fora do Brasil)",
+ "resultados": [
+  {
+   "id": "camara-agenda",
+   "nome": "Câmara — agenda de eventos (plenário e comissões)",
+   "grupo": "oficial",
+   "url": "https://dadosabertos.camara.leg.br/api/v2/eventos",
+   "custo": "0 — API aberta, sem chave.",
+   "risco": "Baixo: API oficial estável há anos, dado público por lei (LAI).",
+   "medida": {
+    "itens": 18,
+    "janela": "7 dias",
+    "atrasoHoras": 2.2,
+    "idPolitico": false,
+    "amostra": [
+     {
+      "data": "2026-10-16T10:01-03:00",
+      "titulo": "CN — Sessão Não Deliberativa Solene (Encerrada)",
+      "url": "https://dadosabertos.camara.leg.br/api/v2/eventos/83073"
+     },
+     {
+      "data": "2026-10-15T15:12-03:00",
+      "titulo": "PLEN — Sessão Deliberativa (Encerrada)",
+      "url": "https://dadosabertos.camara.leg.br/api/v2/eventos/83066"
+     },
+     {
+      "data": "2026-10-16T14:00-03:00",
+      "titulo": "CTUR — Reunião Deliberativa (Cancelada)",
+      "url": "https://dadosabertos.camara.leg.br/api/v2/eventos/83063"
+     }
+    ],
+    "notas": [
+     "situações: Cancelada 5, Convocada 2, Encerrada 6, Encerrada (Final) 5; 3 do plenário",
+     "evento traz órgão, tipo, situação e pauta (/eventos/{id}/pauta), mas não o deputado; o vínculo com o político vem de /eventos/{id}/deputados (presença) e /eventos/{id}/votacoes",
+     "agenda futura também vem (situação \"Convocada\"), dá pra avisar antes; datas sem fuso (Brasília)",
+     "paginação por links rel=next, até 100 itens por página; sem limite de requisição observado"
+    ],
+    "status": "ok",
+    "formato": "json"
+   },
+   "veredito": "usar",
+   "ms": 998
+  },
+  {
+   "id": "camara-despesas-api",
+   "nome": "Câmara — cota parlamentar pela API (/deputados/{id}/despesas)",
+   "grupo": "oficial",
+   "url": "https://dadosabertos.camara.leg.br/api/v2/deputados/{id}/despesas",
+   "custo": "0 — API aberta; 1 requisição por deputado e mês.",
+   "risco": "Alto: o endpoint respondeu vazio nesta rodada; não dá pra depender dele sem o arquivo anual de reserva.",
+   "medida": {
+    "itens": 0,
+    "janela": "ano 2026, 5 deputados",
+    "atrasoHoras": null,
+    "idPolitico": true,
+    "amostra": [],
+    "notas": [
+     "despesas de 2026 por deputado: Átila Lins 0, Dr. Frederico 0, João Leão 0, Merlong Solano 0, Sandro Alex 0",
+     "endpoint devolve lista vazia (HTTP 200) para 2026 na legislatura atual, inclusive sem filtro de ano; com idLegislatura=56 devolve 5 itens — parece quebrado só pro mandato corrente",
+     "reserva: arquivo anual Ano-AAAA.csv.zip (prova camara-despesas-csv), que traz o mesmo dado com nuDeputadoId"
+    ],
+    "status": "falhou",
+    "formato": "json"
+   },
+   "veredito": "fora, por ora",
+   "ms": 2699
+  },
+  {
+   "id": "camara-despesas-csv",
+   "nome": "Câmara — cota parlamentar, arquivo anual (Ano-AAAA.csv.zip)",
+   "grupo": "oficial",
+   "url": "https://www.camara.leg.br/cotas/Ano-2026.csv.zip",
+   "custo": "0 — download aberto, ~4 MB zipado (~45 MB CSV) por dia.",
+   "risco": "Baixo: arquivo oficial regerado diariamente; lançamento atrasa semanas, então o mês corrente sempre aparece incompleto.",
+   "medida": {
+    "itens": 339,
+    "janela": "7 dias (pela data de emissão do documento)",
+    "atrasoHoras": 40.2,
+    "idPolitico": true,
+    "amostra": [
+     {
+      "data": "2026-10-15T00:00:00-03:00",
+      "titulo": "Jilmar Tatto (id 1853): COMBUSTÍVEIS E LUBRIFICANTES. — BRASAL COMBUSTIVEIS LTDA R$ 178.08",
+      "url": "https://www.camara.leg.br/cota-parlamentar/nota-fiscal-eletronica?ideDocumentoFiscal=8165251"
+     },
+     {
+      "data": "2026-10-15T00:00:00-03:00",
+      "titulo": "Silvia Cristina (id 3278): COMBUSTÍVEIS E LUBRIFICANTES. — AUTO POSTO CINCO ESTRELAS LTDA R$ 272.22",
+      "url": "https://www.camara.leg.br/cota-parlamentar/nota-fiscal-eletronica?ideDocumentoFiscal=8165193"
+     },
+     {
+      "data": "2026-10-15T00:00:00-03:00",
+      "titulo": "Pedro Westphalen (id 3280): COMBUSTÍVEIS E LUBRIFICANTES. — SMAFF COMBUSTIVEIS LTDA R$ 217.8",
+      "url": "https://www.camara.leg.br/cota-parlamentar/nota-fiscal-eletronica?ideDocumentoFiscal=8165202"
+     }
+    ],
+    "notas": [
+     "115927 lançamentos no ano; arquivo 4.4 MB zipado, baixado em 2.8 s; Last-Modified Fri, 16 Oct 2026 06:34:06 GMT",
+     "lançamentos por mês: 1:10063 2:13049 3:16603 4:15330 5:16414 6:14545 7:13976 8:9590 9:5155 10:1202 (mediana dos meses fechados 14545; os últimos 1–2 meses ainda estão chegando)",
+     "não há data de lançamento no arquivo: atraso real (emissão → publicação) só se mede comparando o arquivo dia a dia; o volume mostra que um mês leva ~2 meses pra completar",
+     "ideCadastro (= id da API) presente em 115388/115927; linhas sem id são lideranças/órgãos (ex.: LID.GOV-CD)",
+     "nenhuma data no futuro",
+     "pegar() de base.ts só lê texto; o zip foi baixado com fetch próprio e descompactado com zlib (sem dependência)"
+    ],
+    "status": "ok",
+    "formato": "zip"
+   },
+   "veredito": "usar",
+   "ms": 3136
+  },
+  {
+   "id": "camara-discursos",
+   "nome": "Câmara — discursos por deputado (amostra de 10, extrapolada)",
+   "grupo": "oficial",
+   "url": "https://dadosabertos.camara.leg.br/api/v2/deputados/{id}/discursos",
+   "custo": "0 — API aberta; 513 requisições por rodada (uma por deputado).",
+   "risco": "Baixo na fonte; transcrição chega com dias de atraso e sem revisão do orador.",
+   "medida": {
+    "itens": 1,
+    "janela": "7 dias, 10 deputados",
+    "atrasoHoras": 72.5,
+    "idPolitico": true,
+    "amostra": [
+     {
+      "data": "2026-10-13T15:40-03:00",
+      "titulo": "Ricardo Maia (MDB-BA) — BREVES COMUNICAÇÕES: O SR. RICARDO MAIA (Bloco/MDB - BA. Sem revisão do orador.) - Sr. Presidente, demais coleg",
+      "url": "https://dadosabertos.camara.leg.br/api/v2/deputados/220694/discursos"
+     }
+    ],
+    "notas": [
+     "amostra: Aline Gurgel 0, Carlos Gomes 0, Delegado Bruno Lima 0, Evair Vieira de Melo 0, Helder Salomão 0, Junio Amaral 0, Márcio Marinho 0, Pastor Diniz 0, Ricardo Maia 1, Tiago Dimas 0 (discursos em 30 dias)",
+     "extrapolação pra 513: ~51 discursos em 7 dias, ~51 em 30 dias (variância alta: poucos deputados concentram a fala)",
+     "campos: transcrição em 1/1, sumário em 0/1, link de áudio/vídeo/texto em 0/1",
+     "não há endpoint de discursos por período pra Casa toda: é 1 chamada por deputado (513/dia); atraso = horas desde o discurso mais recente da amostra",
+     "paginação padrão de 15 itens; usar itens=100"
+    ],
+    "status": "ok",
+    "formato": "json"
+   },
+   "veredito": "usar",
+   "ms": 5150
+  },
+  {
+   "id": "camara-orgaos",
+   "nome": "Câmara — órgãos e frentes de cada deputado",
+   "grupo": "oficial",
+   "url": "https://dadosabertos.camara.leg.br/api/v2/deputados/{id}/orgaos",
+   "custo": "0 — API aberta; 1 requisição por deputado, dado lento (muda pouco).",
+   "risco": "Baixo: é cadastro, não atividade; serve de contexto pro feed, não como evento diário.",
+   "medida": {
+    "itens": 23,
+    "janela": "3 deputados, cargos vigentes e passados",
+    "atrasoHoras": 1552.2,
+    "idPolitico": true,
+    "amostra": [
+     {
+      "data": "2026-05-12T00:00-03:00",
+      "titulo": "Célia Xakriabá: Presidente em SUBTRAMZ",
+      "url": "https://dadosabertos.camara.leg.br/api/v2/deputados/206018/orgaos"
+     },
+     {
+      "data": "2026-05-11T00:00-03:00",
+      "titulo": "Célia Xakriabá: Titular em SUBTRAMZ",
+      "url": "https://dadosabertos.camara.leg.br/api/v2/deputados/206018/orgaos"
+     },
+     {
+      "data": "2026-04-22T00:00-03:00",
+      "titulo": "Célia Xakriabá: Titular em CPOVOS",
+      "url": "https://dadosabertos.camara.leg.br/api/v2/deputados/206018/orgaos"
+     }
+    ],
+    "notas": [
+     "por deputado: Célia Xakriabá 14 órgãos, 116 frentes; João Maia 4 órgãos, 118 frentes; Renildo Calheiros 5 órgãos, 293 frentes",
+     "útil pra contextualizar (titular de comissão X), não é evento do dia; frentes não têm data de adesão"
+    ],
+    "status": "ok",
+    "formato": "json"
+   },
+   "veredito": "usar",
+   "ms": 2845
+  },
+  {
+   "id": "camara-presenca",
+   "nome": "Câmara — presença por evento (/eventos/{id}/deputados)",
+   "grupo": "oficial",
+   "url": "https://dadosabertos.camara.leg.br/api/v2/eventos/{id}/deputados",
+   "custo": "0 — API aberta; 1 requisição por evento encerrado.",
+   "risco": "Baixo na fonte; médio na leitura: lista de presença registrada não é o mesmo que ter votado ou ficado na sessão.",
+   "medida": {
+    "itens": 1589,
+    "janela": "7 dias",
+    "atrasoHoras": 25,
+    "idPolitico": true,
+    "amostra": [
+     {
+      "data": "2026-10-15T15:12-03:00",
+      "titulo": "PLEN Sessão Deliberativa: 487 deputados presentes",
+      "url": "https://dadosabertos.camara.leg.br/api/v2/eventos/83066/deputados"
+     },
+     {
+      "data": "2026-10-14T14:23-03:00",
+      "titulo": "PLEN Sessão Deliberativa: 502 deputados presentes",
+      "url": "https://dadosabertos.camara.leg.br/api/v2/eventos/83057/deputados"
+     },
+     {
+      "data": "2026-10-14T14:40-03:00",
+      "titulo": "CEXEXPLO Reunião Deliberativa: 8 deputados presentes",
+      "url": "https://dadosabertos.camara.leg.br/api/v2/eventos/83048/deputados"
+     }
+    ],
+    "notas": [
+     "itens = pares (evento, deputado) presentes em 11 eventos encerrados",
+     "plenário: 491, 502, 487 presentes por sessão (de 513); comissões: 12, 17, 38, 18, 16, 8",
+     "eventos encerrados com lista vazia: CN Sessão Não Deliberativa Solene; CN Sessão Não Deliberativa Solene",
+     "existe presença registrada por sessão e por reunião de comissão, já com id do deputado; ausência = 513 menos a lista (cuidado com licenciados e missão oficial, que a lista não distingue)",
+     "não há /eventos/{id}/requerimentos (HTTP 405); /eventos/{id}/pauta, /orgaos e /votacoes existem"
+    ],
+    "status": "ok",
+    "formato": "json"
+   },
+   "veredito": "usar",
+   "ms": 3426
+  },
+  {
+   "id": "camara-proposicoes",
+   "nome": "Câmara — proposições apresentadas na semana",
+   "grupo": "oficial",
+   "url": "https://dadosabertos.camara.leg.br/api/v2/proposicoes",
+   "custo": "0 — API aberta; +1 requisição por proposição pra saber o autor.",
+   "risco": "Baixo: API oficial; volume dominado por requerimentos e pareceres, precisa filtrar tipo.",
+   "medida": {
+    "itens": 393,
+    "janela": "7 dias",
+    "atrasoHoras": 4.5,
+    "idPolitico": false,
+    "amostra": [
+     {
+      "data": "2026-10-16T11:43-03:00",
+      "titulo": "REQ 4305/2026 (Idilvan Alencar): Nos termos do Regimento Interno da Câmara dos Deputados, requeiro a Vossa Excelência que seja submetida ao ",
+      "url": "https://dadosabertos.camara.leg.br/api/v2/proposicoes/2648323"
+     },
+     {
+      "data": "2026-10-16T11:28-03:00",
+      "titulo": "PL 5590/2026 (Dandara): Altera a Lei nº 14.597, de 14 de junho de 2023 Lei Geral do Esporte, para incluir o fomento do esporte universitário",
+      "url": "https://dadosabertos.camara.leg.br/api/v2/proposicoes/2648322"
+     },
+     {
+      "data": "2026-10-16T10:00-03:00",
+      "titulo": "PL 5589/2026 (Fábio Macedo): Dispõe sobre a regulamentação da profissão de Consultor de Imagem.",
+      "url": "https://dadosabertos.camara.leg.br/api/v2/proposicoes/2648319"
+     }
+    ],
+    "notas": [
+     "tipos: RPD 94, PRL 51, PL 49, REQ 46, RIC 36, PAR 13, SBT 13, EMP 10",
+     "a lista não traz autor: precisa de /proposicoes/{id}/autores (uri com id do deputado) ou consultar por deputado com ?idDeputadoAutor= (513 chamadas)",
+     "muito item é parecer, redação final, requerimento: filtrar PL/PLP/PEC/PDL/REQ/RIC/INC para o feed",
+     "paginação de 100 por página via links rel=next; header X-Total-Count disponível (pegar() não expõe headers)"
+    ],
+    "status": "ok",
+    "formato": "json"
+   },
+   "veredito": "usar",
+   "ms": 3902
+  },
+  {
+   "id": "camara-votacoes",
+   "nome": "Câmara — votações da semana e votos nominais",
+   "grupo": "oficial",
+   "url": "https://dadosabertos.camara.leg.br/api/v2/votacoes",
+   "custo": "0 — API aberta; 1 requisição por votação pra achar votos nominais.",
+   "risco": "Baixo: mesma fonte que o app já usa em produção.",
+   "medida": {
+    "itens": 78,
+    "janela": "7 dias",
+    "atrasoHoras": 24.4,
+    "idPolitico": true,
+    "amostra": [
+     {
+      "data": "2026-10-14T20:56:14-03:00",
+      "titulo": "PLEN: Rejeitada a Subemenda Substitutiva ao Projeto de Lei Complementar nº 281, de 2019, adotada pelo relator da Comissão Especial. Sim: 252",
+      "url": "https://dadosabertos.camara.leg.br/api/v2/votacoes/2236186-60/votos"
+     },
+     {
+      "data": "2026-10-14T19:42:50-03:00",
+      "titulo": "PLEN: Aprovada a Subemenda Substitutiva Global ao Projeto de Lei Complementar nº 186, de 2026, adotada pelo relator da Comissão de Indústria",
+      "url": "https://dadosabertos.camara.leg.br/api/v2/votacoes/2635476-36/votos"
+     },
+     {
+      "data": "2026-10-14T17:20:23-03:00",
+      "titulo": "PLEN: Rejeitado o Requerimento. Sim: 11; Não: 387; Total: 398. (399 votos nominais)",
+      "url": "https://dadosabertos.camara.leg.br/api/v2/votacoes/2635476-23/votos"
+     }
+    ],
+    "notas": [
+     "78 votações (PLEN 23, CN 1, CESPO 8, CEXEXPLO 20, CFT 8, CDU 1, CCP 13, CICS 4); só 3 nominais, somando 1294 votos com id do deputado",
+     "votação simbólica não tem /votos (lista vazia): pro feed, só a nominal liga ação a político; as demais servem como contexto do dia",
+     "votos trazem dataRegistroVoto, tipoVoto e deputado_.id; orientação de bancada em /votacoes/{id}/orientacoes",
+     "lista cabe numa página com itens=200 numa semana normal; acima disso, paginar"
+    ],
+    "status": "ok",
+    "formato": "json"
+   },
+   "veredito": "usar",
+   "ms": 11037
+  },
+  {
+   "id": "senado-agenda-comissoes",
+   "nome": "Senado — agenda de reuniões de comissão",
+   "grupo": "oficial",
+   "url": "https://legis.senado.leg.br/dadosabertos/comissao/agenda/{inicio}/{fim}",
+   "custo": "0 — API aberta, sem chave.",
+   "risco": "Baixo: API oficial; reunião não lista os senadores presentes.",
+   "medida": {
+    "itens": 6,
+    "janela": "7 dias",
+    "atrasoHoras": 30.2,
+    "idPolitico": false,
+    "amostra": [
+     {
+      "data": "2026-10-15T10:00:00.000-03:00",
+      "titulo": "CMMPV 1370/2026 (CN) — 2ª Reunião Semipresencial (Realizada)",
+      "url": "https://legis.senado.leg.br/dadosabertos/comissao/reuniao/14990"
+     },
+     {
+      "data": "2026-10-15T09:00:00.000-03:00",
+      "titulo": "CDH (SF) — 71ª Reunião Extraordinária Semipresencial (Realizada)",
+      "url": "https://legis.senado.leg.br/dadosabertos/comissao/reuniao/14968"
+     },
+     {
+      "data": "2026-10-14T15:00:00.000-03:00",
+      "titulo": "CDH (SF) — 4º Evento Remota (Realizada)",
+      "url": "https://legis.senado.leg.br/dadosabertos/comissao/reuniao/14984"
+     }
+    ],
+    "notas": [
+     "situações: Realizada 4, Não Realizada 2",
+     "detalhe da reunião (/comissao/reuniao/{codigo}) tem só \"tipoPresenca\", \"Semipresencial\", \"dataApresentacao\"; não lista quem compareceu",
+     "inclui comissões mistas (CN); relator do item vem com código do parlamentar dentro da pauta do detalhe"
+    ],
+    "status": "ok",
+    "formato": "json"
+   },
+   "veredito": "usar",
+   "ms": 1876
+  },
+  {
+   "id": "senado-agenda-plenario",
+   "nome": "Senado — agenda e sessões do plenário (SF e CN)",
+   "grupo": "oficial",
+   "url": "https://legis.senado.leg.br/dadosabertos/plenario/agenda/mes/{AAAAMMDD}",
+   "custo": "0 — API aberta, sem chave.",
+   "risco": "Baixo: API oficial; JSON é tradução do XML (objeto vira lista só quando há mais de um).",
+   "medida": {
+    "itens": 9,
+    "janela": "7 dias",
+    "atrasoHoras": 7.2,
+    "idPolitico": false,
+    "amostra": [
+     {
+      "data": "2026-10-16T09:00-03:00",
+      "titulo": "CN — SESSÃO SOLENE (Encerrada)",
+      "url": "https://legis.senado.leg.br/dadosabertos/plenario/encontro/592942"
+     },
+     {
+      "data": "2026-10-15T14:00-03:00",
+      "titulo": "SF — SESSÃO DELIBERATIVA ORDINÁRIA (Encerrada)",
+      "url": "https://legis.senado.leg.br/dadosabertos/plenario/encontro/591273"
+     },
+     {
+      "data": "2026-10-14T14:00-03:00",
+      "titulo": "SF — SESSÃO DELIBERATIVA ORDINÁRIA (Encerrada)",
+      "url": "https://legis.senado.leg.br/dadosabertos/plenario/encontro/591267"
+     }
+    ],
+    "notas": [
+     "8 sessões encerradas, 1 não realizadas/canceladas/agendadas na janela",
+     "o serviço /agenda/mes/{data} devolve da data até o fim do mês; traz oradores inscritos por nome (sem código), sem id do senador",
+     "resultado por item de pauta em /plenario/resultado/{AAAAMMDD} e detalhes em /plenario/encontro/{codigo}"
+    ],
+    "status": "ok",
+    "formato": "json"
+   },
+   "veredito": "usar",
+   "ms": 1159
+  },
+  {
+   "id": "senado-ceaps",
+   "nome": "Senado — CEAPS (cota) pela API administrativa",
+   "grupo": "oficial",
+   "url": "https://adm.senado.gov.br/adm-dadosabertos/api/v1/senadores/despesas_ceaps/2026",
+   "custo": "0 — API aberta; ~6 MB JSON por ano, 1 requisição por dia.",
+   "risco": "Baixo: API oficial de transparência; lançamento atrasa semanas e há datas digitadas erradas.",
+   "medida": {
+    "itens": 5,
+    "janela": "7 dias (pela data do documento)",
+    "atrasoHoras": 40.2,
+    "idPolitico": true,
+    "amostra": [
+     {
+      "data": "2026-10-15T00:00:00-03:00",
+      "titulo": "IVETE DA SILVEIRA (6010): Aluguel de imóveis para escritório político, compreendendo despesas concernentes a eles. — AMBIENTAL LIMPEZA URBAN",
+      "url": "https://adm.senado.gov.br/adm-dadosabertos/api/v1/senadores/despesas_ceaps/2026"
+     },
+     {
+      "data": "2026-10-15T00:00:00-03:00",
+      "titulo": "IVETE DA SILVEIRA (6010): Aluguel de imóveis para escritório político, compreendendo despesas concernentes a eles. — JNCN ADMINISTRADORA DE ",
+      "url": "https://adm.senado.gov.br/adm-dadosabertos/api/v1/senadores/despesas_ceaps/2026"
+     },
+     {
+      "data": "2026-10-15T00:00:00-03:00",
+      "titulo": "IVETE DA SILVEIRA (6010): Aluguel de imóveis para escritório político, compreendendo despesas concernentes a eles. — PREEITURA DE JOINVILLE ",
+      "url": "https://adm.senado.gov.br/adm-dadosabertos/api/v1/senadores/despesas_ceaps/2026"
+     }
+    ],
+    "notas": [
+     "15494 lançamentos no ano, 6.4 MB em 9.5 s; por mês: 1:1445 2:1828 3:2193 4:1956 5:2043 6:1795 7:1771 8:1501 9:847 10:115",
+     "meses recentes ainda incompletos (o reembolso entra semanas depois); sem data de lançamento, atraso real só comparando dia a dia",
+     "1 lançamentos com data no futuro (erro na origem)",
+     "codSenador = mesmo código da API legislativa; sem link do comprovante",
+     "CSV antigo despesa_ceaps_2026.csv: HTTP 200 — alternativa em CSV também funciona"
+    ],
+    "status": "ok",
+    "formato": "json"
+   },
+   "veredito": "usar",
+   "ms": 20570
+  },
+  {
+   "id": "senado-discursos",
+   "nome": "Senado — pronunciamentos do plenário",
+   "grupo": "oficial",
+   "url": "https://legis.senado.leg.br/dadosabertos/plenario/lista/discursos/{inicio}/{fim}",
+   "custo": "0 — API aberta; 1 requisição por período (máx. 1 mês).",
+   "risco": "Baixo na fonte; o pronunciamento só entra depois de taquigrafado e publicado no Diário, com semanas de atraso.",
+   "medida": {
+    "itens": 0,
+    "janela": "7 dias",
+    "atrasoHoras": 520.2,
+    "idPolitico": true,
+    "amostra": [
+     {
+      "data": "2026-09-25T00:00:00-03:00",
+      "titulo": "Izalci Lucas (PL-DF) — Não classificado: Sessão especial destinada a celebrar os 25 anos da Fundação de Ensino e Pesquisa em Ciências da Saú",
+      "url": "https://www25.senado.leg.br/web/atividade/pronunciamentos/-/p/texto/524246"
+     },
+     {
+      "data": "2026-09-25T00:00:00-03:00",
+      "titulo": "ALÉCIO DE OLIVEIRA E SILVA — Discurso: Sessão especial destinada a celebrar os 25 anos da Fundação de Ensino e Pesquisa em Ciências da Saúde",
+      "url": "https://www25.senado.leg.br/web/atividade/pronunciamentos/-/p/texto/524245"
+     },
+     {
+      "data": "2026-09-25T00:00:00-03:00",
+      "titulo": "RINALDO DE SOUZA NEVES — Discurso: Sessão especial destinada a celebrar os 25 anos da Fundação de Ensino e Pesquisa em Ciências da Saúde (Fe",
+      "url": "https://www25.senado.leg.br/web/atividade/pronunciamentos/-/p/texto/524244"
+     }
+    ],
+    "notas": [
+     "7 dias: 0 pronunciamentos; 30 dias: 32 (13 de senadores com CodigoParlamentar, o resto é autor externo em sessão especial)",
+     "atraso = horas desde o pronunciamento mais recente já publicado; sessões da semana costumam aparecer só depois da publicação no Diário do Senado",
+     "traz resumo, indexação e link pro texto integral (.txt em /discurso/texto-integral/{codigo}); por senador: /senador/{codigo}/discursos",
+     "JSON vindo de XML: objeto único não vem em lista"
+    ],
+    "status": "parcial",
+    "formato": "json"
+   },
+   "veredito": "usar com cuidado",
+   "ms": 1395
+  },
+  {
+   "id": "senado-materias",
+   "nome": "Senado — documentos e matérias apresentadas",
+   "grupo": "oficial",
+   "url": "https://legis.senado.leg.br/dadosabertos/processo/documento",
+   "custo": "0 — API aberta, sem chave.",
+   "risco": "Baixo: API oficial nova (processo); maioria dos documentos é ofício/emenda/relatório, precisa filtrar tipo.",
+   "medida": {
+    "itens": 363,
+    "janela": "7 dias",
+    "atrasoHoras": 16.2,
+    "idPolitico": true,
+    "amostra": [
+     {
+      "data": "2026-10-13T00:00:00-03:00",
+      "titulo": "EMENDA 61 - MPV 1394/2026 (Mauricio Neves): Dê-se nova redação à Medida Provisória nos termos dos itens 1 e 2",
+      "url": "http://legis.senado.leg.br/sdleg-getter/dadosabertos/documento/3812c7d5-af1d-475b-8c5f-c705b7c3e083"
+     },
+     {
+      "data": "2026-10-13T00:00:00-03:00",
+      "titulo": "EMENDA 62 - MPV 1394/2026 (Mauricio Neves): Suprima-se o art. 29 da Medida Provisória nº 1.394, de 25 de setembro de 2026, e dê-se nova reda",
+      "url": "http://legis.senado.leg.br/sdleg-getter/dadosabertos/documento/c1d3a603-8c88-40e3-aa19-35ca223d0b07"
+     },
+     {
+      "data": "2026-10-13T00:00:00-03:00",
+      "titulo": "EMENDA 63 - MPV 1394/2026 (Mauricio Neves): Suprimam-se os arts. 2º e 26; e acrescentem-se arts. 29-1 e 29-2 à Medida Provisória",
+      "url": "http://legis.senado.leg.br/sdleg-getter/dadosabertos/documento/c56d879e-d659-46ff-8442-d11bac16ed30"
+     }
+    ],
+    "notas": [
+     "363 documentos, 174 com autor parlamentar identificado por codigoParlamentar; tipos: EMENDA 64, OFICIO 54, AVULSO_INICIAL 48, RELATORIO 42, REQUERIMENTO 35, PROJETO_LEI_ORDINARIA 21, LISTAGEM_RELATORIO 17, ATA 15",
+     "/processo por data de apresentação: 54 processos novos, mas autoria só em texto (sem código)",
+     "filtro por autor: ?codigoParlamentarAutor= (documento e processo); janela máx. 6 meses em documento, 1 ano em processo",
+     "sem paginação: devolve tudo numa resposta"
+    ],
+    "status": "ok",
+    "formato": "json"
+   },
+   "veredito": "usar",
+   "ms": 695
+  },
+  {
+   "id": "senado-presenca",
+   "nome": "Senado — presença por sessão",
+   "grupo": "oficial",
+   "url": "https://legis.senado.leg.br/dadosabertos/v3/api-docs",
+   "custo": "0 — mas não há serviço próprio.",
+   "risco": "Médio: sem lista oficial de presença na API, qualquer \"faltou\" vira inferência a partir dos votos.",
+   "medida": {
+    "itens": 0,
+    "janela": "—",
+    "atrasoHoras": null,
+    "idPolitico": false,
+    "amostra": [],
+    "notas": [
+     "rotas da API (OpenAPI v3) com presença/comparecimento: /dadosabertos/plenario/lista/tiposComparecimento",
+     "não existe lista de presença por sessão nem por reunião de comissão na API de dados abertos",
+     "/plenario/encontro/{codigo} e /resumo só têm tipoPresenca (presencial/semipresencial) e permitePresenca, não quem esteve",
+     "proxy: votos nominais trazem P-NRV/AP/LS/NCom por senador — nesta semana cobre 2 sessão(ões) com votação nominal",
+     "o portal do Senado publica frequência mensal em página HTML (não testado aqui)"
+    ],
+    "status": "falhou",
+    "formato": "json"
+   },
+   "veredito": "fora, por ora",
+   "ms": 470
+  },
+  {
+   "id": "senado-votacoes",
+   "nome": "Senado — votações nominais da semana",
+   "grupo": "oficial",
+   "url": "https://legis.senado.leg.br/dadosabertos/votacao",
+   "custo": "0 — API aberta, sem chave.",
+   "risco": "Baixo: mesma fonte que o app já usa; votação simbólica e secreta não identificam o voto.",
+   "medida": {
+    "itens": 3,
+    "janela": "7 dias",
+    "atrasoHoras": 40.2,
+    "idPolitico": true,
+    "amostra": [
+     {
+      "data": "2026-10-15T00:00:00-03:00",
+      "titulo": "PLP 186/2026: Votação nominal do Projeto de Lei Complementar nº 186, de 2026, nos termos do parecer. (81 votos)",
+      "url": "https://legis.senado.leg.br/dadosabertos/votacao?codigoSessao=591273"
+     },
+     {
+      "data": "2026-10-14T00:00:00-03:00",
+      "titulo": "PEC 221/2019: Votação nominal da Proposta de Emenda à Constituição nº 221, de 2019, em segundo turno. (81 votos)",
+      "url": "https://legis.senado.leg.br/dadosabertos/votacao?codigoSessao=591267"
+     },
+     {
+      "data": "2026-10-14T00:00:00-03:00",
+      "titulo": "PEC 221/2019: Votação nominal da Proposta de Emenda à Constituição nº 221, de 2019, em primeiro turno. (81 votos)",
+      "url": "https://legis.senado.leg.br/dadosabertos/votacao?codigoSessao=591267"
+     }
+    ],
+    "notas": [
+     "3 votações nominais (0 secretas), 243 votos individuais com codigoParlamentar",
+     "siglas de voto: Sim 228, P-NRV 4, Presidente (art. 51 RISF) 3, Não 2, AP 2, NCom 4 — P-NRV (presente, não votou), AP/LS/MIS/NCom etc. viram proxy de presença só nos dias com votação nominal",
+     "só nominais: votação simbólica do plenário fica em /plenario/resultado/{data}, sem voto por senador",
+     "votações de comissão em /votacaoComissao/comissao/{sigla} ou /parlamentar/{codigo} (não medido aqui)",
+     "atraso medido pela data da sessão (sem hora): votos aparecem no mesmo dia"
+    ],
+    "status": "ok",
+    "formato": "json"
+   },
+   "veredito": "usar",
+   "ms": 1148
+  },
+  {
+   "id": "exec-agenda-presidente",
+   "nome": "Agenda do Presidente da República (Planalto)",
+   "grupo": "executivo",
+   "url": "https://www.gov.br/planalto/pt-br/acompanhe-o-planalto/agenda-do-presidente-da-republica-lula/agenda-do-presidente-da-republica",
+   "custo": "0 — página pública, uma requisição por dia de agenda",
+   "risco": "Só HTML (sem JSON/feed); a URL leva o nome do presidente no caminho e muda a cada mandato, e o gov.br corta IP com volume alto devolvendo 200 com página de bloqueio.",
+   "medida": {
+    "status": "ok",
+    "itens": 4,
+    "janela": "7 dias",
+    "atrasoHoras": 6.9,
+    "formato": "html",
+    "idPolitico": false,
+    "amostra": [
+     {
+      "data": "2026-10-16T09:20:00-03:00",
+      "titulo": "Cerimônia de Promulgação das Propostas de Emenda à Constituição que Põem Fim à Escala de Trabalho 6x1 e Estabelecem a Aposentadoria Diferenc",
+      "url": "https://www.gov.br/planalto/pt-br/acompanhe-o-planalto/agenda-do-presidente-da-republica-lula/agenda-do-presidente-da-republica/2026-10-16"
+     },
+     {
+      "data": "2026-10-14T12:00:00-03:00",
+      "titulo": "Assinatura do Decreto que regulamenta o Marco Legal da Indústria de Jogos Eletrônicos — Palácio do Planalto",
+      "url": "https://www.gov.br/planalto/pt-br/acompanhe-o-planalto/agenda-do-presidente-da-republica-lula/agenda-do-presidente-da-republica/2026-10-14"
+     },
+     {
+      "data": "2026-10-13T10:00:00-03:00",
+      "titulo": "Cerimônia sobre medidas para microempreendedores individuais — Palácio do Planalto",
+      "url": "https://www.gov.br/planalto/pt-br/acompanhe-o-planalto/agenda-do-presidente-da-republica-lula/agenda-do-presidente-da-republica/2026-10-13"
+     }
+    ],
+    "notas": [
+     "8 dias consultados (2026-10-09 a 2026-10-16): 4 com agenda, 4 sem página (404 = dia sem compromisso publicado), 0 bloqueados.",
+     "Formato: HTML Plone com horário, título e local; sem JSON (Accept: application/json devolve HTML) e sem RSS. Cada compromisso tem um .ics em …/<slug>/vcal_view.",
+     "Dia sem compromisso não tem página (404), então \"silêncio\" e \"erro\" só se distinguem pelo código HTTP.",
+     "Liga ao presidente por construção (a página é dele), mas não há id oficial no item."
+    ]
+   },
+   "veredito": "usar",
+   "ms": 18435
+  },
+  {
+   "id": "exec-dou-leitura-diaria",
+   "nome": "DOU — leitura do dia, seção 1 (todos os atos)",
+   "grupo": "executivo",
+   "url": "https://www.in.gov.br/leiturajornal",
+   "custo": "0 — página pública por dia e seção, JSON embutido com todos os atos",
+   "risco": "Raspagem de JSON embutido (script#params) do portal; volume alto e quase nada é ligado a político eleito sem casar nome.",
+   "medida": {
+    "status": "ok",
+    "itens": 1872,
+    "janela": "7 dias (DO1 + extras)",
+    "atrasoHoras": 34.2,
+    "formato": "html",
+    "idPolitico": false,
+    "amostra": [
+     {
+      "data": "2026-10-15",
+      "titulo": "Mensagem: DESPACHOS DO PRESIDENTE DA REPÚBLICA",
+      "url": "https://www.in.gov.br/web/dou/-/despachos-do-presidente-da-republica-738311640"
+     },
+     {
+      "data": "2026-10-14",
+      "titulo": "Decreto numerado: DECRETO Nº 13.138, DE 14 DE OUTUBRO DE 2026",
+      "url": "https://www.in.gov.br/web/dou/-/decreto-n-13.138-de-14-de-outubro-de-2026-738307319"
+     },
+     {
+      "data": "2026-10-14",
+      "titulo": "Mensagem: DESPACHO DO PRESIDENTE DA REPÚBLICA",
+      "url": "https://www.in.gov.br/web/dou/-/despacho-do-presidente-da-republica-738250613"
+     }
+    ],
+    "notas": [
+     "Atos por dia (DO1 + edição extra): 10-09: 435, 10-10: 0, 10-11: 1, 10-12: 0, 10-13: 449, 10-14: 306, 10-15: 307, 10-16: 374. Fim de semana e feriado não têm edição. Edições extras somaram 53.",
+     "10 atos sob \"Atos do Poder Executivo/Legislativo\", raiz \"Presidência da República\" ou título \"… do Presidente da República\" — conta por hierarquia, que erra (ver exec-dou-presidente).",
+     "Cada ato traz tipo, título, órgão (hierarquia), data, página e resumo de ~400 caracteres; o texto integral está no link do ato.",
+     "Sai de madrugada no dia da publicação; atraso medido supondo 06h de Brasília."
+    ]
+   },
+   "veredito": "usar",
+   "ms": 13275
+  },
+  {
+   "id": "exec-dou-presidente",
+   "nome": "DOU — atos assinados pelo presidente (busca pública)",
+   "grupo": "executivo",
+   "url": "https://www.in.gov.br/consulta/-/buscar/dou",
+   "custo": "0 — busca pública do portal, JSON embutido no HTML; o XML oficial (INLABS) exige cadastro e login",
+   "risco": "Raspagem da busca do portal (Liferay) sem API documentada; a busca é por texto, então pega o nome do signatário mas também atos que só citam o presidente.",
+   "medida": {
+    "status": "ok",
+    "itens": 8,
+    "janela": "7 dias",
+    "atrasoHoras": 58.2,
+    "formato": "html",
+    "idPolitico": false,
+    "amostra": [
+     {
+      "data": "2026-10-14",
+      "titulo": "DECRETO Nº 13.138, DE 14 DE OUTUBRO DE 2026 (DO1_EXTRA_B)",
+      "url": "https://www.in.gov.br/web/dou/-/decreto-n-13.138-de-14-de-outubro-de-2026-738307319"
+     },
+     {
+      "data": "2026-10-13",
+      "titulo": "DECRETO Nº 13.135, DE 9 DE OUTUBRO DE 2026 (DO1)",
+      "url": "https://www.in.gov.br/web/dou/-/decreto-n-13.135-de-9-de-outubro-de-2026-737787837"
+     },
+     {
+      "data": "2026-10-13",
+      "titulo": "DECRETO Nº 13.137, DE 9 DE OUTUBRO DE 2026 (DO1)",
+      "url": "https://www.in.gov.br/web/dou/-/decreto-n-13.137-de-9-de-outubro-de-2026-737775753"
+     }
+    ],
+    "notas": [
+     "Busca exata pelo nome do signatário, 2026-10-09 a 2026-10-16: 8 resultado(s) — 6 Decreto numerado, 2 Medida Provisória.",
+     "Pega decretos e MPs (assinados com o nome por extenso). Despachos e mensagens do presidente não trazem o nome e escapam; a seção \"Presidência da República\" da leitura diária cobre esses.",
+     "O campo hierarchyStr não é confiável pra identificar o autor (decretos de 9/10 vieram sob \"Atos do Poder Judiciário/STF\"); filtrar por órgão perde atos.",
+     "O mesmo truque serve pra qualquer autoridade que assina atos (ministros em portarias), mas a ligação é por nome, sem id oficial.",
+     "INLABS (inlabs.in.gov.br, XML completo diário) exige cadastro e login — fora da regra desta fase. Não há API REST aberta documentada."
+    ]
+   },
+   "veredito": "usar",
+   "ms": 1133
+  },
+  {
+   "id": "exec-eagendas-ministros",
+   "nome": "e-Agendas (CGU) — agenda de ministros",
+   "grupo": "executivo",
+   "url": "https://eagendas.cgu.gov.br",
+   "custo": "0 — página pública com JSON embutido; a API v2 oficial exige token gerado após login gov.br",
+   "risco": "Raspagem de JSON embutido no HTML (ng-init) de um app Angular: muda sem aviso; o download oficial em planilha passa por reCAPTCHA, então fica fora.",
+   "medida": {
+    "status": "ok",
+    "itens": 29,
+    "janela": "7 dias, 4 ministros",
+    "atrasoHoras": 1.6,
+    "formato": "html",
+    "idPolitico": false,
+    "amostra": [
+     {
+      "data": "2026-10-16T16:00",
+      "titulo": "[MF] Evento - Entrevista ao vivo TV Band",
+      "url": "https://eagendas.cgu.gov.br/info-compromisso/agenda/48470/compromisso/976437"
+     },
+     {
+      "data": "2026-10-16T09:00",
+      "titulo": "[MS] Evento - Recepção dos Novos(as) Servidores(as) do Hospital São Paulo e Assinatura do Programa Nacional de Reestruturação do Hospitais U",
+      "url": "https://eagendas.cgu.gov.br/info-compromisso/agenda/40732/compromisso/977303"
+     },
+     {
+      "data": "2026-10-15T13:30",
+      "titulo": "[MS] Evento - Visita ao Hospital Federal de Bonsucesso.",
+      "url": "https://eagendas.cgu.gov.br/info-compromisso/agenda/40732/compromisso/975787"
+     }
+    ],
+    "notas": [
+     "API v2 (https://eagendas.cgu.gov.br/api/v2) sem token: HTTP 401 — o token é gerado em \"Meus tokens\" depois do login (doc: github.com/cgugovbr/eagendas-publico).",
+     "Ministros medidos: MF (DARIO): 9 na janela / 424 no histórico; MS (ALEXANDRE): 13 na janela / 2621 no histórico; MEC (LEONARDO): 6 na janela / 405 no histórico; MJSP (WELLINGTON): 1 na janela / 481 no histórico.",
+     "Compromissos (reunião, audiência, evento) desde 2026-10-09; viagens SCDP e afastamentos ficam fora da contagem mas vêm no mesmo JSON.",
+     "9 de 29 compromissos foram publicados antes de acontecer; o resto saiu depois (agenda é atualizada a posteriori).",
+     "Cada item traz título, local, horário, participantes (com CPF mascarado — não guardar) e objetivo; reuniões com parlamentares aparecem só pelo nome no título, sem id da Câmara/Senado.",
+     "O presidente da República não está no e-Agendas (só assessores do Gabinete Pessoal); a agenda dele fica no site do Planalto."
+    ]
+   },
+   "veredito": "usar",
+   "ms": 40494
+  },
+  {
+   "id": "exec-emendas-transparencia",
+   "nome": "Portal da Transparência — emendas parlamentares (download)",
+   "grupo": "executivo",
+   "url": "https://portaldatransparencia.gov.br/download-de-dados/emendas-parlamentares",
+   "custo": "0 — ZIP aberto (~32 MB); a API de dados exige chave gratuita pedida por e-mail (não temos)",
+   "risco": "Arquivo único reprocessado periodicamente (não é feed): dá pra calcular diferença entre versões, mas o autor vem com código do orçamento e nome, sem id da Câmara/Senado.",
+   "medida": {
+    "status": "parcial",
+    "itens": 5670,
+    "janela": "emendas de 2026 (arquivo completo)",
+    "atrasoHoras": 160.2,
+    "formato": "zip",
+    "idPolitico": false,
+    "amostra": [
+     {
+      "data": "2026",
+      "titulo": "EDUARDO BRAGA — Emenda Individual - Transferências com Finalidade Definida — MÚLTIPLO — pago R$ 51291355,00",
+      "url": "https://portaldatransparencia.gov.br/download-de-dados/emendas-parlamentares#202629090001"
+     },
+     {
+      "data": "2026",
+      "titulo": "RENAN CALHEIROS — Emenda Individual - Transferências com Finalidade Definida — MÚLTIPLO — pago R$ 46800000,00",
+      "url": "https://portaldatransparencia.gov.br/download-de-dados/emendas-parlamentares#202622890005"
+     },
+     {
+      "data": "2026",
+      "titulo": "CID GOMES — Emenda Individual - Transferências com Finalidade Definida — MÚLTIPLO — pago R$ 45000000,00",
+      "url": "https://portaldatransparencia.gov.br/download-de-dados/emendas-parlamentares#202640810002"
+     }
+    ],
+    "notas": [
+     "API /api-de-dados/emendas sem chave: HTTP 401 (chave gratuita via cadastro por e-mail).",
+     "https://portaldatransparencia.gov.br/download-de-dados/emendas-parlamentares/UNICO redireciona pra dadosabertos-download.cgu.gov.br/PortalDaTransparencia/saida/emendas-parlamentares/EmendasParlamentares.zip (32.5 MB, Last-Modified Sat, 10 Oct 2026 02:57:21 GMT). Partes do site estático passam por captcha AWS WAF; o arquivo, não.",
+     "94663 linhas no arquivo (todos os anos desde 2014); 5670 emendas de 2026, 632 autores distintos (inclui bancadas e comissões).",
+     "Colunas: código da emenda, ano, tipo, \"Código do Autor\" (código próprio do orçamento/CMO, não é id da Câmara nem do Senado), nome do autor em caixa alta, localidade, função/programa/ação e valores empenhado/liquidado/pago — acumulados, sem data por evento.",
+     "Casamento por nome exato (sem acento) com os 81 senadores do senado.json: 76 encontrados. O resto exige tabela de-para (nome parlamentar ≠ nome no orçamento).",
+     "Pagamentos por favorecido têm granularidade mensal (Ano/Mês), sem dia: 202608: 3924, 202609: 4890, 202610: 1401 linhas. Serve pra resumo mensal (\"sua emenda pagou X a Y\"), não pra feed diário.",
+     "A página de detalhe da emenda no portal respondeu 405 (WAF) a cliente sem navegador; a amostra aponta pra página de download com o código da emenda.",
+     "Atraso = horas desde o Last-Modified do ZIP (o portal informa atualização periódica, não diária)."
+    ]
+   },
+   "veredito": "usar com cuidado",
+   "ms": 3630
+  },
+  {
+   "id": "exec-noticias-planalto",
+   "nome": "Notícias do Planalto (feed Atom)",
+   "grupo": "executivo",
+   "url": "https://www.gov.br/planalto/pt-br/acompanhe-o-planalto/noticias/RSS",
+   "custo": "0 — feed público",
+   "risco": "Comunicação oficial (versão do governo), não registro de ato; mesmo limite por volume de IP do gov.br.",
+   "medida": {
+    "status": "parcial",
+    "itens": 0,
+    "janela": "7 dias",
+    "atrasoHoras": 461.2,
+    "formato": "rss",
+    "idPolitico": false,
+    "amostra": [],
+    "notas": [
+     "Feed Atom com 30 entradas; 0 nos últimos 7 dias. Título, link e data; o resumo é curto.",
+     "Formato RSS 1.0 (RDF) com dc:date. Útil como contexto do dia do presidente, complementando a agenda.",
+     "Nada nos últimos 7 dias: provável congelamento da publicidade institucional no período eleitoral (a agenda segue publicada). Medir de novo depois do 2º turno.",
+     "Agência Gov (agenciagov.ebc.com.br/rss, /noticias/rss, /noticias/feed) deu 404 nesta rodada."
+    ]
+   },
+   "veredito": "usar com cuidado",
+   "ms": 714
+  },
+  {
+   "id": "imprensa-agencia-brasil",
+   "nome": "Agência Brasil (EBC) — Política",
+   "grupo": "imprensa",
+   "url": "https://agenciabrasil.ebc.com.br/rss/politica/feed.xml",
+   "custo": "0 — RSS público",
+   "risco": "Baixo: agência pública, conteúdo sob Creative Commons BY (pode republicar com crédito).",
+   "medida": {
+    "status": "ok",
+    "itens": 10,
+    "janela": "feed atual (~20 h)",
+    "atrasoHoras": 0.5,
+    "formato": "rss",
+    "idPolitico": false,
+    "amostra": [
+     {
+      "titulo": "Alcolumbre homenageia Paim no fim da 6x1; entenda motivo",
+      "data": "2026-10-16T18:44:00.000Z",
+      "url": "https://agenciabrasil.ebc.com.br/politica/noticia/2026-10/alcolumbre-homenageia-paim-no-fim-da-6x1-entenda-motivo",
+      "resumo": "O presidente do Congresso Nacional, senador Davi Alcolumbre (União-AP), quebrou o protocolo, nesta sexta-feira (16), durante a promulgação da emenda constitucional que acabou com a escala 6x1 no Brasil ao convidar o senador Paulo Paim (PT-RS) (esquerda na foto em destaque) para se sentar na mesa oficial da cerimônia. “Eu sei que o cerimonial estabeleceu esse rito constitucional de uma sessão solene, mas o meu coração não me permitiria, presidente Hugo Motta e presidente Lula, deixar de convidar uma pessoa para a mesa para representar o povo brasileiro”, disse Alcolumbre. Notícias relacionadas: Do trabalho sem limite ao fim da 6x1: veja avanço da jornada no Brasil. Saiba quando começa a valer o fim da escala 6x1. Descanso de trabalhador não quebra empresas, diz Lula após fim da 6x1. O parlamentar gaúcho Paulo Paim está há três mandatos no Senado, tendo sido deputado federal por outros quatro mandatos. Antes, Paim foi presidente do Sindicato dos Trabalhadores Metalúrgicos de Canoas (RS), na década de 1980. “Nós precisamos fazer uma homenagem a um grande ser humano, a um grande brasileiro que esteve, nas últimas quatro décadas, lutando por esta conquista”, completou Alcolumbre. Ainda em 1994, Paulo Paim apresentou o Projeto de Lei 4.653 para reduzir a jornada de trabalho de 44 horas para 40 horas semanais, mas o texto acabou arquivado, assim como outras propostas apresentadas durante os mandatos do político gaúcho. Nesta sexta, ao conversar com jornalistas, Paim destacou que a emoção de aprovar o fim da escala de seis dias de trabalho por um de descanso, que também reduz a jornada para 40 horas, é parecida com a promulgação da Constituição, em 1988, quando a jornada foi reduzida de 48 para 44 horas semanais. “Eu me sinto realizado, de lá para cá, da constituinte, eu apresentei dez projetos”, disse, acrescentando que a emenda promulgada hoje “vai melhorar a vida da nossa gente”. O senador Paulo Paim deixa o Senado no final desta legislatura. Com 76 anos, ele decidiu não disputar nova vaga pelo Rio Grande do Sul na eleição deste ano após mais de 40 anos de vida pública. Brasília – DF – 16/10/2026 -Benedita da Silva e Paulo Paim celebram promulgação da emenda constitucional que põe fim à escala 6x1 . - Lula Marques/Agência Brasil. Fim da 6x1 O Congresso Nacional promulgou, nesta sexta-feira (16), a Emenda Constitucional 141 de 2026, que põe fim à escala de um dia de descanso para cada seis trabalhados (6x1) e prevê a escala 5x2 , com duas folgas por semana, para todos os trabalhadores do Brasil dentro de dois meses. No caso da redução de 44 horas para 40 horas, ela terá um período de transição mais longo, caindo para 42 horas em 60 dias e para 40 horas daqui a 14 meses, também sem redução salarial. Nascida a partir de pressão das ruas e atendendo a uma demanda histórica dos trabalhadores e sindicatos, a proposta teve a tramitação concluída na última quarta-feira (14) no Senado, com 75 votos favoráveis contra 1, do ex-vice-presidente e senador Hamilton Mourão (Republicanos-RS). Apoiada pelo governo, a votação contou com apoio também da oposição, que era contra a PEC e tentava impedir a votação nesta semana. Após a sessão ter sido marcada, no entanto, a oposição liberou a bancada, que votou majoritariamente pelo fim da 6x1.",
+      "texto": true
+     },
+     {
+      "titulo": "Congresso promulga emenda de aposentadoria especial de agente de saúde",
+      "data": "2026-10-16T16:31:00.000Z",
+      "url": "https://agenciabrasil.ebc.com.br/politica/noticia/2026-10/congresso-promulga-emenda-de-aposentadoria-especial-de-agente-de-saude",
+      "resumo": "O Congresso Nacional promulgou, nesta sexta-feira (16), a Emenda Constitucional nº 140 de 2026, que cria regras específicas para aposentadoria diferenciada dos agentes comunitários de saúde (ACS) e dos agentes de combate às endemias (ACE). A emenda fixa requisitos diferenciados para esses trabalhadores no Regime Próprio de Previdência Social (RPPS) e no Regime Geral de Previdência Social (RGPS), com idade mínima de 57 anos para mulheres e 60 anos para homens, condicionada a 25 anos de contribuição e de efetivo exercício na atividade. Notícias relacionadas: Congresso promulga emenda do fim da 6x1; escala 5x2 começa em 60 dias. Atualmente, o regime geral prevê 62 anos de idade mínima para mulheres e 65 para homens. Aprovada em julho no Senado , a nova emenda foi promulgada hoje em sessão solene com participação dos presidentes do Senado, Davi Alcolumbre (União-AP), da Câmara, Hugo Motta (Republicanos-PB), e do presidente da República, Luiz Inácio Lula da Silva. O presidente do Congresso, Davi Alcolumbre, lembrou que a proposta começou a tramitar em 2021 e destacou que a promulgação traz “dignidade para o trabalhador”. “Esses profissionais levam o Estado brasileiro aonde ele, em muitas das vezes, não chega. Hoje, o Estado brasileiro reconhece o valor de cada um de vocês. A aposentadoria especial é o reconhecimento de uma vida inteira de trabalho e de cuidado”, ressaltou Alcolumbre. O presidente Lula disse que “a gente não tem noção do trabalho” que esses agentes de saúde fazem, ao ir às casas das pessoas acompanhar doentes e prevenir doenças transmissíveis. “Se eles reivindicam uma aposentadoria especial, em vez de a gente simplesmente negar, [temos que questionar se] é necessário? É importante? É justo? Ora, se é importante, necessário e justo, a gente não tem outra coisa a fazer que promulgar o direito de eles se aposentarem”, comentou o presidente. Presente na galeria do plenário do Senado, um grupo de agentes comunitários de saúde e de combate às endemias comemorava a promulgação na nova emenda constitucional. Emenda 140 O texto promulgado hoje também estabelece regras permanentes e transitórias de aposentadoria, disciplina a forma de contratação dos profissionais, prevê assistência financeira complementar da União e estende as novas regras aos agentes indígenas de saúde e aos agentes indígenas de saneamento. A proposta prevê assistência financeira complementar da União aos estados, ao Distrito Federal e aos municípios para compensar o aumento das despesas dos regimes próprios de previdência. Também determina repasses ao RGPS para compensar o impacto das aposentadorias concedidas com base nas novas regras. As mudanças valerão tanto para os profissionais vinculados ao RPPS quanto para os segurados do RGPS, administrado pelo Instituto Nacional do Seguro Social (INSS). Atualmente, essas categorias seguem as regras gerais de aposentadoria, que preveem idade mínima de 62 anos para mulheres e 65 anos para homens. Além disso, o texto assegura o cômputo, para fins previdenciários, de período de mandato classista e de tempo em readaptação funcional quando decorrente de acidente de trabalho, doença profissional ou doença do trabalho, e estabelece regras transitórias específicas para agentes vinculados ao RPPS e ao RGPS, com escalonamento de idades, regra de pontos e disciplina de integralidade e paridade em hipóteses definidas no texto.",
+      "texto": true
+     },
+     {
+      "titulo": "Descanso de trabalhador não quebra empresas, diz Lula após fim da 6x1",
+      "data": "2026-10-16T15:59:00.000Z",
+      "url": "https://agenciabrasil.ebc.com.br/politica/noticia/2026-10/descanso-de-trabalhador-nao-quebra-empresas-diz-lula-apos-fim-da-6x1",
+      "resumo": "O presidente Luiz Inácio Lula da Silva rebateu nesta sexta-feira (16) críticas à aprovação do fim da escala 6x1. Ao discursar durante a promulgação da Emenda Constitucional 221, que instituiu a escala 5x2 para todos os trabalhadores , ele afirmou que “ninguém quer que a empresa quebre”, mas que também “ninguém quer que um trabalhador morra por falta de descanso” . \"É combinar a manutenção e a existência da empresa com a manutenção e a saúde das mulheres e dos homens que trabalham\", resumiu. Notícias relacionadas: Congresso promulga emenda do fim da 6x1; escala 5x2 começa em 60 dias. Imprensa estrangeira vê vitória de Lula em aprovação do fim da 6x1. CUT elogia fim da “massacrante” 6x1; CNI quer revisar PEC aprovada . Com a promulgação das novas regras trabalhistas pelo Congresso Nacional, a jornada máxima semanal cairá de 44 para 40 horas semanais, sem a redução de salários. >> Saiba quando entra em vigor a nova jornada de trabalho \"Pelo amor de Deus, se a gente não garantir o direito de o ser humano descansar, de o ser humano ter o direito de visitar a família, de visitar os parentes, de levar a criança a uma praça, a algum lugar para descansar, se a gente não garante isso, que tipo de seres humanos que nós somos?”, disse Lula. O presidente defendeu que a redução de jornada será especialmente importante para mulheres, afirmando que \"o dia do descanso é o dia que elas mais trabalham\". \"Não é possível que as pessoas não tenham sensibilidade”, completou. O presidente Luiz Inácio Lula da Silva com parlamentares durante promulgação da Proposta de Emenda à Constituição (PEC 221), que acaba com a escala 6x1. Lula Marques/Agência Brasil. Críticas da indústria A tramitação da proposta, promulgada nesta sexta-feira, foi marcada por críticas de entidades empresariais e da oposição, que alegaram que a mudança iria prejudicar as empresas e a economia do país. A Confederação Nacional da Indústria (CNI) já pede a revisão da nova regra . Após a promulgação da emenda, o presidente Lula defendeu que o “mundo do trabalho” está cada vez mais difícil e criticou a tentativa de \"jogar nas costas do povo trabalhador\", \"que está reivindicando um dia de descanso a mais\", a responsabilidade por uma crise que \"é mentira\". \"A palavra correta é mentira. Até porque, a lei aprovada é tão clara e tão decente que ela fala que qualquer problema será discutido e resolvido. Ninguém está se negando a discutir\", rebateu. O presidente da República lembrou ainda os avanços tecnológicos nos últimos 50 anos, argumentando que possibilitaram \"mais lucros para os empresários\". A história se repete O presidente Luiz Inácio Lula da Silva iniciou o discurso relembrando que, durante a discussão da Constituição de 1988, alguns grupos diziam que a nova Carta Magna, que acabou com 21 anos de ditadura civil-militar no Brasil, iria “quebrar o Brasil”. Naquela época, a jornada de trabalho foi reduzida de 48 para 44 horas semanais. \"Logo que nós aprovamos a Constituição, os críticos de sempre já queriam mudar a Constituição. [Diziam] que a Constituição iria atrapalhar o crescimento do Brasil\", disse. O presidente Lula comentou que, toda vez que a sociedade “conquista alguma coisa”, aparece “uma turma ou um segmento” da sociedade que não concorda, dizendo “que não vai dar certo”. “Foi assim em todas as lutas. Não tem uma conquista do povo trabalhador que não aparece aqueles dizendo isso vai ser um atraso para o país, isso vai quebrar as empresas, isso vai quebrar a economia”, completou. Lula ainda lembrou da campanha pelo 13º salário, na década de 1960, quando a proposta foi atacada sob o argumento de que quebraria as empresas. “[Foi] a mesma coisa, vai quebrar as empresas, vai afundar as empresas, no mundo inteiro não tem isso. Não quebrou as empresas”, completou. O presidente do Senado, Davi Alcolumbre, e o presidente da Câmara dos Deputados, Hugo Motta, aplaudem discurso do presidente Luiz Inácio Lula da Silva durante promulgação da Proposta de Emenda à Constituição (PEC 221), que acaba com a escala 6x1. Lula Marques/Agência Brasil. Estudos divergem Estudos têm divergido sobre impactos do fim da escala 6x1 no PIB e na inflação . Enquanto algumas pesquisas ligadas a entidades empresariais projetam amplos impactos negativos, outras apontam prejuízo residual, com capacidade de absorção pelas empresas. Pesquisadores do Instituto de Pesquisa Econômica Aplicada (Ipea) avaliam que a redução da jornada terá um impacto de 1% no custo total das empresas , em setores como comércio e indústria, chegando até 6,6% nos setores da vigilância e segurança. Com o objetivo de também mitigar os efeitos da mudança nos micro e pequenos negócios, foi aprovado na Câmara, nesta semana, o projeto que aumenta do limite anual de faturamento dos MEIs (Micro empreendedores individuais) dos atuais R$ 80 mil para R$ 110 mil em 2027 e R$ 140 mil em 2028 . O texto também permite a contratação de até dois funcionários por microempreendedor. Atualmente, o MEI pode ter apenas um funcionário. O artigo 5º da emenda promulgada nesta sexta ainda prevê que poderá ser elaborada lei complementar para estabelecer medidas transitórias, condicionadas à manutenção de níveis de emprego, para a mitigação dos impactos da mudança sobre os microempreendedores individuais, as microempresas e as empresas de pequeno porte.",
+      "texto": true
+     }
+    ],
+    "notas": [
+     "10 itens no feed; 0 de coluna/blog/opinião descartados; sobram 10.",
+     "Menção a político da lista: 8/10 (80%) em título+resumo; 50% só no título.",
+     "Conteúdo: texto integral no feed (10/10 com resumo, 10 com texto longo). Paywall: não.",
+     "O feed cobre ~20 h de publicação."
+    ]
+   },
+   "veredito": "usar",
+   "ms": 374
+  },
+  {
+   "id": "imprensa-agencia-camara",
+   "nome": "Agência Câmara — últimas",
+   "grupo": "imprensa",
+   "url": "https://www.camara.leg.br/noticias/rss/ultimas-noticias",
+   "custo": "0 — RSS público",
+   "risco": "Baixo: fonte oficial, uso livre com crédito.",
+   "medida": {
+    "status": "ok",
+    "itens": 20,
+    "janela": "feed atual (~22 h)",
+    "atrasoHoras": 2.4,
+    "formato": "rss",
+    "idPolitico": false,
+    "amostra": [
+     {
+      "titulo": "Congresso promulga emenda que acaba com escala 6x1 e estabelece jornada máxima de 40 horas semanais",
+      "data": "2026-10-16T15:08:00.000Z",
+      "url": "https://www.camara.leg.br/noticias/1311797-congresso-promulga-emenda-que-acaba-com-escala-6x1-e-estabelece-jornada-maxima-de-40-horas-semanais",
+      "resumo": "Lula e os presidentes da Câmara, Hugo Motta, e do Congresso, Davi Alcolumbre, celebraram a medida e defenderam direito de descanso para o trabalhador brasileiro",
+      "texto": true
+     },
+     {
+      "titulo": "Congresso promulga o fim da escala 6x1 e aposentadoria especial para agentes de saúde",
+      "data": "2026-10-16T14:10:00.000Z",
+      "url": "https://www.camara.leg.br/noticias/1311742-congresso-promulga-o-fim-da-escala-6x1-e-aposentadoria-especial-para-agentes-de-saude",
+      "resumo": "Hugo Motta diz que a aprovação da redução da jornada de trabalho coroa um esforço histórico feito pela Câmara",
+      "texto": true
+     },
+     {
+      "titulo": "Hugo Motta afirma que aprovação de MP permitirá avaliação rigorosa e aprimoramento dos cursos de medicina",
+      "data": "2026-10-15T19:13:00.000Z",
+      "url": "https://www.camara.leg.br/noticias/1311645-hugo-motta-afirma-que-aprovacao-de-mp-permitira-avaliacao-rigorosa-e-aprimoramento-dos-cursos-de-medicina",
+      "resumo": "Medida provisória condiciona o registro profissional de médicos à aprovação no Exame Nacional de Avaliação da Formação Médica",
+      "texto": true
+     }
+    ],
+    "notas": [
+     "20 itens no feed; 0 de coluna/blog/opinião descartados; sobram 20.",
+     "Menção a político da lista: 3/20 (15%) em título+resumo; 5% só no título.",
+     "Conteúdo: texto integral no feed (19/20 com resumo, 19 com texto longo). Paywall: não.",
+     "O feed cobre ~22 h de publicação.",
+     "Também existe feed por tema (rss/dinamico/POLITICA, 10 itens). Cita deputados pelo nome, mas sem id oficial no item."
+    ]
+   },
+   "veredito": "usar",
+   "ms": 954
+  },
+  {
+   "id": "imprensa-agencia-senado",
+   "nome": "Agência Senado",
+   "grupo": "imprensa",
+   "url": "https://www12.senado.leg.br/noticias/rss",
+   "custo": "0 — RSS público",
+   "risco": "Baixo: fonte oficial, uso livre com crédito.",
+   "medida": {
+    "status": "ok",
+    "itens": 15,
+    "janela": "feed atual (~6 h)",
+    "atrasoHoras": 0.3,
+    "formato": "rss",
+    "idPolitico": false,
+    "amostra": [
+     {
+      "titulo": "Vídeo: Fim da escala 6x1 é promulgado em sessão do Congresso Nacional",
+      "data": "2026-10-16T17:25:44.000Z",
+      "url": "https://www12.senado.leg.br/noticias/videos/2026/10/fim-da-escala-6x1-e-promulgada-em-sessao-do-congresso-nacional",
+      "resumo": "Foi promulgada, durante sessão do Congresso Nacional nesta sexta-feira (16), a Emenda Constitucional 141, que acaba com a jornada máxima de trabalho de 44 horas (também chamada de escala 6x1) para 40 horas. Participaram da cerimônia o presidente da República, Luiz Inácio Lula da Silva, o presidente do Senado, Davi Alcolumbre, e o presidente da Câmara dos Deputados, Hugo Motta. Assista ao vídeo.",
+      "texto": false,
+      "fonte": "Senado Federal"
+     },
+     {
+      "titulo": "Áudio: Senado analisa proibição de 'fim planejado' da vida útil de produtos",
+      "data": "2026-10-16T16:43:34.000Z",
+      "url": "https://www12.senado.leg.br/noticias/audios/2026/10/senado-analisa-proibicao-de-fim-planejado-da-vida-util-de-produtos",
+      "resumo": "A Comissão de Fiscalização e Controle e Defesa do Consumidor (CTFC) do Senado analisa um projeto de lei que combate a chamada obsolescência programada (fabricação de peças ou produtos que duram pouco ou ficam ultrapassados rapidamente, de forma intencional). A proposta (PL 805/2024), do senador Ciro Nogueira (PP-PI), obriga que fabricantes e importadores ofereçam peças de reposição e manuais de conserto por até 20 anos e estabelece multas para quem descumprir a regra. Para o relator, senador Dr. Hiran (PP-RR), a obsolescência programada gera aumento de resíduos e do uso de matérias-primas finitas.",
+      "texto": true,
+      "fonte": "Senado Federal"
+     },
+     {
+      "titulo": "Congresso promulga o fim da escala 6x1 e aposentadoria de agentes de saúde",
+      "data": "2026-10-16T15:34:26.000Z",
+      "url": "https://www12.senado.leg.br/noticias/materias/2026/10/16/congresso-promulga-o-fim-da-escala-6x1-e-aposentadoria-de-agentes-de-saude",
+      "resumo": "O Congresso Nacional promulgou nesta sexta-feira (16), em sessão solene, duas emendas à Constituição que ampliam direitos dos trabalhadores. A Emenda Constitucional 141 acaba com a escala de seis dias de trabalho por um de descanso (6x1) e garante dois dias de repouso semanal remunerado. Daqui a 60 dias, a jornada máxima será reduzida de 44 para 42 horas. Após um ano, a jornada de trabalho cairá para 40 horas, sem redução de salário. Já a Emenda Constitucional 140 estabelece regras especiais de aposentadoria para agentes comunitários de saúde e agentes de combate às endemias. A cerimônia foi conduzida pelo presidente do Senado e do Congresso Nacional, Davi Alcolumbre, com a presença do presidente da República, Luiz Inácio Lula da Silva, e do presidente da Câmara dos Deputados, Hugo Motta. Davi prestou homenagem ao senador Paulo Paim (PT-RS), defensor dessa mudança há muito tempo, e destacou que a promulgação das emendas representam o reconhecimento de reivindicações históricas e resultam do entendimento entre deputados e senadores. Ele lembrou que assumiu o compromisso de colocar as duas propostas em votação. — Hoje, o Congresso Nacional transforma duas lutas históricas em direitos: direito ao tempo para viver e direito à dignidade para quem dedica a vida a cuidar — celebrou. Lula destacou a importância do descanso para a saúde e a convivência dos trabalhadores com suas famílias, sem desconsiderar a continuidade das atividades econômicas. — A Constituição ficou mais cidadã — afirmou Lula, segundo o qual \"ninguém quer que empresa quebre, mas também ninguém quer que o trabalhador morra por falta de descanso\". Hugo Motta ressaltou que as mudanças foram construídas por meio do diálogo com trabalhadores, especialistas e representantes do setor produtivo. Fim da escala 6x1 A Emenda Constitucional 141, originada da PEC 221/2019, estabelece a substituição da escala 6x1 pela jornada de cinco dias de trabalho e dois de descanso (5x2), sem redução salarial. Após 60 dias da publicação da emenda, os trabalhadores terão direito a dois dias de descanso semanal remunerado, com jornada máxima de 42 horas. Um ano depois desse prazo, ou seja, 14 meses após a publicação, o limite cairá para 40 horas semanais. Um dos dias de folga deverá ocorrer preferencialmente aos domingos. Segundo levantamento do Ministério do Trabalho e Emprego, dos 44,7 milhões de trabalhadores com jornada identificada, cerca de 14,9 milhões, o equivalente a um terço, cumprem atualmente a escala 6x1 e serão beneficiados pela mudança. Outros dados apontam que 38,6 milhões trabalham mais de 40 horas semanais, dos quais 37,2 milhões cumprem jornadas de 44 horas. A mudança alcança diferentes setores, especialmente comércio, serviços, indústria e logística. Durante a transição, acordos ou convenções coletivas poderão ampliar a jornada diária para acomodar as 42 horas semanais, desde que preservados os dois dias de repouso. Também será permitida a compensação das folgas, com média de dois dias por semana no mês e pelo menos um dia de descanso a cada sete. Cláusulas incompatíveis com as novas regras perderão validade após 60 dias. Jornadas já fixadas em até 40 horas não sofrerão redução proporcional. Uma futura lei complementar poderá estabelecer medidas de adaptação para microempreendedores individuais, microempresas e empresas de pequeno porte, condicionadas à manutenção dos empregos. As regras de duração e controle de jornada não se aplicam a empregados com diploma superior que recebam pelo menos 2,5 vezes o teto do Regime Geral de Previdência Social (RGPS), ressalvadas condições previstas em negociação coletiva e a garantia do repouso semanal. A emenda também não altera a jornada dos servidores públicos da União, dos estados, do Distrito Federal e dos municípios. A proposta teve como primeiro signatário o deputado Reginaldo Lopes (PT-MG) e tramitou na Câmara em conjunto com a PEC 8/2025, da deputada Erika Hilton (PSol-SP). No Senado, recebeu parecer favorável do senador Omar Aziz (PSD-AM) e foi aprovada em dois turnos na quarta-feira (14), por 75 votos a 1 em cada votação. Tempo com a família Em entrevista à TV Senado,o senador Paulo Paim (PT-RS) comparou a mudança à redução da jornada de 48 para 44 horas, aprovada na Assembleia Nacional Constituinte de 1988. Por sua vez, o senador Jaques Wagner (PT-BA) destacou que a folga adicional permitirá mais tempo com a família e para qualificação profissional. — Todo mundo que trabalha no seis por um vai ganhar mais um dia de descanso, que eu acho importante para desfrutar com a família e se qualificar — ressaltou Wagner. O senador Cleitinho (Republicanos-MG) também comemorou a mudança, mas defendeu medidas para reduzir encargos e preservar as condições de funcionamento das empresas. — É uma proposta justa, mas tem que ter ajustes, com o governo federal, e não o trabalhador e nem o empresário — ponderou. Aposentadoria dos agentes de saúde A Emenda Constitucional 140, decorrente da PEC 14/2021, de autoria do ex-deputado Dr. Leonardo (MT), estabelece aposentadoria especial para agentes comunitários de saúde e de combate às endemias, além de contemplar agentes indígenas de saúde e de saneamento. Pela regra permanente, mulheres poderão se aposentar aos 57 anos e homens aos 60 anos, desde que comprovem 25 anos de contribuição e de efetivo exercício na atividade. A transição prevê idades menores para quem já atua na profissão, começando em 50 anos para mulheres e 52 para homens até 2030, com elevação gradual até 2041. O texto também prevê integralidade e paridade para servidores vinculados a regimes próprios, nas condições estabelecidas, e benefício complementar custeado pela União para profissionais vinculados ao Instituto Nacional do Seguro Social (INSS). Estados, municípios e o Distrito Federal terão até o fim de 2028 para regularizar vínculos profissionais conforme os critérios constitucionais. A proposta teve origem na Câmara dos Deputados e recebeu parecer favorável do senador Irajá (PSD-TO) na Comissão de Constituição e Justiça (CCJ). No Plenário do Senado, foi aprovada em julho, por 73 votos favoráveis e um contrário. Durante a solenidade, Lula e Hugo Motta destacaram o papel dos agentes na prevenção de doenças e no acompanhamento das famílias. Para o presidente da Câmara, a nova emenda reconhece a importância dos profissionais que atuam na linha de frente do Sistema Único de Saúde (SUS), especialmente nas comunidades mais vulneráveis.",
+      "texto": true,
+      "fonte": "Senado Federal"
+     }
+    ],
+    "notas": [
+     "15 itens no feed; 0 de coluna/blog/opinião descartados; sobram 15.",
+     "Menção a político da lista: 4/15 (27%) em título+resumo; 0% só no título.",
+     "Conteúdo: título + resumo (14/15 com resumo, 3 com texto longo). Paywall: não.",
+     "O feed cobre ~6 h de publicação."
+    ]
+   },
+   "veredito": "usar",
+   "ms": 1368
+  },
+  {
+   "id": "imprensa-bbc",
+   "nome": "BBC News Brasil (feed geral)",
+   "grupo": "imprensa",
+   "url": "https://feeds.bbci.co.uk/portuguese/rss.xml",
+   "custo": "0 — RSS público",
+   "risco": "Baixo: RSS é oferecido pelo veículo para leitura; republicar só título + link, nunca o texto.",
+   "medida": {
+    "status": "parcial",
+    "itens": 27,
+    "janela": "feed atual (~21944 h)",
+    "atrasoHoras": 0.2,
+    "formato": "rss",
+    "idPolitico": false,
+    "amostra": [
+     {
+      "titulo": "Redução da maioridade penal: as diferenças nas propostas de Lula e Flávio Bolsonaro",
+      "data": "2026-10-16T11:18:30.000Z",
+      "url": "https://www.bbc.com/portuguese/articles/cq4g1ep62pgyo?at_medium=RSS&at_campaign=rss",
+      "resumo": "Diante de impasse, o presidente do Senado, Davi Alcolumbre (União-AP), decidiu interromper a discussão da PEC da Segurança Pública, que pode ficar para depois das eleições.",
+      "texto": false
+     },
+     {
+      "titulo": "A crise global que Flávio Bolsonaro ou Lula terão de enfrentar se eleitos",
+      "data": "2026-10-16T08:56:12.000Z",
+      "url": "https://www.bbc.com/portuguese/articles/cv0lr33lw868o?at_medium=RSS&at_campaign=rss",
+      "resumo": "Embates com os EUA, posição na rivalidade Pequim-Washington e América do Sul fraturada marcarão desafios geopolíticos do próximo presidente.",
+      "texto": false
+     },
+     {
+      "titulo": "Distância entre Flávio e Lula é de 2 pontos no agregador de pesquisas da BBC",
+      "data": "2026-10-16T13:54:07.000Z",
+      "url": "https://www.bbc.com/portuguese/articles/cm1dlv13yql9o?at_medium=RSS&at_campaign=rss",
+      "resumo": "Acompanhe as intenções de voto para Lula e Flávio Bolsonaro no segundo turno da eleição presidencial de 2026, de acordo com o Agregador de Pesquisas da BBC News Brasil.",
+      "texto": false
+     }
+    ],
+    "notas": [
+     "27 itens no feed; 0 de coluna/blog/opinião descartados; sobram 27.",
+     "Menção a político da lista: 5/27 (19%) em título+resumo; 15% só no título.",
+     "Conteúdo: título + resumo (27/27 com resumo, 0 com texto longo). Paywall: não.",
+     "O feed cobre ~21944 h de publicação.",
+     "Não há feed só de Brasil/política; o geral mistura internacional."
+    ]
+   },
+   "veredito": "usar com cuidado",
+   "ms": 147
+  },
+  {
+   "id": "imprensa-cnn",
+   "nome": "CNN Brasil — feed geral filtrado por /politica/",
+   "grupo": "imprensa",
+   "url": "https://www.cnnbrasil.com.br/feed/",
+   "custo": "0 — RSS público",
+   "risco": "Baixo: RSS é oferecido pelo veículo para leitura; republicar só título + link, nunca o texto.",
+   "medida": {
+    "status": "parcial",
+    "itens": 6,
+    "janela": "feed atual (~1 h)",
+    "atrasoHoras": 1.1,
+    "formato": "rss",
+    "idPolitico": false,
+    "amostra": [
+     {
+      "titulo": "Camilo diz que fará apelo para maioridade ser discutida em PEC separada",
+      "data": "2026-10-16T17:40:19.000Z",
+      "url": "https://www.cnnbrasil.com.br/politica/camilo-diz-que-fara-apelo-para-maioridade-ser-discutida-em-pec-separada/",
+      "resumo": "Líder do PT e coordenador de campanha de Lula afirma que incluir redução na PEC da Segurança retardará promulgação da proposta; presidente espera aprovação para criar novo ministério",
+      "texto": true
+     },
+     {
+      "titulo": "À CNN, Sanderson cobra Alcolumbre sobre prioridade para PEC da Segurança",
+      "data": "2026-10-16T17:26:33.000Z",
+      "url": "https://www.cnnbrasil.com.br/politica/a-cnn-sanderson-cobra-alcolumbre-sobre-prioridade-para-pec-da-seguranca/",
+      "resumo": "Senador eleito falou que presidente da Casa Alta removeu texto de análise por \"questões político-eleitorais\" e não prevê recondução de Alcolumbre ao posto em 2027",
+      "texto": true
+     },
+     {
+      "titulo": "Oposição vê manobra de Alcolumbre para evitar derrota de Lula no Senado",
+      "data": "2026-10-16T16:43:58.000Z",
+      "url": "https://www.cnnbrasil.com.br/politica/oposicao-ve-manobra-de-alcolumbre-para-evitar-derrota-de-lula-no-senado/",
+      "resumo": "Segundo apuração da âncora da CNN Tainá Falcão, ao Bastidores CNN, oposição diz que retirada da PEC da Segurança Pública da pauta foi estratégia para proteger governo em votação sobre maioridade penal",
+      "texto": true
+     }
+    ],
+    "notas": [
+     "60 itens no feed; 0 de coluna/blog/opinião descartados; 54 fora da seção de política; sobram 6.",
+     "Menção a político da lista: 3/6 (50%) em título+resumo; 33% só no título.",
+     "Conteúdo: texto integral no feed (6/6 com resumo, 6 com texto longo). Paywall: não.",
+     "O feed cobre ~1 h de publicação.",
+     "Não existe /politica/feed/ (404); só o feed geral de 60 itens, filtrado pela URL."
+    ]
+   },
+   "veredito": "usar com cuidado",
+   "ms": 428
+  },
+  {
+   "id": "imprensa-estadao",
+   "nome": "Estadão — Política",
+   "grupo": "imprensa",
+   "url": "https://www.estadao.com.br/arc/outboundfeeds/feeds/rss/sections/politica/",
+   "custo": "0 — RSS público",
+   "risco": "Baixo nos termos (RSS público); o leitor bate no paywall ao clicar — mostrar só título + link.",
+   "medida": {
+    "status": "ok",
+    "itens": 20,
+    "janela": "feed atual (~17 h)",
+    "atrasoHoras": 0.4,
+    "formato": "rss",
+    "idPolitico": false,
+    "amostra": [
+     {
+      "titulo": "Ministro do TSE rejeita pedido de Flávio para limitar atuação de sindicatos a favor de Lula",
+      "data": "2026-10-16T18:45:15.000Z",
+      "url": "https://www.estadao.com.br/politica/ministro-do-tse-rejeita-pedido-de-flavio-para-limitar-atuacao-de-sindicatos-a-favor-de-lula/",
+      "resumo": "",
+      "texto": true
+     },
+     {
+      "titulo": "Lula: ‘Cleitinho é esperto. Não precisa me apoiar, tem de ficar quietinho, porque só tem a ganhar’",
+      "data": "2026-10-16T18:39:43.000Z",
+      "url": "https://www.estadao.com.br/politica/eleicoes/lula-cleitinho-e-esperto-nao-precisa-me-apoiar-tem-de-ficar-quietinho-porque-so-tem-a-ganhar/",
+      "resumo": "",
+      "texto": true
+     },
+     {
+      "titulo": "Moraes autoriza convidados em aniversário da filha de Bolsonaro neste domingo",
+      "data": "2026-10-16T17:47:03.000Z",
+      "url": "https://www.estadao.com.br/politica/moraes-autoriza-convidados-em-aniversario-da-filha-de-bolsonaro-neste-domingo-nprp/",
+      "resumo": "",
+      "texto": true
+     }
+    ],
+    "notas": [
+     "20 itens no feed; 0 de coluna/blog/opinião descartados; sobram 20.",
+     "Menção a político da lista: 12/20 (60%) em título+resumo; 60% só no título.",
+     "Conteúdo: texto integral no feed (1/20 com resumo, 20 com texto longo). Paywall: sim (rígido).",
+     "O feed cobre ~17 h de publicação."
+    ]
+   },
+   "veredito": "usar",
+   "ms": 222
+  },
+  {
+   "id": "imprensa-folha",
+   "nome": "Folha de S.Paulo — Poder",
+   "grupo": "imprensa",
+   "url": "https://feeds.folha.uol.com.br/poder/rss091.xml",
+   "custo": "0 — RSS público",
+   "risco": "Baixo nos termos (RSS público); o leitor bate no paywall ao clicar — mostrar só título + link.",
+   "medida": {
+    "status": "ok",
+    "itens": 71,
+    "janela": "feed atual (~48 h)",
+    "atrasoHoras": 0.7,
+    "formato": "rss",
+    "idPolitico": false,
+    "amostra": [
+     {
+      "titulo": "Justiça barra entrega de título de cidadão a Flávio Bolsonaro em Salvador",
+      "data": "2026-10-16T18:30:00.000Z",
+      "url": "https://redir.folha.com.br/redir/online/poder/rss091/*https://www1.folha.uol.com.br/poder/2026/10/justica-barra-entrega-de-titulo-de-cidadao-a-flavio-bolsonaro-em-salvador.shtml",
+      "resumo": "A Justiça da Bahia suspendeu a cerimônia de entrega de um título de cidadão de Salvador ao candidato a presidente Flávio Bolsonaro ( PL ), que aconteceria neste sábado (17) em meio a um ato de campanha do senador no Farol da Barra. Leia mais (10/16/2026 - 15h30)",
+      "texto": false
+     },
+     {
+      "titulo": "Tarcísio chama de 'estelionato eleitoral' promessa de Lula sobre passe livre no transporte",
+      "data": "2026-10-16T18:30:00.000Z",
+      "url": "https://redir.folha.com.br/redir/online/poder/rss091/*https://www1.folha.uol.com.br/poder/2026/10/tarcisio-chama-de-estelionato-eleitoral-promessa-de-lula-sobre-passe-livre-no-transporte.shtml",
+      "resumo": "O governador de São Paulo , Tarcísio de Freitas ( Republicanos ), criticou nesta sexta-feira (16) a promessa do presidente Lula ( PT ) de instituir transporte público gratuito aos finais de semana em todo o país e classificou o anúncio como \"estelionato eleitoral\". Leia mais (10/16/2026 - 15h30)",
+      "texto": false
+     },
+     {
+      "titulo": "Lula usa fim da 6x1 contra Flávio Bolsonaro durante campanha em MG e dá recado a Cleitinho",
+      "data": "2026-10-16T18:11:00.000Z",
+      "url": "https://redir.folha.com.br/redir/online/poder/rss091/*https://www1.folha.uol.com.br/poder/2026/10/lula-usa-fim-da-6x1-contra-flavio-bolsonaro-durante-campanha-em-mg.shtml",
+      "resumo": "O presidente Lula ( PT ), candidato à reeleição, usou a promulgação do fim da escala 6x1 como trunfo de campanha contra o adversário Flávio Bolsonaro ( PL ) nesta sexta-feira (16), durante comício em Juiz de Fora (MG), na zona da mata mineira. Leia mais (10/16/2026 - 15h11)",
+      "texto": false
+     }
+    ],
+    "notas": [
+     "100 itens no feed; 29 de coluna/blog/opinião descartados; sobram 71.",
+     "Menção a político da lista: 52/71 (73%) em título+resumo; 62% só no título.",
+     "Conteúdo: título + resumo (71/71 com resumo, 0 com texto longo). Paywall: sim (limite de matérias grátis).",
+     "O feed cobre ~48 h de publicação.",
+     "Feed em ISO-8859-1; link passa por redir.folha.com.br (URL real vem depois do \"*\")."
+    ]
+   },
+   "veredito": "usar",
+   "ms": 1353
+  },
+  {
+   "id": "imprensa-g1",
+   "nome": "G1 — Política",
+   "grupo": "imprensa",
+   "url": "https://g1.globo.com/rss/g1/politica/",
+   "custo": "0 — RSS público",
+   "risco": "Baixo: RSS é oferecido pelo veículo para leitura; republicar só título + link, nunca o texto.",
+   "medida": {
+    "status": "ok",
+    "itens": 96,
+    "janela": "feed atual (~45 h)",
+    "atrasoHoras": 0.7,
+    "formato": "rss",
+    "idPolitico": false,
+    "amostra": [
+     {
+      "titulo": "Na TV, Flávio Bolsonaro dedica propaganda às mulheres; Lula compara adversário a Milei e critica 'tesouraço'",
+      "data": "2026-10-16T18:31:36.000Z",
+      "url": "https://g1.globo.com/politica/eleicoes/2026/noticia/2026/10/16/tv-propaganda-eleitoral-presidente-16-outubro.ghtml",
+      "resumo": "Na propaganda eleitoral gratuita dos candidatos à Presidência da República desta sexta-feira (16), Flávio Bolsonaro (PL) acenou ao eleitorado feminino, detalhando propostas voltadas às mulheres e exibindo o apoio de aliadas. Já Luiz Inácio Lula da Silva (PT) criticou as medidas econômicas do candidato do PL e comemorou a aprovação do fim da escala 6x1. ✅ Siga o canal de notícias de eleições do g1 no WhatsApp Primeira a ser exibida, a propaganda de Flávio foi dedicada às propostas do \"Brasil por Elas\", programa do plano de governo registrado na Justiça Eleitoral voltado às mulheres. O candidato mostrou depoimentos de mulheres demonstrando insatisfação com a economia, inflação e segurança pública no atual governo. \"Lula promete, o Brasil sofre\", afirmou a campanha. Entre as propostas, já apresentadas em propagandas anteriores, Flávio destacou medidas de auxílio a crédito para mulheres, rede TEA Brasil e o vale-creche, que propõe vagas em creches particulares caso não haja disponibilidade na rede pública. O presidenciável ainda abordou a redução da maioridade penal e sugeriu que a medida não vai avançar caso Lula seja reeleito. O programa também exibiu depoimentos de apoio de aliadas políticas do candidato, entre elas Daniella Marques, uma das coordenadoras da campanha. As senadoras eleitas Caroline de Toni (PL-SC), Bia Kicis (PL-DF) e Gracinha Caiado (União-GO), esposa de Ronaldo Caiado (PSD), candidato à Presidência derrotado no 1º turno, também apareceram na propaganda. O candidato afirmou ter apoio da maioria da bancada feminina eleita no Congresso, caso seja eleito presidente. Agora no g1 Já na propaganda petista, Lula abriu a peça comparando Flávio a Javier Milei, presidente da Argentina, e criticando as medidas econômicas do adversário. O petista sugeriu que a crise deflagrada no país vizinho pode ocorrer no Brasil caso o candidato do PL seja eleito. \"O tesouraço do Flávio Bolsonaro é a motosserra de Milei na Argentina. Quando Flávio Bolsonaro fala em cortes, a despesa que ele quer cortar é você\", destacou a propaganda petista. A peça também voltou a abordar o fim da escala 6x1 no Senado e comemorou a aprovação do projeto no Senado, afirmando ainda que o candidato do PL mudou de posição e acabou votando a favor do projeto por \"oportunismo\". Outro trecho da propaganda foi dedicado à mobilização de apoiadores. A peça exibiu um vídeo, viralizado nas redes sociais, da cantora Ivete Sangalo fazendo o “L”. Na propaganda, o vice-presidente Geraldo Alckmin (PSB) defendeu a união de diferentes posições políticas em torno da candidatura. O vice-presidente afirmou que o país \"não precisa de radicalismos\" e convocou apoiadores a formar uma frente democrática para impedir a volta do bolsonarismo. Flávio Bolsonaro e Lula REUTERS/Diego Vara e REUTERS/Adriano Machado",
+      "texto": true
+     },
+     {
+      "titulo": "TSE aprova novas regras para vincular canais de WhatsApp a campanhas eleitorais",
+      "data": "2026-10-16T17:36:20.000Z",
+      "url": "https://g1.globo.com/politica/eleicoes/2026/noticia/2026/10/16/tse-nova-regras-para-vincular-canais-de-whatsapp-a-campanhas-eleitorais.ghtml",
+      "resumo": "O Tribunal Superior Eleitoral (TSE) aprovou por unanimidade nesta sexta-feira (16) novas regras para definir se um canal em grupo de mensagens instantâneas está ou não vinculado a uma campanha eleitoral. A nova resolução prevê que a associação será a partir de critérios como: uso de recursos da campanha; suporte técnico ou tecnológico; divulgação oficial; recomendação; atuação coordenada; e orientação da campanha sobre conteúdo. A resolução prevê que o apoio espontâneo não vincula automaticamente um canal a uma campanha. Agora no g1 \"O enquadramento do canal como vinculado à campanha demanda a demonstração por elemento objetivamente verificável e submete-se às mesmas regras e disciplina estabelecidas na legislação e nesta resolução, observadas as disposições específicas relativas à natureza do serviço e à forma de divulgação do conteúdo\", diz o texto. O relator da proposta é o ministro André Mendonça. No voto apresentado ao plenário virtual, o ministro disse que o texto é consenso no tribunal e busca garantir normalidade ao ambiente digital durante o processo eleitoral. \"Assim, ficou estabelecido o dever das campanhas e dos responsáveis de zelar pela licitude dos conteúdos vinculados e também a higidez das informações e das mensagens veiculadas, sob pena da respectiva indisponibilização do canal em uso em caso de condutas reiteradas, sem prejuízo da apuração das responsabilidades\", disse ele. A nova regra determina ainda que fica vedada a utilização do canal para a transmissão de conteúdo fabricado ou manipulado para difundir fatos notoriamente inverídicos ou descontextualizados com potencial para causar danos ao equilíbrio do pleito ou à integridade do processo eleitoral. Guerra de liminares As mudanças foram adotadas após o TSE protagonizar uma guerra de liminares sobre a retirada do canal Exército do Lula. O presidente do TSE, Nunes Marques, atendeu a um pedido da campanha de Flávio Bolsonaro e retirou o canal administrado pelo deputado André Janones (Rede). Ministro Kassio Nunes Marques Luiz Roberto/TSE Argumentou que o canal divulgava informações já consideradas falsas pelo TSE e que não se pode transformar uma ferramenta de comunicação em instrumento de desinformação em massa às vésperas do pleito. A decisão do presidente do TSE provocou críticas de uma ala do tribunal – especialmente por não ter liberado o caso para julgamento do plenário – e também a reação do corregedor, ministro Ricardo Vilas Boas Cueva, que lembrou que o caso já estava em análise pela Corregedoria e que não se pode usar diferentes instrumentos jurídicos para escolher quem vai julgar. O corregedor insistiu que os elementos apresentados pela campanha de Flávio Bolsonaro não justificam nesse momento a suspensão e restabeleceu o canal de forma provisória , proibindo a divulgação de conteúdo falso e vetado pelo TSE. \"A liberdade de expressão não constitui obstáculo à repressão de ilícitos eleitorais. Por outro lado, a existência de manifestações ilícitas individualizadas não autoriza, sem demonstração adicional, a restrição de toda a atividade comunicativa\", dizia a decisão de Cueva. Na sequência, Nunes derrubou a decisão de Cueva e determinou o registro do canal Exército do Lula como da campanha. O canal, que já conta com mais de 4 milhões de seguidores, chegou a ficar fora do ar, mas acabou restabelecido pelo próprio presidente do TSE.",
+      "texto": true
+     },
+     {
+      "titulo": "Cueva rejeita pedido de Flávio para restringir atuação de sindicatos e estudantes",
+      "data": "2026-10-16T16:23:00.000Z",
+      "url": "https://g1.globo.com/politica/noticia/2026/10/16/cueva-rejeita-pedido-de-flavio-para-restringir-atuacao-de-sindicatos-e-estudantes.ghtml",
+      "resumo": "O corregedor-geral da Justiça Eleitoral, ministro Ricardo Villas Bôas Cueva, deu prazo de 72 horas para que a campanha de Flávio Bolsonaro (PL) detalhe as acusações feitas contra dirigentes de sindicatos, entidades estudantis e movimentos sociais em uma ação que aponta suposto uso dessas estruturas em benefício da candidatura à reeleição do presidente Luiz Inácio Lula da Silva (PT). Na decisão, Ricardo Villas Bôas Cueva também negou, por enquanto, uma série de medidas urgentes solicitadas pela campanha de Flávio Nantes Bolsonaro. Entre as medidas estão pedidos para restringir o uso de estruturas das entidades, impedir repasses de recursos e determinar a preservação de dados e documentos. O pedido de aplicação de multas ficou prejudicado. Ao analisar a relação de dirigentes apontados na ação, Cueva afirmou que ocupar um cargo de direção não significa, automaticamente, ser responsável por eventual abuso eleitoral cometido por uma entidade. Flávio Bolsonaro fez campanha no interior de Minas Gerais Segundo a decisão, dos 54 dirigentes apresentados pela campanha, 37 não são citados nominalmente na narrativa dos fatos ou na fundamentação jurídica. Outros sete aparecem somente como signatários de uma nota das centrais sindicais. A ação foi apresentada por Flávio contra Lula, o vice-presidente Geraldo Alckmin e dirigentes de centrais sindicais, confederações, federações, sindicatos, entidades estudantis e movimentos sociais. A campanha acusa os envolvidos de abuso de poder econômico e político e de uso indevido dos meios de comunicação social. O recebimento da ação, porém, não significa que o tribunal tenha considerado verdadeiras as acusações ou reconhecido a existência de irregularidades. O próprio ministro ressalvou na decisão que essas questões ainda dependerão da produção de provas. Lula e Flávio disputam o segundo turno da eleição presidencial, marcado para 25 de outubro. Ministro Ricardo Villas Bôas Cueva, corregedor-geral da Justiça Eleitoral Luiz Roberto/TSE Campanha terá de detalhar acusações O corregedor-geral determinou que a campanha de Flávio informe, individualmente, quais fatos atribui a cada um dos demais dirigentes citados na ação. Para cada pessoa, a campanha terá de apontar o fato atribuído, a respectiva data, a prova correspondente e explicar de que forma o ato teria contribuído para o abuso alegado. Se isso não for feito no prazo de 72 horas, a ação poderá ser rejeitada em relação aos dirigentes cujas condutas não forem individualizadas. Até uma nova decisão, esses dirigentes não deverão ser notificados para apresentar defesa, mesmo que seus nomes já apareçam no cadastro do processo. O ministro decidiu, entretanto, receber a ação contra Lula e Alckmin e cinco dirigentes para os quais considerou haver condutas delimitadas na petição. Eles terão cinco dias para apresentar defesa. Cueva rejeita proibição ampla contra entidades Ricardo Villas Bôas Cueva negou o pedido da campanha de Flávio Nantes Bolsonaro para que dirigentes fossem proibidos, até 25 de outubro, de utilizar sedes, empregados, veículos, recursos financeiros, sites, perfis institucionais, jornais, canais de mensagens e cadastros de filiados das entidades para propaganda favorável a Lula e Alckmin, ou contrária ao candidato do PL. Segundo o corregedor, a solicitação resultaria em uma ordem genérica sobre manifestações futuras e ainda desconhecidas. O ministro afirmou que é preciso analisar individualmente o conteúdo, as circunstâncias e os meios utilizados para definir se uma manifestação configura propaganda eleitoral irregular. Na avaliação do ministro, uma restrição nos termos pedidos poderia ter efeito inibidor indevido sobre as liberdades de expressão, associação e organização sindical e se aproximar de censura prévia. Ao mesmo tempo, ele ressaltou que a negativa não autoriza propaganda irregular nem impede a investigação de eventual uso abusivo das estruturas institucionais. Pedido envolvendo entidades estudantis também é rejeitado O corregedor também negou a ordem solicitada contra a União Nacional dos Estudantes (UNE). A campanha queria obrigar a entidade a orientar organizações estudantis vinculadas a ela a não utilizar centros acadêmicos e outros espaços de instituições públicas de ensino para armazenar ou distribuir material eleitoral. Para Ricardo Villas Bôas Cueva, não foram apresentados elementos suficientes que demonstrassem o uso efetivo desses espaços para essa finalidade, nem houve individualização dos locais e das atividades que justificariam a intervenção da Justiça. A decisão também cita a proteção constitucional às manifestações políticas no ambiente universitário. Preservação de dados e documentos Outro pedido negado, por ora, determinaria que Meta, X e Google, responsável pelo YouTube, preservassem dados, registros, métricas e conteúdos relacionados às publicações citadas na ação, inclusive material eventualmente apagado. As entidades também seriam obrigadas a conservar documentos fiscais, contratos, atas e outros registros relacionados aos episódios descritos pela campanha. O corregedor considerou que o pedido não delimitou suficientemente quais dados e documentos deveriam ser preservados, quem seria responsável por guardá-los, os períodos abrangidos e a relação de cada elemento com os fatos investigados. A negativa, segundo a decisão, não impede uma nova análise caso seja apresentado um requerimento mais específico. Repasse de recursos A campanha de Flávio Bolsonaro também pediu uma ordem para impedir entidades sindicais, com exceções previstas na própria ação, de repassar dinheiro, bens ou serviços estimáveis em dinheiro a comitês, frentes, brigadas ou outras estruturas favoráveis a candidaturas. Cueva rejeitou o pedido neste momento. Na decisão, diferenciou manifestação política de eventual contribuição econômica eleitoral e afirmou que é necessário examinar as circunstâncias concretas de cada iniciativa. Também considerou abrangente demais a ordem solicitada. O ministro ressaltou, contudo, que a decisão não libera o uso de recursos sindicais de forma contrária à legislação eleitoral. Multas ficam prejudicadas A campanha ainda havia solicitado multa de R$ 50 mil por ato ou publicação em descumprimento pelos investigados e de R$ 100 mil por hora de descumprimento pelos provedores. Como as medidas de urgência correspondentes foram rejeitadas, Ricardo Villas Bôas Cueva considerou prejudicado o pedido de multas, por não haver, neste momento, obrigação judicial a ser assegurada pelas penalidades. Um ponto, porém, ficou pendente de decisão: o pedido para desativar um chamado “Comitê de Apoio à reeleição do Presidente Lula”, que, segundo a ação, teria sido instalado na sede do Sindicato dos Trabalhadores dos Correios do Rio de Janeiro (SINTECT-RJ). O ministro deu 24 horas para que o sindicato explique em que consiste o comitê, se houve disponibilização de estrutura física e de recursos da entidade e se ele continua funcionando. Só depois desses esclarecimentos ou do fim do prazo o ministro analisará o pedido de desativação. Corregedor do TSE afirmou que ocupar cargo de direção não basta para responsabilizar alguém por eventual abuso eleitoral; ministro também rejeitou, por ora, ordens abrangentes contra sindicatos e entidades estudantis.",
+      "texto": true
+     }
+    ],
+    "notas": [
+     "100 itens no feed; 4 de coluna/blog/opinião descartados; sobram 96.",
+     "Menção a político da lista: 79/96 (82%) em título+resumo; 41% só no título.",
+     "Conteúdo: texto integral no feed (95/96 com resumo, 92 com texto longo). Paywall: não.",
+     "O feed cobre ~45 h de publicação."
+    ]
+   },
+   "veredito": "usar",
+   "ms": 2605
+  },
+  {
+   "id": "imprensa-gdelt",
+   "nome": "GDELT DOC 2.0 (busca por nome)",
+   "grupo": "imprensa",
+   "url": "https://api.gdeltproject.org/api/v2/doc/doc?query=%22Hugo%20Motta%22%20sourcelang:por&mode=artlist&maxrecords=75&format=json&timespan=7d",
+   "custo": "0 — API aberta, sem chave",
+   "risco": "Baixo nos termos (dado aberto), alto na estabilidade: limite de 1 requisição a cada 5 s e cobertura irregular de veículo brasileiro.",
+   "medida": {
+    "status": "falhou",
+    "itens": null,
+    "janela": "—",
+    "atrasoHoras": null,
+    "formato": "json",
+    "idPolitico": false,
+    "amostra": [],
+    "notas": [
+     "HTTP sem resposta (fetch failed) em https://api.gdeltproject.org/api/v2/doc/doc?query=%22Hugo%20Motta%22%20sourcelang:por&mode=artlist&maxrecords=75&format=",
+     "GDELT responde 429 (limite de 1 req/5 s, aparentemente por IP e compartilhado) ou estoura o tempo; em teste manual na mesma sessão, a busca sem filtro de idioma devolveu só 2 artigos (em inglês, riotimesonline). Cobertura de imprensa brasileira fraca."
+    ]
+   },
+   "veredito": "fora, por ora",
+   "ms": 27776
+  },
+  {
+   "id": "imprensa-google-news",
+   "nome": "Google News — RSS de busca por nome",
+   "grupo": "imprensa",
+   "url": "https://news.google.com/rss/search?q=%22Hugo+Motta%22+when:7d&hl=pt-BR&gl=BR&ceid=BR:pt-419",
+   "custo": "0 — RSS público, sem chave",
+   "risco": "Alto: o próprio feed diz que é só para uso pessoal e não comercial; endpoint sem contrato, pode mudar ou bloquear sem aviso.",
+   "medida": {
+    "status": "parcial",
+    "itens": 500,
+    "janela": "7 dias × 5 nomes",
+    "atrasoHoras": 0.3,
+    "formato": "rss",
+    "idPolitico": false,
+    "amostra": [
+     {
+      "titulo": "Motta reage ao PL e procura centrão e esquerda para viabilizar reeleição à presidência da Câmara - Folha de S.Paulo",
+      "data": "2026-10-14T13:00:00.000Z",
+      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQM3g3ampTTVhqUkdFalRtN0RDdGNtNzN1V2RWOWNDTG14cGg4Y3lYOTVOLUFwblc1R09BRno5R1lKbzJVUWlxNjBzOVQzaHVSejlhUTh1cE5LcTh3d1NPTjJ0d2hLQlNYWTk5dUdhRTVIclJCOTBRYklmQ3RnbWVRN2QzWmttcWN1ZlYwWVBiWW9zaGUzYUZQb1VVUWFodU5weWZ6NTR2ZDRvb01lN1pVMXhVc1dfUHFZakNRVW5B?oc=5",
+      "resumo": "Motta reage ao PL e procura centrão e esquerda para viabilizar reeleição à presidência da Câmara &nbsp;&nbsp; Folha de S.Paulo",
+      "texto": false,
+      "fonte": "Folha de S.Paulo"
+     },
+     {
+      "titulo": "Hugo Motta destaca aprovação quase unânime de novo limite para enquadramento de MEI - Portal da Câmara dos Deputados",
+      "data": "2026-10-14T23:10:00.000Z",
+      "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxPS05NQUJCb2NwU2JYaHZaMUdwNnU2MkliR0pTLXhfRVJhUThnbzJPQUNYODhfeXBwcGdodjFYRDdEQ1FVNHZPeVhKQU9GcWFYOEs5Q1BqNlhxYTF0NmpCYnAyOWU1MnVXa2EzMU9BNEdMWXlEU2NQcE9KVGlEc2RpYTctbFcwZklvS3l0eXlDVFREcExjYzJCb0R0d3p3alhhSEExUUJhbGlMZkU0SDRjX2lNVmxBS2NEOGQ2b2hvRXpwVjJO?oc=5",
+      "resumo": "Hugo Motta destaca aprovação quase unânime de novo limite para enquadramento de MEI &nbsp;&nbsp; Portal da Câmara dos Deputados",
+      "texto": false,
+      "fonte": "Portal da Câmara dos Deputados"
+     },
+     {
+      "titulo": "Centrão se antecipa a movimento do PL e reedita aliança para reeleger Hugo Motta presidente da Câmara - G1",
+      "data": "2026-10-14T19:26:13.000Z",
+      "url": "https://news.google.com/rss/articles/CBMi7AFBVV95cUxPSG9UTGJPUnpSVVhZUnZrcE9xWTcxako2eVREa2F2c0VKbzBTYWxZV1ZkNDN0QTdmaW55OHJEZ1lQWWhidWdEYkx5Nm9nX3R3YUJMck5rVWQtRnBITTFoMmkzXzBSbE01MlZKbENJZ2l4TzY0RkFTT2x0NzVyX0swUVZENHNNX1lHM2drSm1jZkdSLUN3Z0lyYU4tLWJfY2dpUXo3dWc2WDFEbWN2cHR0cUNwNGhtbVVmV1JpOGl6Q3BGdS05emtrVy1rWXdZOEpZVVVCRTRCYXhteGxpbmpGTmpCMWpzZzhxYlpvZNIB-wFBVV95cUxOcUN5NVI3YXdRY0ZTckFhUDBMWkNLQnI3dFJkV1ktZVV2NlNxR3pxS05hQnV6b2hDX19qUlk3YUVvWHhIOGdRNkNOOUY5VU16Y3lKdEpMeGluelBPZzZ1SW01OWc2WUotY19ndUVhV3lpTTZoU3hHN1ZXdVNMQWphRzBaSUhpYjNSZGEwbDRjWmNxSUZMdXI3ek1JQlkxRFplQ2dxcUlZbGYwbU8ycEtnaWpuQUE3cHY5OFgzNHlKZldOODg5UE81ai16MExiMDRmX2l5dXVmeUZQVTZUc2RkeklZcHo4Ni1EUmxubTM2SXh1M2w3S2NjcDVyZw?oc=5",
+      "resumo": "Centrão se antecipa a movimento do PL e reedita aliança para reeleger Hugo Motta presidente da Câmara &nbsp;&nbsp; G1",
+      "texto": false,
+      "fonte": "G1"
+     }
+    ],
+    "notas": [
+     "Copyright do feed: \"personal, non-commercial use ... any other use is expressly prohibited\".",
+     "\"Hugo Motta\" (7 d): 100 itens; nome no título em 86%; de veículo grande 49%; 2 com cara de coluna/blog no título.",
+     "\"Alcolumbre\" (7 d): 100 itens; nome no título em 90%; de veículo grande 68%; 0 com cara de coluna/blog no título.",
+     "\"Tarcísio de Freitas\" (7 d): 100 itens; nome no título em 12%; de veículo grande 56%; 0 com cara de coluna/blog no título.",
+     "\"Erika Hilton\" (7 d): 100 itens; nome no título em 87%; de veículo grande 29%; 1 com cara de coluna/blog no título.",
+     "\"Nikolas Ferreira\" (7 d): 100 itens; nome no título em 46%; de veículo grande 47%; 1 com cara de coluna/blog no título.",
+     "Teto de 100 itens por busca. Link é redirecionador news.google.com/rss/articles/… (precisa resolver pra URL do veículo). Resumo é só o título repetido. Mistura colunas, blogs e sites pequenos: exige lista branca de domínios."
+    ]
+   },
+   "veredito": "fora (termos: uso pessoal e não comercial; mistura coluna e site pequeno)",
+   "ms": 10522
+  },
+  {
+   "id": "imprensa-metropoles",
+   "nome": "Metrópoles — feed geral filtrado por /brasil/",
+   "grupo": "imprensa",
+   "url": "https://www.metropoles.com/feed",
+   "custo": "0 — RSS público",
+   "risco": "Baixo: RSS é oferecido pelo veículo para leitura; republicar só título + link, nunca o texto.",
+   "medida": {
+    "status": "parcial",
+    "itens": 3,
+    "janela": "feed atual (~1 h)",
+    "atrasoHoras": 0.1,
+    "formato": "rss",
+    "idPolitico": false,
+    "amostra": [
+     {
+      "titulo": "Meta nega favorecimento a candidatos e explica erros em contas de Lula",
+      "data": "2026-10-16T19:08:06.000Z",
+      "url": "https://www.metropoles.com/brasil/meta-nega-favorecimento-a-candidatos-e-explica-erros-em-contas-de-lula",
+      "resumo": "Após acusações, Meta nega boicote eleitoral e diz que bloqueios na conta de Lula ocorreram por falha em sistema antifraude",
+      "texto": false
+     }
+    ],
+    "notas": [
+     "20 itens no feed; 4 de coluna/blog/opinião descartados; 13 fora da seção de política; sobram 3.",
+     "Menção a político da lista: 1/3 (33%) em título+resumo; 33% só no título.",
+     "Conteúdo: título + resumo (3/3 com resumo, 0 com texto longo). Paywall: não.",
+     "O feed cobre ~1 h de publicação.",
+     "/politica/feed responde mas está abandonado (item mais novo de jul/2025); /brasil/feed e /politica-brasil/feed vêm com itens de 1-2 semanas atrás. Feed geral é metade coluna (fofoca e bastidor) — o filtro de /colunas/ é obrigatório."
+    ]
+   },
+   "veredito": "fora (feed de política abandonado; o geral é metade coluna)",
+   "ms": 289
+  },
+  {
+   "id": "imprensa-oglobo",
+   "nome": "O Globo — Política",
+   "grupo": "imprensa",
+   "url": "https://oglobo.globo.com/rss/oglobo/politica",
+   "custo": "0 — RSS público",
+   "risco": "Baixo nos termos (RSS público); o leitor bate no paywall ao clicar — mostrar só título + link.",
+   "medida": {
+    "status": "ok",
+    "itens": 70,
+    "janela": "feed atual (~37 h)",
+    "atrasoHoras": 0.2,
+    "formato": "rss",
+    "idPolitico": false,
+    "amostra": [
+     {
+      "titulo": "Moraes autoriza Bolsonaro a receber dez convidados para aniversário de 16 anos da filha",
+      "data": "2026-10-16T19:02:04.000Z",
+      "url": "https://oglobo.globo.com/politica/noticia/2026/10/16/moraes-autoriza-bolsonaro-a-receber-dez-convidados-para-aniversario-de-16-anos-da-filha.ghtml",
+      "resumo": "O ministro Alexandre de Moraes, do Supremo Tribunal Federal (STF), autorizou nesta sexta-feira o ex-presidente Jair Bolsonaro (PL) a receber dez convidados em sua residência, em Brasília, para comemorar o aniversário de 16 anos de sua filha caçula, Laura Bolsonaro. A celebração está prevista para este domingo. A decisão atende a um pedido apresentado pela defesa do ex-presidente, que cumpre prisão domiciliar após ser condenado a 27 anos e três meses de prisão por tentativa de golpe de Estado. Moraes estabeleceu que os convidados poderão permanecer na residência apenas durante o período necessário para a realização do almoço. A autorização também está condicionada ao cumprimento das regras de segurança impostas ao imóvel, que permanece sob vigilância policial. “A autorização ora concedida fica condicionada ao cumprimento das regras e dos procedimentos de segurança estabelecidos para o ingresso e a permanência de pessoas na residência, devendo as pessoas acima autorizadas se submeterem às orientações e determinações dos agentes responsáveis pela segurança do local”, afirmou Moraes na decisão. Entre os convidados autorizados estão familiares da ex-primeira-dama Michelle Bolsonaro, incluindo seu pai, Vicente de Paulo Reinaldo, sua madrasta, Maísa Torres Antunes, e irmãos. A lista também inclui um churrasqueiro responsável pela preparação do almoço. A autorização representa uma exceção às restrições impostas ao ex-presidente durante o cumprimento da prisão domiciliar. Pelas regras estabelecidas pelo STF, Bolsonaro não pode receber visitas sem autorização judicial, ressalvadas as hipóteses previamente permitidas. No início desta semana, Moraes também autorizou a retomada das visitas do senador Flávio Bolsonaro (PL-RJ) ao pai, após o encerramento de uma proibição de 90 dias. A restrição havia sido determinada depois que o parlamentar divulgou, durante uma transmissão nas redes sociais, uma carta escrita pelo ex-presidente com manifestação de apoio à sua candidatura à Presidência da República. Moraes determinou ainda que a Secretaria de Segurança Pública do Distrito Federal e o Núcleo de Custódia da Polícia Militar sejam comunicados sobre a autorização, para a adoção das providências necessárias.",
+      "texto": true
+     },
+     {
+      "titulo": "Janones diz que ‘Exército do Lula’ voltou a funcionar e que direita perdeu espaço nas redes sociais: ‘O que eles fizerem não adianta mais’",
+      "data": "2026-10-16T18:51:29.000Z",
+      "url": "https://oglobo.globo.com/politica/eleicoes-2026/noticia/2026/10/16/janones-diz-que-exercito-do-lula-voltou-a-funcionar-e-que-direita-perdeu-espaco-nas-redes-sociais-o-que-eles-fizerem-nao-adianta-mais.ghtml",
+      "resumo": "O deputado federal André Janones (Rede-MG), criador do canal de WhatsApp “Exército do Lula”, disse que o grupo voltou a funcionar normalmente, após ter sido contestado no Tribunal Superior Eleitoral (TSE). Depois de participar de ato de campanha do atual presidente, em Juiz de Fora (MG), nesta sexta-feira, o parlamentar afirmou que “ensinou” ao campo progressista a lidar com o algoritmo das redes sociais. Ele acredita que o petista será reeleito em função da melhora do desempenho digital. Disputa digital: TSE aprova novas regras para canais de campanhas no WhatsApp Sonar: Meta admite falhas envolvendo contas de Lula e nega interferência nas eleições — O canal voltou a funcionar, agora em caráter definitivo, e vamos chegar a 5 milhões de inscritos ainda hoje (sexta-feira). A gente entende que tem sido um vetor fundamental da mobilização digital nesse segundo turno — disse Janones. — A eleição tomou um caminho que praticamente não tem volta. O presidente Lula está praticamente reeleito. Tem que acontecer algo totalmente fora da curva para que isso mude. Eu falo isso com toda a humildade de alguém que quase foi cancelado quando falou que o Flávio terminaria o primeiro turno na frente. O canal exibe mensagens de incentivo à militância, áudios, vídeos e tutoriais sobre como ampliar o alcance de postagens a favor da campanha de reeleição do petista. No final de semana, no entanto, o presidente do TSE, Kassio Nunes Marques determinou a suspensão do grupo a pedido da campanha de Flávio Bolsonaro, que alegou comportamento inautêntico dos integrantes do canal, difusão de boatos e \"missões\" de compartilhamento em massa. A decisão, no entanto, foi derrubada pelo ministro Ricardo Villas Bôas Cueva, relator escolhido para a ação na Corte, na segunda-feira. No dia seguinte, Nunes Marques também autorizou o funcionamento da ferramenta, desde que a campanha de Lula registrasse, em até 48 horas, o grupo como um endereço oficial de comunicação. Em paralelo, aliados do senador Flávio Bolsonaro, como o deputado federal Nikolas Ferreira (PL) e o ex-coach Pablo Marçal (PRTB), organizaram o canal de WhatsApp \"Tropa do Flávio\", também usado para a divulgação de conteúdos de campanha. Em função da controvérsia judicial envolvendo o grupo a favor de Lula, o PL decidiu registrar nesta semana a ferramenta como meio oficial de comunicação. A iniciativa, no entanto, é criticada por Janones, que afirma que a mobilização da direita não superou o engajamento obtido pela esquerda nos últimos dias. — O que eles (apoiadores de Flávio fizeram) não resolve mais. Eles estão tocando a campanha do ódio, do desespero e da mentira. Nós ensinamos ao campo progressista a usar as redes sociais, apreendemos a lógica das redes sociais e virou um massacre. Vou te dar um dado que obtivemos com o monitoramento feito pela nossa área técnica. Antes, numa escala de 0 a 100, era 89 a 11 para eles em média. No ontem, foi 73 a 17 para nós. Não é possível ganhar uma eleição sem redes sociais — disse Janones. Como mostrou o GLOBO, o fim da escala 6x1 mobilizou uma atuação inédita da esquerda, que conseguiu capitalizar o tema nas redes sociais, espaço em que tradicionalmente é superada pela direita bolsonarista. Dados obtidos pelo Instituto Democracia em Xeque mostram que o episódio registrou a maior mobilização digital nas primeiras 24 horas entre os principais acontecimentos políticos de grande repercussão que aconteceram desde meados do ano passado. A aprovação gerou cerca de 1,9 milhão de publicações contabilizadas pelo Instituto, superando temas como a proibição das bets (1,3 milhão), a recente crise entre os ministros André Mendonça e Alexandre de Moraes, do Supremo Tribunal Federal (STF), e o caso Dark Horse (911 mil). Do total de posts sobre o tema, perfis governistas concentraram 72% das publicações sobre o assunto e 62% das interações.",
+      "texto": true
+     },
+     {
+      "titulo": "Lula termina semana com onda favorável e entra competitivo na reta final da disputa com Flávio, que segue na liderança",
+      "data": "2026-10-16T18:26:21.000Z",
+      "url": "https://oglobo.globo.com/economia/fabio-graner/post/2026/10/lula-termina-semana-com-onda-favoravel-e-entra-competitivo-na-reta-final-da-disputa-com-flavio-que-segue-na-lideranca.ghtml",
+      "resumo": "A segunda semana após o primeiro turno das eleições presidenciais se aproxima de seu final com um quadro de disputa totalmente em aberto, mas com as duas candidaturas em momentos bem diferentes. Depois de Flávio Bolsonaro dominar a pauta na primeira semana, com a construção de alianças com partidos do centrão que o haviam esnobado antes, a segunda semana teve predomínio do presidente Luiz Inácio Lula da Silva, que coroou a reação com a foto de uma Constituição na mão após a promulgação do fim da escala 6x1, na manhã dessa sexta-feira. Depois de um freio de arrumação interno e uma mudança significativa de rota, Lula saiu da letargia e conseguiu gerar uma onda a seu favor nas ruas e nas redes sociais. Nas palavras de um petista, a campanha à reeleição se assemelha a um aluno que passou o ano inteiro meio relapso na escola, ficou de recuperação e na reta final corre para tentar não ser reprovado e passar de ano. Lula conseguiu retomar o comando da pauta tanto na agenda positiva como na negativa. No primeiro caso, além da 6x1, Lula lançou medidas para beneficiar os Microempreendedores Individuais (MEI) e já conseguiu aprová-las no Congresso, contando com a ajuda dos presidentes da Câmara e do Senado, Hugo Motta e Davi Alcolumbre, que jogam todas as suas fichas na reeleição do presidente para também sobreviverem nos seus cargos atuais. E agiu em outras frentes, como a pressão sobre o setor de combustíveis para repassar a desoneração anunciada na sexta-feira da semana passada, que começou a chegar nas bombas. Na agenda negativa, a campanha petista tem empurrado o bolsonarismo para a defensiva, sobretudo no tema fiscal, ao acusar a Flávio e seu time de preparem um corte de gastos que vai causar perdas para os trabalhadores e para as pessoas mais pobres do país. O flanco foi aberto pela sinalização de corte de 1,5% do PIB em despesas no primeiro ano de governo combinada com a proximidade explícita com o argentino Javier Milei, que esteve no lançamento da campanha do senador e filho do ex-presidente Jair Bolsonaro. Apesar de acusarem os petistas de praticar fake news nesse tema, é fato que a campanha bolsonarista não detalha de onde viriam os cortes substanciais que promete (reduzir ministérios e penduricalhos passa longe de resolver o problema fiscal, e diminuir conta de juros por tirar o PT não pode ser considerado uma proposta) e tampouco anuncia explicitamente um recuo em torno da sinalização de 1,5% de redução de gastos. Um dos apoiadores de Flávio, cogitado para ocupar uma pasta econômica caso ele vença, Marcelo Kayath, mostrou que a promessa só seria factível sem comprometer programas e o crescimento econômico em um horizonte mais alongado, mas ele não fala pela campanha e ninguém da cúpula bolsonarista sancionou a ideia dele. O que Flávio e seu time têm feito para tentar mitigar o problema é dizer que não haverá redução de programas sociais e que o salário mínimo terá aumento real, mas sem compromisso com um número ou desenho específico de política. Setores da campanha bolsonarista reconhecem que os últimos dias, especialmente a partir do feriado, foram mais favoráveis a Lula. Ponderam, contudo, que os efeitos foram mais derivados da campanha negativa e que a agenda de propostas e promessas não estaria alterando o teto e nem reduzindo a rejeição do presidente. A tese foi de certa forma corroborada com os números do Datafolha, que mostraram uma queda na intenção de voto de Flávio Bolsonaro de 49% para 47% e manutenção do nível de Lula em 45%. Interlocutores bolsonaristas destacam ainda que, a despeito da onda dessa semana ter sido a favor do PT, Flávio segue numericamente à frente em praticamente todos os levantamentos, mantendo seu favoritismo, e que oscilações são naturais. E apostam que os movimentos de rua nesse fim de semana, especialmente na avenida Paulista no domingo, vão ajudar a quebrar a onda. Com o início das entrevistas ao Jornal Nacional e os debates com confronto direto entre os dois, a disputa entre em sua reta final e fase de maior imprevisibilidade. Na primeira sabatina, ontem, Lula se saiu bem ontem, com poucas escorregadas e mantendo o ânimo positivo do petismo. Hoje, será a vez de Flávio sentar-se na bancada da GLOBO e trabalhar para tentar manter sua liderança. No domingo, será o primeiro debate, na Band, e na próxima sexta, o da GLOBO. Quem vai criar e surfar a último onda até o dia 25?",
+      "texto": true
+     }
+    ],
+    "notas": [
+     "100 itens no feed; 30 de coluna/blog/opinião descartados; sobram 70.",
+     "Menção a político da lista: 64/70 (91%) em título+resumo; 67% só no título.",
+     "Conteúdo: texto integral no feed (70/70 com resumo, 66 com texto longo). Paywall: sim (limite de matérias grátis).",
+     "O feed cobre ~37 h de publicação.",
+     "O feed de política inclui blogs de bastidor (Malu Gaspar, Bela Megale, Pulso etc.) — o filtro de /blogs/ é obrigatório."
+    ]
+   },
+   "veredito": "usar",
+   "ms": 1811
+  },
+  {
+   "id": "imprensa-poder360",
+   "nome": "Poder360 (feed geral)",
+   "grupo": "imprensa",
+   "url": "https://www.poder360.com.br/feed/",
+   "custo": "0 — RSS público",
+   "risco": "Médio: o WAF do site recusa o cliente HTTP do Node (403) mesmo com o curl passando do mesmo IP — sem contrato, pode bloquear o servidor a qualquer momento.",
+   "medida": {
+    "status": "ok",
+    "itens": 10,
+    "janela": "feed atual (~1 h)",
+    "atrasoHoras": 0,
+    "formato": "rss",
+    "idPolitico": false,
+    "amostra": [
+     {
+      "titulo": "Kassab tem reunião com coordenador da campanha de Lula",
+      "data": "2026-10-16T18:36:37.000Z",
+      "url": "https://www.poder360.com.br/poder-eleicoes-2026/kassab-tem-reuniao-com-coordenador-da-campanha-de-lula/",
+      "resumo": "Presidente do PSD parabenizou Rafael Fonteles pela reeleição no Piauí; encontro também teve congressistas eleitos pelo partido",
+      "texto": true
+     },
+     {
+      "titulo": "Promulgação do fim da 6 x 1 tem “olê, olê, olê, olá, Lula”",
+      "data": "2026-10-16T18:28:08.000Z",
+      "url": "https://www.poder360.com.br/poder-eleicoes-2026/promulgacao-do-fim-da-6-x-1-tem-ole-ole-ole-ola-lula/",
+      "resumo": "Sindicalistas e militantes acompanham sessão solene no Congresso que também promulgou regras para agentes de saúde",
+      "texto": true
+     },
+     {
+      "titulo": "Nikolas satiriza medidas de Lula: “Tá desesperado, tadinho”",
+      "data": "2026-10-16T18:13:51.000Z",
+      "url": "https://www.poder360.com.br/poder-eleicoes-2026/nikolas-satiriza-medidas-de-lula-ta-desesperado-tadinho/",
+      "resumo": "Deputado ironiza aumento do Bolsa Família, proibição das bets e perdão de dívidas de MEIs perto do 2º turno",
+      "texto": true
+     }
+    ],
+    "notas": [
+     "10 itens no feed; 0 de coluna/blog/opinião descartados; sobram 10.",
+     "Menção a político da lista: 6/10 (60%) em título+resumo; 60% só no título.",
+     "Conteúdo: texto integral no feed (10/10 com resumo, 10 com texto longo). Paywall: não.",
+     "O feed cobre ~1 h de publicação.",
+     "Se der 403: o curl com o mesmo user-agent e IP recebe 200, então é filtro de robô por assinatura do cliente, não bloqueio geográfico. Não contornamos.",
+     "Feed geral tem só 10 itens; o site é quase todo política. Feeds por editoria (/poder-governo/feed/) vêm quase vazios."
+    ]
+   },
+   "veredito": "usar",
+   "ms": 231
+  },
+  {
+   "id": "imprensa-uol",
+   "nome": "UOL — Notícias (feed geral)",
+   "grupo": "imprensa",
+   "url": "https://rss.uol.com.br/feed/noticias.xml",
+   "custo": "0 — RSS público",
+   "risco": "Baixo: RSS é oferecido pelo veículo para leitura; republicar só título + link, nunca o texto.",
+   "medida": {
+    "status": "parcial",
+    "itens": 14,
+    "janela": "feed atual (~0 h)",
+    "atrasoHoras": 0.1,
+    "formato": "rss",
+    "idPolitico": false,
+    "amostra": [
+     {
+      "titulo": "Ministro do TSE rejeita pedido de Flávio para limitar atuação de sindicatos a favor de Lula",
+      "data": "2026-10-16T18:56:00.000Z",
+      "url": "https://noticias.uol.com.br/ultimas-noticias/agencia-estado/2026/10/16/ministro-do-tse-rejeita-pedido-de-flavio-para-limitar-atuacao-de-sindicatos-a-favor-de-lula.htm",
+      "resumo": "O ministro Ricardo Villas Bôas Cueva, corregedor do Tribunal Superior Eleitoral (TSE), rejeitou o pedido da campanha do senador Flávio Bolsonaro (PL-RJ), candidato à Presidência, para limitar a atuação de sindicatos e movimentos sociais na campanha de Luiz Inácio Lula da Silva.",
+      "texto": false
+     }
+    ],
+    "notas": [
+     "15 itens no feed; 1 de coluna/blog/opinião descartados; sobram 14.",
+     "Menção a político da lista: 1/14 (7%) em título+resumo; 7% só no título.",
+     "Conteúdo: título + resumo (13/14 com resumo, 0 com texto longo). Paywall: parcial (parte do conteúdo é só para assinante).",
+     "O feed cobre ~0 h de publicação.",
+     "UOL não tem RSS de política acessível: noticias.uol.com.br/politica/index.xml devolve 403 daqui. Feed geral mistura esporte e outros sites do grupo; pubDate em português."
+    ]
+   },
+   "veredito": "usar com cuidado",
+   "ms": 1100
+  },
+  {
+   "id": "rede-bluesky",
+   "nome": "Bluesky — AppView público (searchActors + getAuthorFeed)",
+   "grupo": "rede-aberta",
+   "url": "https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=lulaoficialbluesky.bsky.social",
+   "custo": "0 — API pública, sem login",
+   "risco": "Baixo: protocolo aberto e API pública documentada; o risco é a conta não ser oficial (só o selo de verificação garante).",
+   "medida": {
+    "status": "parcial",
+    "itens": 49,
+    "janela": "7 dias × 1 conta(s) verificada(s)",
+    "atrasoHoras": 16.1,
+    "formato": "json",
+    "idPolitico": false,
+    "amostra": [
+     {
+      "data": "2026-10-16T03:07:20.401Z",
+      "titulo": "@lulaoficialbluesky.bsky.social: Bora, gente! Bora, Brasil! Saindo da sabatina da Globo no pique para vencer as eleições. Vamos juntos! 🇧🇷",
+      "url": "https://bsky.app/profile/did:plc:a5o5pa6imrd52s627zq63zgz/post/3mxxlvaif4k2u"
+     },
+     {
+      "data": "2026-10-16T03:04:26.643Z",
+      "titulo": "@lulaoficialbluesky.bsky.social: Um recomeço para milhões de MEIs. Hoje aprovamos no Senado a lei que permite o aumento do teto do MEI para ",
+      "url": "https://bsky.app/profile/did:plc:a5o5pa6imrd52s627zq63zgz/post/3mxxlq2rols2u"
+     },
+     {
+      "data": "2026-10-16T03:02:35.233Z",
+      "titulo": "@lulaoficialbluesky.bsky.social: Crime hediondo exige punição. E eu, como cidadão, sou favorável à redução da maioridade penal para 16 anos ",
+      "url": "https://bsky.app/profile/did:plc:a5o5pa6imrd52s627zq63zgz/post/3mxxlmqjrps2u"
+     }
+    ],
+    "notas": [
+     "12 nomes testados: 11 com conta plausível, 1 verificada(s) pelo Bluesky, 3 com post nos últimos 7 dias (1 delas verificadas). Itens e amostra contam só contas verificadas.",
+     "Lula → @lulaoficialbluesky.bsky.social (verificada pelo Bluesky; 8 perfis com esse nome): 49 posts em 7 d, último 2026-10-16.",
+     "Fernando Haddad → @fernandohaddad.bsky.social (sem selo, oficialidade não confirmada; 5 perfis com esse nome): 0 posts em 7 d, último 2025-09-11.",
+     "Tarcísio Gomes de Freitas → @tarcisiogdf.bsky.social (sem selo, oficialidade não confirmada): 0 posts em 7 d, último nunca.",
+     "Guilherme Boulos → @guilhermeboulos.bsky.social (sem selo, oficialidade não confirmada; 4 perfis com esse nome): 0 posts em 7 d, último 2025-02-19.",
+     "Erika Hilton → @erikahilton.bsky.social (sem selo, oficialidade não confirmada; 10 perfis com esse nome): 1 posts em 7 d, último 2026-10-15.",
+     "Tabata Amaral → @tabatasp.bsky.social (sem selo, oficialidade não confirmada; 2 perfis com esse nome): 5 posts em 7 d, último 2026-10-16.",
+     "Gleisi Hoffmann → @gleisi.bsky.social (sem selo, oficialidade não confirmada): 0 posts em 7 d, último 2025-09-02.",
+     "Marina Silva → @marinasilva.bsky.social (sem selo, oficialidade não confirmada; 5 perfis com esse nome): 0 posts em 7 d, último 2025-09-24.",
+     "Nikolas Ferreira → @nikolasferreira.bsky.social (sem selo, oficialidade não confirmada; 5 perfis com esse nome): 0 posts em 7 d, último nunca.",
+     "Randolfe Rodrigues → @randolfe.bsky.social (sem selo, oficialidade não confirmada; 2 perfis com esse nome): 0 posts em 7 d, último 2024-06-04.",
+     "Flávio Bolsonaro → @flaviobolsonar.bsky.social (sem selo, oficialidade não confirmada; 4 perfis com esse nome): 0 posts em 7 d, último 2026-03-16.",
+     "Hugo Motta: nenhuma conta plausível (2 perfis com o nome, nenhum com selo nem handle compatível).",
+     "Muitos perfis homônimos (fã-clube, paródia, \"não oficial\"); sem selo, a ligação conta→político precisa de conferência manual (link no site oficial do político)."
+    ]
+   },
+   "veredito": "usar com cuidado",
+   "ms": 6123
+  },
+  {
+   "id": "rede-telegram",
+   "nome": "Telegram — prévia pública t.me/s/<canal>",
+   "grupo": "rede-aberta",
+   "url": "https://t.me/s/nikolasferreira",
+   "custo": "0 — página pública, sem login",
+   "risco": "Médio: é HTML pensado pra navegador, sem API documentada pra isso; markup pode mudar e o Telegram pode limitar acesso automatizado.",
+   "medida": {
+    "status": "parcial",
+    "itens": 30,
+    "janela": "7 dias × 3 canais",
+    "atrasoHoras": 0.6,
+    "formato": "html",
+    "idPolitico": false,
+    "amostra": [
+     {
+      "data": "2026-10-16T18:33:48+00:00",
+      "url": "https://t.me/nikolasferreira/5491",
+      "titulo": "Nikolas Ferreira: Projeto aprovado! ✅ O SUS agora deverá aceitar exames da rede privada. Menos burocracia, menos gasto e mais agilidade na s"
+     },
+     {
+      "data": "2026-10-16T15:12:44+00:00",
+      "url": "https://t.me/nikolasferreira/5490",
+      "titulo": "Nikolas Ferreira: Já compartilhou? 😂😂😂"
+     },
+     {
+      "data": "2026-10-16T15:12:37+00:00",
+      "url": "https://t.me/nikolasferreira/5489",
+      "titulo": "Nikolas Ferreira: https://www.instagram.com/reel/Dej0d71xC43/?obrf=amk4c2czNnVzc25n"
+     }
+    ],
+    "notas": [
+     "Nikolas Ferreira (deputado federal, MG) t.me/nikolasferreira (verificado, 245K inscritos): prévia mostra 20 posts, 20 em 7 d, último há 0.6 h.",
+     "Flávio Bolsonaro (senador, RJ) t.me/SenadorFlavioBolsonaro (verificado, 89.7K inscritos): prévia mostra 20 posts, 10 em 7 d, último há 19.6 h.",
+     "Jair Bolsonaro (ex-presidente) t.me/jairbolsonarobrasil (verificado, 1.05M inscritos): prévia mostra 20 posts, 0 em 7 d, último há 10949.6 h.",
+     "Prévia mostra só os ~20 posts mais recentes (mais antigos exigem paginação ?before=). Muitos posts são vídeo/repost sem texto.",
+     "Não achei canal oficial do Lula, do Tarcísio nem do Boulos (t.me/s/lula, LulaOficial, tarcisiogdf etc. não existem). Uso no Brasil é concentrado na direita."
+    ]
+   },
+   "veredito": "usar com cuidado",
+   "ms": 806
+  },
+  {
+   "id": "rede-youtube",
+   "nome": "YouTube — RSS público do canal",
+   "grupo": "rede-aberta",
+   "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCvO2BExvkAbGMsTGnEnI_Ng",
+   "custo": "0 — RSS público, sem chave",
+   "risco": "Baixo: feed oficial e estável há anos; mostrar título + link (embed), não baixar vídeo.",
+   "medida": {
+    "status": "ok",
+    "itens": 15,
+    "janela": "7 dias × 3 canais",
+    "atrasoHoras": 0.5,
+    "formato": "xml",
+    "idPolitico": false,
+    "amostra": [
+     {
+      "titulo": "Lula: Lula em Ipatinga: O Brasil Pronto Pra Mais",
+      "data": "2026-10-16T18:41:28+00:00",
+      "url": "https://www.youtube.com/watch?v=R_QGfDJfNvU"
+     },
+     {
+      "titulo": "Lula: Lula em Juiz de Fora: O Brasil Pronto Pra Mais",
+      "data": "2026-10-16T18:16:23+00:00",
+      "url": "https://www.youtube.com/watch?v=gdhD8gsBo8U"
+     },
+     {
+      "titulo": "Lula: 7º Programa Eleitoral do Segundo Turno - O Fim da 6x1 é uma Conquista Histórica",
+      "data": "2026-10-16T16:30:50+00:00",
+      "url": "https://www.youtube.com/watch?v=WeZGYplt3VU"
+     }
+    ],
+    "notas": [
+     "Lula (presidente) @LulaOficial (selo de verificado): 15 vídeos no feed, 15 nos últimos 7 dias, mais recente há 0.5 h.",
+     "Tarcísio de Freitas (governador de SP) @tarcisiogdf (selo de verificado): 15 vídeos no feed, 0 nos últimos 7 dias, mais recente há 270.8 h.",
+     "Nikolas Ferreira (deputado federal, MG) @nikolasferreiradm (mesmo handle das outras redes dele; @nikolasferreira é canal antigo, parado desde 2014): 15 vídeos no feed, 0 nos últimos 7 dias, mais recente há 405.6 h.",
+     "Feed dá os 15 vídeos mais recentes (Atom) com título, data e descrição; sem contagem confiável de views. O channel_id liga ao político de forma estável (cadastrar à mão uma vez)."
+    ]
+   },
+   "veredito": "usar",
+   "ms": 123
+  },
+  {
+   "id": "fechada-facebook",
+   "nome": "Facebook — página pública (/Lula)",
+   "grupo": "rede-fechada",
+   "url": "https://www.facebook.com/Lula",
+   "custo": "0 — mas posts só via Graph API com token de app",
+   "risco": "Termos da Meta proíbem coleta automatizada sem permissão; embed/HTML público não é API e muda sem aviso.",
+   "medida": {
+    "status": "parcial",
+    "itens": 0,
+    "janela": "só perfil",
+    "atrasoHoras": null,
+    "formato": "html",
+    "idPolitico": false,
+    "amostra": [],
+    "notas": [
+     "página facebook.com/Lula: HTTP 200 (UA do helper), 495 KB; só meta-dados do perfil (\"Lula. 7.138.133 seguidores · 11.155.627 falando sobre isso. Perfil pessoal do Presidente do Brasil. Filho da D\"), nenhum post no HTML",
+     "plugin de página (embed público, tabs=timeline): HTTP 200 (UA do helper); traz nome e seguidores, sem posts datados — a timeline é carregada depois por JS",
+     "oEmbed oficial (graph.facebook.com/oembed_page): HTTP 200 (UA do helper); abre sem token, mas devolve só o bloco do plugin (SDK JS), sem posts. Posts da página só pela Graph API com token de app Meta, fora pela regra"
+    ]
+   },
+   "veredito": "fora: sem login só vem o cabeçalho da página",
+   "ms": 5505
+  },
+  {
+   "id": "fechada-instagram",
+   "nome": "Instagram — perfil público (@lulaoficial)",
+   "grupo": "rede-fechada",
+   "url": "https://www.instagram.com/lulaoficial/embed/",
+   "custo": "0 — sem chave; só embed público do perfil",
+   "risco": "Termos da Meta proíbem coleta automatizada sem permissão; embed/HTML público não é API e muda sem aviso.",
+   "medida": {
+    "status": "ok",
+    "itens": 6,
+    "janela": "últimos 6 posts (embed do perfil)",
+    "atrasoHoras": 0.5,
+    "formato": "json",
+    "idPolitico": false,
+    "amostra": [
+     {
+      "data": "2026-10-16T18:41:52.000Z",
+      "titulo": "JUIZ DE FORA TOMOU AS RUAS! ❤️🔥🇧🇷 Que coisa linda ver essa multidão de mineiros e mineiras mostrando a força da Zona da Mata mineira e de",
+      "url": "https://www.instagram.com/p/DekM5W0FXAI/"
+     },
+     {
+      "data": "2026-10-16T16:36:49.000Z",
+      "titulo": "E se tudo que conquistamos juntos estivesse em risco? EXPLODAM ESSE VÍDEO! 🚨 Lembrar para não repetir. 🇧🇷",
+      "url": "https://www.instagram.com/p/Dej-ey3N-fb/"
+     },
+     {
+      "data": "2026-10-16T16:03:34.000Z",
+      "titulo": "Encontrei com os agentes comunitários de saúde e de combate às endemias hoje, no Congresso Nacional, para celebrar a conquista da promulgaçã",
+      "url": "https://www.instagram.com/p/Dej6fDRNW6E/"
+     }
+    ],
+    "notas": [
+     "perfil instagram.com/lulaoficial: HTTP 200 (UA do helper), 659 KB; só meta-dados do perfil (\"17M seguidores, seguindo 716, 5,362 posts — Veja as fotos e vídeos de Luiz Inácio Lula da Silva (@lulaoficial\"), nenhum post no HTML",
+     "API web_profile_info: UA do helper: HTTP 400; UA só ASCII: HTTP 400; exige cabeçalho de app (x-ig-app-id) do navegador, não usado (seria fingir ser o app)",
+     "embed do perfil instagram.com/lulaoficial/embed/: HTTP 200 (UA do helper); 6 posts com data e legenda no JSON embutido (contextJSON), 6 nos últimos 7 dias",
+     "o embed de perfil não é documentado pela Meta como API; o oficial (instagram_oembed no Graph) exige token de app"
+    ]
+   },
+   "veredito": "usar com cuidado (embed, ritmo baixo, pronto pra cair)",
+   "ms": 8390
+  },
+  {
+   "id": "fechada-threads",
+   "nome": "Threads — perfil público (@lulaoficial)",
+   "grupo": "rede-fechada",
+   "url": "https://www.threads.com/@lulaoficial",
+   "custo": "0 — mas posts só com login ou token do dono",
+   "risco": "Termos da Meta proíbem coleta automatizada sem permissão; embed/HTML público não é API e muda sem aviso.",
+   "medida": {
+    "status": "parcial",
+    "itens": 0,
+    "janela": "só perfil",
+    "atrasoHoras": null,
+    "formato": "html",
+    "idPolitico": false,
+    "amostra": [],
+    "notas": [
+     "perfil threads.com/@lulaoficial (threads.net redireciona pra cá): HTTP 200 (UA do helper), 569 KB; só meta-dados do perfil (\"3,1 mi seguidores • 154 threads • Presidente do Brasil. Veja as conversas mais recentes com @lulaoficial.\"), nenhum post no HTML",
+     "embed do perfil: HTTP 200 (UA do helper); casca vazia, sem posts",
+     "embed de post (threads.com/@x/post/ID/embed) precisa do ID do post, que o perfil sem login não entrega; API oficial do Threads exige token do próprio dono da conta"
+    ]
+   },
+   "veredito": "fora: sem login só vem o cabeçalho do perfil",
+   "ms": 4416
+  },
+  {
+   "id": "fechada-tiktok",
+   "nome": "TikTok — perfil público (@lulaoficial)",
+   "grupo": "rede-fechada",
+   "url": "https://www.tiktok.com/embed/@lulaoficial",
+   "custo": "0 — sem chave; só embed de criador",
+   "risco": "Termos do TikTok proíbem coleta automatizada; o embed oscila (503 overload-protect) e a data sai do ID, não do dado.",
+   "medida": {
+    "status": "parcial",
+    "itens": 0,
+    "janela": "só perfil",
+    "atrasoHoras": null,
+    "formato": "html",
+    "idPolitico": false,
+    "amostra": [],
+    "notas": [
+     "perfil tiktok.com/@lulaoficial: HTTP 200 (UA do helper); JSON embutido com perfil (Presidente Lula, 1295 vídeos, 6100000 seguidores) e lista de vídeos vazia. A lista de vídeos vem de /api/post/item_list com assinatura (X-Bogus/msToken) gerada no navegador — forjar isso é contornar proteção, fora",
+     "embed de criador: UA do helper: HTTP 500; UA só ASCII: HTTP 500 — em testes manuais (curl) no mesmo dia ele alternou 200/503 e, quando abriu, trouxe 11 vídeos com legenda (data derivável do ID); instável demais pra feed diário",
+     "oEmbed oficial (perfil): UA do helper: HTTP 502; UA só ASCII: HTTP 502; devolve só nome e o bloco do widget, sem vídeos",
+     "API de pesquisa do TikTok (Research API) é só para academia aprovada; Display API exige login do dono"
+    ]
+   },
+   "veredito": "fora, por ora",
+   "ms": 70650
+  },
+  {
+   "id": "fechada-x",
+   "nome": "X/Twitter — perfil público (@LulaOficial)",
+   "grupo": "rede-fechada",
+   "url": "https://x.com/LulaOficial",
+   "custo": "0 — sem chave; API oficial de leitura é paga",
+   "risco": "Termos do X proíbem scraping sem consentimento; os posts só vêm no HTML servido a robôs e isso pode mudar a qualquer hora.",
+   "medida": {
+    "status": "ok",
+    "itens": 5,
+    "janela": "últimos 5 posts (HTML público do perfil)",
+    "atrasoHoras": 0.7,
+    "formato": "json",
+    "idPolitico": false,
+    "amostra": [
+     {
+      "data": "2026-10-16T18:28:21.000Z",
+      "titulo": "Bora, Juiz de Fora! Bora, Minas Gerais! Bora, Brasil! 🇧🇷 É 13! 📸 @ricardostuckert https://t.co/JlP83ZjWBf",
+      "url": "https://x.com/LulaOficial/status/2111162346320371743"
+     },
+     {
+      "data": "2026-10-16T18:09:40.000Z",
+      "titulo": "Nossa meta é alcançar o desmatamento ilegal zero até 2030. https://t.co/fWmldw6T5i",
+      "url": "https://x.com/LulaOficial/status/2111157644794691671"
+     },
+     {
+      "data": "2026-10-16T17:03:53.000Z",
+      "titulo": "Lula em Juiz de Fora: O Brasil Pronto Pra Mais https://t.co/wtvUZsoxzW",
+      "url": "https://x.com/LulaOficial/status/2111141087473729691"
+     }
+    ],
+    "notas": [
+     "perfil x.com/LulaOficial: HTTP 200 (UA do helper); 5 posts com data e texto no HTML (resultado GraphQL embutido, pedido com count=20, veio menos), 5 nos últimos 7 dias",
+     "o X só manda os posts no HTML para clientes que ele trata como robô de indexação; com UA de navegador vem a casca JS — comportamento não documentado, pode sumir sem aviso",
+     "syndication timeline-profile (widget público): UA do helper: HTTP 429 (rate limit); UA só ASCII: HTTP 429 (rate limit) — rate limit",
+     "oEmbed publish.twitter.com: HTTP 200 (UA do helper); devolve só o link do widget de timeline (carregado por JS), sem posts",
+     "API oficial do X: plano grátis só escreve; leitura é paga — fora pela regra do dono"
+    ]
+   },
+   "veredito": "usar com cuidado (HTML de robô, pronto pra cair)",
+   "ms": 7232
+  },
+  {
+   "id": "estado-ba-alba-nopaper",
+   "nome": "ALBA — NoPaper/SPL (proposições, sessões, frequência)",
+   "grupo": "estado",
+   "url": "https://albalegis.nopapercloud.com.br/spl/",
+   "custo": "0 — se abrir; scraping de HTML",
+   "risco": "Médio: sistema terceirizado atrás de Cloudflare; sem API conhecida.",
+   "medida": {
+    "status": "bloqueado",
+    "itens": null,
+    "janela": "—",
+    "atrasoHoras": null,
+    "formato": "html",
+    "idPolitico": false,
+    "amostra": [],
+    "notas": [
+     "HTTP 403 com página \"Sorry, you have been blocked\" do Cloudflare em https://albalegis.nopapercloud.com.br/spl/; robots.txt também: HTTP 403 (Cloudflare)",
+     "bloqueio vem antes de qualquer conteúdo, até no robots.txt e com qualquer UA testado: forte indício de bloqueio por IP/país (máquina em Barcelona). Precisa repetir de IP brasileiro",
+     "é aqui que a ALBA publica, desde 01/08/2025, proposições, sessões e frequência dos deputados (sistema NoPaper/SPL, terceirizado); o site antigo só tem até jul/2025"
+    ]
+   },
+   "veredito": "refazer de IP brasileiro antes de decidir",
+   "ms": 1099
+  },
+  {
+   "id": "estado-ba-alba-site",
+   "nome": "ALBA — site institucional (deputados, proposições até jul/2025, agenda)",
+   "grupo": "estado",
+   "url": "https://www.al.ba.gov.br/atividade-legislativa-nova/proposicoes",
+   "custo": "0 — scraping de HTML",
+   "risco": "Baixo nos termos; alto na manutenção, e a atividade não está mais aqui.",
+   "medida": {
+    "status": "parcial",
+    "itens": 0,
+    "janela": "7 dias (2026-10-09 a 2026-10-16)",
+    "atrasoHoras": null,
+    "formato": "html",
+    "idPolitico": false,
+    "amostra": [],
+    "notas": [
+     "lista de deputados: HTTP 200, 63 deputados com id numérico na URL (/deputados/deputado-estadual/{id}) — scraping de HTML",
+     "busca de proposições do site (dataInicio/dataFim): HTTP 200, 0 proposições na janela; o próprio site avisa que desde 01/08/2025 os dados estão no NoPaper (ver estado-ba-alba-nopaper)",
+     "agenda (/midia-center/agenda): HTTP 200, sem nenhum evento datado no HTML",
+     "sem dados abertos, sem API, sem RSS (/rss = 404)",
+     "Fragilidade: alta — HTML de site em transição de sistema"
+    ]
+   },
+   "veredito": "só cadastro de deputados; atividade fora",
+   "ms": 3817
+  },
+  {
+   "id": "estado-ba-governador-agenda",
+   "nome": "Governo da BA — agenda do governador (SECOM)",
+   "grupo": "estado",
+   "url": "https://www.ba.gov.br/comunicacao/agenda-do-governador",
+   "custo": "0 — scraping de HTML",
+   "risco": "Baixo nos termos; página existe mas está vazia.",
+   "medida": {
+    "status": "falhou",
+    "itens": 0,
+    "janela": "7 dias (2026-10-09 a 2026-10-16)",
+    "atrasoHoras": null,
+    "formato": "html",
+    "idPolitico": true,
+    "amostra": [],
+    "notas": [
+     "HTTP 200: página da SECOM no ar, mas o corpo está vazio (0 caracteres de texto; só um bloco de abas residual de 7/3/2024 em comentário HTML); \"Última atualização: 04/08/2026 às 16:38\"",
+     "sem API nem JSON; www.ba.gov.br é SPA de serviços e a SECOM é Drupal; a SECOM tem RSS de notícias (ba.gov.br/comunicacao/feed), não de agenda",
+     "Fragilidade: alta — quando volta a ser preenchida, é texto livre em HTML"
+    ]
+   },
+   "veredito": "fora: página vazia; reavaliar depois da eleição",
+   "ms": 865
+  },
+  {
+   "id": "estado-mg-almg-agenda",
+   "nome": "ALMG — agenda diária (API)",
+   "grupo": "estado",
+   "url": "https://dadosabertos.almg.gov.br/api/v2/agenda/diaria/agenda/pesquisa",
+   "custo": "0 — API aberta, sem chave",
+   "risco": "Baixo: dado público oficial, publicado pra reuso.",
+   "medida": {
+    "status": "ok",
+    "itens": 50,
+    "janela": "7 dias (2026-10-09 a 2026-10-16)",
+    "atrasoHoras": 2.2,
+    "formato": "json",
+    "idPolitico": false,
+    "amostra": [
+     {
+      "data": "2026-10-16T14:00:00-03:00",
+      "titulo": "Ensino Médio - Câmara Municipal de Bocaiúva - Bocaiúva — Visita orientada (Externo)",
+      "url": "https://www.almg.gov.br/acompanhe/agenda/"
+     },
+     {
+      "data": "2026-10-16T09:00:00-03:00",
+      "titulo": "Parlamento Jovem - Câmara Municipal de Lima Duarte - Lima Duarte — Visita orientada (Externo)",
+      "url": "https://www.almg.gov.br/acompanhe/agenda/"
+     },
+     {
+      "data": "2026-10-16T08:00:00-03:00",
+      "titulo": "2026 - Associação Itabiritense de Artistas e Artesãos (Palácio da Inconfidência - Galeria de Arte)",
+      "url": "https://www.almg.gov.br/servicos/assembleia-cultural/agenda/arquivos/Mostra-da-Associacao-Itabiritense-de-Artistas-e-Artesaos/"
+     }
+    ],
+    "notas": [
+     "API REST documentada (OpenAPI em dadosabertos.almg.gov.br), JSON ou XML; categorias na janela: Artesanato 4, Comissões 34, Visitas Orientadas 8, Plenário 3, ALMG Cultural 1",
+     "agenda institucional (comissões, plenário, eventos, cultura); item não traz id de deputado — o vínculo vem dos endpoints de reunião",
+     "Fragilidade: baixa — API pública versionada (v2)"
+    ]
+   },
+   "veredito": "usar",
+   "ms": 648
+  },
+  {
+   "id": "estado-mg-almg-comissoes",
+   "nome": "ALMG — reuniões e presença em comissões (API)",
+   "grupo": "estado",
+   "url": "https://dadosabertos.almg.gov.br/api/v2/comissoes/reunioes/pesquisa",
+   "custo": "0 — API aberta, sem chave",
+   "risco": "Baixo: dado público oficial, publicado pra reuso.",
+   "medida": {
+    "status": "ok",
+    "itens": 5,
+    "janela": "7 dias (2026-10-09 a 2026-10-16), reuniões realizadas",
+    "atrasoHoras": 43.2,
+    "formato": "json",
+    "idPolitico": true,
+    "amostra": [
+     {
+      "data": "2026-10-14T16:00:00-03:00",
+      "titulo": "Beatriz Cerqueira (PT, idDeputado 26098) presente — Educação, Ciência e Tecnologia",
+      "url": "https://www.almg.gov.br/atividade-parlamentar/comissoes/"
+     },
+     {
+      "data": "2026-10-14T16:00:00-03:00",
+      "titulo": "Professor Cleiton (PV, idDeputado 26119) presente — Educação, Ciência e Tecnologia",
+      "url": "https://www.almg.gov.br/atividade-parlamentar/comissoes/"
+     },
+     {
+      "data": "2026-10-14T16:00:00-03:00",
+      "titulo": "Leleco Pimentel (PT, idDeputado 12552) presente — Educação, Ciência e Tecnologia",
+      "url": "https://www.almg.gov.br/atividade-parlamentar/comissoes/"
+     }
+    ],
+    "notas": [
+     "34 reuniões de comissão convocadas na janela, 5 marcadas como ocorridas (reuniaoOcorrida = S)",
+     "resultado de reunião (/comissoes/{id}/reunioes/{tipo}/{data}/{hora}/resultados) traz presenças com idDeputado: 6 registros nas 2 reuniões consultadas",
+     "Fragilidade: baixa — API pública documentada; uma chamada por reunião pra ter presença"
+    ]
+   },
+   "veredito": "usar",
+   "ms": 3176
+  },
+  {
+   "id": "estado-mg-almg-plenario",
+   "nome": "ALMG — reuniões de Plenário, votações e pronunciamentos (API)",
+   "grupo": "estado",
+   "url": "https://dadosabertos.almg.gov.br/api/v2/plenario/reunioes/pesquisa",
+   "custo": "0 — API aberta, sem chave",
+   "risco": "Baixo: dado público oficial, publicado pra reuso.",
+   "medida": {
+    "status": "ok",
+    "itens": 3,
+    "janela": "7 dias (2026-10-09 a 2026-10-16)",
+    "atrasoHoras": 26.2,
+    "formato": "json",
+    "idPolitico": true,
+    "amostra": [
+     {
+      "data": "2026-10-15T14:00:00-03:00",
+      "titulo": "Reunião ordinária de Plenário — Não ocorrida",
+      "url": "https://dadosabertos.almg.gov.br/api/v2/plenario/reunioes/detalhes/2026/10/15/14:00?formato=json"
+     },
+     {
+      "data": "2026-10-14T14:00:00-03:00",
+      "titulo": "Reunião ordinária de Plenário — Ocorrida, 136 registros com idDeputado",
+      "url": "https://dadosabertos.almg.gov.br/api/v2/plenario/reunioes/detalhes/2026/10/14/14:00?formato=json"
+     },
+     {
+      "data": "2026-10-13T14:00:00-03:00",
+      "titulo": "Reunião ordinária de Plenário — Não ocorrida",
+      "url": "https://dadosabertos.almg.gov.br/api/v2/plenario/reunioes/detalhes/2026/10/13/14:00?formato=json"
+     }
+    ],
+    "notas": [
+     "3 reuniões de Plenário convocadas na janela, 1 com situação diferente de \"Não ocorrida\" (detalhe de 3)",
+     "o detalhe (desde mai/2023) traz pauta, resultado e votação nominal com idDeputado quando há; presença em Plenário não aparece como lista própria na API",
+     "pronunciamentos na janela: 0 (endpoint /pronunciamentos/pesquisa/direcionada, com autor)",
+     "Fragilidade: baixa — API pública documentada"
+    ]
+   },
+   "veredito": "usar",
+   "ms": 1968
+  },
+  {
+   "id": "estado-mg-almg-proposicoes",
+   "nome": "ALMG — proposições (API)",
+   "grupo": "estado",
+   "url": "https://dadosabertos.almg.gov.br/api/v2/proposicoes/pesquisa/direcionada",
+   "custo": "0 — API aberta, sem chave",
+   "risco": "Baixo: dado público oficial, publicado pra reuso.",
+   "medida": {
+    "status": "ok",
+    "itens": 224,
+    "janela": "7 dias por data de publicação (2026-10-09 a 2026-10-16)",
+    "atrasoHoras": 19.2,
+    "formato": "json",
+    "idPolitico": false,
+    "amostra": [
+     {
+      "data": "2026-10-16",
+      "titulo": "PL 6187/2026 — Estima as receitas e fixa as despesas do Orçamento Fiscal do Estado e do Orçamento de Investimento das Empresas Controladas p",
+      "url": "https://www.almg.gov.br/atividade-parlamentar/projetos-de-lei/?tipo=PL&num=6187&ano=2026"
+     },
+     {
+      "data": "2026-10-16",
+      "titulo": "PL 6186/2026 — Dispõe sobre a revisão do Plano Plurianual de Ação Governamental 2024-2027 para o exercício 2027. (autor: Governador do Estad",
+      "url": "https://www.almg.gov.br/atividade-parlamentar/projetos-de-lei/?tipo=PL&num=6186&ano=2026"
+     },
+     {
+      "data": "2026-10-16",
+      "titulo": "PL 6177/2026 — Autoriza a abertura de crédito suplementar ao Orçamento Fiscal do Estado em favor da unidade orçamentária Procuradoria-Geral ",
+      "url": "https://www.almg.gov.br/atividade-parlamentar/projetos-de-lei/?tipo=PL&num=6177&ano=2026"
+     }
+    ],
+    "notas": [
+     "filtro ini/fim por data de publicação funciona (dataInicial/dataFinal é ignorado em silêncio e devolve a base inteira); 100 itens na 1ª página de 100",
+     "autor vem só como texto (\"Governador do Estado\"), sem id de deputado — casar por nome com /deputados/em_exercicio; autores mais frequentes: Comissão de Educação, Ciência e Tecnologia (17), Deputada Ana Paula Siqueira PT (7), Deputado Rafael Martins PSD (6)",
+     "Fragilidade: baixa — API pública documentada"
+    ]
+   },
+   "veredito": "usar (autor por nome, casar com lista de deputados)",
+   "ms": 627
+  },
+  {
+   "id": "estado-mg-governador-agenda",
+   "nome": "Governo de MG — agenda do governador (Agência Minas)",
+   "grupo": "estado",
+   "url": "https://www.agenciaminas.mg.gov.br/governador#agenda",
+   "custo": "0 — JSON sem chave",
+   "risco": "Médio: backend do site, sem contrato público; dado em si é público.",
+   "medida": {
+    "status": "ok",
+    "itens": 9,
+    "janela": "7 dias (2026-10-09 a 2026-10-16)",
+    "atrasoHoras": 5.2,
+    "formato": "json",
+    "idPolitico": true,
+    "amostra": [
+     {
+      "data": "2026-10-16T14:00:00.000Z",
+      "titulo": "Participa da 2ª Assembleia Extraordinária dos Governadores do Cosud (remota) — Belo Horizonte (MG) Fechado para imprensa.",
+      "url": "https://www.agenciaminas.mg.gov.br/governador#agenda"
+     },
+     {
+      "data": "2026-10-16T10:00:00.000Z",
+      "titulo": "Reunião — Reunião com secretário de Estado de Governo, Renato Rezende; secretário de Estado Adjunto de Governo, Juliano Fisicaro; secretário",
+      "url": "https://www.agenciaminas.mg.gov.br/governador#agenda"
+     },
+     {
+      "data": "2026-10-15T14:00:00.000Z",
+      "titulo": "Reunião — Reunião com secretário de Estado de Governo, Renato Rezende, secretário de Estado Adjunto de Governo, Juliano Fisicaro, subsecretá",
+      "url": "https://www.agenciaminas.mg.gov.br/governador#agenda"
+     }
+    ],
+    "notas": [
+     "JSON da API interna da Agência Minas (achada no JS do site, não documentada); filtro startDate/endDate funciona",
+     "cada item: título, corpo HTML (local, \"fechado para imprensa\"), data/hora; cadastrado em média 10 h depois do horário do compromisso (há lançamento retroativo)",
+     "agenda do vice: endpoint viceGovernorSchedule responde (0 itens), mas o site esconde por chave de configuração",
+     "id do político: implícito (é a agenda do cargo de governador), não vem id",
+     "Fragilidade: média — JSON limpo, mas é o backend do site, sem contrato público"
+    ]
+   },
+   "veredito": "usar com cuidado (API não documentada)",
+   "ms": 983
+  },
+  {
+   "id": "estado-sp-alesp-agenda",
+   "nome": "ALESP — agenda de eventos (XML anual)",
+   "grupo": "estado",
+   "url": "https://www.al.sp.gov.br/repositorioDados/agenda/agenda_eventos_2026.xml",
+   "custo": "0 — dados abertos, sem chave",
+   "risco": "Baixo: dado público oficial, publicado pra reuso.",
+   "medida": {
+    "status": "ok",
+    "itens": 46,
+    "janela": "7 dias (2026-10-09 a 2026-10-16)",
+    "atrasoHoras": 19.2,
+    "formato": "xml",
+    "idPolitico": true,
+    "amostra": [
+     {
+      "data": "2026-10-16T08:00:00-03:00",
+      "titulo": "Democracia Corinthiana — solicitante: MAURICI (Hall Monumental)",
+      "url": "https://www.al.sp.gov.br/alesp/agenda/"
+     },
+     {
+      "data": "2026-10-16T08:00:00-03:00",
+      "titulo": "Exposição \"Toda cicatriz carrega uma história. E toda história pode florescer\" — solicitante: FÁBIO FARIA DE SÁ (Hall Monumental)",
+      "url": "https://www.al.sp.gov.br/alesp/agenda/"
+     },
+     {
+      "data": "2026-10-16T08:00:00-03:00",
+      "titulo": "EXPO DCS (Espaço Deputado Paulo Frateschi - V Centenário)",
+      "url": "https://www.al.sp.gov.br/alesp/agenda/"
+     }
+    ],
+    "notas": [
+     "46 ocorrências evento×dia na janela (25 eventos distintos); arquivo anual agenda_eventos_2026.xml (1035 KB), 2452 linhas no ano, regerado todo dia de madrugada; último evento até hoje: 16/10/2026",
+     "29/46 eventos da janela têm <Solicitante> igual à matrícula de um deputado (casa com nuMatricula da API de presença; 219 parlamentares); o resto é setor da casa",
+     "agenda é de uso do prédio (audiência, sessão solene, evento cultural), não agenda pessoal do deputado",
+     "Fragilidade: baixa — arquivo de dados abertos com URL estável e documentação em PDF"
+    ]
+   },
+   "veredito": "usar (agenda do prédio, não do deputado)",
+   "ms": 4883
+  },
+  {
+   "id": "estado-sp-alesp-comissoes",
+   "nome": "ALESP — presença em comissões (XML)",
+   "grupo": "estado",
+   "url": "https://www.al.sp.gov.br/repositorioDados/processo_legislativo/comissoes_permanentes_presencas.xml",
+   "custo": "0 — dados abertos; 8 MB/dia",
+   "risco": "Baixo: dado público oficial, publicado pra reuso.",
+   "medida": {
+    "status": "parcial",
+    "itens": 0,
+    "janela": "7 dias (2026-10-09 a 2026-10-16)",
+    "atrasoHoras": 2107.2,
+    "formato": "xml",
+    "idPolitico": true,
+    "amostra": [
+     {
+      "data": "2026-07-21",
+      "titulo": "Fábio Faria de Sá (id 1000001205) presente na reunião 1000007775 da CFOP",
+      "url": "https://www.al.sp.gov.br/comissao/"
+     },
+     {
+      "data": "2026-07-21",
+      "titulo": "Fabiana Bolsonaro (id 1000000973) presente na reunião 1000007775 da CFOP",
+      "url": "https://www.al.sp.gov.br/comissao/"
+     },
+     {
+      "data": "2026-07-21",
+      "titulo": "Solange Freitas (id 1000001007) presente na reunião 1000007775 da CFOP",
+      "url": "https://www.al.sp.gov.br/comissao/"
+     }
+    ],
+    "notas": [
+     "arquivo completo desde 2005 (8 MB, 28437 presenças), sem recorte por ano; regerado todo dia",
+     "última reunião de comissão com presença registrada: 21/07/2026",
+     "o campo <IdDeputado> deste arquivo segue o <IdSPL> do deputados.xml (não o <IdDeputado> de lá): 7/7 presenças de 21/07/2026 casam com deputado atual",
+     "mesmo repositório tem reuniões, deliberações e votações de comissão (votações = 64 MB, também sem recorte anual)",
+     "Fragilidade: baixa no formato; custo é baixar o arquivo inteiro todo dia"
+    ]
+   },
+   "veredito": "usar",
+   "ms": 23667
+  },
+  {
+   "id": "estado-sp-alesp-presenca",
+   "nome": "ALESP — presença em plenário (API interna do site)",
+   "grupo": "estado",
+   "url": "https://www.al.sp.gov.br/deputado/presenca-plenario/",
+   "custo": "0 — sem chave; ~94 chamadas/mês",
+   "risco": "Médio: API não publicada pela ALESP; pode mudar sem aviso.",
+   "medida": {
+    "status": "parcial",
+    "itens": 0,
+    "janela": "7 dias, amostra de 3 de 94 deputados em exercício",
+    "atrasoHoras": 1123.2,
+    "formato": "json",
+    "idPolitico": true,
+    "amostra": [
+     {
+      "data": "2026-08-31",
+      "titulo": "AGENTE FEDERAL DANILO BALAS: 123ª Sessão Ordinária — Sessão não Deliberativa - com quórum regimental para abertura da sessão",
+      "url": "https://www.al.sp.gov.br/deputado/presenca-plenario/?matriculaDeputado=300607"
+     },
+     {
+      "data": "2026-08-31",
+      "titulo": "ALEX MADUREIRA: 123ª Sessão Ordinária — Sessão não Deliberativa - com quórum regimental para abertura da sessão",
+      "url": "https://www.al.sp.gov.br/deputado/presenca-plenario/?matriculaDeputado=300608"
+     },
+     {
+      "data": "2026-08-31",
+      "titulo": "ALTAIR MORAES: 123ª Sessão Ordinária — Sessão não Deliberativa - com quórum regimental para abertura da sessão",
+      "url": "https://www.al.sp.gov.br/deputado/presenca-plenario/?matriculaDeputado=300609"
+     }
+    ],
+    "notas": [
+     "API interna do site (legis-api-portal-prd.al.sp.gov.br), sem documentação, achada no JS da página \"Presença em Plenário\"; 9 requisições pra 3 deputados",
+     "uma chamada por deputado por mês: cobertura completa = 94 chamadas/mês; traz sessão, data e situação (Presente, Justificada, Ausência, sessão não deliberativa)",
+     "última sessão com registro: 31/08/2026 — nenhuma sessão na janela",
+     "id: nuMatricula (= <Solicitante> da agenda) e idParlamentar (= <IdDeputado> do deputados.xml)",
+     "votações nominais do plenário não estão em dados abertos: só lista HTML + PDF por votação (ver estado-sp-alesp-votacoes)",
+     "Fragilidade: média — JSON limpo, mas API não publicada; pode mudar junto com o site"
+    ]
+   },
+   "veredito": "usar com cuidado (API não documentada)",
+   "ms": 6508
+  },
+  {
+   "id": "estado-sp-alesp-proposituras",
+   "nome": "ALESP — proposituras e autores (ZIP)",
+   "grupo": "estado",
+   "url": "https://www.al.sp.gov.br/repositorioDados/processo_legislativo/proposituras.zip",
+   "custo": "0 — dados abertos; ~25 MB/dia de download",
+   "risco": "Baixo: dado público oficial, publicado pra reuso.",
+   "medida": {
+    "status": "parcial",
+    "itens": 0,
+    "janela": "7 dias por data de publicação (2026-10-09 a 2026-10-16)",
+    "atrasoHoras": 1939.2,
+    "formato": "zip",
+    "idPolitico": true,
+    "amostra": [
+     {
+      "data": "2026-07-28",
+      "titulo": "20/2026 — Manifesta concordância com a implementação do Convênio ICMS 79/26, ratificado pelo Decreto nº 70.762, de 17 de julho de 2026. (aut",
+      "url": "https://www.al.sp.gov.br/propositura?id=1000699760"
+     },
+     {
+      "data": "2026-07-28",
+      "titulo": "21/2026 — Manifesta concordância com a implementação do Convênio ICMS 80/26, ratificado pelo Decreto nº 70.762, de 17 de julho de 2026. (aut",
+      "url": "https://www.al.sp.gov.br/propositura?id=1000699761"
+     },
+     {
+      "data": "2026-07-28",
+      "titulo": "19/2026 — Manifesta concordância com a implementação do Convênio ICMS 63/26, ratificado pelo Decreto nº 70.762, de 17 de julho de 2026. (aut",
+      "url": "https://www.al.sp.gov.br/propositura?id=1000699759"
+     }
+    ],
+    "notas": [
+     "proposituras.zip 17 MB → 124 MB de XML (desde 1995, sem recorte anual); 16753 publicadas em 2026; última publicação: 28/07/2026",
+     "autoria: documento_autor.zip (6 MB); nos 7 dias até 28/07/2026: 795 vínculos autor-documento, 792 com IdAutor = <IdSPL> de deputado atual do deputados.xml",
+     "tramitação dos últimos 12 meses em documento_andamento_atual.zip (2 MB → 89 MB)",
+     "Fragilidade: baixa no formato, alta no peso — ~25 MB baixados e ~280 MB descompactados por dia só pra ver o que é novo"
+    ]
+   },
+   "veredito": "usar (pesado: baixar 1x/dia e guardar diff)",
+   "ms": 71191
+  },
+  {
+   "id": "estado-sp-alesp-votacoes",
+   "nome": "ALESP — votações nominais em plenário (HTML + PDF)",
+   "grupo": "estado",
+   "url": "https://www.al.sp.gov.br/alesp/votacoes-no-plenario/",
+   "custo": "0 — scraping",
+   "risco": "Baixo nos termos; alto na manutenção (HTML + PDF).",
+   "medida": {
+    "status": "parcial",
+    "itens": 0,
+    "janela": "7 dias (2026-10-09 a 2026-10-16)",
+    "atrasoHoras": 2107.2,
+    "formato": "html",
+    "idPolitico": false,
+    "amostra": [
+     {
+      "data": "2026-07-21",
+      "titulo": "29ª Sessão Extraordinária: PL 407/26 SALVO SUBEMENDAS E EMENDAS — Dispõe sobre as Diretrizes Orçamentárias para o exercício de 2027.",
+      "url": "https://www.al.sp.gov.br/repositorio/ementario/votacoes/65ba6948-50ce-46f3-b416-47a79cee52ca.pdf"
+     },
+     {
+      "data": "2026-07-21",
+      "titulo": "29ª Sessão Extraordinária: REQ. MÉTODO DE VOTAÇÃO PL. 407/26 — Dispõe sobre as Diretrizes Orçamentárias para o exercício de 2027.",
+      "url": "https://www.al.sp.gov.br/repositorio/ementario/votacoes/fd21ba4f-13ab-495e-8280-2c1d8a5a1da5.pdf"
+     },
+     {
+      "data": "2026-07-21",
+      "titulo": "28ª Sessão Extraordinária: REQ. MÉTODO DE VOTAÇÃO PL. 407/26 — Dispõe sobre as Diretrizes Orçamentárias para o exercício de 2027.",
+      "url": "https://www.al.sp.gov.br/repositorio/ementario/votacoes/9adeb6d0-2cbc-4899-a814-94c156a38584.pdf"
+     }
+    ],
+    "notas": [
+     "página HTML (latin1) com 12 votações nominais (painel) em 2026; última: 21/07/2026",
+     "o voto de cada deputado só está no PDF de cada votação; não há XML/JSON de votação de plenário nos dados abertos",
+     "Fragilidade: alta — scraping de HTML + extração de PDF"
+    ]
+   },
+   "veredito": "usar com cuidado (voto por deputado só no PDF)",
+   "ms": 1982
+  },
+  {
+   "id": "estado-sp-governador-agenda",
+   "nome": "Governo de SP — agenda do governador",
+   "grupo": "estado",
+   "url": "https://www.sp.gov.br/sp/institucional/agenda_governador",
+   "custo": "0 — se abrir",
+   "risco": "Alto: página atrás de anti-robô Imperva; passar seria contornar bloqueio.",
+   "medida": {
+    "status": "bloqueado",
+    "itens": null,
+    "janela": "—",
+    "atrasoHoras": null,
+    "formato": "html",
+    "idPolitico": false,
+    "amostra": [],
+    "notas": [
+     "HTTP 200, 6 KB: página \"Pardon Our Interruption\" do Imperva (desafio JS/cookie anti-robô) em https://www.sp.gov.br/sp/institucional/agenda_governador",
+     "passar exigiria executar o desafio JS do Imperva = contornar bloqueio; fora pela regra. A home sp.gov.br/sp às vezes abre na 1ª requisição e o desafio vem na seguinte",
+     "o desafio é por comportamento de robô, não por país: IP brasileiro provavelmente não resolve (não testado)",
+     "em 2 de ~10 tentativas no mesmo dia a URL abriu (92 KB, sem desafio), mas não deu pra confirmar se a agenda vem no HTML ou por JS: intermitente demais pra feed"
+    ]
+   },
+   "veredito": "fora (muro anti-robô); usar imprensa/DOE",
+   "ms": 115
+  }
+ ]
+}

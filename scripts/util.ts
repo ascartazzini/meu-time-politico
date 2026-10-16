@@ -4,7 +4,7 @@ import { dirname, resolve } from 'node:path';
 export const RAIZ = resolve(import.meta.dirname, '..');
 export const GERADO = resolve(RAIZ, 'src/data/generated');
 export const RAW = resolve(RAIZ, 'data/raw');
-export const UA = 'MeuTimePolitico2026/0.1 (tech cívica; +https://github.com/ascartazzini)';
+export const UA = 'MeuTimePolitico2026/0.1 (tech civica; +https://github.com/ascartazzini)';
 
 export function lerJson<T = unknown>(caminho: string): T {
   return JSON.parse(readFileSync(caminho, 'utf8')) as T;
