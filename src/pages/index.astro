@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import ListaEspera from '../components/ListaEspera.astro';
 import '../styles/landing.css';
 import indice from '../data/generated/indice.json';
 const n = indice.nacional;
@@ -134,6 +135,8 @@ const fontes = [
           galera chegou. No celular abre a folha de compartilhar; no computador, copia o link.</p>
       </div>
     </div>
+
+    <ListaEspera local="home" />
   </section>
 
   <footer>

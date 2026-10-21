@@ -1,0 +1,87 @@
+---
+/* Caixa da lista de espera: "o jogo não acaba na urna".
+   `local` vai pro GA4 e pro campo origem, pra saber de onde vem quem se inscreve. */
+import { CONSENTIMENTO } from '../lib/lista-espera';
+interface Props { local: 'home' | 'placar' }
+const { local } = Astro.props;
+---
+<div class="espera" data-espera data-local={local}>
+  <div class="espera-k">Depois do apito final</div>
+  <h3>O jogo não acaba na urna.</h3>
+  <p>A partir da posse, o Meu Time Político acompanha <b>o time que você elegeu</b>: agenda, presença,
+    votos e o que sai na imprensa, todo dia, com a fonte de cada coisa. Deixa teu e-mail que a gente
+    avisa quando abrir.</p>
+  <form class="espera-f" novalidate>
+    <label class="espera-l" for={`espera-email-${local}`}>Seu e-mail</label>
+    <div class="espera-linha">
+      <input id={`espera-email-${local}`} name="email" type="email" inputmode="email" autocomplete="email"
+        placeholder="voce@exemplo.com" required maxlength="254" />
+      <button class="cta" type="submit">Me avisa</button>
+    </div>
+    <label class="espera-ok">
+      <input type="checkbox" name="consentimento" required />
+      <span>{CONSENTIMENTO}</span>
+    </label>
+    <p class="espera-msg" role="status" aria-live="polite"></p>
+  </form>
+</div>
+
+<style>
+  .espera{margin:40px auto 0;max-width:620px;text-align:left;background:var(--surface);border:1px solid var(--line);
+    border-left:4px solid var(--data);border-radius:4px;padding:26px 24px}
+  .espera-k{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--data)}
+  .espera h3{font-family:var(--display);font-size:clamp(26px,5vw,36px);text-transform:uppercase;line-height:1;margin:8px 0 12px}
+  .espera p{font-size:15px;color:#C2CCBB}
+  .espera p b{color:var(--ink)}
+  .espera-f{margin-top:18px}
+  .espera-l{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .espera-linha{display:flex;gap:10px;flex-wrap:wrap}
+  .espera-linha input{flex:1 1 220px;min-width:0;font:inherit;font-size:16px;color:var(--ink);background:var(--bg);
+    border:1px solid var(--line);border-radius:3px;padding:14px 14px}
+  .espera-linha input:focus{outline:2px solid var(--data);outline-offset:1px}
+  .espera-linha .cta{padding:12px 24px;font-size:22px}
+  .espera-ok{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:13px;color:var(--muted);cursor:pointer}
+  .espera-ok input{margin-top:3px;accent-color:var(--data);flex:none}
+  .espera-msg{margin-top:12px;font-family:var(--mono);font-size:12.5px;min-height:1.2em}
+  .espera-msg.ok{color:var(--data)}
+  .espera-msg.erro{color:var(--danger)}
+  .espera.feito .espera-f > :not(.espera-msg){display:none}
+  @media(max-width:640px){.espera{padding:22px 18px}.espera-linha .cta{width:100%;text-align:center}}
+</style>
+
+<script>
+  import { inscrever } from '../lib/lista-espera';
+  import { evento } from '../lib/analytics';
+  import { carregar } from '../lib/estado';
+
+  document.querySelectorAll<HTMLElement>('[data-espera]').forEach(caixa => {
+    const form = caixa.querySelector('form')!;
+    const msg = caixa.querySelector<HTMLElement>('.espera-msg')!;
+    const local = caixa.dataset.local ?? 'home';
+    const dizer = (texto: string, tipo: 'ok' | 'erro' | '') => { msg.textContent = texto; msg.className = `espera-msg ${tipo}`; };
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const email = (form.elements.namedItem('email') as HTMLInputElement).value;
+      const aceitou = (form.elements.namedItem('consentimento') as HTMLInputElement).checked;
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.trim())) return dizer('Confere o e-mail: parece que faltou alguma coisa.', 'erro');
+      if (!aceitou) return dizer('Marca a caixinha pra gente poder te mandar o aviso.', 'erro');
+
+      const botao = form.querySelector('button')!;
+      botao.disabled = true;
+      dizer('Mandando…', '');
+      const utm = new URLSearchParams(location.search).get('utm_source');
+      const r = await inscrever(email, carregar()?.uf, utm ? `${local}:${utm}` : local);
+      botao.disabled = false;
+      if (r === 'ok') {
+        caixa.classList.add('feito');
+        dizer('Tá na lista. Quando o time entrar em campo, a gente te avisa.', 'ok');
+        evento('lista_espera_inscricao', { local });
+      } else if (r === 'invalido') {
+        dizer('Esse e-mail não passou. Confere e tenta de novo?', 'erro');
+      } else {
+        dizer('Não deu pra salvar agora. Tenta de novo daqui a pouco.', 'erro');
+      }
+    });
+  });
+</script>

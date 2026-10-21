@@ -37,6 +37,9 @@ src/lib/stories.ts           imagem 1080×1920 pros stories (canvas, no navegado
 src/lib/wizard.ts            camada de DOM do app (escolha de UF → perfil → pautas → escalação → placar)
 src/lib/analytics.ts         eventos do GA4 (no-op se o gtag não carregou)
 src/lib/compartilhar.ts      botão de compartilhar: link com UTM por canal, Web Share API com fallback de copiar
+src/lib/lista-espera.ts      inscrição na lista de espera do acompanhamento dos eleitos (Supabase, função pública entrar_lista_espera)
+src/components/ListaEspera.astro  caixa "o jogo não acaba na urna", na home e no placar
+supabase/migrations/         esquema do banco pós-eleição (projeto meu-time-politico, sa-east-1, plano gratuito); a lista de espera não é legível de fora
 src/pages/index.astro        landing (como funciona) · app.astro (o app: capa + primeira pergunta na mesma tela) · metodo.astro · sobre.astro (redireciona pra /)
 ```
 

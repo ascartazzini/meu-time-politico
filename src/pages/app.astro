@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import ListaEspera from '../components/ListaEspera.astro';
 import '../styles/app.css';
 import indice from '../data/generated/indice.json';
 const n = indice.nacional;
@@ -79,6 +80,8 @@ const n = indice.nacional;
         <p class="stories-nota">1080 × 1920 · gerada aqui no seu navegador · sem cadastro, nada é enviado</p>
       </div>
     </div>
+
+    <ListaEspera local="placar" />
   </section>
 
   <footer>
