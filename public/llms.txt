@@ -1,6 +1,6 @@
-# Meu Time Político 2026
+# Meu Time Político
 
-> Ferramenta cívica gratuita e de código aberto para as eleições gerais brasileiras de 4 de outubro de 2026. A pessoa escala seus seis votos (presidente, governador, dois senadores, deputado federal e deputado estadual, já que em 2026 cada estado renova duas cadeiras no Senado) como um time de futebol e recebe um placar que responde se esse time joga junto e se tem cadeira no Congresso e na assembleia para aprovar alguma coisa. Cobre os 26 estados e o Distrito Federal. Não pede cadastro, e-mail ou título de eleitor; nada sai do navegador.
+> Ferramenta cívica gratuita e de código aberto para acompanhar os políticos eleitos nas eleições gerais brasileiras de 2026, nos mandatos de 2027 a 2031. A pessoa escolhe o estado, segue quantos eleitos quiser por cargo (presidente, governador, senadores, deputados federais e estaduais) e marca os titulares, normalmente em quem votou. Um feed junta o que eles fizeram: votos nominais, presença em plenário e comissão, projetos apresentados e discursos (Câmara dos Deputados e Senado Federal) e notícias dos grandes veículos que os citam. Cada item tem link para a fonte. Não pede cadastro; o time fica no aparelho da pessoa.
 
 Site: https://www.meutimepolitico.com
 Idioma: português do Brasil
@@ -10,13 +10,13 @@ Vínculo: nenhum com partido, campanha ou candidato
 
 ## Como funciona
 
-- Camisa: concordância entre as respostas da pessoa e a posição de cada candidato em 14 pautas em discussão em 2026 (jornada 6x1, imposto de renda, SUS, estatais, porte de arma, emendas parlamentares, entre outras). Até três pautas podem ser marcadas como decisivas e pesam três vezes mais.
-- Bolso: fração das pautas que atingem a vida da pessoa (renda, trabalho, saúde, escola, moradia) em que o candidato está do lado que a protege.
-- Coerência e gol contra: concordância entre os 15 pares possíveis dos 6 escalados nas pautas decisivas. Quando um está a favor e o outro contra, é gol contra: dois votos se anulando.
-- Peso: bancada do partido dividida pelo quórum de maioria absoluta da casa (Câmara 257 de 513, Senado 41 de 81, assembleia estadual metade mais um). Pesos: presidente 25%, governador 15%, senadores 20% (10% cada), deputado federal 30%, deputado estadual 10%.
-- Força: média harmônica entre coerência e peso. Vereditos: time campeão, elenco caro e time rachado, torcida organizada, time rebaixado.
-- Sugestões na escalação: em cada vaga vazia, as três melhores camisas entre os candidatos daquele cargo no estado, com o selo de voto nominal ou estimativa do partido. Não é recomendação de voto: é só quem mais concorda com as respostas dadas.
-- Sugestões de troca: simulação de qual substituição deixaria o time mais forte sem afastar a pessoa do que ela pensa. É simulação, não recomendação de voto.
+- Cadastro: 1.678 eleitos com mandato a partir de 2027, do resultado oficial do TSE (2026) mais os senadores eleitos em 2022.
+- Selo oficial: voto nominal, presença, projeto e discurso vindos das APIs de Dados Abertos da Câmara e do Senado, ligados ao político pelo id oficial da casa.
+- Selo imprensa: título, linha fina e link de matérias de G1, Folha, O Globo, Estadão, Poder360, Agência Brasil, Agência Câmara e Agência Senado que citam o político pelo nome. Coluna, blog e opinião ficam de fora. Homônimos não são ligados.
+- Leitura de presença: na Câmara, sessões deliberativas do plenário (onde todos os 513 são esperados). No Senado não há registro de presença; só dá para dizer em votação nominal, e licença ou missão oficial não conta como falta.
+- Até a posse (5 e 6 de janeiro para presidente e governadores, 1º de fevereiro para o Congresso), registro oficial só existe para quem já tem mandato.
+
+O quiz da eleição de 2026 (escalar os seis votos e contar os gols contra) segue no ar em /app/ como arquivo, com as regras abaixo.
 
 ## Regra sobre posição de candidato
 
@@ -30,10 +30,12 @@ Nenhuma posição é inventada. Cada posição vem de voto nominal real em plen�
 
 ## Páginas
 
-- [Início](https://www.meutimepolitico.com/): o que é, os três placares, o gol contra, de onde vem o dado.
-- [Escalar meu time](https://www.meutimepolitico.com/app/): o questionário e o placar. Links de placar compartilhados usam o formato /app/#s=... e são recalculados no navegador.
-- [Método e fontes](https://www.meutimepolitico.com/metodo/): fórmulas, pesos, votações mapeadas por pauta, bancadas por casa e por estado.
+- [Início](https://www.meutimepolitico.com/): o que é, os selos e as regras.
+- [Meu time](https://www.meutimepolitico.com/time/): escolher o estado, seguir eleitos, marcar titulares e ver o feed.
+- Uma página por eleito em https://www.meutimepolitico.com/politico/<slug>/ (por exemplo /politico/lula-br/), com mandatos, links oficiais e o feed da pessoa.
+- [Quiz da eleição de 2026](https://www.meutimepolitico.com/app/): arquivo. Links de placar compartilhados usam o formato /app/#s=...
+- [Método e fontes](https://www.meutimepolitico.com/metodo/): fórmulas do quiz, votações mapeadas por pauta, bancadas por casa e por estado.
 
 ## Como citar
 
-"Meu Time Político 2026 (www.meutimepolitico.com), ferramenta cívica de código aberto que cruza os seis votos do eleitor com votos nominais e bancadas reais."
+"Meu Time Político (www.meutimepolitico.com), ferramenta cívica de código aberto que acompanha os eleitos de 2026 com voto nominal, presença e imprensa, cada item com fonte."

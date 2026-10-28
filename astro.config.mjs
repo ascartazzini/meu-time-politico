@@ -6,7 +6,8 @@ import sitemap from '@astrojs/sitemap';
 export const SITE = 'https://www.meutimepolitico.com';
 
 // Páginas na raiz valem mais pro buscador; /sobre/ só redireciona (noindex) e não entra no sitemap.
-const PRIORIDADE = { '/': 1.0, '/app/': 0.9, '/metodo/': 0.6 };
+// As 1.678 páginas /politico/<slug>/ ficam no padrão (0,5) e mudam todo dia com o feed.
+const PRIORIDADE = { '/': 1.0, '/time/': 0.9, '/metodo/': 0.6, '/app/': 0.4 };
 
 export default defineConfig({
   site: SITE,

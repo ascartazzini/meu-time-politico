@@ -5,6 +5,7 @@ Astro 7 estático + TypeScript + vitest + scripts tsx. Leia o README antes de me
 ## Regras do projeto
 - **Nunca** invente posição de candidato. Posição só vem de voto nominal (via `temas.json` → APIs) ou de estimativa partidária em `partidos.json`, sempre com o selo na UI.
 - O app lê `public/dados/<UF>.json` (gerado no build, 27 arquivos) e `src/data/generated/indice.json`. Mudou dado de origem? `npm run build-data && npm run validate-data`.
+- Pós-eleição (`/time/`, `/politico/<slug>/`): cadastro em `src/data/generated/eleitos-2027.json` (`npm run cadastro`), feed lido no navegador da função `feed` do Supabase, alimentada pelos coletores (`npm run coletar`, GitHub Actions). Ligação item → político: id oficial primeiro; nome só pela regra de `scripts/coletores/citacoes.ts` (testada).
 - Cobertura nacional: nada pode ser específico de uma UF fora de `build-dataset.ts` (nomes de cargo/casa por UF) e `ufs.json`.
 - `src/lib/motor.ts` é puro (sem DOM) e coberto por `tests/motor.test.ts`. Mudança de regra de cálculo = teste junto.
 - Textos em pt-BR, tom direto, metáfora de futebol; sem promessa de precisão que o dado não sustenta.

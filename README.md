@@ -1,6 +1,6 @@
-# Meu Time Político 2026
+# Meu Time Político
 
-Você vota seis vezes em 2026 — cinco cargos, com duas vagas de senador — e decide um de cada vez. Aqui você escala os seis como um time e descobre se eles jogam juntos — e se têm cadeira pra aprovar alguma coisa. Tech cívica, código aberto, sem vínculo com partido, campanha ou candidato. Cobre os 26 estados e o Distrito Federal.
+Depois da eleição: a pessoa monta o time com os eleitos de 2026 (vários por cargo, com titulares) e acompanha todo dia o que eles fazem — votos, presença, projetos, discursos e o que sai na imprensa, com a fonte de cada coisa. Tech cívica, código aberto, sem vínculo com partido, campanha ou político. O plano completo está em [docs/plano-pos-eleicao.md](docs/plano-pos-eleicao.md). O quiz da eleição (escalar os seis votos) segue no ar em `/app/`.
 
 ## Como roda
 
@@ -9,8 +9,13 @@ npm install
 npm run fetch-data     # Câmara + Senado (APIs oficiais) + TSE (CDN, com fallback pro Wayback Machine)
 npm run build          # build-data → validate-data → astro build
 npm run dev            # servidor local em http://localhost:4321
-npm test               # motor de cálculo, codificação do link, casamento de nomes
+npm test               # motor de cálculo, codificação do link, casamento de nomes, time, feed, citações
+npm run cadastro       # eleitos de 2026 (TSE) → src/data/generated/eleitos-2027.json
+npm run cadastro:carregar  # sobe o cadastro pro Supabase (precisa de SUPABASE_SECRET_KEY no .env)
+npm run coletar        # coletores do feed: Câmara, Senado e imprensa → Supabase (mesmo .env)
 ```
+
+Os coletores rodam sozinhos no GitHub Actions (`.github/workflows/coletar.yml`): imprensa de hora em hora, Câmara e Senado a cada 3 horas. Precisam do secret `SUPABASE_SECRET_KEY` no repositório.
 
 ## Arquitetura
 
@@ -42,6 +47,11 @@ src/components/ListaEspera.astro  caixa "o jogo não acaba na urna", na home e n
 supabase/migrations/         esquema do banco pós-eleição (projeto meu-time-politico, sa-east-1, plano gratuito); a lista de espera não é legível de fora
 scripts/cadastro-eleitos.ts  `npm run cadastro`: eleitos de 2026 (TSE) + senadores até 2031 → src/data/generated/eleitos-2027.json, sem CPF
 scripts/carregar-cadastro.ts `npm run cadastro:carregar`: sobe o cadastro pro Supabase (upsert); precisa de SUPABASE_SECRET_KEY no .env
+scripts/coletores/           camara.ts (presença, votos, projetos) · senado.ts (votos, discursos) · imprensa.ts (RSS) · citacoes.ts (nome → político, puro) · banco.ts (escrita no Supabase)
+src/lib/time.ts              o time pós-eleição: seguir, titulares por cargo, localStorage (puro, testado)
+src/lib/feed.ts · feed-ui.ts busca do feed (função feed do Supabase, por slug), texto de cada papel, placar de presença; e a camada de DOM
+src/lib/eleitos.ts           cadastro → linha leve, nome bonito, cargo principal, links oficiais
+src/pages/time/              /time/: escolher UF, seguir, titular, feed · src/pages/politico/[slug].astro: 1.678 páginas estáticas · src/pages/eleitos/[uf].json.ts: lista por UF
 .github/workflows/manter-supabase.yml  leitura diária pro plano gratuito não pausar o projeto (pausa com 7 dias parado)
 src/pages/index.astro        landing (como funciona) · app.astro (o app: capa + primeira pergunta na mesma tela) · metodo.astro · sobre.astro (redireciona pra /)
 ```

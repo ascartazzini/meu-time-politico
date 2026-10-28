@@ -2,122 +2,72 @@
 import Base from '../layouts/Base.astro';
 import ListaEspera from '../components/ListaEspera.astro';
 import '../styles/landing.css';
-import indice from '../data/generated/indice.json';
-const n = indice.nacional;
-const nominais = indice.cobertura.filter(c => c.nominal > 0).length;
-const fontes = [
-  { rotulo: 'Quem é candidato', detalhe: `TSE — Portal de Dados Abertos, consulta_cand_2026 (gerado em ${indice.dataTse}): ${n.candidatos.toLocaleString('pt-BR')} candidaturas aos 5 cargos, 27 estados` },
-  { rotulo: 'Quanto vale um voto', detalhe: `Câmara: 513 cadeiras, maioria absoluta 257 — bancadas via API de Dados Abertos (${indice.atualizacoes.camara.slice(0, 10)})` },
-  { rotulo: 'Peso no Senado', detalhe: `Senado: 81 cadeiras, maioria absoluta 41 — via API de Dados Abertos (${indice.atualizacoes.senado.slice(0, 10)})` },
-  { rotulo: 'Peso nas assembleias', detalhe: '27 assembleias: composição eleita em 2022 (TSE), quórum = maioria absoluta de cada casa' }
-];
+import cadastro from '../data/generated/eleitos-2027.json';
+const c = cadastro.contagem as Record<string, number>;
+const senadores = (c['senador'] ?? 0) + (c['senador (2022)'] ?? 0);
 ---
-<Base title="Meu Time Político 2026 — seus 6 votos jogam juntos?" badge="beta" description="Escale presidente, governador, dois senadores e deputados como um time e veja se eles jogam juntos, quantos gols contra fazem e se têm bancada pra aprovar alguma coisa. Grátis, sem cadastro, 27 estados.">
+<Base title="Meu Time Político — o que o seu time eleito fez hoje" badge="beta" description="Monte o time com os eleitos de 2026, quantos quiser por cargo, e acompanhe todo dia o que eles fazem: como votaram, se foram trabalhar, que projeto apresentaram e o que a imprensa noticiou. Com a fonte de cada coisa. Grátis, sem cadastro.">
   <script is:inline>if (location.hash.startsWith('#s=')) location.replace('/app/' + location.hash);</script>
   <header class="hero">
-    <div class="kicker">Brasil · 27 estados · 4 de outubro de 2026</div>
-    <h1>Você escala 6.<br /><span class="hl">Quantos jogam<br />contra você?</span></h1>
-    <p class="lead">Presidente, governador, <b>dois</b> senadores, deputado federal, deputado estadual.
-      Você decide <b>um de cada vez</b> — e nunca viu os seis juntos.</p>
-    <a class="cta" href="/app/" data-cta="hero">Escalar meu time →</a>
-    <span class="cta-note">2 minutos · sem cadastro · nada sai do seu navegador</span>
-    <p class="lead lead-mais">Telas separadas, meses diferentes. Aqui você escala o time e a gente
-      responde a pergunta que ninguém faz: <b>esse time joga junto? E ele consegue aprovar
-      alguma coisa?</b></p>
+    <div class="kicker">Mandatos 2027–2031 · {cadastro.eleitos.length.toLocaleString('pt-BR')} eleitos · 27 estados</div>
+    <h1>O jogo não<br /><span class="hl">acaba na urna.</span></h1>
+    <p class="lead">Monte o time com os eleitos de 2026, <b>quantos quiser por cargo</b>, e veja todo dia o que eles
+      fizeram: como votaram, se foram trabalhar, que projeto apresentaram, o que a imprensa noticiou.</p>
+    <a class="cta" href="/time/" data-cta="hero">Montar meu time →</a>
+    <span class="cta-note">sem cadastro · o time fica no seu aparelho · cada item com a fonte</span>
 
     <div class="stats">
-      <div class="stat"><div class="n" data-count>{n.candidatos.toLocaleString('pt-BR')}</div><div class="l">candidatos no país<br />disputando 4 de outubro</div></div>
-      <div class="stat"><div class="n" data-count>{n.federais.toLocaleString('pt-BR')}</div><div class="l">candidatos a deputado federal<br />para 513 vagas</div></div>
-      <div class="stat"><div class="n" data-count>257</div><div class="l">votos na Câmara<br />pra aprovar qualquer coisa</div></div>
-      <div class="stat"><div class="n" data-count>{n.partidosCamara}</div><div class="l">partidos dividindo<br />a Câmara hoje</div></div>
+      <div class="stat"><div class="n" data-count>{c['deputado-federal']}</div><div class="l">deputados federais<br />de 2027 a 2031</div></div>
+      <div class="stat"><div class="n" data-count>{senadores}</div><div class="l">senadores<br />em exercício em 2027</div></div>
+      <div class="stat"><div class="n" data-count>{c['governador']}</div><div class="l">governadores<br />e o presidente</div></div>
+      <div class="stat"><div class="n" data-count>{c['deputado-estadual'].toLocaleString('pt-BR')}</div><div class="l">deputados estaduais<br />e distritais</div></div>
     </div>
   </header>
 
   <section>
-    <h2>Três placares.<br /><span class="out">Um time.</span></h2>
-    <p class="sec-lead">Todo teste eleitoral que existe te dá uma nota por candidato, um de cada vez.
-      Aqui a nota é do <b>conjunto</b> — porque é o conjunto que governa.</p>
+    <h2>Escale. Marque os titulares.<br /><span class="out">Acompanhe o jogo.</span></h2>
+    <p class="sec-lead">Você escolhe o estado e segue quem quiser: o presidente, o governador, os senadores, os deputados.
+      Marca com ★ os <b>titulares</b>, normalmente em quem você votou. A partir daí, o feed junta tudo que o time fez.</p>
     <div class="eixos">
       <div class="ex" style="--c:#00E676">
-        <div class="tag">Eixo 1</div><h3>Camisa</h3>
-        <p>Quanto ele <b>pensa como você</b>. Quatorze pautas que estão na mesa em 2026 —
-          jornada 6x1, imposto de renda, SUS, estatais, porte de arma, emendas. Você marca até
-          <b>três decisivas</b>, e elas pesam três vezes mais.</p>
-        <div class="frm">suas respostas × posição do candidato<br />igual = 1 · dividido = 0,5 · oposto = 0</div>
+        <div class="tag">Selo verde</div><h3>Oficial</h3>
+        <p>Registro do próprio Congresso: <b>votos nominais</b>, <b>presença</b> em plenário e comissão,
+          <b>projetos apresentados</b> e <b>discursos</b>. Ligado ao político pelo id oficial da casa, sem adivinhação.</p>
+        <div class="frm">Câmara dos Deputados e Senado Federal<br />APIs de Dados Abertos</div>
       </div>
       <div class="ex" style="--c:#FFD100">
-        <div class="tag">Eixo 2</div><h3>Bolso</h3>
-        <p>Quanto ele <b>mexe na sua vida</b>. Sua renda, seu trabalho, se você usa SUS, se seu
-          filho está na escola pública, se você mora de aluguel. Só as pautas que batem em você
-          entram nessa conta. <b>Concordar não é a mesma coisa que ser defendido.</b></p>
-        <div class="frm">fração das pautas que te atingem<br />em que ele está do lado que te protege</div>
+        <div class="tag">Selo amarelo</div><h3>Imprensa</h3>
+        <p>Fato noticiado pelos grandes veículos que cita alguém do seu time. Só título, linha fina e link:
+          a matéria você lê lá. <b>Coluna, blog e opinião ficam de fora</b>. Nada de bastidor.</p>
+        <div class="frm">G1 · Folha · O Globo · Estadão · Poder360<br />Agência Brasil · Agência Câmara · Agência Senado</div>
       </div>
       <div class="ex" style="--c:#FF3B30">
-        <div class="tag">Eixo 3 — o que ninguém te conta</div><h3>Força</h3>
-        <p>Se o time <b>aprova alguma coisa</b>. Coerência entre os seis, cruzada com o peso real
-          deles nas casas: um deputado sozinho vale 1 voto em 513. O que aprova é a <b>bancada</b>.</p>
-        <div class="frm">força = média harmônica (coerência, peso)<br />ela derruba quem é bom só num eixo</div>
+        <div class="tag">Leitura</div><h3>Presença</h3>
+        <p>Estava onde precisava estar? Na Câmara, a lista de cada <b>sessão deliberativa</b> diz quem foi e quem faltou.
+          No Senado não existe registro de presença: só dá pra dizer em dia de <b>votação nominal</b>, e a gente avisa isso.</p>
+        <div class="frm">licença médica e missão oficial<br />não contam como falta</div>
       </div>
     </div>
   </section>
 
   <section>
-    <h2>O gol contra</h2>
-    <p class="sec-lead">A parte que dói. Nas pautas que <b>você marcou como decisivas</b>, a gente
-      cruza os seis escalados par a par. Onde um está a favor e o outro está contra, é gol contra
-      — <b>dois dos seus votos anulando um ao outro</b>. Você pagou os dois.</p>
-    <div class="golbox">
-      <div class="n" data-count>8</div>
-      <h3>gols contra num time real</h3>
-      <p>Um eleitor que escala um presidente de esquerda e um governador de direita — combinação que
-        existe e não é rara em vários estados — pode sair daqui com o time fazendo gol contra em
-        <b>saúde</b>, <b>jornada</b> e <b>segurança</b> ao mesmo tempo. Veredito típico: time rachado ou rebaixado.</p>
-      <div class="ex-real">
-        saúde &nbsp;→&nbsp; presidente <span class="f">A FAVOR</span> × governador <span class="c">CONTRA</span><br />
-        jornada 6x1 &nbsp;→&nbsp; presidente <span class="f">A FAVOR</span> × deputado estadual <span class="c">CONTRA</span><br />
-        segurança &nbsp;→&nbsp; presidente <span class="c">CONTRA</span> × governador <span class="f">A FAVOR</span>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <h2>Quatro finais<br />possíveis</h2>
-    <p class="sec-lead">Coerência num eixo, peso no outro. É aqui que mora o resultado que
-      incomoda: <b>concordar não é o mesmo que conseguir</b>.</p>
-    <div class="quad">
-      <div class="q campeao"><div class="cond">coerente + pesado</div><div class="nm">Time campeão</div><p>Joga junto e tem cadeira pra transformar acordo em lei. É raro.</p></div>
-      <div class="q rachado"><div class="cond">rachado + pesado</div><div class="nm">Elenco caro,<br />time rachado</div><p>Poder de verdade — gasto na briga entre eles mesmos.</p></div>
-      <div class="q torcida"><div class="cond">coerente + leve</div><div class="nm">Torcida organizada</div><p>Vocês concordam em quase tudo e não aprovam quase nada. Coerente e impotente.</p></div>
-      <div class="q rebaixado"><div class="cond">rachado + leve</div><div class="nm">Time rebaixado</div><p>Se contradiz e não tem peso. Os seis votos trabalham um contra o outro.</p></div>
-    </div>
-  </section>
-
-  <section>
-    <h2>De onde<br /><span class="out">vem o dado</span></h2>
-    <p class="sec-lead">Nada aqui é opinião nossa sobre candidato. Cada número tem fonte pública
-      e cada critério está aberto dentro do app, no botão <b>"como esse número é calculado"</b>,
-      e na página <a href="/metodo/">método</a>.</p>
-    <div class="fontes">
-      {fontes.map(f => <div class="fo"><div class="k">{f.rotulo}</div><div class="v">{f.detalhe}</div></div>)}
-    </div>
+    <h2>Regras do jogo</h2>
     <div class="honesto">
-      <h3>O que já é real e o que ainda é estimativa</h3>
-      <p>Os nomes, partidos, números e cargos são os do registro de candidaturas do TSE, nos 27 estados.
-        As bancadas da Câmara e do Senado vêm das APIs oficiais, atualizadas a cada build. Em <b>{nominais} das 14 pautas</b>
-        há votação nominal mapeada: <b>{n.comVotoNominal} candidatos</b> com mandato recebem a posição do <b>voto real</b>,
-        com o selo na tela e o link da votação.</p>
-      <p>Pra quem não tem mandato, ou nas pautas que ainda não foram a plenário, a posição é
-        <b>estimada pela orientação pública do partido</b> — e cada card diz isso. Nenhum voto
-        individual é atribuído a ninguém sem registro nominal. As bancadas das assembleias são a composição
-        eleita em 2022, porque nenhuma assembleia tem API — trocas de partido desde então não aparecem.</p>
+      <h3>Nada sem fonte, nada inventado</h3>
+      <p>Todo card tem o link de onde veio. Notícia não traz id do político, então a ligação é pelo nome de urna ou pelo nome completo;
+        quando dois eleitos têm o mesmo nome, a notícia não vai pra nenhum dos dois. O card avisa quando a ligação foi pelo nome.</p>
+      <p><b>Até a posse</b> (presidente e governadores em 5 e 6 de janeiro, Congresso e assembleias em 1º de fevereiro), registro oficial
+        só existe pra quem já tem mandato: os reeleitos e os senadores que seguem até 2031. Os novatos aparecem pela imprensa.</p>
+      <p><b>Ainda não tem</b>: agenda oficial (pública × privada), assembleias estaduais, governadores e o placar de impacto do mandato e do
+        time titular. Vêm nas próximas fases, nessa ordem, e a gente diz aqui quando cada uma entrar.</p>
     </div>
   </section>
 
   <section class="fecho">
-    <h2>Escale seu time.<br /><span class="hl">Conte os gols contra.</span></h2>
-    <p class="sec-lead" style="margin:24px auto 0">Leva dois minutos. Não pede seu nome, seu e-mail, nem seu título de eleitor.</p>
+    <h2>Monte o time.<br /><span class="hl">Cobre o jogo.</span></h2>
+    <p class="sec-lead" style="margin:24px auto 0">Não pede nome, e-mail nem título de eleitor. O time fica no seu aparelho.</p>
     <div class="acoes">
-      <a class="cta" href="/app/" data-cta="fecho">Abrir o app →</a>
+      <a class="cta" href="/time/" data-cta="fecho">Montar meu time →</a>
       <a class="cta ghost" href="/metodo/">Ver o método</a>
     </div>
 
@@ -140,10 +90,11 @@ const fontes = [
   </section>
 
   <footer>
-    <b>Meu Time Político 2026</b> — tech cívica, código aberto, sem vínculo com partido, campanha ou
-    candidato. Cobre os 26 estados e o Distrito Federal.<br /><br />
-    <b>Fontes:</b> TSE (Portal de Dados Abertos, consulta_cand_2026 e consulta_cand_2022) · Câmara dos Deputados (API de Dados Abertos) ·
-    Senado Federal (API de Dados Abertos). Dataset gerado em {indice.geradoEm.slice(0, 10)}.<br /><br />
+    <b>Meu Time Político</b> — tech cívica, código aberto, sem vínculo com partido, campanha ou
+    político. Cobre os 26 estados e o Distrito Federal.<br /><br />
+    <b>Fontes:</b> TSE (resultado de 2026, gerado em {cadastro.dataGeracaoTse}) · Câmara dos Deputados e Senado Federal (APIs de Dados Abertos) ·
+    RSS público dos veículos listados acima.<br /><br />
+    O quiz da eleição (escale seus 6 votos e conte os gols contra) segue no ar em <a href="/app/">/app/</a>.<br /><br />
     Projeto criado por <a href="https://arturscartazzini.com" rel="author">Artur Scartazzini</a> (Mnova Solutions).
   </footer>
 
@@ -156,12 +107,11 @@ const fontes = [
     if (caixa) instalarCompartilhar(caixa, {
       local: 'home',
       link: () => `${location.origin}/`,
-      texto: link => `⚽ Você vota 6 vezes em 2026 e nunca viu os seis juntos. Escala teu time político e vê quantos gols contra dá:\n${link}`
+      texto: link => `⚽ O jogo não acaba na urna. Monta o time com os eleitos e vê todo dia o que eles fizeram, com a fonte:\n${link}`
     });
 
-    // qual CTA da home leva pro app (dobra ou fecho) — a home é onde 2 em cada 3 param
     document.querySelectorAll<HTMLAnchorElement>('[data-cta]').forEach(a => {
-      a.addEventListener('click', () => evento('cta_app_click', { local: a.dataset.cta ?? 'home' }));
+      a.addEventListener('click', () => evento('cta_time_click', { local: a.dataset.cta ?? 'home' }));
     });
 
     const vistos = new WeakSet<Element>();

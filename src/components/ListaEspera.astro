@@ -6,11 +6,10 @@ interface Props { local: 'home' | 'placar' }
 const { local } = Astro.props;
 ---
 <div class="espera" data-espera data-local={local}>
-  <div class="espera-k">Depois do apito final</div>
-  <h3>O jogo não acaba na urna.</h3>
-  <p>A partir da posse, o Meu Time Político acompanha <b>o time que você elegeu</b>: agenda, presença,
-    votos e o que sai na imprensa, todo dia, com a fonte de cada coisa. Deixa teu e-mail que a gente
-    avisa quando abrir.</p>
+  <div class="espera-k">Resumo por e-mail</div>
+  <h3>Quer o jogo na caixa de entrada?</h3>
+  <p>O resumo diário do time por e-mail ainda não sai. Deixa teu e-mail que a gente avisa quando começar
+    e quando a cobertura crescer (agenda oficial, governadores, assembleias).</p>
   <form class="espera-f" novalidate>
     <label class="espera-l" for={`espera-email-${local}`}>Seu e-mail</label>
     <div class="espera-linha">
@@ -53,6 +52,7 @@ const { local } = Astro.props;
   import { inscrever } from '../lib/lista-espera';
   import { evento } from '../lib/analytics';
   import { carregar } from '../lib/estado';
+  import { carregarTime } from '../lib/time';
 
   document.querySelectorAll<HTMLElement>('[data-espera]').forEach(caixa => {
     const form = caixa.querySelector('form')!;
@@ -71,7 +71,7 @@ const { local } = Astro.props;
       botao.disabled = true;
       dizer('Mandando…', '');
       const utm = new URLSearchParams(location.search).get('utm_source');
-      const r = await inscrever(email, carregar()?.uf, utm ? `${local}:${utm}` : local);
+      const r = await inscrever(email, carregarTime().uf ?? carregar()?.uf, utm ? `${local}:${utm}` : local);
       botao.disabled = false;
       if (r === 'ok') {
         caixa.classList.add('feito');

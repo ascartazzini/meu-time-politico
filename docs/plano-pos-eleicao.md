@@ -106,6 +106,14 @@ Consequências pro produto:
 - **A confirmar na Fase 0**: cotas do Supabase gratuito, quantos e-mails por dia o plano gratuito escolhido dá, e quanto custa por item o modelo escolhido.
 - **IP brasileiro**: GitHub Actions roda fora do Brasil, e algumas fontes (o TSE já bloqueia) recusam IP estrangeiro. Se um site de governo ou assembleia bloquear, esse coletor precisa rodar de uma máquina no Brasil, ou a fonte fica de fora.
 
+## Andamento (28/10/2026)
+
+No ar: cadastro dos 1.678 eleitos no Supabase, `/time/` (escolher UF, seguir vários por cargo, titulares, time salvo no aparelho), uma página estática por eleito em `/politico/<slug>/` e o feed com as leituras **tudo**, **presença**, **oficial** e **imprensa**. Coletores no GitHub Actions: Câmara (presença por evento, votos nominais, projetos), Senado (votos nominais, discursos) e os 8 veículos aprovados na Fase 0.
+
+Mudança de arquitetura: o site continua **estático**. O feed é lido no navegador direto da função `feed` do Supabase (chave publicável, RLS de leitura), então não precisou do Astro híbrido nem de servidor.
+
+Falta, na ordem: agenda oficial (Câmara, e-Agendas, Planalto) e a leitura pública × privada; resumo por e-mail e push; governadores; impacto do mandato e do time titular (fase 4); assembleias (fase 5).
+
 ## Fases
 
 ### Fase 0 — até o 2º turno (16/10 → 25/10)

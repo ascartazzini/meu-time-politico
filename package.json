@@ -24,7 +24,11 @@
     "prova": "tsx scripts/prova/rodar.ts",
     "cadastro": "tsx scripts/cadastro-eleitos.ts",
     "cadastro:carregar": "tsx scripts/carregar-cadastro.ts",
-    "editor:partidos": "tsx scripts/evidencia-partidos.ts && tsx scripts/editor-partidos.ts"
+    "editor:partidos": "tsx scripts/evidencia-partidos.ts && tsx scripts/editor-partidos.ts",
+    "coletar:camara": "tsx scripts/coletores/camara.ts",
+    "coletar:senado": "tsx scripts/coletores/senado.ts",
+    "coletar:imprensa": "tsx scripts/coletores/imprensa.ts",
+    "coletar": "npm run coletar:camara && npm run coletar:senado && npm run coletar:imprensa"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

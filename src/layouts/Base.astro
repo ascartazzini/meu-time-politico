@@ -2,11 +2,10 @@
 import '../styles/fontes.css';
 import '../styles/fontes-fallback.css';
 import '../styles/tokens.css';
-import { diasParaOPleito } from '../lib/formato';
 interface Props { title: string; description?: string; badge?: string; wide?: boolean; noindex?: boolean }
 const {
   title,
-  description = 'Você vota seis vezes em 2026, dois senadores incluídos, e decide um de cada vez. Aqui você escala os seis como um time e descobre se eles jogam juntos — e se têm cadeira pra aprovar alguma coisa.',
+  description = 'Monte o time com os eleitos de 2026 e acompanhe, todo dia, o que eles fazem: votos, presença, projetos e o que sai na imprensa, com a fonte de cada coisa.',
   badge,
   noindex = false
 } = Astro.props;
@@ -16,7 +15,7 @@ const SITE = 'https://www.meutimepolitico.com';
 const site = Astro.site ?? new URL(SITE);
 const canonical = new URL(Astro.url.pathname, site).toString();
 const ogImage = new URL('/og.png', site).toString();
-const NOME = 'Meu Time Político 2026';
+const NOME = 'Meu Time Político';
 const GA_ID = 'G-EQMVHHWH9C';
 // O measurement ID é fixo no código, então dev, preview e qualquer outro host mandariam hits
 // pra propriedade real (foi o que sujou os relatórios em 07/09/2026). A tag só existe aqui.
@@ -32,10 +31,6 @@ const FONTES_CRITICAS = [
   '/fontes/chivo-mono-400-latin.woff2'
 ];
 
-// O contador sai pronto do build: se ele chegasse vazio e fosse preenchido no cliente,
-// o cabeçalho cresceria uma linha depois da primeira pintura (salto de layout no celular).
-const diasNoBuild = diasParaOPleito();
-const contagemHtml = diasNoBuild > 0 ? `faltam <b>${diasNoBuild}</b> dias pro 1º turno` : 'dia de eleição';
 
 // Dados estruturados: quem somos, o que é o app e pra qual eleição. Ajuda buscador e assistente de IA a citar certo.
 const jsonLd = {
@@ -43,15 +38,14 @@ const jsonLd = {
   '@graph': [
     {
       '@type': 'WebSite', '@id': `${site.origin}/#site`, url: `${site.origin}/`, name: NOME, inLanguage: 'pt-BR',
-      description: 'Escale seus seis votos de 2026 (presidente, governador, dois senadores e deputados) como um time e veja se eles jogam juntos e se têm cadeira pra aprovar alguma coisa.',
+      description: 'Acompanhe os eleitos de 2026 (presidente, governadores, senadores e deputados) como um time: votos, presença, projetos e imprensa, todo dia, com fonte.',
       publisher: { '@id': `${site.origin}/#autor` }
     },
     {
-      '@type': 'WebApplication', '@id': `${site.origin}/#app`, name: NOME, url: `${site.origin}/app/`, inLanguage: 'pt-BR',
+      '@type': 'WebApplication', '@id': `${site.origin}/#app`, name: NOME, url: `${site.origin}/time/`, inLanguage: 'pt-BR',
       applicationCategory: 'Civic tech', operatingSystem: 'Web', browserRequirements: 'Requer JavaScript',
       isAccessibleForFree: true, offers: { '@type': 'Offer', price: '0', priceCurrency: 'BRL' },
-      description: 'Questionário de 14 pautas e escalação dos seis votos das eleições gerais brasileiras de 2026 (cinco cargos, com duas vagas de senador), com placar de coerência, peso e gols contra a partir de votos nominais e bancadas reais.',
-      about: { '@type': 'Event', name: 'Eleições gerais no Brasil de 2026', startDate: '2026-10-04', eventStatus: 'https://schema.org/EventScheduled', location: { '@type': 'Country', name: 'Brasil' } },
+      description: 'Feed diário dos políticos eleitos em 2026 que a pessoa segue: votos nominais, presença, projetos e discursos (Câmara e Senado) e notícias dos grandes veículos, cada item com link pra fonte.',
       author: { '@id': `${site.origin}/#autor` }
     },
     { '@type': 'Person', '@id': `${site.origin}/#autor`, name: 'Artur Scartazzini', url: 'https://arturscartazzini.com', worksFor: { '@type': 'Organization', name: 'Mnova Solutions' } },
@@ -117,7 +111,7 @@ const jsonLd = {
   <meta property="og:image" content={ogImage} />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="Meu Time Político 2026 — você escala 6. Quantos jogam contra você?" />
+  <meta property="og:image:alt" content="Meu Time Político" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
@@ -135,24 +129,13 @@ const jsonLd = {
 <body>
   <div class="wrap">
     <header class="top">
-      <a class="brand" href="/">MEU TIME <span>POLÍTICO</span><em>2026</em></a>
+      <a class="brand" href="/">MEU TIME <span>POLÍTICO</span><em>27–31</em></a>
       <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-        <nav class="nav"><a href="/">como funciona</a><a href="/app/">escalar</a><a href="/metodo/">método</a></nav>
-        <div class="countdown" data-countdown set:html={contagemHtml}></div>
+        <nav class="nav"><a href="/time/">meu time</a><a href="/">como funciona</a><a href="/metodo/">método</a></nav>
         {badge && <div class="badge beta">{badge}</div>}
       </div>
     </header>
     <slot />
   </div>
-  <script>
-    // O texto já veio pronto do build; isto só corrige quando o build ficou velho no cache.
-    import { diasParaOPleito } from '../lib/formato';
-    const el = document.querySelector('[data-countdown]');
-    if (el) {
-      const d = diasParaOPleito();
-      const txt = d > 0 ? `faltam <b>${d}</b> dias pro 1º turno` : 'dia de eleição';
-      if (el.innerHTML !== txt) el.innerHTML = txt;
-    }
-  </script>
 </body>
 </html>
