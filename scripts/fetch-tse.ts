@@ -7,7 +7,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { resolve } from 'node:path';
-import { escreverJson, lerJson, agoraIso, RAIZ, RAW, GERADO } from './util';
+import { escreverJson, lerJson, agoraIso, parseCsvTse as parseCsv, RAIZ, RAW, GERADO } from './util';
 import { canonizarSigla } from '../src/lib/nomes';
 
 const CDN = 'https://cdn.tse.jus.br/estatistica/sead/odsele/consulta_cand';
@@ -36,23 +36,6 @@ async function baixarComFallback(nome: string): Promise<boolean> {
     else console.warn('  ⚠ sem snapshot no Wayback');
   } catch (e) { console.warn(`  ⚠ Wayback: ${(e as Error).message}`); }
   return false;
-}
-
-/** parser de CSV do TSE: separador ';', todos os campos entre aspas, latin1 */
-function parseCsv(buf: Buffer): Record<string, string>[] {
-  const txt = buf.toString('latin1');
-  const linhas: string[][] = []; let campo = '', linha: string[] = [], aspas = false;
-  for (let i = 0; i < txt.length; i++) {
-    const ch = txt[i];
-    if (aspas) { if (ch === '"') { if (txt[i + 1] === '"') { campo += '"'; i++; } else aspas = false; } else campo += ch; }
-    else if (ch === '"') aspas = true;
-    else if (ch === ';') { linha.push(campo); campo = ''; }
-    else if (ch === '\n' || ch === '\r') { if (ch === '\r' && txt[i + 1] === '\n') i++; linha.push(campo); linhas.push(linha); linha = []; campo = ''; }
-    else campo += ch;
-  }
-  if (campo || linha.length) { linha.push(campo); linhas.push(linha); }
-  const cab = linhas[0];
-  return linhas.slice(1).filter(l => l.length > 1).map(l => { const o: Record<string, string> = {}; cab.forEach((k, i) => { o[k] = l[i] ?? ''; }); return o; });
 }
 
 function csvNacional(ano: number): Record<string, string>[] | null {

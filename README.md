@@ -40,6 +40,9 @@ src/lib/compartilhar.ts      botão de compartilhar: link com UTM por canal, Web
 src/lib/lista-espera.ts      inscrição na lista de espera do acompanhamento dos eleitos (Supabase, função pública entrar_lista_espera)
 src/components/ListaEspera.astro  caixa "o jogo não acaba na urna", na home e no placar
 supabase/migrations/         esquema do banco pós-eleição (projeto meu-time-politico, sa-east-1, plano gratuito); a lista de espera não é legível de fora
+scripts/cadastro-eleitos.ts  `npm run cadastro`: eleitos de 2026 (TSE) + senadores até 2031 → src/data/generated/eleitos-2027.json, sem CPF
+scripts/carregar-cadastro.ts `npm run cadastro:carregar`: sobe o cadastro pro Supabase (upsert); precisa de SUPABASE_SECRET_KEY no .env
+.github/workflows/manter-supabase.yml  leitura diária pro plano gratuito não pausar o projeto (pausa com 7 dias parado)
 src/pages/index.astro        landing (como funciona) · app.astro (o app: capa + primeira pergunta na mesma tela) · metodo.astro · sobre.astro (redireciona pra /)
 ```
 

@@ -22,6 +22,8 @@
     "test:watch": "vitest",
     "evidencia": "tsx scripts/evidencia-partidos.ts",
     "prova": "tsx scripts/prova/rodar.ts",
+    "cadastro": "tsx scripts/cadastro-eleitos.ts",
+    "cadastro:carregar": "tsx scripts/carregar-cadastro.ts",
     "editor:partidos": "tsx scripts/evidencia-partidos.ts && tsx scripts/editor-partidos.ts"
   },
   "dependencies": {

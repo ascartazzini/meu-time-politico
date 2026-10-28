@@ -1,0 +1,14 @@
+# O plano gratuito do Supabase pausa o projeto depois de 7 dias sem uso, e aí a lista de espera do site para.
+# Uma leitura pública por dia conta como uso. Se falhar, o GitHub manda e-mail: projeto pausado ou fora do ar.
+name: manter-supabase
+on:
+  schedule: [{ cron: '17 6 * * *' }]
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          curl -fsS --retry 3 --retry-delay 20 -o /dev/null \
+            -H 'apikey: sb_publishable_jF_A8NhI0oIvg2dYj4R_HA_PaeGvnmx' \
+            'https://zclxjwbpfgompypncvol.supabase.co/rest/v1/politicos?select=id&limit=1'
