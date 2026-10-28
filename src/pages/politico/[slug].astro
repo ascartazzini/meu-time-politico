@@ -40,6 +40,14 @@ const iniciais = l.nome.split(' ').filter(w => w.length > 2).slice(0, 2).map(w =
   </section>
 
   <section class="bloco">
+    <h2 class="bloco-t">Placar do mandato</h2>
+    <p class="nota" id="placarDesde">Somando…</p>
+    <ul class="placar-mandato" id="placarMandato"></ul>
+    <p class="nota">Cada linha mede uma coisa; não existe nota única. Ainda não entra se o projeto andou, relatoria, emenda paga e gasto de cota
+      (<a href="/metodo/#acompanhamento">o que falta e por quê</a>).</p>
+  </section>
+
+  <section class="bloco">
     <h2 class="bloco-t">O que fez</h2>
     <p class="nota">Registro oficial da Câmara e do Senado (votos, presença, projetos, discursos) e notícias dos grandes veículos que citam {l.nome}.
       Até a posse, registro oficial só existe pra quem já tem mandato.</p>
@@ -54,6 +62,7 @@ const iniciais = l.nome.split(' ').filter(w => w.length > 2).slice(0, 2).map(w =
   <script>
     import { carregarTime, salvarTime, seguir, deixarDeSeguir, alternarTitular, segue, ehTitular, type Escalado } from '../../lib/time';
     import { montarFeed } from '../../lib/feed-ui';
+    import { buscarPlacar, linhasDoPlacar, desdeEmTexto } from '../../lib/mandato';
     import { evento } from '../../lib/analytics';
 
     const caixa = document.querySelector<HTMLElement>('[data-politico]')!;
@@ -84,6 +93,15 @@ const iniciais = l.nome.split(' ').filter(w => w.length > 2).slice(0, 2).map(w =
       pintar();
     });
     pintar();
+
+    const esc = (s: string) => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+    buscarPlacar(p.slug).then(placar => {
+      const linhas = linhasDoPlacar(placar);
+      document.getElementById('placarDesde')!.textContent = desdeEmTexto(placar.desde);
+      document.getElementById('placarMandato')!.innerHTML = linhas.length ? linhas.map(l =>
+        `<li><span class="pm-r">${esc(l.rotulo)}</span><b class="${l.tom ? `tom-${l.tom}` : ''}">${esc(l.valor)}</b>${l.nota ? `<small>${esc(l.nota)}</small>` : ''}</li>`).join('')
+        : '<li class="feed-vazio">Nada coletado ainda pra somar.</li>';
+    }).catch(() => { document.getElementById('placarDesde')!.textContent = 'Não deu pra somar agora.'; });
 
     montarFeed({
       raiz: document.getElementById('feed')!, local: 'politico',

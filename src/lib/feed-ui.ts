@@ -1,6 +1,6 @@
 /* Camada de DOM do feed: abas de leitura, cards, placar de presença e "carregar mais".
    Usada em /time/ (o time inteiro) e em /politico/<slug>/ (um político). */
-import { buscarFeed, LEITURAS, papelEmTexto, quandoEmTexto, placarPresenca, ROTULO_TIPO, type ItemFeed, type Leitura } from './feed';
+import { buscarFeed, LEITURAS, papelEmTexto, quandoEmTexto, placarPresenca, placarAgenda, ROTULO_TIPO, ROTULO_NATUREZA, type ItemFeed, type Leitura } from './feed';
 import { evento } from './analytics';
 
 const esc = (s: string) => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
@@ -25,7 +25,7 @@ function card(i: ItemFeed, nome: OpcoesFeed['nome'], local: OpcoesFeed['local'])
   const local_ = i.local ? ` · ${esc(i.local)}` : '';
   return `<article class="card n-${esc(i.natureza)}">
     <div class="card-top"><span class="selo s-${esc(i.natureza)}">${esc(SELO[i.natureza] ?? i.natureza)}</span>
-      <span class="card-tipo">${esc(ROTULO_TIPO[i.tipo] ?? i.tipo)}</span>
+      <span class="card-tipo">${esc(ROTULO_TIPO[i.tipo] ?? i.tipo)}</span>${i.tipo === 'agenda' ? `<span class="nat nat-${esc(i.agenda_natureza ?? 'sem')}">${esc(i.agenda_natureza ? ROTULO_NATUREZA[i.agenda_natureza] : 'sem classificação')}</span>` : ''}
       <time datetime="${esc(i.quando)}" title="${esc(new Date(i.quando).toLocaleString('pt-BR'))}">${esc(quandoEmTexto(i.quando))}</time></div>
     <h3 class="card-t"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.titulo)}</a></h3>
     ${resumo}
@@ -45,6 +45,18 @@ function placar(itens: ItemFeed[], nome: OpcoesFeed['nome'], local: OpcoesFeed['
   return `<div class="placar-presenca"><div class="pp-k">Placar de presença nestes cards</div><ul>${linhas}</ul>
     <p class="pp-nota">Câmara: conta só sessão deliberativa do plenário, onde todos os 513 são esperados (comissão não entra).
     Senado: não existe registro de presença fora das votações nominais; licença e missão oficial não contam como falta.</p></div>`;
+}
+
+function resumoAgenda(itens: ItemFeed[]): string {
+  const p = placarAgenda(itens);
+  const total = Object.values(p).reduce((a, b) => a + b, 0);
+  if (!total) return '';
+  const partes = (Object.keys(ROTULO_NATUREZA) as (keyof typeof ROTULO_NATUREZA)[]).filter(k => p[k])
+    .map(k => `<li><span class="nat nat-${k}">${ROTULO_NATUREZA[k]}</span> ${p[k]}</li>`);
+  if (p.sem) partes.push(`<li><span class="nat nat-sem">sem classificação</span> ${p.sem}</li>`);
+  return `<div class="placar-presenca"><div class="pp-k">${total} compromissos nestes cards</div><ul class="pp-agenda">${partes.join('')}</ul>
+    <p class="pp-nota">Classificação pelo texto da agenda: com quem foi a reunião. Na dúvida, fica sem classificação. Critério em <a href="/metodo/#agenda">/metodo</a>.
+    Hoje só a agenda do presidente; ministros, governadores e parlamentares entram nas próximas fases.</p></div>`;
 }
 
 export function montarFeed(o: OpcoesFeed): { recarregar: () => void } {
@@ -73,7 +85,7 @@ export function montarFeed(o: OpcoesFeed): { recarregar: () => void } {
       itens = acrescentar ? [...itens, ...novos] : novos;
       lista.innerHTML = itens.length ? itens.map(i => card(i, o.nome, o.local)).join('')
         : `<p class="feed-vazio">${leitura === 'tudo' ? o.vazio : 'Nada nesta leitura por enquanto.'}</p>`;
-      placarEl.innerHTML = leitura === 'presenca' ? placar(itens, o.nome, o.local) : '';
+      placarEl.innerHTML = leitura === 'presenca' ? placar(itens, o.nome, o.local) : leitura === 'agenda' ? resumoAgenda(itens) : '';
       mais.hidden = novos.length < 30;
     } catch {
       if (meu === pedido) lista.innerHTML = '<p class="feed-vazio">Não deu pra buscar o feed agora. Tenta de novo daqui a pouco.</p>';

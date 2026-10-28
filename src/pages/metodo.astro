@@ -16,11 +16,12 @@ const ordenar = (o: object) => Object.entries(o as Record<string, number>).filte
 const bancCam = ordenar(indice.bancadas.camara), bancSen = ordenar(indice.bancadas.senado);
 const n = indice.nacional;
 ---
-<Base title="Método e fontes — Meu Time Político 2026" badge="método" description="Como o placar é calculado: camisa, bolso, coerência, peso e força, com as fórmulas abertas. Votações nominais mapeadas por pauta e bancadas da Câmara, do Senado e das 27 assembleias.">
+<Base title="Método e fontes — Meu Time Político" badge="método" description="Como o feed dos eleitos é montado: fontes, ligação de cada item ao político, presença, agenda pública × privada e placar do mandato. E as fórmulas do quiz da eleição de 2026.">
   <style>
     .m{padding:48px 0 0}
     .m h2{margin-top:56px}
     .m h2:first-of-type{margin-top:0}
+    .m p a{color:var(--stance)}
     .m p{margin-top:14px;max-width:680px;color:#B9C4B2;font-size:15.5px}
     .m p b,.m li b{color:var(--ink)}
     .m code{font-family:var(--mono);font-size:12.5px;color:var(--data);background:#0B0E09;padding:1px 6px;border-radius:2px}
@@ -40,7 +41,16 @@ const n = indice.nacional;
   </style>
   <div class="m">
     <div class="kicker">Método · fontes · o que é real e o que é estimativa</div>
+    <h2 id="acompanhamento">Acompanhamento<br /><span class="out">dos eleitos</span></h2>
+    <p>O time que você monta em <a href="/time/">/time/</a> vê um feed com o que cada eleito fez. Todo item tem link pra fonte e um selo: <b>oficial</b> (registro da Câmara, do Senado ou do Planalto) ou <b>imprensa</b> (fato noticiado por G1, Folha, O Globo, Estadão, Poder360, Agência Brasil, Agência Câmara ou Agência Senado). Coluna, blog, análise e opinião ficam de fora pelo endereço da matéria. Da imprensa guardamos só título, linha fina e link.</p>
+    <p><b>Quem é quem.</b> Voto, presença, projeto e discurso chegam com o id oficial do parlamentar na casa, e é por ele que ligamos. A agenda do presidente é dele por construção. Notícia não traz id: ligamos pelo nome de urna (duas palavras ou mais; uma palavra só vale pra presidente, governador e senador, fora prenomes comuns), pelo nome civil completo ou por prenome + sobrenome pouco comum. Se dois eleitos têm o mesmo nome, a notícia não vai pra nenhum. O card avisa quando a ligação foi pelo nome.</p>
+    <p><b>Presença.</b> Na Câmara, a lista de cada sessão deliberativa do plenário diz quem foi; quem está em exercício e não está na lista faltou. Em comissão só contamos quem foi, porque só os membros são esperados. No Senado não existe registro de presença: só dá pra dizer em votação nominal, pela sigla oficial. Licença médica, missão oficial, representação e atividade parlamentar (AP, LS, MIS, REP) não contam como falta; NCom e licença particular contam.</p>
+    <p id="agenda"><b>Agenda pública × privada.</b> Cada compromisso é classificado pelo texto da agenda, ou seja, por com quem foi. Nesta ordem: <b>pessoal</b> (médico, velório, família), <b>partidária</b> (partido, diretório, campanha), <b>setor privado / sociedade</b> (empresa, CEO, banco privado, confederação patronal, sindicato, associação, ONG, artista) e <b>pública</b> (ministro, governador, parlamentar, chefe de Estado, órgão público, cerimônia, despacho). Se nada bate, fica <b>sem classificação</b>: viagem, por exemplo. As regras estão em <code>scripts/coletores/agenda.ts</code>, com teste. Hoje só a agenda do presidente entra.</p>
+    <p><b>Placar do mandato.</b> Na página de cada eleito, as contagens do que foi coletado: presença no plenário, votações nominais, projetos como autor e coautor, discursos, agenda por natureza e citações na imprensa. Não existe nota única nem ranking, e a página diz desde quando conta. Ainda não entram: se o projeto andou, relatorias, emendas pagas e gasto de cota (veja as <a href="https://github.com/ascartazzini/meu-time-politico/blob/main/docs/pendencias.md">pendências</a>).</p>
+    <p><b>Antes da posse</b> (5 e 6 de janeiro para presidente e governadores, 1º de fevereiro para o Congresso), só tem registro oficial quem já tem mandato. Achou algo ligado à pessoa errada? <a href="https://github.com/ascartazzini/meu-time-politico/issues">Avise aqui</a>.</p>
+
     <h2>Como o placar<br /><span class="out">é calculado</span></h2>
+    <p><i>As seções abaixo são do quiz da eleição de 2026, que segue no ar como arquivo em <a href="/app/">/app/</a>.</i></p>
     <p>Este app não tem opinião sobre candidato. Ele cruza <b>três coisas públicas</b>: o que você respondeu, a posição registrada (ou estimada) de cada candidato em 14 pautas, e o tamanho das bancadas nas casas que aprovam lei. Cada critério está aberto aqui, de propósito. Critério escondido é editorial disfarçado de dado.</p>
 
     <h2>1. Camisa</h2>

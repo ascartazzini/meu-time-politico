@@ -1,11 +1,11 @@
-# Coletores do feed: imprensa de hora em hora (os RSS cobrem 1 a 2 dias), Câmara e Senado a cada 3 horas.
+# Coletores do feed: imprensa de hora em hora (os RSS cobrem 1 a 2 dias); Câmara, Senado e agenda do presidente a cada 3 horas.
 # Escrevem no Supabase com a chave secreta, que fica em Settings → Secrets → Actions → SUPABASE_SECRET_KEY.
 # Sem o secret o job só avisa e sai, pra não mandar e-mail de falha toda hora.
 name: coletar
 on:
   schedule:
     - cron: '7 * * * *'       # imprensa
-    - cron: '37 */3 * * *'    # Câmara e Senado
+    - cron: '37 */3 * * *'    # Câmara, Senado e agenda do presidente
   workflow_dispatch:
     inputs:
       dias: { description: 'Janela da Câmara/Senado, em dias', default: '3' }
@@ -32,3 +32,4 @@ jobs:
         run: |
           npm run coletar:camara -- --dias=${{ inputs.dias || '2' }}
           npm run coletar:senado -- --dias=${{ inputs.dias || '3' }}
+          npm run coletar:presidente -- --dias=2

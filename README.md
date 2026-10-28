@@ -15,7 +15,7 @@ npm run cadastro:carregar  # sobe o cadastro pro Supabase (precisa de SUPABASE_S
 npm run coletar        # coletores do feed: Câmara, Senado e imprensa → Supabase (mesmo .env)
 ```
 
-Os coletores rodam sozinhos no GitHub Actions (`.github/workflows/coletar.yml`): imprensa de hora em hora, Câmara e Senado a cada 3 horas. Precisam do secret `SUPABASE_SECRET_KEY` no repositório.
+Os coletores rodam sozinhos no GitHub Actions (`.github/workflows/coletar.yml`): imprensa de hora em hora; Câmara, Senado e agenda do presidente a cada 3 horas. Precisam do secret `SUPABASE_SECRET_KEY` no repositório.
 
 ## Arquitetura
 
@@ -47,7 +47,9 @@ src/components/ListaEspera.astro  caixa "o jogo não acaba na urna", na home e n
 supabase/migrations/         esquema do banco pós-eleição (projeto meu-time-politico, sa-east-1, plano gratuito); a lista de espera não é legível de fora
 scripts/cadastro-eleitos.ts  `npm run cadastro`: eleitos de 2026 (TSE) + senadores até 2031 → src/data/generated/eleitos-2027.json, sem CPF
 scripts/carregar-cadastro.ts `npm run cadastro:carregar`: sobe o cadastro pro Supabase (upsert); precisa de SUPABASE_SECRET_KEY no .env
-scripts/coletores/           camara.ts (presença, votos, projetos) · senado.ts (votos, discursos) · imprensa.ts (RSS) · citacoes.ts (nome → político, puro) · banco.ts (escrita no Supabase)
+scripts/coletores/           camara.ts (presença, votos, projetos) · senado.ts (votos, discursos) · presidente.ts (agenda do Planalto) · imprensa.ts (RSS) · citacoes.ts e agenda.ts (regras puras, testadas) · banco.ts (escrita no Supabase)
+src/lib/mandato.ts           placar do mandato na página do político (função placar_mandato), em partes, sem nota única
+docs/pendencias.md           o que o plano prevê e ainda não está no ar, com o motivo
 src/lib/time.ts              o time pós-eleição: seguir, titulares por cargo, localStorage (puro, testado)
 src/lib/feed.ts · feed-ui.ts busca do feed (função feed do Supabase, por slug), texto de cada papel, placar de presença; e a camada de DOM
 src/lib/eleitos.ts           cadastro → linha leve, nome bonito, cargo principal, links oficiais

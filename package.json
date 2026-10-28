@@ -28,7 +28,8 @@
     "coletar:camara": "tsx scripts/coletores/camara.ts",
     "coletar:senado": "tsx scripts/coletores/senado.ts",
     "coletar:imprensa": "tsx scripts/coletores/imprensa.ts",
-    "coletar": "npm run coletar:camara && npm run coletar:senado && npm run coletar:imprensa"
+    "coletar": "npm run coletar:camara && npm run coletar:senado && npm run coletar:presidente && npm run coletar:imprensa",
+    "coletar:presidente": "tsx scripts/coletores/presidente.ts"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

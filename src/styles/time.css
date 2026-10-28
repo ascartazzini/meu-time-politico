@@ -117,3 +117,17 @@
 .placar-presenca ul{list-style:none;font-size:14.5px}
 .placar-presenca li{padding:3px 0}
 .pp-nota{font-size:12px;color:var(--muted);margin-top:10px}
+.nat{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line);border-radius:2px;padding:2px 6px}
+.nat-publica{color:var(--data);border-color:#1E4D2E}
+.nat-privada{color:#FF9F43;border-color:#5A3A12}
+.nat-partidaria{color:#C792EA;border-color:#4A2F5E}
+.nat-pessoal{color:var(--ink)}
+.nat-sem{color:var(--muted)}
+.pp-agenda{display:flex;flex-wrap:wrap;gap:8px 18px}
+.placar-mandato{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:14px}
+.placar-mandato li{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:14px 16px}
+.placar-mandato li.feed-vazio{background:none;border:0;padding:0}
+.pm-r{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.placar-mandato b{display:block;font-family:var(--display);font-size:24px;font-weight:400;margin-top:6px;line-height:1.1}
+.placar-mandato small{display:block;font-size:12px;color:var(--muted);margin-top:6px}
+.nota a{color:var(--stance)}

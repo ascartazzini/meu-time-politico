@@ -29,6 +29,7 @@ export interface ItemNovo {
   ocorreuEm?: string | null;
   publicadoEm?: string | null;
   local?: string | null;
+  agendaNatureza?: 'publica' | 'privada' | 'partidaria' | 'pessoal' | null;
   dados?: Record<string, unknown>;
   politicos: { id: string; papel: string; metodo: Metodo; confianca?: number }[];
 }
@@ -58,11 +59,11 @@ export async function idsPorFonte(fonte: string): Promise<Map<string, string>> {
   return new Map(linhas.map(l => [l.valor, l.politico_id]));
 }
 
-export interface PoliticoBase { id: string; nome: string; nome_urna: string | null; uf: string | null; cargos: string[] }
+export interface PoliticoBase { id: string; slug: string; nome: string; nome_urna: string | null; uf: string | null; cargos: string[] }
 export async function politicos(): Promise<PoliticoBase[]> {
-  const ps = await todas<{ id: string; nome: string; nome_urna: string | null; uf: string | null; mandatos: { cargo: string }[] }>(
-    'politicos?select=id,nome,nome_urna,uf,mandatos(cargo)');
-  return ps.map(p => ({ id: p.id, nome: p.nome, nome_urna: p.nome_urna, uf: p.uf, cargos: p.mandatos.map(m => m.cargo) }));
+  const ps = await todas<{ id: string; slug: string; nome: string; nome_urna: string | null; uf: string | null; mandatos: { cargo: string }[] }>(
+    'politicos?select=id,slug,nome,nome_urna,uf,mandatos(cargo)');
+  return ps.map(p => ({ id: p.id, slug: p.slug, nome: p.nome, nome_urna: p.nome_urna, uf: p.uf, cargos: p.mandatos.map(m => m.cargo) }));
 }
 
 /** Grava itens e as ligações com políticos. Item sem político ligado não entra (o feed é por político). */
@@ -76,7 +77,8 @@ export async function gravar(itens: ItemNovo[]): Promise<{ itens: number; ligaco
       headers: { Prefer: 'resolution=merge-duplicates,return=representation' },
       body: JSON.stringify(lote.map(i => ({
         fonte_id: i.fonte, chave: i.chave, tipo: i.tipo, titulo: i.titulo.slice(0, 500), resumo: i.resumo?.slice(0, 1000) ?? null,
-        url: i.url, ocorreu_em: i.ocorreuEm ?? null, publicado_em: i.publicadoEm ?? null, local: i.local ?? null, dados: i.dados ?? {},
+        url: i.url, ocorreu_em: i.ocorreuEm ?? null, publicado_em: i.publicadoEm ?? null, local: i.local ?? null,
+        agenda_natureza: i.agendaNatureza ?? null, dados: i.dados ?? {},
       }))),
     });
     const idPorChave = new Map(salvos.map(s => [s.chave, s.id]));

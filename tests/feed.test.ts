@@ -47,3 +47,12 @@ describe('placarPresenca', () => {
     expect(p.get('sen')).toEqual({ esteve: 1, faltou: 1, base: 'votacao' });
   });
 });
+
+import { placarAgenda } from '../src/lib/feed';
+describe('placarAgenda', () => {
+  it('conta por natureza, com sem classificação à parte', () => {
+    const a = (n: string | null) => ({ ...item('agenda', {}, [['lula-br', 'agenda']]), agenda_natureza: n as never });
+    expect(placarAgenda([a('publica'), a('publica'), a('privada'), a(null), item('noticia', {}, [])]))
+      .toEqual({ publica: 2, privada: 1, partidaria: 0, pessoal: 0, sem: 1 });
+  });
+});

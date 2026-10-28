@@ -6,13 +6,17 @@ export interface Ligacao { slug: string; papel: string; metodo: 'id-oficial' | '
 export interface ItemFeed {
   id: string; fonte_id: string; fonte_nome: string; natureza: 'oficial' | 'imprensa' | 'rede';
   tipo: string; titulo: string; resumo: string | null; resumo_ia: boolean; url: string; quando: string;
-  local: string | null; dados: Record<string, unknown>; politicos: Ligacao[];
+  local: string | null; agenda_natureza?: NaturezaAgenda | null; dados: Record<string, unknown>; politicos: Ligacao[];
 }
 
-/** As leituras do feed que já têm dado. Agenda pública × privada e impacto chegam nas fases 3 e 4. */
+export type NaturezaAgenda = 'publica' | 'privada' | 'partidaria' | 'pessoal';
+export const ROTULO_NATUREZA: Record<NaturezaAgenda, string> = { publica: 'pública', privada: 'setor privado / sociedade', partidaria: 'partidária', pessoal: 'pessoal' };
+
+/** As leituras do feed que já têm dado. O impacto (do mandato e do time titular) fica na página do político e na fase 4. */
 export const LEITURAS = {
   tudo: { rotulo: 'Tudo', tipos: null },
   presenca: { rotulo: 'Presença', tipos: ['presenca', 'voto'] },
+  agenda: { rotulo: 'Agenda', tipos: ['agenda'] },
   oficial: { rotulo: 'Oficial', tipos: ['presenca', 'voto', 'discurso', 'proposicao', 'agenda', 'despesa', 'ato', 'emenda'] },
   imprensa: { rotulo: 'Imprensa', tipos: ['noticia'] },
 } as const;
@@ -48,6 +52,7 @@ export function papelEmTexto(tipo: string, papel: string, casa?: unknown): { tex
   if (tipo === 'proposicao') return { texto: papel === 'autor' ? 'apresentou' : 'assinou junto', tom: 'neutro' };
   if (tipo === 'discurso') return { texto: 'discursou', tom: 'neutro' };
   if (tipo === 'noticia') return { texto: 'citado na imprensa', tom: 'neutro' };
+  if (tipo === 'agenda') return { texto: 'na agenda oficial', tom: 'neutro' };
   return { texto: papel, tom: 'neutro' };
 }
 
@@ -90,5 +95,12 @@ export function placarPresenca(itens: ItemFeed[]): Map<string, Placar> {
       }
     }
   }
+  return out;
+}
+
+/** Quantos compromissos de agenda de cada natureza nos itens carregados (null = sem critério que bata). */
+export function placarAgenda(itens: ItemFeed[]): Record<NaturezaAgenda | 'sem', number> {
+  const out = { publica: 0, privada: 0, partidaria: 0, pessoal: 0, sem: 0 };
+  for (const i of itens) if (i.tipo === 'agenda') out[i.agenda_natureza ?? 'sem']++;
   return out;
 }
