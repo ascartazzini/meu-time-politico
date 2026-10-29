@@ -82,14 +82,14 @@ import { CONSENTIMENTO } from '../lib/lista-espera';
     document.getElementById('edicao')!.addEventListener('scroll', e => {
       const c = e.target as HTMLElement;
       if (!c.classList?.contains('capas')) return;
-      const k = Math.round(c.scrollLeft / ((c.firstElementChild as HTMLElement).offsetWidth + 10));
+      const k = Math.round(c.scrollLeft / ((c.firstElementChild as HTMLElement).offsetWidth));
       c.parentElement!.querySelector('.contador')!.textContent = `${Math.min(k + 1, c.children.length)}/${c.children.length}`;
     }, true);
     document.getElementById('edicao')!.addEventListener('click', e => {
       const seta = (e.target as HTMLElement).closest<HTMLElement>('[data-seta]');
       if (!seta) return;
       const c = seta.closest('.dia-imprensa')!.querySelector<HTMLElement>('.capas')!;
-      c.scrollBy({ left: Number(seta.dataset.seta) * ((c.firstElementChild as HTMLElement).offsetWidth + 10), behavior: 'smooth' });
+      c.scrollBy({ left: Number(seta.dataset.seta) * ((c.firstElementChild as HTMLElement).offsetWidth), behavior: 'smooth' });
     });
     abrir().catch(() => { document.getElementById('quando')!.textContent = 'Não deu pra carregar agora. Tenta de novo daqui a pouco.'; });
 

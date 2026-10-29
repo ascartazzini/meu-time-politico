@@ -206,7 +206,7 @@ export function montarTimeline(o: OpcoesTimeline): { recarregar: () => void } {
     const seta = (e.target as HTMLElement).closest<HTMLElement>('[data-seta]');
     if (!seta) return;
     const c = seta.closest('.dia-imprensa')!.querySelector<HTMLElement>('.capas')!;
-    c.scrollBy({ left: Number(seta.dataset.seta) * ((c.firstElementChild as HTMLElement).offsetWidth + 10), behavior: 'smooth' });
+    c.scrollBy({ left: Number(seta.dataset.seta) * ((c.firstElementChild as HTMLElement).offsetWidth), behavior: 'smooth' });
   });
 
   mais.addEventListener('click', () => carregar(true));

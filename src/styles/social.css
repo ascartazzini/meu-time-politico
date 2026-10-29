@@ -160,15 +160,18 @@ main{max-width:640px;margin:0 auto;padding:12px 16px 80px}
 .setas{display:flex;gap:4px}
 .setas button{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:18px;line-height:1}
 .setas button:hover{background:var(--hover)}
-@media (hover:none){.setas{display:none}}
-.capas{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
+.capas{display:flex;gap:0;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
 .capas::-webkit-scrollbar{display:none}
 .capas > .post{flex:0 0 100%;scroll-snap-align:start;padding:0 0 4px;border-bottom:0;min-width:0}
 .capas > .post .peca{margin:0;border-radius:18px}
 .capas > .post .canto .tipo{display:none}
+/* no celular a capa vai de borda a borda, uma por vez (sem a próxima espiando, que parecia corte) */
 @media (max-width:600px){
-  .capas{margin:0 -16px;padding:0 16px;scroll-padding:0 16px}
-  .capas > .post{flex-basis:calc(100% - 28px)}
+  .capas{margin:0 -16px}
+  .capas > .post > .post-cab{padding:0 16px}
+  .capas > .post > .tambem,.capas > .post > .gente,.capas > .post > .post-pe{padding:0 16px}
+  .capas > .post .peca{border-radius:0}
+  .setas button{width:34px;height:34px}
 }
 
 /* embaixo da peça */
