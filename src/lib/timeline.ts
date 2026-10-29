@@ -1,7 +1,8 @@
 /* Timeline (home e página do político): posts do feed e as quatro reações (amei, gostei, odiei, odiei muito).
    Sem login dá pra ler tudo; pra reagir precisa entrar e seguir alguém ligado ao post. */
 import { rpc } from './supabase';
-import { papelEmTexto, quandoEmTexto, ROTULO_NATUREZA, ROTULO_TIPO, type ItemFeed } from './feed';
+import { papelEmTexto, quandoEmTexto, ROTULO_TIPO } from './feed';
+import { peca, type ItemPeca } from './pecas';
 import { cargoEmTexto, type EleitoLeve } from './eleitos';
 import {
   usuario, seguir, interacoes, reagir, mensagemDeErro, REACOES, type Interacao, type Reacao,
@@ -9,7 +10,7 @@ import {
 import { toast } from './toast';
 import { evento } from './analytics';
 
-export type Item = ItemFeed & { n_politicos: number; outras_fontes: { fonte: string; url: string; titulo: string }[] | null };
+export type Item = ItemPeca;
 
 const esc = (s: string) => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 const POR_PAGINA = 25;
@@ -26,51 +27,40 @@ export function avatar(e: EleitoLeve | undefined, slug: string): string {
   return `<a class="ava" href="/politico/${esc(slug)}/" aria-hidden="true" tabindex="-1">${dentro}</a>`;
 }
 export const sobre = (e: EleitoLeve) => `${esc(e.partido)}${e.uf && e.cargo !== 'presidente' ? `-${esc(e.uf)}` : ''} · ${esc(cargoEmTexto(e.cargo, e.uf).toLowerCase())}`;
-const dominio = (u: string) => { try { return new URL(u).hostname.replace(/^www\d*\./, ''); } catch { return ''; } };
 
-function fonte(i: Item): string {
-  const nat = i.tipo === 'agenda' ? `<span class="nat nat-${esc(i.agenda_natureza ?? 'sem')}">${esc(i.agenda_natureza ? ROTULO_NATUREZA[i.agenda_natureza] : 'sem classificação')}</span>` : '';
-  const resumo = i.resumo && i.tipo !== 'presenca' ? `<span class="resumo">${esc(i.resumo)}</span>` : '';
-  return `<a class="fonte" href="${esc(i.url)}" target="_blank" rel="noopener"><b>${esc(i.titulo)}</b>${resumo}
-    <small><span class="selo ${esc(i.natureza)}">${i.natureza === 'oficial' ? 'oficial' : 'imprensa'}</span> · ${esc(i.fonte_nome)} · ${esc(dominio(i.url))}${nat ? ` ${nat}` : ''}</small></a>${tambem(i)}`;
-}
-
-/** A mesma notícia em outros veículos (grupo montado pelo coletor). */
-function tambem(i: Item): string {
-  const os = i.outras_fontes ?? [];
-  if (!os.length) return '';
-  return `<p class="tambem">Também em ${os.map(o => `<a href="${esc(o.url)}" target="_blank" rel="noopener" title="${esc(o.titulo)}">${esc(o.fonte)}</a>`).join(', ')}</p>`;
-}
 const etiqueta = (i: Item) => `<span class="tipo t-${esc(i.tipo)}">${esc(ROTULO_TIPO[i.tipo] ?? i.tipo)}</span>`;
+const CASA_NOME: Record<string, string> = { senado: 'Senado Federal', executivo: 'Planalto', camara: 'Câmara dos Deputados' };
 
-/** Card de um item. Com uma pessoa só, o post é dela; com muitas (sessão, votação), é da casa, com as pessoas em fichas. */
+/** Um post: cabeçalho (de quem é), a peça visual do tipo (pecas.ts), reações e a fonte.
+ *  Com uma pessoa só, o post é dela; notícia é do veículo; sessão e votação com muita gente são da casa. */
 export function post(i: Item, gente: Map<string, EleitoLeve>, umaPessoa?: string): string {
   const ps = i.politicos ?? [];
   const quando = `<time class="quando" datetime="${esc(i.quando)}" title="${esc(new Date(i.quando).toLocaleString('pt-BR'))}">${esc(quandoEmTexto(i.quando))}</time>`;
   const slugs = ps.map(p => p.slug).slice(0, 12).join(',');
-  const rodape = `<div class="reacoes">${REACOES.map(r =>
-    `<button type="button" class="r-${r.tipo}" data-r="${r.tipo}" aria-pressed="false" aria-label="${r.rotulo}" title="${r.rotulo}">${r.emoji} <span>0</span></button>`).join('')}</div>`;
   const solo = umaPessoa ? ps.find(p => p.slug === umaPessoa) : (i.n_politicos === 1 || ps.length === 1) ? ps[0] : undefined;
-  if (solo) {
+  let cab: string;
+  if (i.tipo === 'noticia') {
+    const nomes = ps.slice(0, 3).map(p => `<a href="/politico/${esc(p.slug)}/">${esc(gente.get(p.slug)?.nome ?? p.slug)}</a>`);
+    cab = `<span class="ava jornal" aria-hidden="true">${esc(i.fonte_nome.replace(/^(O|A)\s+/, '')[0] ?? '')}</span>
+      <div class="quem"><b>${esc(i.fonte_nome)}</b><small>sobre ${nomes.join(', ')}${i.n_politicos > 3 ? ` e mais ${i.n_politicos - 3}` : ''}</small></div>`;
+  } else if (solo) {
     const e = gente.get(solo.slug);
-    const papel = papelEmTexto(i.tipo, solo.papel, i.dados.casa);
-    const verbo = i.tipo === 'noticia' ? `apareceu no <b>${esc(i.fonte_nome)}</b>${solo.metodo === 'nome' ? ' <span class="pista">· ligado pelo nome</span>' : ''}`
-      : `<span class="${papel.tom}">${esc(papel.texto)}</span>`;
-    return `<article class="post t-${esc(i.tipo)}" data-id="${esc(i.id)}" data-slugs="${esc(slugs)}"><div class="post-cab">${avatar(e, solo.slug)}
-      <div class="quem"><b><a href="/politico/${esc(solo.slug)}/">${esc(e?.nome ?? solo.slug)}</a></b><small>${e ? sobre(e) : ''}</small></div><div class="canto">${etiqueta(i)}${quando}</div></div>
-      <p class="acao">${verbo}</p>${fonte(i)}${rodape}</article>`;
+    cab = `${avatar(e, solo.slug)}<div class="quem"><b><a href="/politico/${esc(solo.slug)}/">${esc(e?.nome ?? solo.slug)}</a></b><small>${e ? sobre(e) : ''}</small></div>`;
+  } else {
+    const casa = CASA_NOME[String(i.dados.casa)] ?? 'Câmara dos Deputados';
+    cab = `<span class="ava casa" aria-hidden="true">🏛</span><div class="quem"><b>${esc(casa)}</b><small>${i.n_politicos} eleitos que acompanhamos</small></div>`;
   }
-  const casa = i.dados.casa === 'senado' ? 'Senado Federal' : i.dados.casa === 'executivo' ? 'Planalto' : 'Câmara dos Deputados';
-  const oficial = i.natureza === 'oficial';
-  const resumo = i.tipo === 'presenca' ? `${(i.dados.presentes as number) ?? i.n_politicos} deputados presentes`
-    : i.tipo === 'voto' ? `votação nominal · ${i.n_politicos} parlamentares` : `${i.n_politicos} políticos citados`;
-  const fichas = ps.slice(0, 8).map(p => {
+  // votação com muita gente: quem do cadastro votou o quê, em fichas
+  const fichas = !solo && i.tipo === 'voto' ? `<div class="gente">${ps.slice(0, 8).map(p => {
     const e = gente.get(p.slug), papel = papelEmTexto(i.tipo, p.papel, i.dados.casa);
     return `<a class="${papel.tom === 'ruim' ? 'ruim' : ''}" href="/politico/${esc(p.slug)}/">${esc(e?.nome ?? p.slug)}: ${esc(papel.texto)}</a>`;
-  }).join('') + (i.n_politicos > 8 ? `<a href="${esc(i.url)}" target="_blank" rel="noopener">+ ${i.n_politicos - 8} na fonte</a>` : '');
-  return `<article class="post t-${esc(i.tipo)}" data-id="${esc(i.id)}" data-slugs="${esc(slugs)}"><div class="post-cab"><span class="ava ${oficial ? 'casa' : 'jornal'}" aria-hidden="true">${oficial ? '🏛' : '📰'}</span>
-    <div class="quem"><b>${esc(oficial ? casa : i.fonte_nome)}</b><small>${resumo}</small></div><div class="canto">${etiqueta(i)}${quando}</div></div>
-    ${fonte(i)}<div class="gente">${fichas}</div>${rodape}</article>`;
+  }).join('')}${i.n_politicos > 8 ? `<a href="${esc(i.url)}" target="_blank" rel="noopener">+ ${i.n_politicos - 8} na fonte</a>` : ''}</div>` : '';
+  const fonte = i.tipo === 'agenda' || i.tipo === 'presenca' ? `<a class="fonte-link" href="${esc(i.url)}" target="_blank" rel="noopener" title="${esc(i.fonte_nome)}">fonte ↗</a>` : '';
+  const rodape = `<div class="post-pe"><div class="reacoes">${REACOES.map(r =>
+    `<button type="button" class="r-${r.tipo}" data-r="${r.tipo}" aria-pressed="false" aria-label="${r.rotulo}" title="${r.rotulo}">${r.emoji} <span>0</span></button>`).join('')}</div>${fonte}</div>`;
+  return `<article class="post t-${esc(i.tipo)}" data-id="${esc(i.id)}" data-slugs="${esc(slugs)}">
+    <div class="post-cab">${cab}<div class="canto">${etiqueta(i)}${quando}</div></div>
+    ${peca(i, gente, solo)}${fichas}${rodape}</article>`;
 }
 
 export interface OpcoesTimeline {
@@ -178,6 +168,14 @@ export function montarTimeline(o: OpcoesTimeline): { recarregar: () => void } {
       } catch (err) { toast(mensagemDeErro(err)); s.disabled = false; }
     }
   });
+
+  // carrossel de discurso: o ponto aceso acompanha o slide (scroll não sobe, por isso a captura)
+  o.raiz.addEventListener('scroll', e => {
+    const c = e.target as HTMLElement;
+    if (!c.classList?.contains('carrossel')) return;
+    const k = Math.round(c.scrollLeft / c.clientWidth);
+    c.parentElement?.querySelectorAll('.pontos i').forEach((p, j) => p.classList.toggle('on', j === k));
+  }, true);
 
   mais.addEventListener('click', () => carregar(true));
   addEventListener('mtp:seguidos', () => { if (itens.length) pintarInteracoes(itens.map(i => i.id)); });

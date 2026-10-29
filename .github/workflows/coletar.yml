@@ -36,5 +36,8 @@ jobs:
           npm run coletar:senado -- --dias=${{ inputs.dias || '3' }}
           npm run coletar:presidente -- --dias=2
           npm run coletar:pauta
+      # imagem das matérias, trechos de discurso e fotos de quem está na agenda (o que ainda não tem)
+      - if: env.SUPABASE_SECRET_KEY != ''
+        run: npm run enriquecer
       - if: env.SUPABASE_SECRET_KEY != '' && github.event.schedule == '0 12 * * 5'
         run: npm run coletar:pauta && npm run newsletter

@@ -1,9 +1,10 @@
 /* Meu Time Político — visual claro, uma coluna, cara de rede social. */
 :root{
-  --bg:#F4F4F1; --card:#FFFFFF; --ink:#16181A; --sub:#5F6670; --line:#E3E4E0; --hover:#F1F2EE;
+  --bg:#FFFFFF; --card:#FFFFFF; --ink:#16181A; --sub:#5F6670; --line:#E3E4E0; --hover:#F1F2EE;
   --marca:#FFD100; --oficial:#0A8F4E; --imprensa:#B07A00; --ruim:#D7263D; --bom:#0A8F4E; --link:#1A5FD0;
   --display:'Anton', Impact, 'Arial Narrow', sans-serif;
   --body:'Barlow', 'Barlow medidas', system-ui, -apple-system, sans-serif;
+  --jornal:'Playfair Display', Georgia, 'Times New Roman', serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 [hidden]{display:none !important}
@@ -49,56 +50,151 @@ main{max-width:640px;margin:0 auto;padding:12px 16px 80px}
 .rodape{max-width:640px;margin:0 auto;padding:8px 16px 60px;color:var(--sub);font-size:13px}
 .rodape a{color:var(--sub)}
 
-/* ---- post ---- */
-.post{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:10px}
-.post-cab{display:flex;gap:10px;align-items:center}
-.ava{flex:none;width:42px;height:42px;border-radius:50%;background:#E9EAE6;display:grid;place-items:center;font-weight:700;color:var(--sub);overflow:hidden;font-size:15px;text-decoration:none}
+/* ---- post: um por vez, como numa rede de fotos. Cabeçalho, a peça grande do tipo, reações. ---- */
+.post{--tipo:var(--ink);padding:20px 0 12px;border-bottom:1px solid var(--line)}
+.post.t-voto{--tipo:#1A5FD0}
+.post.t-agenda{--tipo:#6B2FA0}
+.post.t-presenca{--tipo:#0A7F45}
+.post.t-proposicao{--tipo:#0E6F78}
+.post.t-discurso{--tipo:#C25000}
+.post.t-noticia{--tipo:#16181A}
+.post-cab{display:flex;gap:10px;align-items:center;margin-bottom:12px}
+.ava{flex:none;width:42px;height:42px;border-radius:50%;background:#E9EAE6;display:grid;place-items:center;font-weight:700;color:var(--sub);overflow:hidden;font-size:15px;text-decoration:none;box-shadow:0 0 0 2px #fff,0 0 0 4px var(--tipo)}
 .ava img{width:100%;height:100%;object-fit:cover;object-position:top}
 .ava.casa{background:#EEF6F1;color:var(--oficial)}
-.ava.jornal{background:#FBF4E2;color:var(--imprensa)}
+.ava.jornal{background:#16181A;color:#fff;font-family:var(--jornal);font-weight:800;font-size:20px}
 .quem{min-width:0;flex:1}
 .quem b{display:block;font-size:15.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .quem a{text-decoration:none}
 .quem a:hover{text-decoration:underline}
-.quem small{display:block;color:var(--sub);font-size:13px}
-.quando{flex:none;color:var(--sub);font-size:13px;align-self:flex-start}
-.acao{margin-top:10px;font-size:16px}
+.quem small{display:block;color:var(--sub);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.quando{flex:none;color:var(--sub);font-size:13px}
+.canto{flex:none;align-self:flex-start;display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.tipo{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--tipo);white-space:nowrap}
 .ruim{color:var(--ruim);font-weight:700}
 .bom{color:var(--bom);font-weight:700}
+
+/* a peça: borda a borda no celular */
+.peca{display:block;position:relative;border-radius:22px;overflow:hidden;text-decoration:none;color:#fff}
+@media (max-width:600px){.peca{margin:0 -16px;border-radius:0}}
+.painel{background:var(--tipo);padding:22px 22px 24px;min-height:360px;display:flex;flex-direction:column;gap:14px}
+.painel::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 80% at 100% 0%,rgba(255,255,255,.16),transparent 60%);pointer-events:none}
+.rotulo{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.9}
+.manchete{font-weight:700;font-size:clamp(24px,6vw,32px);line-height:1.1;letter-spacing:-.01em;margin-top:auto;text-wrap:balance}
+.manchete.longa{font-size:clamp(21px,5vw,26px)}
+.quer{font-family:var(--display);font-weight:400;text-transform:uppercase;color:var(--marca);font-size:1.12em;letter-spacing:.01em}
+.nota{font-size:14px;opacity:.88}
+.carimbo{align-self:flex-start;font-family:var(--display);text-transform:uppercase;font-size:30px;line-height:1;padding:7px 14px 5px;border:3px solid currentColor;border-radius:6px;transform:rotate(-3deg)}
+.carimbo.aprovado{color:var(--marca)}
+.carimbo.rejeitado{color:#FFC2CA}
+.barra{height:10px;background:rgba(255,255,255,.25);border-radius:999px;overflow:hidden}
+.barra i{display:block;height:100%;background:#fff;border-radius:inherit}
+.placar-voto{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 12px;font-weight:700}
+.placar-voto b{font-family:var(--display);font-weight:400;font-size:44px;line-height:1;margin-right:4px}
+.placar-voto .barra{flex:1 0 100%}
+.selo-pessoa{align-self:flex-start;background:#fff;color:var(--ink);border-radius:999px;padding:8px 16px;font-weight:700;font-size:16px}
+.selo-pessoa.ruim{color:var(--ruim)}
+.numerao{display:flex;align-items:flex-end;gap:14px;margin-top:auto}
+.numerao b{font-family:var(--display);font-weight:400;font-size:clamp(104px,28vw,160px);line-height:.82;letter-spacing:-.01em}
+.numerao span{font-weight:700;font-size:19px;line-height:1.15;padding-bottom:6px}
+.faltaram small{font-size:13px;font-weight:600;opacity:.9}
+.pauta{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+
+/* rostos */
+.rosto{position:relative;flex:none;display:inline-grid;place-items:center;width:40px;height:40px;border-radius:50%;overflow:hidden;background:rgba(255,255,255,.22);color:#fff;font-weight:700;font-size:14px;text-decoration:none}
+.rosto i{font-style:normal}
+.rosto img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+.rosto.ruim{box-shadow:0 0 0 3px #FF8A98}
+.rosto.mais{background:rgba(0,0,0,.25);font-size:13px}
+.rostos{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:8px}
+
+/* notícia: capa de jornal */
+.capa{background:#F2EDE1;color:#111;outline:1px solid #E0D9C8;outline-offset:-1px}
+.capa-topo{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:12px 16px 9px;background:#F2EDE1;border-bottom:4px double #111}
+.capa-topo b{font-family:var(--jornal);font-weight:800;font-size:23px;line-height:1;text-transform:uppercase;letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.capa-topo small{flex:none;font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#555}
+.capa-foto{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;object-position:50% 30%;background:#ddd}
+.capa-texto{display:block}
+.capa-texto strong{display:block;font-family:var(--jornal);font-weight:800;line-height:1.06;letter-spacing:-.005em;text-wrap:balance}
+.linha-fina{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-top:10px;font-size:15.5px;line-height:1.4}
+.capa.com-foto .capa-texto{position:absolute;left:0;right:0;bottom:0;padding:120px 18px 22px;background:linear-gradient(transparent,rgba(0,0,0,.55) 35%,rgba(0,0,0,.9));color:#fff}
+.capa.com-foto strong{font-size:clamp(26px,6.6vw,36px)}
+.capa.com-foto .linha-fina{opacity:.9}
+.capa.sem-foto .capa-texto{min-height:320px;display:flex;flex-direction:column;justify-content:center;padding:26px 18px 30px}
+.capa.sem-foto strong{font-size:clamp(32px,8vw,46px)}
+.capa.sem-foto .linha-fina{color:#3a3a3a;border-top:1px solid #111;padding-top:10px}
+.capa:hover strong{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+
+/* discurso: carrossel de trechos */
+.p-discurso{padding:0;min-height:0;gap:0}
+.carrossel{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
+.carrossel::-webkit-scrollbar{display:none}
+.slide{position:relative;flex:0 0 100%;scroll-snap-align:start;padding:22px 22px 26px;min-height:380px;display:flex;flex-direction:column;gap:14px}
+.slide::after{content:attr(data-n);position:absolute;top:18px;right:18px;font-size:12px;font-weight:700;background:rgba(0,0,0,.22);border-radius:999px;padding:3px 9px}
+.slide .rotulo{padding-right:48px}
+.manchete-media{font-weight:600;font-size:clamp(19px,4.6vw,23px);line-height:1.32;margin-top:auto}
+.citacao blockquote{font-family:var(--jornal);font-weight:800;font-size:clamp(22px,5.4vw,29px);line-height:1.2;margin-top:auto;text-wrap:pretty}
+.aspas{font-family:var(--jornal);font-weight:800;font-size:130px;line-height:.75;height:56px;color:var(--marca)}
+.credito{display:flex;align-items:center;gap:8px;font-size:12.5px;opacity:.88}
+.credito .rosto{width:28px;height:28px;font-size:11px}
+.pontos{display:flex;gap:6px;justify-content:center;padding:0 0 16px}
+.pontos i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.4);transition:background .2s}
+.pontos i.on{background:#fff}
+
+/* agenda: quem encontra quem */
+.encontro{display:flex;justify-content:center;align-items:flex-start;gap:4px;margin-top:6px}
+.encontro figure{display:flex;flex-direction:column;align-items:center;text-align:center;width:130px;min-width:0}
+.encontro .rosto{width:104px;height:104px;font-size:30px;box-shadow:0 0 0 4px #fff}
+.encontro.muitos .rosto{width:74px;height:74px;font-size:22px}
+.encontro figcaption b{display:block;font-size:14.5px;line-height:1.2;margin-top:10px}
+.encontro figcaption small{display:block;font-size:11.5px;line-height:1.25;opacity:.85;margin-top:3px}
+.liga{align-self:center;font-size:24px;margin:-40px -6px 0}
+.icone-grande{font-size:70px;line-height:1}
+.painel .nat{align-self:flex-start;background:rgba(255,255,255,.18);color:#fff}
+
+/* embaixo da peça */
+.ref{margin-top:10px;font-size:13.5px;color:var(--sub)}
+.ref summary{cursor:pointer;list-style:none}
+.ref summary::-webkit-details-marker{display:none}
+.ref summary::after{content:" ▸"}
+.ref[open] summary::after{content:" ▾"}
+.ref p{margin-top:6px;color:#2E3338;line-height:1.45}
+.ref a{display:inline-block;margin-top:6px;color:var(--link);font-weight:600}
+.tambem{margin-top:10px;font-size:13.5px;color:var(--sub)}
+.tambem a{color:var(--ink);font-weight:700}
+.gente{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.gente a{font-size:13px;text-decoration:none;background:var(--hover);border-radius:999px;padding:3px 10px}
+.gente a.ruim{background:#FDECEE;color:var(--ruim);font-weight:600}
+.post-pe{display:flex;align-items:center;gap:8px;margin-top:8px}
+.fonte-link{margin-left:auto;font-size:13px;color:var(--sub);text-decoration:none;font-weight:600;white-space:nowrap}
+.fonte-link:hover{color:var(--ink)}
+
+/* resumo da semana */
+.titulo-semana{font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:38px;line-height:1;margin:22px 0 0}
+.post.sem-borda{border-bottom:0}
+.bloco-semana{min-height:0}
+.dia-semana{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--marca);margin-top:8px}
+.item-pauta{display:block;text-decoration:none;color:#fff;border-top:1px solid rgba(255,255,255,.25);padding-top:10px}
+.item-pauta b{display:block;font-size:19px;line-height:1.25}
+.item-pauta small{display:block;font-size:12.5px;opacity:.8;margin-top:4px}
+.marco{border-top:1px solid rgba(255,255,255,.25);padding-top:12px;display:flex;flex-direction:column;gap:6px}
+.marco .numerao b{font-size:72px}
+.marco .manchete{margin-top:0;font-size:24px}
+
+/* cartão simples de fonte (sobra do resumo antigo) */
 .fonte{display:block;margin-top:10px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;text-decoration:none}
-.fonte:hover{background:#FAFAF8}
 .fonte b{display:block;font-size:15px;line-height:1.35}
-.fonte span.resumo{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--sub);font-size:14px;margin-top:4px}
 .fonte small{display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center;margin-top:6px;color:var(--sub);font-size:12.5px}
 .selo{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
 .selo.oficial{color:var(--oficial)}
 .selo.imprensa{color:var(--imprensa)}
-.nat{font-size:11px;font-weight:700;border-radius:999px;padding:1px 8px;background:var(--hover)}
+.nat{font-size:11px;font-weight:700;border-radius:999px;padding:2px 9px;background:var(--hover)}
 .nat-publica{color:var(--oficial)}
 .nat-privada{color:#B85C00}
 .nat-partidaria{color:#7A3EA8}
-.gente{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.gente a{font-size:13px;text-decoration:none;background:var(--hover);border-radius:999px;padding:3px 10px}
-.gente a.ruim{background:#FDECEE;color:var(--ruim);font-weight:600}
-.pista{font-size:11.5px;color:var(--sub)}
-
-/* ---- cor por tipo de ação: faixa à esquerda do card e etiqueta no canto ---- */
-.post{--tipo:var(--line);border-left:4px solid var(--tipo)}
-.post.t-voto{--tipo:#1A5FD0}
-.post.t-agenda{--tipo:#7A3EA8}
-.post.t-presenca{--tipo:#0A8F4E}
-.post.t-proposicao{--tipo:#0E7C86}
-.post.t-discurso{--tipo:#C25E00}
-.post.t-noticia{--tipo:#E0A800}
-.canto{flex:none;align-self:flex-start;display:flex;flex-direction:column;align-items:flex-end;gap:4px}
-.canto .quando{align-self:auto}
-.tipo{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--tipo);background:color-mix(in srgb,var(--tipo) 10%,#fff);border-radius:999px;padding:2px 8px;white-space:nowrap}
-.post.t-noticia .tipo{color:#8A6400}
-.tambem{margin-top:6px;font-size:13px;color:var(--sub)}
-.tambem a{color:var(--ink);font-weight:600}
 
 /* ---- reações ---- */
-.reacoes{display:flex;gap:2px;margin-top:10px;margin-left:-8px;flex-wrap:wrap}
+.reacoes{display:flex;gap:2px;margin-left:-8px;flex-wrap:wrap}
 .reacoes button{display:flex;align-items:center;gap:5px;background:none;border:1px solid transparent;border-radius:999px;padding:6px 10px;color:var(--sub);font-size:14px;min-height:36px}
 .reacoes button:hover{background:var(--hover);color:var(--ink)}
 .reacoes button[aria-pressed="true"]{background:var(--hover);border-color:var(--line);color:var(--ink);font-weight:700}

@@ -14,6 +14,8 @@ npm run cadastro       # eleitos de 2026 (TSE) → src/data/generated/eleitos-20
 npm run cadastro:carregar  # sobe o cadastro pro Supabase (precisa de SUPABASE_SECRET_KEY no .env)
 npm run coletar        # coletores do feed: Câmara, Senado e imprensa → Supabase (mesmo .env)
 npm run coletar:pauta  # pauta futura do plenário (Câmara e Senado), pra newsletter
+npm run enriquecer     # depois da coleta: imagem da matéria, trechos de discurso, fotos de quem está na agenda (em itens.dados)
+npm run fotos          # foto da Wikipédia pra presidente, governador e senador sem foto (src/data/generated/fotos-wiki.json)
 npm run newsletter     # monta a edição da semana em `edicoes` (página /semana/ + HTML do e-mail)
 npm run links          # site e redes de cada eleito (TSE, Câmara, sugestões aprovadas) → links-eleitos.json
 npm run sugestoes      # lista as sugestões de link ("insira aqui"); --aprovar=ID,ID · --recusar=ID

@@ -13,15 +13,15 @@ async function main() {
   const agora = new Date();
   const desde = new Date(agora.getTime() - 7 * 864e5).toISOString();
   console.log('▶ Newsletter da semana');
-  const linhas = await pedir<{ id: string; chave: string; grupo: string | null; titulo: string; url: string; quando: string; fontes: { nome: string }; item_politico: { politicos: { slug: string } }[] }[]>(
-    `itens?tipo=eq.noticia&quando=gte.${desde}&select=id,chave,grupo,titulo,url,quando,fontes(nome),item_politico(politicos(slug))&order=quando&limit=5000`);
+  const linhas = await pedir<{ id: string; chave: string; grupo: string | null; titulo: string; url: string; quando: string; imagem: string | null; fontes: { nome: string }; item_politico: { politicos: { slug: string } }[] }[]>(
+    `itens?tipo=eq.noticia&quando=gte.${desde}&select=id,chave,grupo,titulo,url,quando,imagem:dados->>imagem,fontes(nome),item_politico(politicos(slug))&order=quando&limit=5000`);
   const reacoes = new Map<string, number>();
   for (let i = 0; i < linhas.length; i += 150) {
     const ids = linhas.slice(i, i + 150).map(l => l.id).join(',');
     for (const r of await pedir<{ item_id: string }[]>(`reacoes?item_id=in.(${ids})&select=item_id`)) reacoes.set(r.item_id, (reacoes.get(r.item_id) ?? 0) + 1);
   }
   const noticias: NoticiaEntrada[] = linhas.map(l => ({
-    grupo: l.grupo ?? l.chave, titulo: l.titulo, url: l.url, fonte: l.fontes.nome, quando: l.quando,
+    grupo: l.grupo ?? l.chave, titulo: l.titulo, url: l.url, fonte: l.fontes.nome, quando: l.quando, imagem: l.imagem,
     politicos: l.item_politico.map(ip => ip.politicos.slug), reacoes: reacoes.get(l.id) ?? 0,
   }));
   const pauta = await pedir<PautaEntrada[]>(`pauta?quando=gte.${agora.toISOString()}&select=casa,quando,sessao,materia,ementa,url&order=quando`);

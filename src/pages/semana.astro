@@ -25,14 +25,16 @@ import { CONSENTIMENTO } from '../lib/lista-espera';
   <script>
     import { SUPABASE_URL, SUPABASE_CHAVE_PUBLICA } from '../lib/supabase';
     import { dataLonga, CASA, type Edicao } from '../lib/edicao';
+    import { separarReferencia, explicarEmenta, maiuscula } from '../lib/linguagem';
     import { inscrever } from '../lib/lista-espera';
     import { seguidos } from '../lib/conta';
     import { eleitos } from '../lib/timeline';
     import { evento } from '../lib/analytics';
 
     const esc = (s: string) => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
-    const caixa = (titulo: string, corpo: string, cor = 'var(--line)') =>
-      `<section class="caixa" style="border-left:4px solid ${cor}"><h2>${titulo}</h2>${corpo}</section>`;
+    // um bloco por assunto, em painel de cor cheia como os posts da timeline
+    const painel = (cor: string, rotulo: string, corpo: string) =>
+      `<section class="post sem-borda" style="--tipo:${cor}"><div class="peca painel bloco-semana"><span class="rotulo">${rotulo}</span>${corpo}</div></section>`;
 
     async function abrir() {
       const s = new URLSearchParams(location.search).get('s');
@@ -43,23 +45,29 @@ import { CONSENTIMENTO } from '../lib/lista-espera';
       if (!linha) { document.getElementById('quando')!.textContent = 'Ainda não tem edição publicada.'; return; }
       const ed = linha.dados;
       document.getElementById('quando')!.innerHTML = `Semana de <b>${esc(dataLonga(ed.semana))}</b>. Tudo com a fonte; toque pra abrir.`;
-      const noticias = ed.noticias.length ? ed.noticias.map(n => `<div class="post t-noticia" style="margin:10px 0 0">
-          <a class="fonte" style="margin:0" href="${esc(n.url)}" target="_blank" rel="noopener"><b>${esc(n.titulo)}</b><small><span class="selo imprensa">imprensa</span> · ${esc(n.fonte)}</small></a>
-          ${n.outras.length ? `<p class="tambem">Também em ${n.outras.map(o => `<a href="${esc(o.url)}" target="_blank" rel="noopener">${esc(o.fonte)}</a>`).join(', ')}</p>` : ''}
-          ${n.politicos.length ? `<div class="gente">${n.politicos.map(p => `<a href="/politico/${esc(p.slug)}/">${esc(p.nome)}</a>`).join('')}</div>` : ''}</div>`).join('')
-        : '<p>Semana fraca de notícia sobre os eleitos nos veículos que acompanhamos.</p>';
-      const pauta = ed.pauta.length ? ed.pauta.map(d => `<p style="margin-top:12px"><b style="color:#1A5FD0">${esc(dataLonga(d.dia))} · ${CASA[d.casa]}</b></p>
-          <ul style="padding-left:18px">${d.itens.map(i => `<li style="margin-top:4px"><a href="${esc(i.url)}" target="_blank" rel="noopener"><b>${esc(i.materia)}</b></a>${i.ementa ? `: ${esc(i.ementa.slice(0, 180))}${i.ementa.length > 180 ? '…' : ''}` : ''}</li>`).join('')}</ul>`).join('')
-        : '<p>A Câmara e o Senado ainda não publicaram a pauta de votações dos próximos dias. Ela costuma sair na véspera; a timeline mostra quando acontecer.</p>';
-      const marcos = ed.marcos.length ? ed.marcos.map(m => `<p style="margin-top:12px"><b style="color:#7A3EA8">${esc(dataLonga(m.data))}${m.faltam ? ` · faltam ${m.faltam} dias` : ' · hoje'}</b><br>
-          <b style="color:var(--ink)">${esc(m.titulo)}.</b> ${esc(m.detalhe)} <small>(${esc(m.fonte)})</small></p>`).join('')
-        : '<p>Nenhum marco nos próximos 60 dias.</p>';
+      const dataCurta = new Date(`${ed.semana}T12:00:00Z`).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+      const noticias = ed.noticias.length ? ed.noticias.map(n => `<article class="post t-noticia">
+          <a class="peca capa ${n.imagem ? 'com-foto' : 'sem-foto'}" href="${esc(n.url)}" target="_blank" rel="noopener">
+            <span class="capa-topo"><b>${esc(n.fonte)}</b><small>semana de ${esc(dataCurta)}</small></span>
+            ${n.imagem ? `<img class="capa-foto" src="${esc(n.imagem)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.closest('.capa').classList.replace('com-foto','sem-foto');this.remove()" />` : ''}
+            <span class="capa-texto"><strong>${esc(n.titulo)}</strong></span></a>
+          ${n.outras.length ? `<p class="tambem">Também na capa de ${n.outras.map(o => `<a href="${esc(o.url)}" target="_blank" rel="noopener">${esc(o.fonte)}</a>`).join(' · ')}</p>` : ''}
+          ${n.politicos.length ? `<div class="gente">${n.politicos.map(p => `<a href="/politico/${esc(p.slug)}/">${esc(p.nome)}</a>`).join('')}</div>` : ''}</article>`).join('')
+        : '<p class="vazio">Semana fraca de notícia sobre os eleitos nos veículos que acompanhamos.</p>';
+      const pauta = ed.pauta.length ? ed.pauta.map(d => `<p class="dia-semana">${esc(dataLonga(d.dia))} · ${CASA[d.casa]}</p>
+          ${d.itens.map(i => { const r = separarReferencia(`${i.materia}: ${i.ementa ?? ''}`); return `<a class="item-pauta" href="${esc(i.url)}" target="_blank" rel="noopener">
+            <b>${i.ementa ? `${esc(maiuscula(explicarEmenta(i.ementa)))}` : esc(i.materia)}</b><small>${esc(r.ref ?? i.materia)} ↗</small></a>`; }).join('')}`).join('')
+        : '<p class="manchete-media">A Câmara e o Senado ainda não publicaram a pauta de votações dos próximos dias. Ela costuma sair na véspera; a timeline mostra quando acontecer.</p>';
+      const marcos = ed.marcos.length ? ed.marcos.map(m => `<div class="marco"><p class="numerao"><b>${m.faltam || 'hoje'}</b>${m.faltam ? '<span>dias</span>' : ''}</p>
+          <p class="manchete">${esc(m.titulo)}</p><p class="nota">${esc(dataLonga(m.data))} · ${esc(m.detalhe)} (${esc(m.fonte)})</p></div>`).join('')
+        : '<p class="manchete-media">Nenhum marco nos próximos 60 dias.</p>';
       const [meus, gente] = await Promise.all([seguidos().catch(() => new Set<string>()), eleitos()]);
       const cobrar = `<p>Siga seus políticos, reaja ao que eles fazem e mande a página deles pra quem votou junto: quanto mais gente olhando, menos dá pra sumir do plenário.</p>
         <p style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><a class="btn" href="${meus.size ? '/?f=meus' : '/seguir/'}">${meus.size ? 'Ver o que meu time fez' : 'Escolher quem seguir'}</a>
         ${[...meus].slice(0, 3).map(s => `<a class="btn leve" href="/politico/${esc(s)}/#cobre">Compartilhar ${esc(gente.get(s)?.nome ?? s)}</a>`).join('')}</p>`;
-      alvo.innerHTML = caixa('As notícias da semana', noticias, '#E0A800') + caixa('Votações pela frente', pauta, '#1A5FD0')
-        + caixa('Marcos que vêm aí', marcos, '#7A3EA8') + `<section class="caixa" style="background:var(--marca);border-color:var(--marca)"><h2>Cobre quem você elegeu.</h2>${cobrar}</section>`;
+      alvo.innerHTML = `<h2 class="titulo-semana">As notícias da semana</h2>${noticias}`
+        + painel('#1A5FD0', 'Votações pela frente', pauta) + painel('#6B2FA0', 'Marcos que vêm aí', marcos)
+        + `<section class="caixa" style="background:var(--marca);border-color:var(--marca)"><h2>Cobre quem você elegeu.</h2>${cobrar}</section>`;
       evento('semana_abrir', { semana: ed.semana });
     }
     abrir().catch(() => { document.getElementById('quando')!.textContent = 'Não deu pra carregar agora. Tenta de novo daqui a pouco.'; });

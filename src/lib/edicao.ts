@@ -6,13 +6,13 @@
    3. os marcos dos próximos 60 dias (src/data/marcos.json);
    4. a chamada pra cobrar: seguir, reagir e mandar a página do político pra quem votou junto. */
 
-export interface NoticiaEntrada { grupo: string; titulo: string; url: string; fonte: string; quando: string; politicos: string[]; reacoes: number }
+export interface NoticiaEntrada { grupo: string; titulo: string; url: string; fonte: string; quando: string; politicos: string[]; reacoes: number; imagem?: string | null }
 export interface PautaEntrada { casa: 'camara' | 'senado'; quando: string; sessao: string | null; materia: string; ementa: string | null; url: string }
 export interface Marco { data: string; titulo: string; detalhe: string; fonte: string }
 
 export interface Edicao {
   semana: string;                       // segunda-feira, AAAA-MM-DD
-  noticias: { titulo: string; url: string; fonte: string; outras: { fonte: string; url: string }[]; politicos: { slug: string; nome: string }[] }[];
+  noticias: { titulo: string; url: string; fonte: string; imagem?: string | null; outras: { fonte: string; url: string }[]; politicos: { slug: string; nome: string }[] }[];
   pauta: { dia: string; casa: 'camara' | 'senado'; itens: { materia: string; ementa: string | null; url: string }[] }[];
   marcos: (Marco & { faltam: number })[];
 }
@@ -37,7 +37,7 @@ export function montarEdicao(e: { agora: Date; noticias: NoticiaEntrada[]; pauta
     .sort((a, b) => b.fontes - a.fontes || b.reacoes - a.reacoes || b.ultima.localeCompare(a.ultima))
     .slice(0, e.maxNoticias ?? 8)
     .map(({ s }) => ({
-      titulo: s[0].titulo, url: s[0].url, fonte: s[0].fonte,
+      titulo: s[0].titulo, url: s[0].url, fonte: s[0].fonte, imagem: s[0].imagem ?? null,   // só a foto do veículo da capa: a de outro levaria o crédito errado
       outras: s.slice(1).filter((x, i, arr) => x.fonte !== s[0].fonte && arr.findIndex(y => y.fonte === x.fonte) === i).map(x => ({ fonte: x.fonte, url: x.url })),
       politicos: [...new Set(s.flatMap(x => x.politicos))].slice(0, 4).map(slug => ({ slug, nome: e.nomes.get(slug) ?? slug })),
     }));

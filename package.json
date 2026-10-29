@@ -33,6 +33,8 @@
     "links": "tsx scripts/links-eleitos.ts",
     "sugestoes": "tsx scripts/sugestoes.ts",
     "coletar:pauta": "tsx scripts/coletores/pauta.ts",
+    "enriquecer": "tsx scripts/coletores/enriquecer.ts",
+    "fotos": "tsx scripts/fotos-wiki.ts",
     "newsletter": "tsx scripts/newsletter.ts"
   },
   "dependencies": {

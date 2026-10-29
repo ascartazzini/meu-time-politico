@@ -45,7 +45,9 @@ async function presenca(ids: Map<string, string>, inicio: string, fim: string): 
       fonte: 'camara-presenca', chave: `camara-evento-${e.id}`, tipo: 'presenca',
       titulo: `${orgao}: ${e.descricaoTipo}`, resumo: e.descricao?.replace(/\s+/g, ' ').trim().slice(0, 400) || null,
       url: paginaEvento(e.id), ocorreuEm: br(e.dataHoraInicio), local: e.localCamara?.nome ?? null,
-      dados: { casa: 'camara', orgao, presentes: presentes.length, plenario: ehPlenarioDeliberativo(e) },
+      // esperados: em plenário deliberativo, todos os deputados em exercício (o "de 513" do card)
+      dados: { casa: 'camara', orgao, orgao_nome: e.orgaos.map(o => o.nome).join(' / '), presentes: presentes.length, plenario: ehPlenarioDeliberativo(e),
+        ...(ehPlenarioDeliberativo(e) ? { esperados: emExercicio.size } : {}) },
       politicos,
     });
   }

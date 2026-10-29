@@ -1,7 +1,7 @@
 # Pendências
 
 O que o [plano](plano-pos-eleicao.md) prevê e ainda não está no ar, com o motivo e o que destrava.
-Já entregue até 29/10/2026: timeline com filtros, notícias agrupadas, cor por tipo, conta com Google, seguir, quatro reações (amei, gostei, odiei, odiei muito), landing page de cada eleito com site e redes (e "insira aqui"), resumo da semana (/semana/) gerado sozinho, páginas dos eleitos com placar do mandato, agenda do presidente com pública × privada.
+Já entregue até 30/10/2026: timeline um post por vez (capa de jornal com a foto da matéria, projeto em linguagem simples, presença com o total da sessão, discurso em carrossel de trechos literais, agenda com o rosto de quem se encontra), timeline com filtros, notícias agrupadas, cor por tipo, conta com Google, seguir, quatro reações (amei, gostei, odiei, odiei muito), landing page de cada eleito com site e redes (e "insira aqui"), resumo da semana (/semana/) gerado sozinho, páginas dos eleitos com placar do mandato, agenda do presidente com pública × privada.
 Atualizar quando algo entrar ou mudar de motivo.
 
 ## Precisa de você
@@ -34,4 +34,5 @@ Atualizar quando algo entrar ou mudar de motivo.
 | Revisar sugestões de link | — | o "insira aqui" manda pra `sugestoes_link`; aprovar é manual | `npm run sugestoes`, depois `npm run links` e publicar |
 | Imagem de compartilhamento por político | 1 | a landing já está no ar; a imagem que aparece no WhatsApp ainda é a geral do site | gerar 1.678 imagens no build (Chrome headless) ou sob demanda |
 | Ligação de notícia por IA | 3 | hoje só por nome exato; perde apelidos e menções indiretas | só onde o nome não resolve, com teto de custo |
-| Fotos de quem não é deputado federal | 1 | só a Câmara dá foto pelo id; TSE não tem URL estável de foto | 1.300 eleitos aparecem com iniciais |
+| Fotos de deputados estaduais e novatos | 1 | só Câmara e Senado dão foto pelo id; TSE barra IP de fora; a Wikipédia (`npm run fotos`) cobre só presidente, governadores e senadores (33 de 44 sem foto) | ~1.270 eleitos aparecem com iniciais; estaduais quase nunca têm página na Wikipédia |
+| Manchete de projeto mais simples | 3 | hoje a manchete é a ementa oficial com regras de forma (`linguagem.ts`); termo técnico no meio ("remissão de créditos") continua | explicar com IA só com teto de custo e a ementa sempre ao lado; ou a Agência Câmara/Senado quando tiver matéria do projeto |

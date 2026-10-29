@@ -24,7 +24,10 @@ async function votacoes(ids: Map<string, string>, inicio: string, fim: string): 
     resumo: `${v.descricaoVotacao}${v.votacaoSecreta === 'S' ? ' Votação secreta: só se sabe quem votou, não como.' : ''}${v.totalVotosSim != null ? ` Sim: ${v.totalVotosSim} · Não: ${v.totalVotosNao ?? 0}` : ''}`,
     url: v.codigoMateria ? `https://www25.senado.leg.br/web/atividade/materias/-/materia/${v.codigoMateria}` : `${SEN}/votacao?dataInicio=${inicio}&dataFim=${fim}`,
     ocorreuEm: br(v.dataSessao),
-    dados: { casa: 'senado', secreta: v.votacaoSecreta === 'S', resultado: v.resultadoVotacao },
+    // o total às vezes vem vazio; a lista nominal tem os 81, então conta dela
+    dados: { casa: 'senado', secreta: v.votacaoSecreta === 'S', resultado: v.resultadoVotacao,
+      sim: v.totalVotosSim ?? v.votos!.filter(x => x.siglaVotoParlamentar === 'Sim').length,
+      nao: v.totalVotosNao ?? v.votos!.filter(x => x.siglaVotoParlamentar === 'Não').length },
     politicos: v.votos!.filter(x => ids.has(String(x.codigoParlamentar)))
       .map(x => ({ id: ids.get(String(x.codigoParlamentar))!, papel: x.siglaVotoParlamentar, metodo: 'id-oficial' as const })),
   }));

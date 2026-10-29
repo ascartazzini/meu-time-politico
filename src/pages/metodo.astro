@@ -12,12 +12,22 @@ import cadastro from '../data/generated/eleitos-2027.json';
     <h2 id="ligacao">Quem é quem</h2>
     <p>Voto, presença, projeto e discurso chegam com o id oficial do parlamentar na casa, e é por ele que ligamos. A agenda do presidente é dele por construção.
       Notícia não traz id: ligamos pelo nome de urna (duas palavras ou mais; uma palavra só vale pra presidente, governador e senador, fora prenomes comuns),
-      pelo nome civil completo ou por prenome + sobrenome pouco comum. Se dois eleitos têm o mesmo nome, a notícia não vai pra nenhum. O post avisa quando a
-      ligação foi pelo nome.</p>
+      pelo nome civil completo ou por prenome + sobrenome pouco comum. Se dois eleitos têm o mesmo nome, a notícia não vai pra nenhum. Toda notícia
+      é ligada assim, pelo nome; ligou errado? Avise (fim desta página).</p>
+
+    <h2 id="card">Como o card conta</h2>
+    <p><b>Projeto e votação:</b> a manchete sai da ementa oficial, reescrita só na forma: tiramos o "Altera a Lei nº … para", trocamos verbo jurídico
+      por comum ("institui" vira "criar", "susta" vira "derrubar") e encolhemos a citação de lei. Nada é acrescentado; o número do projeto e a ementa
+      inteira ficam logo embaixo, em "texto oficial". As regras estão em <code>src/lib/linguagem.ts</code>, com teste.</p>
+    <p><b>Discurso:</b> o primeiro slide é o resumo oficial do Senado; os outros são frases inteiras copiadas do texto integral do discurso, sem cortar
+      no meio nem juntar pedaços. Ficam de fora cumprimentos, agradecimentos e os apartes de outros senadores.</p>
+    <p><b>Agenda:</b> quem está no compromisso sai do próprio texto da agenda. A foto vem do cadastro quando a pessoa é um eleito; senão, da Wikipédia,
+      e só quando a página é claramente da pessoa. Na dúvida, aparecem as iniciais.</p>
+    <p><b>Notícia:</b> a imagem é a que o próprio veículo publica pra compartilhar a matéria, e o card inteiro leva pra matéria no site dele.</p>
 
     <h2 id="presenca">Presença</h2>
-    <p>Na Câmara, a lista de cada sessão deliberativa do plenário diz quem foi; quem está em exercício e não está na lista faltou. Em comissão só contamos quem foi,
-      porque só os membros são esperados. No Senado não existe registro de presença: só dá pra dizer em votação nominal, pela sigla oficial. Licença médica,
+    <p>Na Câmara, a lista de cada sessão deliberativa do plenário diz quem foi; quem está em exercício e não está na lista faltou. O card mostra o total da sessão (quantos dos deputados em exercício estavam lá) e o rosto de quem
+      faltou entre os eleitos que acompanhamos. Em comissão só contamos quem foi, porque só os membros são esperados. No Senado não existe registro de presença: só dá pra dizer em votação nominal, pela sigla oficial. Licença médica,
       missão oficial, representação e atividade parlamentar não contam como falta; "não compareceu" e licença particular contam.</p>
 
     <h2 id="agenda">Agenda pública × privada</h2>

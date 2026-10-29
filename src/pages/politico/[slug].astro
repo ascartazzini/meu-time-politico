@@ -4,13 +4,13 @@
    últimas ações, linha do tempo do mandato e chamada pra cobrar. Placar e timeline carregam no navegador. */
 import Social from '../../layouts/Social.astro';
 import '../../styles/politico.css';
-import cadastro from '../../data/generated/eleitos-2027.json';
+import { eleitos } from '../../data/cadastro';
 import linksGerados from '../../data/generated/links-eleitos.json';
 import { leve, cargoEmTexto, nomeBonito, paginaOficial, cargoPrincipal, type EleitoBruto } from '../../lib/eleitos';
 import { principais, ESSENCIAIS, type Link, type TipoLink } from '../../../scripts/links';
 
 export function getStaticPaths() {
-  return (cadastro.eleitos as EleitoBruto[]).map(e => ({ params: { slug: e.slug }, props: { e } }));
+  return eleitos.map(e => ({ params: { slug: e.slug }, props: { e } }));
 }
 const { e } = Astro.props as { e: EleitoBruto };
 const l = leve(e);
@@ -175,7 +175,7 @@ const titulo = `${l.nome} (${e.partido}${presidente ? '' : `-${e.uf}`}) — ${ca
       x.target.classList.add('visivel');
       x.target.querySelectorAll<HTMLElement>('[data-alvo]:not([data-contado])').forEach(n => { n.dataset.contado = '1'; contar(n); });
       revela.unobserve(x.target);
-    }), { threshold: 0.15 });
+    }), { rootMargin: '0px 0px -15% 0px' });   // pela borda, não por fração: a seção da timeline é bem mais alta que a tela
     document.querySelectorAll('[data-revela]').forEach(s => revela.observe(s));
 
     // ---- placar ----
