@@ -3,7 +3,7 @@
 interface Props { title: string; description?: string; noindex?: boolean; corTema?: string }
 const {
   title,
-  description = 'Tudo o que os políticos eleitos em 2026 fazem, numa timeline: votos, presença, projetos, agenda e o que sai na imprensa, com a fonte de cada coisa. Siga quem você quer cobrar, reaja e comente.',
+  description = 'Tudo o que os políticos eleitos em 2026 fazem, numa timeline: votos, presença, projetos, agenda e o que sai na imprensa, com a fonte de cada coisa. Siga quem você quer cobrar e reaja.',
   noindex = false,
   corTema = '#FFFFFF'
 } = Astro.props;
@@ -13,7 +13,7 @@ const SITE = 'https://www.meutimepolitico.com';
 const site = Astro.site ?? new URL(SITE);
 const canonical = new URL(Astro.url.pathname, site).toString();
 // ?v= muda quando a arte muda: WhatsApp, X e LinkedIn guardam a imagem pelo endereço.
-const ogImage = new URL('/og.png?v=2', site).toString();
+const ogImage = new URL('/og.png?v=3', site).toString();
 const NOME = 'Meu Time Político';
 const GA_ID = 'G-EQMVHHWH9C';
 // O measurement ID é fixo no código, então dev, preview e qualquer outro host mandariam hits
@@ -44,7 +44,7 @@ const jsonLd = {
       '@type': 'WebApplication', '@id': `${site.origin}/#app`, name: NOME, url: `${site.origin}/`, inLanguage: 'pt-BR',
       applicationCategory: 'Civic tech', operatingSystem: 'Web', browserRequirements: 'Requer JavaScript',
       isAccessibleForFree: true, offers: { '@type': 'Offer', price: '0', priceCurrency: 'BRL' },
-      description: 'Timeline diária dos políticos eleitos em 2026: votos nominais, presença, projetos, discursos, agenda e notícias dos grandes veículos, cada item com link pra fonte. Quem segue um político pode reagir e comentar.',
+      description: 'Timeline diária dos políticos eleitos em 2026: votos nominais, presença, projetos, discursos, agenda e notícias dos grandes veículos, cada item com link pra fonte. Quem segue um político pode reagir: amei, gostei, odiei ou odiei muito.',
       author: { '@id': `${site.origin}/#autor` }
     },
     { '@type': 'Person', '@id': `${site.origin}/#autor`, name: 'Artur Scartazzini', url: 'https://arturscartazzini.com', worksFor: { '@type': 'Organization', name: 'Mnova Solutions' } },

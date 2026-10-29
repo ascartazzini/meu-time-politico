@@ -2,7 +2,7 @@
 import Social from '../layouts/Social.astro';
 import cadastro from '../data/generated/eleitos-2027.json';
 ---
-<Social title="Como funciona — Meu Time Político" description="De onde vem cada post da timeline, como ligamos cada ação ao político, presença, agenda pública × privada, placar do mandato, regras dos comentários e privacidade.">
+<Social title="Como funciona — Meu Time Político" description="De onde vem cada post da timeline, como ligamos cada ação ao político, presença, agenda pública × privada, placar do mandato, regras das reações e privacidade.">
   <article class="caixa texto">
     <h1>Como funciona</h1>
     <p>A timeline junta o que os {cadastro.eleitos.length.toLocaleString('pt-BR')} eleitos de 2026 fazem. Todo post tem link pra fonte e um selo:
@@ -31,19 +31,17 @@ import cadastro from '../data/generated/eleitos-2027.json';
       Não existe nota única nem ranking, e a página diz desde quando conta. Ainda não entram: se o projeto andou, relatorias, emendas pagas e gasto de cota.</p>
     <p><b>Antes da posse</b> (5 e 6 de janeiro para presidente e governadores, 1º de fevereiro para o Congresso), só tem registro oficial quem já tem mandato.</p>
 
-    <h2 id="regras">Regras pra reagir e comentar</h2>
+    <h2 id="regras">Regras pra reagir</h2>
     <ul>
-      <li>Precisa entrar com o Google e seguir ao menos um dos políticos daquele post. Quem segue o mesmo político conversa ali.</li>
-      <li>Ninguém vê quem deu like ou odiei; aparece só a contagem.</li>
-      <li>O comentário mostra o seu primeiro nome e a inicial do sobrenome. Até 500 caracteres, no máximo 10 a cada 10 minutos.</li>
-      <li>Sem palavrão, ofensa, ameaça, discurso de ódio, dado pessoal de terceiros nem acusação sem fonte. O filtro barra palavrão na hora.</li>
-      <li>Qualquer pessoa com conta pode denunciar. Com 3 denúncias o comentário some pra todo mundo (menos pro autor) até ser revisado.</li>
-      <li>Você pode apagar o seu comentário quando quiser.</li>
+      <li>Quatro reações: ❤️ amei, 👍 gostei, 👎 odiei e 🤬 odiei muito. Uma por post; tocar de novo desfaz, tocar em outra troca.</li>
+      <li>Precisa entrar com o Google e seguir ao menos um dos políticos daquele post: quem reage é quem acompanha.</li>
+      <li>Ninguém vê quem reagiu; aparece só a contagem.</li>
+      <li>Não tem comentário, de propósito: a timeline é do que os políticos fizeram, com fonte.</li>
     </ul>
 
     <h2 id="privacidade">Privacidade</h2>
     <p>Do Google guardamos o que o login traz: nome, e-mail e foto. O e-mail não aparece pra ninguém e não vai pra partido, campanha nem empresa.
-      Guardamos também quem você segue, suas reações e seus comentários. Pra apagar a conta e tudo isso,
+      Guardamos também quem você segue e suas reações. Pra apagar a conta e tudo isso,
       <a href="https://github.com/ascartazzini/meu-time-politico/issues">peça aqui</a>.</p>
 
     <h2 id="erro">Achou um erro?</h2>

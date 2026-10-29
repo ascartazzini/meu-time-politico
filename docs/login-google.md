@@ -30,6 +30,6 @@ Uns 10 minutos, tudo grátis. A chave secreta do Google vai direto no painel do 
 ## 3. Conferir
 
 Abra https://www.meutimepolitico.com, clique em **Entrar**, escolha a conta Google. Na primeira vez o site leva pra
-`/seguir/`. Siga alguém, volte pra timeline, dê like num post dele e comente.
+`/seguir/`. Siga alguém, volte pra timeline e reaja a um post dele.
 
 Se aparecer "redirect_uri_mismatch", o URI do passo 1.3 não está idêntico (sem barra no fim, com `https`).

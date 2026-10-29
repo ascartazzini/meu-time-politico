@@ -1,9 +1,11 @@
 /* Coletor de imprensa: RSS de política dos grandes veículos aprovados na Fase 0 (docs/fase0/README.md).
    Guarda título, link, data e a linha fina do próprio feed; nunca o texto da matéria.
    Liga ao político pelo nome (citacoes.ts). Os feeds cobrem 1 a 2 dias, então roda de hora em hora.
+   Depois de gravar, junta a mesma notícia de veículos diferentes num grupo (agrupar.ts).
    Uso: npm run coletar:imprensa */
 import { UA } from '../util';
-import { gravar, hash, politicos, emLotes, type ItemNovo } from './banco';
+import { gravar, hash, politicos, emLotes, pedir, type ItemNovo } from './banco';
+import { agrupar } from './agrupar';
 import { indiceDeNomes, citados, lerRss, ehOpiniao, urlCanonica } from './citacoes';
 
 const FEEDS: { fonte: string; url: string; secao?: RegExp }[] = [
@@ -63,4 +65,29 @@ async function main() {
   console.log(`  ✓ imprensa: ${r.itens} itens, ${r.ligacoes} ligações`);
 }
 
-main().catch(e => { console.error('✗ coletor de imprensa falhou:', e.message); process.exit(1); });
+/** Reagrupa as notícias dos últimos 4 dias e grava só o que mudou. Quem já tinha grupo mantém. */
+async function reagrupar() {
+  const desde = new Date(Date.now() - 4 * 864e5).toISOString();
+  const linhas = await pedir<{ chave: string; fonte_id: string; titulo: string; quando: string; grupo: string | null; item_politico: { politicos: { slug: string } }[] }[]>(
+    `itens?tipo=eq.noticia&quando=gte.${desde}&select=chave,fonte_id,titulo,quando,grupo,item_politico(politicos(slug))&order=quando&limit=5000`);
+  const grupos = agrupar(linhas.map(l => ({
+    chave: l.chave, fonte: l.fonte_id, titulo: l.titulo, quando: l.quando, grupo: l.grupo,
+    politicos: l.item_politico.map(ip => ip.politicos.slug),
+  })));
+  const mudou = new Map<string, string[]>();
+  for (const l of linhas) {
+    const g = grupos.get(l.chave)!;
+    if (g !== l.grupo) mudou.set(g, [...(mudou.get(g) ?? []), l.chave]);
+  }
+  for (const [grupo, chaves] of mudou) {
+    for (let i = 0; i < chaves.length; i += 50) {
+      await pedir(`itens?chave=in.(${chaves.slice(i, i + 50).map(c => `"${c}"`).join(',')})`, {
+        method: 'PATCH', headers: { Prefer: 'return=minimal' }, body: JSON.stringify({ grupo }),
+      });
+    }
+  }
+  const cards = new Set(grupos.values()).size;
+  console.log(`  ✓ grupos: ${linhas.length} notícias em ${cards} cards (${[...mudou.values()].flat().length} atualizadas)`);
+}
+
+main().then(reagrupar).catch(e => { console.error('✗ coletor de imprensa falhou:', e.message); process.exit(1); });

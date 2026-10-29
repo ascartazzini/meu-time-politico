@@ -1,6 +1,6 @@
 # Meu Time Político
 
-> Ferramenta cívica gratuita e de código aberto que mostra, numa timeline, tudo o que os políticos eleitos nas eleições gerais brasileiras de 2026 fazem nos mandatos de 2027 a 2031: votos nominais, presença, projetos e discursos (Câmara dos Deputados e Senado Federal), agenda oficial do presidente e notícias dos grandes veículos. Cada item tem link para a fonte. Qualquer pessoa lê e filtra por político; com conta Google, a pessoa segue quem quer acompanhar e pode reagir (gostei/odiei) e comentar nas ações dos políticos que segue.
+> Ferramenta cívica gratuita e de código aberto que mostra, numa timeline, tudo o que os políticos eleitos nas eleições gerais brasileiras de 2026 fazem nos mandatos de 2027 a 2031: votos nominais, presença, projetos e discursos (Câmara dos Deputados e Senado Federal), agenda oficial do presidente e notícias dos grandes veículos. Cada item tem link para a fonte. Qualquer pessoa lê e filtra por político; com conta Google, a pessoa segue quem quer acompanhar e pode reagir (amei, gostei, odiei, odiei muito) às ações dos políticos que segue.
 
 Site: https://www.meutimepolitico.com
 Idioma: português do Brasil
@@ -32,7 +32,7 @@ Nenhuma posição é inventada. Cada posição vem de voto nominal real em plen�
 
 - [Timeline](https://www.meutimepolitico.com/): tudo o que os eleitos fizeram, com filtros por quem a pessoa segue, presidente, Câmara, Senado, agenda e imprensa, e busca por nome, partido ou estado.
 - Uma página por eleito em https://www.meutimepolitico.com/politico/<slug>/ (por exemplo /politico/lula-br/), com mandatos, links oficiais, placar do mandato e a timeline da pessoa.
-- [Como funciona](https://www.meutimepolitico.com/metodo/): fontes, ligação de cada item ao político, presença, agenda pública × privada, placar do mandato, regras dos comentários e privacidade.
+- [Como funciona](https://www.meutimepolitico.com/metodo/): fontes, ligação de cada item ao político, presença, agenda pública × privada, placar do mandato, regras das reações e privacidade.
 - [Quiz da eleição de 2026](https://www.meutimepolitico.com/app/) e [método do quiz](https://www.meutimepolitico.com/app/metodo/): arquivo.
 
 ## Como citar

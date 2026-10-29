@@ -1,7 +1,7 @@
 # Pendências
 
 O que o [plano](plano-pos-eleicao.md) prevê e ainda não está no ar, com o motivo e o que destrava.
-Já entregue até 29/10/2026: timeline com filtros, conta com Google, seguir, like/odiei, comentários com denúncia, páginas dos eleitos com placar do mandato, agenda do presidente com pública × privada.
+Já entregue até 29/10/2026: timeline com filtros, conta com Google, seguir, quatro reações (amei, gostei, odiei, odiei muito), páginas dos eleitos com placar do mandato, agenda do presidente com pública × privada.
 Atualizar quando algo entrar ou mudar de motivo.
 
 ## Precisa de você
@@ -10,7 +10,6 @@ Atualizar quando algo entrar ou mudar de motivo.
 | --- | --- | --- |
 | Coletores rodando sozinhos | o GitHub Actions precisa da chave secreta | `grep '^SUPABASE_SECRET_KEY=' .env \| cut -d= -f2- \| gh secret set SUPABASE_SECRET_KEY` |
 | Login com Google | o provedor Google precisa ser ligado no Supabase com um cliente OAuth criado no Google Cloud (conta sua) | guia em [login-google.md](login-google.md); até lá o botão Entrar não funciona |
-| Revisar comentários escondidos | 3 denúncias escondem; a revisão é manual | no Supabase, tabela `comentarios`, filtro `oculto = true`: apagar ou desmarcar |
 | Resumo diário por e-mail | precisa de conta num serviço de envio com plano gratuito (ex.: Resend, Brevo); criar conta é seu | escolher o serviço e criar a conta; o resto (modelo do e-mail, job diário, descadastro) a gente faz |
 
 ## Próximas na fila
@@ -31,5 +30,8 @@ Atualizar quando algo entrar ou mudar de motivo.
 | Titular (em quem votei) | 4 | saiu da tela pra simplificar; volta quando o impacto do time titular existir |
 | "Isso não é sobre ele" | 3 | botão no card pra apontar ligação errada; precisa de tabela e função pública de denúncia | hoje o caminho é abrir issue no GitHub |
 | Assembleias estaduais | 5 | sem API na maioria; MG tem API completa, SP dados abertos pesados, BA bloqueia IP de fora | medir as outras 24 com o método da Fase 0 |
+| Newsletter semanal | — | pedida em 29/10: principais notícias (grupos), votações pela frente, marcos, chamada pra cobrar | o envio depende do serviço de e-mail (acima) |
+| Links externos do político + "insira aqui" | 1 | pedido em 29/10; fonte: redes declaradas ao TSE e páginas oficiais; o que faltar vira sugestão pro admin | |
+| Página do político como landing page | 1 | pedido em 29/10: gráfica, títulos grandes, efeitos de rolagem, feita pra compartilhar | |
 | Ligação de notícia por IA | 3 | hoje só por nome exato; perde apelidos e menções indiretas | só onde o nome não resolve, com teto de custo |
 | Fotos de quem não é deputado federal | 1 | só a Câmara dá foto pelo id; TSE não tem URL estável de foto | 1.300 eleitos aparecem com iniciais |

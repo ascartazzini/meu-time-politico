@@ -47,13 +47,13 @@ src/components/ListaEspera.astro  caixa "o jogo não acaba na urna", na home e n
 supabase/migrations/         esquema do banco pós-eleição (projeto meu-time-politico, sa-east-1, plano gratuito); a lista de espera não é legível de fora
 scripts/cadastro-eleitos.ts  `npm run cadastro`: eleitos de 2026 (TSE) + senadores até 2031 → src/data/generated/eleitos-2027.json, sem CPF
 scripts/carregar-cadastro.ts `npm run cadastro:carregar`: sobe o cadastro pro Supabase (upsert); precisa de SUPABASE_SECRET_KEY no .env
-scripts/coletores/           camara.ts (presença, votos, projetos) · senado.ts (votos, discursos) · presidente.ts (agenda do Planalto) · imprensa.ts (RSS) · citacoes.ts e agenda.ts (regras puras, testadas) · banco.ts (escrita no Supabase)
+scripts/coletores/           camara.ts (presença, votos, projetos) · senado.ts (votos, discursos) · presidente.ts (agenda do Planalto) · imprensa.ts (RSS) · citacoes.ts, agenda.ts e agrupar.ts (mesma notícia em vários veículos vira um card; regras puras, testadas) · banco.ts (escrita no Supabase)
 src/lib/mandato.ts           placar do mandato na página do político (função placar_mandato), em partes, sem nota única
 docs/pendencias.md           o que o plano prevê e ainda não está no ar, com o motivo
 src/layouts/Social.astro     layout claro do site (topo, conta); Base.astro ficou só pro quiz em /app/
 src/components/Cabeca.astro  <head> comum: GA (só em produção), metatags, fontes, dados estruturados
-src/lib/conta.ts             login com Google (supabase-js), quem a pessoa segue, reações e comentários (funções do banco)
-src/lib/timeline.ts          a timeline: posts, like/odiei, comentários, denúncia; home e página do político
+src/lib/conta.ts             login com Google (supabase-js), quem a pessoa segue, as quatro reações (funções do banco)
+src/lib/timeline.ts          a timeline: posts e reações (amei, gostei, odiei, odiei muito); home e página do político
 src/lib/time.ts              time antigo salvo no aparelho; só lido pra trazer pra conta no primeiro login
 src/lib/feed.ts              texto de cada papel, rótulos, placar de presença e de agenda (puro, testado)
 src/lib/eleitos.ts           cadastro → linha leve, nome bonito, cargo principal, links oficiais

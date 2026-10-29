@@ -1,5 +1,5 @@
 /* Conta da pessoa: login com Google (Supabase Auth, fluxo PKCE), quem ela segue e as chamadas que precisam dela.
-   O cliente só é criado no navegador. Sem login dá pra ver e filtrar tudo; seguir, reagir e comentar pedem conta. */
+   O cliente só é criado no navegador. Sem login dá pra ver e filtrar tudo; seguir e reagir pedem conta. */
 import { createClient, type SupabaseClient, type User } from '@supabase/supabase-js';
 import { SUPABASE_URL, SUPABASE_CHAVE_PUBLICA } from './supabase';
 import { carregarTime } from './time';
@@ -59,13 +59,15 @@ export async function trazerTimeDoAparelho(): Promise<number> {
   return 0;
 }
 
-export type Reacao = 'gostei' | 'odiei';
-export interface Interacao { item_id: string; gostei: number; odiei: number; comentarios: number; minha: Reacao | null; pode: boolean }
-export interface Comentario { id: string; autor: string; texto: string; criado_em: string; meu: boolean }
+/** As quatro reações, na ordem em que aparecem no post. Uma por pessoa por post. */
+export const REACOES = [
+  { tipo: 'amei', emoji: '❤️', rotulo: 'Amei' },
+  { tipo: 'gostei', emoji: '👍', rotulo: 'Gostei' },
+  { tipo: 'odiei', emoji: '👎', rotulo: 'Odiei' },
+  { tipo: 'odiei_muito', emoji: '🤬', rotulo: 'Odiei muito' },
+] as const;
+export type Reacao = (typeof REACOES)[number]['tipo'];
+export type Interacao = { item_id: string; minha: Reacao | null; pode: boolean } & Record<Reacao, number>;
 
 export const interacoes = (itens: string[]) => chamar<Interacao[]>('interacoes', { p_itens: itens });
 export const reagir = (item: string, tipo: Reacao | null) => chamar<void>('reagir', { p_item: item, p_tipo: tipo });
-export const comentariosDoItem = (item: string) => chamar<Comentario[]>('comentarios_do_item', { p_item: item });
-export const comentar = (item: string, texto: string) => chamar<string>('comentar', { p_item: item, p_texto: texto });
-export const apagarComentario = (id: string) => chamar<void>('apagar_comentario', { p_id: id });
-export const denunciar = (id: string) => chamar<void>('denunciar', { p_comentario: id });
