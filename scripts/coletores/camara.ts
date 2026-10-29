@@ -23,7 +23,25 @@ async function eventos(inicio: string, fim: string): Promise<Evento[]> {
 const ehPlenarioDeliberativo = (e: Evento) => e.orgaos.some(o => o.sigla === 'PLEN') && /deliberativa/i.test(e.descricaoTipo);
 
 interface Deputado { id: number; nome: string; siglaPartido: string; siglaUf: string; urlFoto: string }
-interface ItemPauta { titulo: string; situacaoItem: string | null; proposicao_: { id: number; ementa: string } | null }
+interface ItemPauta { titulo: string; situacaoItem: string | null; proposicao_: { id: number; ementa: string } | null; proposicaoRelacionada_?: { id: number } | null }
+interface VotacaoEvento { id: string; descricao: string; uriProposicaoObjeto: string | null }
+
+/* Votações da reunião, pra mostrar no item da pauta como cada eleito votou. O id da votação começa pelo
+   id da proposição votada ("2620905-56"). Votação simbólica não tem lista de votos: a Câmara não registra
+   o voto de cada um, e o card diz isso em vez de supor. Os votos guardados são só dos eleitos do cadastro. */
+async function votacoesDoEvento(id: number, ids: Map<string, string>, slugPorId: Map<string, string>) {
+  const lista = (await fetchJson<{ dados: VotacaoEvento[] }>(`${CAM}/eventos/${id}/votacoes`).catch(() => null))?.dados ?? [];
+  return Promise.all(lista.map(async v => {
+    const r = await fetchJson<{ dados: { tipoVoto: string; deputado_: { id: number } }[] }>(`${CAM}/votacoes/${v.id}/votos`).catch(() => null);
+    const votos: Record<string, string> = {};
+    for (const x of r?.dados ?? []) {
+      const slug = slugPorId.get(ids.get(String(x.deputado_.id)) ?? '');
+      if (slug) votos[slug] = x.tipoVoto;
+    }
+    const proposicoes = [v.id.split('-')[0], v.uriProposicaoObjeto?.split('/').pop()].filter((x): x is string => !!x);
+    return { proposicoes, descricao: v.descricao.replace(/\s+/g, ' ').trim(), nominal: !!r?.dados.length, votos };
+  }));
+}
 
 async function presenca(ids: Map<string, string>, inicio: string, fim: string): Promise<ItemNovo[]> {
   const encerrados = (await eventos(inicio, fim)).filter(e => /^Encerrada/.test(e.situacao));
@@ -32,14 +50,15 @@ async function presenca(ids: Map<string, string>, inicio: string, fim: string): 
   const slugPorId = new Map((await listarPoliticos()).map(p => [p.id, p.slug]));
   // presença e pauta (com o que aconteceu em cada item) de cada reunião
   const res = await emLotes(encerrados, 5, async e => {
-    const [r, pauta] = await Promise.all([
+    const [r, pauta, votacoes] = await Promise.all([
       fetchJson<{ dados: { id: number }[] }>(`${CAM}/eventos/${e.id}/deputados`).catch(() => null),
       fetchJson<{ dados: ItemPauta[] }>(`${CAM}/eventos/${e.id}/pauta`).catch(() => null),
+      votacoesDoEvento(e.id, ids, slugPorId),
     ]);
-    return { e, presentes: r?.dados.map(d => String(d.id)) ?? null, pauta: pauta?.dados ?? [] };
+    return { e, presentes: r?.dados.map(d => String(d.id)) ?? null, pauta: pauta?.dados ?? [], votacoes };
   });
   const itens: ItemNovo[] = [];
-  for (const { e, presentes, pauta } of res) {
+  for (const { e, presentes, pauta, votacoes } of res) {
     if (!presentes?.length) continue;   // lista vazia = presença não registrada; não dá pra dizer quem faltou
     const orgao = e.orgaos.map(o => o.sigla).join('/');
     const politicos = presentes.filter(p => ids.has(p)).map(p => ({ id: ids.get(p)!, papel: 'presente', metodo: 'id-oficial' as const }));
@@ -54,10 +73,18 @@ async function presenca(ids: Map<string, string>, inicio: string, fim: string): 
       const pid = ids.get(String(d.id));
       return { nome: d.nome, partido: d.siglaPartido, uf: d.siglaUf, foto: d.urlFoto.replace(/^http:/, 'https:'), ...(pid && slugPorId.has(pid) ? { slug: slugPorId.get(pid) } : {}) };
     }).sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR')) : [];
-    const itensPauta = pauta.filter(x => x.proposicao_?.ementa).slice(0, 20).map(x => ({
-      ref: x.titulo, ementa: x.proposicao_!.ementa.replace(/\s+/g, ' ').trim(), situacao: x.situacaoItem?.replace(/\s+/g, ' ').trim() || null,
-      url: `https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao=${x.proposicao_!.id}`,
-    }));
+    // a mesma proposição pode vir repetida na pauta (uma linha por fase); fica uma
+    const vistas = new Set<number>();
+    const itensPauta = pauta.filter(x => x.proposicao_?.ementa && !vistas.has(x.proposicao_.id) && vistas.add(x.proposicao_.id)).slice(0, 20).map(x => {
+      const alvo = [x.proposicao_!.id, x.proposicaoRelacionada_?.id].filter(Boolean).map(String);
+      const votadas = votacoes.filter(v => v.proposicoes.some(p => alvo.includes(p)))
+        .map(v => ({ descricao: v.descricao, nominal: v.nominal, ...(v.nominal ? { votos: v.votos } : {}) }));
+      return {
+        ref: x.titulo, ementa: x.proposicao_!.ementa.replace(/\s+/g, ' ').trim(), situacao: x.situacaoItem?.replace(/\s+/g, ' ').trim() || null,
+        url: `https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao=${x.proposicao_!.id}`,
+        ...(votadas.length ? { votacoes: votadas } : {}),
+      };
+    });
     itens.push({
       fonte: 'camara-presenca', chave: `camara-evento-${e.id}`, tipo: 'presenca',
       titulo: `${orgao}: ${e.descricaoTipo}`, resumo: e.descricao?.replace(/\s+/g, ' ').trim().slice(0, 400) || null,

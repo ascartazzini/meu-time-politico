@@ -99,7 +99,25 @@ function carrossel(classe: string, slides: string[], aria: string): string {
 }
 const fatias = <T>(xs: T[], n: number) => Array.from({ length: Math.ceil(xs.length / n) }, (_, k) => xs.slice(k * n, k * n + n));
 
-type ItemPautaSalvo = { ref: string; ementa: string; situacao: string | null; url: string };
+type VotacaoSalva = { descricao: string; nominal: boolean; votos?: Record<string, string> };
+type ItemPautaSalvo = { ref: string; ementa: string; situacao: string | null; url: string; votacoes?: VotacaoSalva[] };
+
+/** Como a pessoa votou no item: só o que a Câmara registrou. Votação nominal mostra o voto (a mais recente
+    primeiro, que é a decisiva); simbólica não tem voto individual e o card diz isso. Sem pessoa (timeline
+    geral), só o tipo de votação. */
+function votoNoItem(x: ItemPautaSalvo, solo?: Ligacao, nome?: string): string {
+  const vs = x.votacoes ?? [];
+  if (!vs.length) return '';
+  const nominais = vs.filter(v => v.nominal);
+  if (!nominais.length) return `<span class="voto-item simbolica" title="${esc(vs.map(v => v.descricao).join(' · '))}">votação simbólica${solo ? ': sem voto individual registrado' : ''}</span>`;
+  if (!solo) return `<span class="voto-item">votação nominal</span>`;
+  const meus = nominais.map(v => v.votos?.[solo.slug]).filter((v): v is string => !!v);
+  if (!meus.length) return `<span class="voto-item ruim" title="${esc(nominais[0].descricao)}">${esc(nome ? `${nome.split(' ')[0]} não registrou voto` : 'não registrou voto')}</span>`;
+  const { texto, tom } = papelEmTexto('voto', meus[0], 'camara');
+  const quem = nome ? `${nome.split(' ')[0]} ` : '';
+  const outras = nominais.length > 1 ? ` <i>· ${nominais.length} votações nominais</i>` : '';
+  return `<span class="voto-item ${tom}" title="${esc(nominais[0].descricao)}">${esc(quem + texto)}${outras}</span>`;
+}
 type AusenteSalvo = { nome: string; partido: string; uf: string; foto?: string; slug?: string };
 const DESFECHO: Record<DesfechoPauta, string> = { aprovado: 'aprovado', rejeitado: 'rejeitado', adiado: 'ficou pra depois' };
 
@@ -140,7 +158,7 @@ function presenca(i: ItemPeca, gente: Map<string, EleitoLeve>, solo?: Ligacao): 
     <div class="lista-pauta">${parte.map(x => {
       const d = desfechoPauta(x.situacao);
       return `<a class="item-pauta" href="${esc(x.url)}" target="_blank" rel="noopener"><b>${esc(maiuscula(explicarItemPauta(x.ref, x.ementa)))}</b>
-        <small>${d ? `<span class="desfecho ${d}">${DESFECHO[d]}</span> ` : ''}${esc(x.ref)} ↗</small></a>`;
+        <small>${d ? `<span class="desfecho ${d}">${DESFECHO[d]}</span> ` : ''}${esc(x.ref)} ↗</small>${solo?.papel === 'ausente' ? '' : votoNoItem(x, solo, solo ? gente.get(solo.slug)?.nome : undefined)}</a>`;
     }).join('')}</div>${k === todas.length - 1 && pauta.length > 12 ? `<small class="credito">e mais ${pauta.length - 12} itens na pauta da fonte</small>` : ''}`);
 
   const slidesFalta = fatias(ausentes, 12).map((parte, k, todas) => `<span class="rotulo">Quem faltou · ${ausentes.length} ${salvos ? 'deputados' : 'dos eleitos que acompanhamos'}${todas.length > 1 ? ` · ${k + 1}/${todas.length}` : ''}</span>

@@ -1,11 +1,12 @@
 ---
 /* <head> comum dos dois layouts: GA (só em produção), metatags, Open Graph, fontes e dados estruturados. */
-interface Props { title: string; description?: string; noindex?: boolean; corTema?: string }
+interface Props { title: string; description?: string; noindex?: boolean; corTema?: string; imagem?: string }
 const {
   title,
   description = 'Tudo o que os políticos eleitos em 2026 fazem, numa timeline: votos, presença, projetos, agenda e o que sai na imprensa, com a fonte de cada coisa. Siga quem você quer cobrar e reaja.',
   noindex = false,
-  corTema = '#FFFFFF'
+  corTema = '#FFFFFF',
+  imagem
 } = Astro.props;
 
 // Domínio canônico (o mesmo de astro.config.mjs; o fallback só vale no dev sem `site`).
@@ -13,7 +14,7 @@ const SITE = 'https://www.meutimepolitico.com';
 const site = Astro.site ?? new URL(SITE);
 const canonical = new URL(Astro.url.pathname, site).toString();
 // ?v= muda quando a arte muda: WhatsApp, X e LinkedIn guardam a imagem pelo endereço.
-const ogImage = new URL('/og.png?v=3', site).toString();
+const ogImage = imagem ?? new URL('/og.png?v=3', site).toString();
 const NOME = 'Meu Time Político';
 const GA_ID = 'G-EQMVHHWH9C';
 // O measurement ID é fixo no código, então dev, preview e qualquer outro host mandariam hits
@@ -107,7 +108,7 @@ const jsonLd = {
   <meta property="og:image" content={ogImage} />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="Meu Time Político: o jogo não acaba na urna. Tudo o que os eleitos fazem, numa timeline, com a fonte de cada coisa." />
+  <meta property="og:image:alt" content={imagem ? title : "Meu Time Político: o jogo não acaba na urna. Tudo o que os eleitos fazem, numa timeline, com a fonte de cada coisa."} />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />

@@ -6,6 +6,8 @@ import Social from '../../layouts/Social.astro';
 import '../../styles/politico.css';
 import { eleitos } from '../../data/cadastro';
 import linksGerados from '../../data/generated/links-eleitos.json';
+import og from '../../data/generated/og.json';
+import { SUPABASE_URL } from '../../lib/supabase';
 import { leve, cargoEmTexto, nomeBonito, paginaOficial, cargoPrincipal, type EleitoBruto } from '../../lib/eleitos';
 import { principais, ESSENCIAIS, type Link, type TipoLink } from '../../../scripts/links';
 
@@ -38,9 +40,12 @@ const mostrar = (u: string) => u.replace(/^https:\/\/(www\.)?/, '').replace(/\/$
 
 // linha do tempo do mandato (o "hoje" é corrigido no navegador)
 const ini = new Date(`${m.inicio}T12:00:00-03:00`).getTime(), fim = new Date(`${m.fim}T12:00:00-03:00`).getTime();
+// imagem de compartilhamento: a abertura desta página (npm run og); sem ela, a geral do site
+const versaoOg = (og.imagens as Record<string, string>)[e.slug];
+const imagem = versaoOg ? `${SUPABASE_URL}/storage/v1/object/public/og/${e.slug}.jpg?v=${versaoOg}` : undefined;
 const titulo = `${l.nome} (${e.partido}${presidente ? '' : `-${e.uf}`}) — ${cargo} · Meu Time Político`;
 ---
-<Social title={titulo}
+<Social title={titulo} imagem={imagem}
   description={`O que ${l.nome}, ${cargo.toLowerCase()} ${presidente ? 'do Brasil' : `por ${e.uf}`}, faz no mandato: presença, votos, projetos, agenda e o que sai na imprensa, com a fonte de cada coisa. Siga e cobre.`}>
   <div class="lp-barra" id="barra" aria-hidden="true">
     <div class="lp-in"><b>{l.nome}</b><button class="lp-btn amarelo" type="button" data-seguir>Seguir</button></div>

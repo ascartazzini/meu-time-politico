@@ -68,6 +68,26 @@ describe('peça de presença', () => {
     expect(h).toContain('https://camara/b.jpg');
     expect(h).toContain('PT-BA');
   });
+  it('voto da pessoa em cada item: nominal mostra o voto, simbólica diz que não há registro', () => {
+    const pauta = [
+      { ref: 'PL 1/2026', ementa: 'Institui o Dia do Teste.', situacao: 'Aprovado.', url: 'u1',
+        votacoes: [{ descricao: 'Aprovado o projeto.', nominal: true, votos: { 'fulano-sp': 'Não' } }] },
+      { ref: 'REQ 2/2026', ementa: 'Requer urgência para o Projeto de Lei nº 3, de 2026, que institui o Dia do Outro.', situacao: 'Aprovado.', url: 'u2',
+        votacoes: [{ descricao: 'Aprovado, por unanimidade, o Requerimento.', nominal: false }] },
+      { ref: 'PL 4/2026', ementa: 'Dispõe sobre drones.', situacao: 'Aprovado.', url: 'u3',
+        votacoes: [{ descricao: 'Aprovado o projeto.', nominal: true, votos: { 'outro-rj': 'Sim' } }] },
+      { ref: 'PL 5/2026', ementa: 'Dispõe sobre barcos.', situacao: 'Matéria não apreciada.', url: 'u4' },
+    ];
+    const eu = { slug: 'fulano-sp', papel: 'presente', metodo: 'id-oficial' as const, confianca: 1 };
+    const h = peca(base({ tipo: 'presenca', dados: { plenario: true, presentes: 500, pauta } }), gente, eu);
+    expect(h).toContain('Fulano votou NÃO');
+    expect(h).toContain('votação simbólica: sem voto individual registrado');
+    expect(h).toContain('Fulano não registrou voto');
+    expect(h.match(/class="voto-item/g)).toHaveLength(3);
+    const geral = peca(base({ tipo: 'presenca', dados: { plenario: true, presentes: 500, pauta } }), gente);
+    expect(geral).not.toContain('Fulano');
+    expect(geral).toContain('votação nominal');
+  });
   it('a pessoa que faltou leva o carimbo', () => {
     const h = peca(base({ tipo: 'presenca', dados: { plenario: true, presentes: 485 } }), gente, { slug: 'fulano-sp', papel: 'ausente', metodo: 'id-oficial', confianca: 1 });
     expect(h).toContain('>Faltou<');

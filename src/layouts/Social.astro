@@ -5,13 +5,13 @@ import '../styles/fontes-fallback.css';
 import '../styles/social.css';
 import Cabeca from '../components/Cabeca.astro';
 import { CONSENTIMENTO } from '../lib/lista-espera';
-interface Props { title: string; description?: string; noindex?: boolean }
-const { title, description, noindex = false } = Astro.props;
+interface Props { title: string; description?: string; noindex?: boolean; imagem?: string }
+const { title, description, noindex = false, imagem } = Astro.props;
 ---
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <Cabeca title={title} description={description} noindex={noindex} />
+  <Cabeca title={title} description={description} noindex={noindex} imagem={imagem} />
 </head>
 <body>
   <header class="topo">

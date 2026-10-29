@@ -35,7 +35,8 @@
     "coletar:pauta": "tsx scripts/coletores/pauta.ts",
     "enriquecer": "tsx scripts/coletores/enriquecer.ts",
     "fotos": "tsx scripts/fotos-wiki.ts",
-    "newsletter": "tsx scripts/newsletter.ts"
+    "newsletter": "tsx scripts/newsletter.ts",
+    "og": "tsx scripts/og-politicos.ts"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
@@ -45,6 +46,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "happy-dom": "^20.13.2",
+    "puppeteer-core": "^24.43.1",
     "tsx": "^4.23.13",
     "typescript": "^6.0.3",
     "vitest": "^4.1.11",
