@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { separarReferencia, explicarEmenta, escolherTrechos, lerCompromisso, mancheteCurta } from '../src/lib/linguagem';
+import { separarReferencia, explicarEmenta, escolherTrechos, lerCompromisso, mancheteCurta, explicarItemPauta, desfechoPauta } from '../src/lib/linguagem';
 
 describe('separarReferencia', () => {
   it('separa o número do projeto da ementa', () => {
@@ -76,5 +76,20 @@ describe('lerCompromisso', () => {
   it('viagem e cerimônia ficam como estão, sem participante inventado', () => {
     expect(lerCompromisso('Partida para Brasília')).toEqual({ modo: 'deslocamento', manchete: 'Partida para Brasília', participantes: [] });
     expect(lerCompromisso('Cerimônia de Promulgação da PEC 6x1').modo).toBe('evento');
+  });
+});
+
+describe('pauta do plenário', () => {
+  it('pedido de urgência vira o que o projeto quer', () => {
+    expect(explicarItemPauta('REQ 4194/2026', 'Requer regime de urgência urgentíssima para a apreciação do Substitutivo do Senado Federal ao Projeto de Lei nº 3.099, de 2019, que institui o Dia Nacional do Autocuidado e altera a Lei nº 8.080, de 19 de setembro de 1990.'))
+      .toBe('urgência pro projeto que quer criar o Dia Nacional do Autocuidado');
+    expect(explicarItemPauta('PL 5902/2023', 'Altera o Código Penal, para dispor sobre o uso de drones nos presídios.')).toBe('tratar do uso de drones nos presídios');
+  });
+  it('desfecho pela situação oficial', () => {
+    expect(desfechoPauta('Matéria sobre a Mesa. Aprovado, por unanimidade, o Requerimento de Urgência')).toBe('aprovado');
+    expect(desfechoPauta('Rejeitado o Requerimento.')).toBe('rejeitado');
+    expect(desfechoPauta('Matéria não apreciada em face do encerramento da Ordem do Dia.')).toBe('adiado');
+    expect(desfechoPauta('Em discussão')).toBeNull();
+    expect(desfechoPauta(null)).toBeNull();
   });
 });

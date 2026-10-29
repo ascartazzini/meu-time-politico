@@ -46,12 +46,27 @@ describe('peça de projeto e votação', () => {
 });
 
 describe('peça de presença', () => {
-  it('plenário: total da sessão e o rosto de quem faltou', () => {
+  it('plenário sem a lista completa: total da sessão e os faltantes do cadastro', () => {
     const h = peca(base({ tipo: 'presenca', dados: { casa: 'camara', plenario: true, presentes: 485, esperados: 512 },
       politicos: [{ slug: 'fulano-sp', papel: 'ausente', metodo: 'id-oficial', confianca: 1 }], n_politicos: 400 }), gente);
     expect(h).toContain('<b>485</b><span>de 512 deputados');
-    expect(h).toContain('faltaram');
+    expect(h).toContain('Quem faltou · 1 dos eleitos que acompanhamos');
     expect(h).toContain('href="/politico/fulano-sp/"');
+  });
+  it('plenário com pauta e todos os faltantes: carrossel com resumo, pauta e rostos', () => {
+    const pauta = [
+      { ref: 'REQ 1/2026', ementa: 'Requer urgência para o Projeto de Lei nº 9, de 2026, que institui o Dia do Teste.', situacao: 'Aprovado o Requerimento.', url: 'u1' },
+      { ref: 'PL 5/2026', ementa: 'Dispõe sobre drones.', situacao: 'Matéria não apreciada em face do encerramento da Ordem do Dia.', url: 'u2' },
+    ];
+    const ausentes = [{ nome: 'Fulano', partido: 'PL', uf: 'SP', slug: 'fulano-sp' }, { nome: 'Beltrano', partido: 'PT', uf: 'BA', foto: 'https://camara/b.jpg' }];
+    const h = peca(base({ tipo: 'presenca', dados: { plenario: true, presentes: 511, esperados: 513, pauta, ausentes } }), gente);
+    expect(h.match(/class="slide"/g)).toHaveLength(3);
+    expect(h).toContain('<b>2</b> faltaram');
+    expect(h).toContain('<b>2</b> itens na pauta: 1 aprovado, 1 ficou pra depois');
+    expect(h).toContain('Urgência pro projeto que quer criar o Dia do Teste');
+    expect(h).toContain('Quem faltou · 2 deputados');
+    expect(h).toContain('https://camara/b.jpg');
+    expect(h).toContain('PT-BA');
   });
   it('a pessoa que faltou leva o carimbo', () => {
     const h = peca(base({ tipo: 'presenca', dados: { plenario: true, presentes: 485 } }), gente, { slug: 'fulano-sp', papel: 'ausente', metodo: 'id-oficial', confianca: 1 });

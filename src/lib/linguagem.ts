@@ -164,3 +164,22 @@ export function lerCompromisso(titulo: string): { modo: ModoAgenda; manchete: st
   if (ps) return { modo: 'encontro', manchete: `Encontro com ${ps.map(p => quemEmTexto(p)).join(' e ')}`, participantes: ps };
   return { modo: 'evento', manchete: t, participantes: [] };
 }
+
+/* ---------- pauta do plenário ---------- */
+
+/** Item da pauta em linguagem comum. Pedido de urgência vira "urgência pro projeto que quer …". */
+export function explicarItemPauta(ref: string, ementa: string): string {
+  const urgencia = ementa.match(/urg[êe]ncia[\s\S]*?(?:Projeto|Proposta|Medida Provis[óo]ria|Substitutivo|PL|PEC|PLP|PDL)[^,]*?,?\s*(?:de \d{4},\s*)?que\s+([\s\S]+)$/i);
+  if (/^REQ\b/i.test(ref) && urgencia) return `urgência pro projeto que quer ${explicarEmenta(maiuscula(urgencia[1].trim()))}`;
+  return explicarEmenta(ementa);
+}
+
+export type DesfechoPauta = 'aprovado' | 'rejeitado' | 'adiado';
+/** O que aconteceu com o item, pela situação oficial. null quando o texto não diz. */
+export function desfechoPauta(situacao: string | null): DesfechoPauta | null {
+  if (!situacao) return null;
+  if (/rejeitad/i.test(situacao)) return 'rejeitado';
+  if (/aprovad/i.test(situacao)) return 'aprovado';
+  if (/não apreciad|adiad|retirad|encerramento da ordem|prejudicad/i.test(situacao)) return 'adiado';
+  return null;
+}

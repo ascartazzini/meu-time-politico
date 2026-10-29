@@ -127,7 +127,22 @@ main{max-width:640px;margin:0 auto;padding:12px 16px 80px}
 .capa:hover strong{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
 
 /* discurso: carrossel de trechos */
-.p-discurso{padding:0;min-height:0;gap:0}
+.p-discurso,.com-slides{padding:0;min-height:0;gap:0}
+.slide[data-n="1/1"]::after{display:none}
+.p-presenca .slide{min-height:400px}
+.resumo-sessao{list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.resumo-sessao li{font-weight:600;font-size:19px;line-height:1.25}
+.resumo-sessao b{font-family:var(--display);font-weight:400;font-size:34px;line-height:1;margin-right:6px;vertical-align:-3px}
+.lista-pauta{display:flex;flex-direction:column;gap:12px;margin-top:4px}
+.item-pauta b{font-size:18px}
+.desfecho{display:inline-block;font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:11px;border-radius:999px;padding:2px 8px;background:rgba(255,255,255,.2);margin-right:4px}
+.desfecho.aprovado{background:var(--marca);color:var(--ink)}
+.desfecho.rejeitado{background:#FFC2CA;color:#5A0010}
+.grade-rostos{display:grid;grid-template-columns:repeat(3,1fr);gap:14px 8px;margin-top:6px}
+.grade-rostos figure{display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0}
+.grade-rostos .rosto{width:58px;height:58px;font-size:18px}
+.grade-rostos figcaption b{display:block;font-size:12.5px;line-height:1.2;margin-top:6px;overflow-wrap:anywhere}
+.grade-rostos figcaption small{display:block;font-size:11px;opacity:.85}
 .carrossel{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
 .carrossel::-webkit-scrollbar{display:none}
 .slide{position:relative;flex:0 0 100%;scroll-snap-align:start;padding:22px 22px 26px;min-height:380px;display:flex;flex-direction:column;gap:14px}

@@ -6,7 +6,7 @@
 import type { ItemFeed, Ligacao } from './feed';
 import { papelEmTexto, type NaturezaAgenda } from './feed';
 import type { EleitoLeve } from './eleitos';
-import { separarReferencia, explicarEmenta, lerCompromisso, mancheteCurta, maiuscula, type Participante } from './linguagem';
+import { separarReferencia, explicarEmenta, explicarItemPauta, desfechoPauta, lerCompromisso, mancheteCurta, maiuscula, type DesfechoPauta, type Participante } from './linguagem';
 
 export type ItemPeca = ItemFeed & { n_politicos: number; outras_fontes: { fonte: string; url: string; titulo: string }[] | null };
 
@@ -90,25 +90,64 @@ function projeto(i: ItemPeca, gente: Map<string, EleitoLeve>, solo?: Ligacao): s
 
 /* ---------- presença ---------- */
 
+/** Painel em carrossel: um slide por bloco, contador no canto e pontos embaixo. */
+function carrossel(classe: string, slides: string[], aria: string): string {
+  const n = slides.length;
+  return `<div class="peca painel com-slides ${classe}"><div class="carrossel" tabindex="0" aria-label="${esc(aria)}">${
+    slides.map((s, k) => `<div class="slide" data-n="${k + 1}/${n}">${s}</div>`).join('')}</div>${
+    n > 1 ? `<div class="pontos" aria-hidden="true">${slides.map((_, k) => `<i${k ? '' : ' class="on"'}></i>`).join('')}</div>` : ''}</div>`;
+}
+const fatias = <T>(xs: T[], n: number) => Array.from({ length: Math.ceil(xs.length / n) }, (_, k) => xs.slice(k * n, k * n + n));
+
+type ItemPautaSalvo = { ref: string; ementa: string; situacao: string | null; url: string };
+type AusenteSalvo = { nome: string; partido: string; uf: string; foto?: string; slug?: string };
+const DESFECHO: Record<DesfechoPauta, string> = { aprovado: 'aprovado', rejeitado: 'rejeitado', adiado: 'ficou pra depois' };
+
 function presenca(i: ItemPeca, gente: Map<string, EleitoLeve>, solo?: Ligacao): string {
   const plenario = i.dados.plenario === true;
   const presentes = num(i.dados.presentes) ?? i.n_politicos;
   const esperados = num(i.dados.esperados) ?? (plenario ? 513 : null);
   const orgao = String(i.dados.orgao_nome || i.dados.orgao || '');
   const onde = plenario ? 'Plenário da Câmara' : orgao;
-  const ausentes = (i.politicos ?? []).filter(p => p.papel === 'ausente');
   const pct = esperados ? Math.round((presentes / esperados) * 100) : null;
   const eu = solo ? papelEmTexto('presenca', solo.papel) : null;
-  return `<div class="peca painel p-presenca">
-    <span class="rotulo">Presença · ${esc(onde)} · ${esc(hora(i.quando))}</span>
+  const pauta = Array.isArray(i.dados.pauta) ? (i.dados.pauta as ItemPautaSalvo[]) : [];
+  // todos os que faltaram (gravado pelo coletor); item antigo só tem os do cadastro, pelas ligações
+  const salvos = Array.isArray(i.dados.ausentes) ? (i.dados.ausentes as AusenteSalvo[]) : null;
+  const ausentes: AusenteSalvo[] = salvos ?? (i.politicos ?? []).filter(p => p.papel === 'ausente').map(p => {
+    const e = gente.get(p.slug); return { nome: e?.nome ?? p.slug, partido: e?.partido ?? '', uf: e?.uf ?? '', foto: e?.foto, slug: p.slug };
+  });
+
+  // o que a sessão rendeu, em uma linha cada: quantos faltaram e o desfecho da pauta
+  const desfechos = pauta.map(x => desfechoPauta(x.situacao));
+  const conta = (d: DesfechoPauta) => desfechos.filter(x => x === d).length;
+  const partesPauta = [conta('aprovado') && `${conta('aprovado')} ${conta('aprovado') === 1 ? 'aprovado' : 'aprovados'}`,
+    conta('rejeitado') && `${conta('rejeitado')} ${conta('rejeitado') === 1 ? 'rejeitado' : 'rejeitados'}`,
+    conta('adiado') && `${conta('adiado')} ${conta('adiado') === 1 ? 'ficou' : 'ficaram'} pra depois`].filter(Boolean);
+  const resumoSessao = salvos || pauta.length ? `<ul class="resumo-sessao">
+    ${salvos ? `<li><b>${ausentes.length}</b> ${ausentes.length === 1 ? 'faltou' : 'faltaram'}</li>` : ''}
+    ${pauta.length ? `<li><b>${pauta.length}</b> ${pauta.length === 1 ? 'item' : 'itens'} na pauta${partesPauta.length ? `: ${partesPauta.join(', ')}` : ''}</li>` : ''}</ul>` : '';
+
+  const total = `<span class="rotulo">Presença · ${esc(onde)} · ${esc(hora(i.quando))}</span>
     ${eu ? `<span class="carimbo ${eu.tom === 'ruim' ? 'rejeitado' : 'aprovado'}">${eu.tom === 'ruim' ? 'Faltou' : 'Esteve lá'}</span>` : ''}
+    ${resumoSessao}
     <p class="numerao"><b>${presentes}</b>${esperados ? `<span>de ${esperados} deputados<br>na sessão</span>` : `<span>deputados<br>na reunião</span>`}</p>
     ${pct != null ? `<div class="barra" role="img" aria-label="${pct}% de presença"><i style="width:${pct}%"></i></div>` : ''}
-    ${!solo && ausentes.length ? `<div class="faltaram"><small>Dos eleitos que acompanhamos, faltaram</small><div class="rostos">${ausentes.slice(0, 10).map(a => {
-      const e = gente.get(a.slug); return rosto(e?.nome ?? a.slug, e?.foto, `/politico/${a.slug}/`, 'ruim');
-    }).join('')}${ausentes.length > 10 ? `<span class="rosto mais"><i>+${ausentes.length - 10}</i></span>` : ''}</div></div>` : ''}
-    ${i.resumo && !plenario ? `<p class="nota pauta">Na pauta: ${esc(i.resumo.slice(0, 180))}${i.resumo.length > 180 ? '…' : ''}</p>` : ''}
-  </div>`;
+    ${pauta.length || ausentes.length ? `<small class="credito">deslize pra ${[pauta.length ? 'pauta' : '', ausentes.length ? 'quem faltou' : ''].filter(Boolean).join(' e ')} →</small>` : ''}
+    ${!pauta.length && i.resumo && !plenario ? `<p class="nota pauta">Na pauta: ${esc(i.resumo.slice(0, 180))}${i.resumo.length > 180 ? '…' : ''}</p>` : ''}`;
+
+  const slidesPauta = fatias(pauta.slice(0, 12), 4).map((parte, k, todas) => `<span class="rotulo">Na pauta · ${pauta.length} ${pauta.length === 1 ? 'item' : 'itens'}${todas.length > 1 ? ` · ${k + 1}/${todas.length}` : ''}</span>
+    <div class="lista-pauta">${parte.map(x => {
+      const d = desfechoPauta(x.situacao);
+      return `<a class="item-pauta" href="${esc(x.url)}" target="_blank" rel="noopener"><b>${esc(maiuscula(explicarItemPauta(x.ref, x.ementa)))}</b>
+        <small>${d ? `<span class="desfecho ${d}">${DESFECHO[d]}</span> ` : ''}${esc(x.ref)} ↗</small></a>`;
+    }).join('')}</div>${k === todas.length - 1 && pauta.length > 12 ? `<small class="credito">e mais ${pauta.length - 12} itens na pauta da fonte</small>` : ''}`);
+
+  const slidesFalta = fatias(ausentes, 12).map((parte, k, todas) => `<span class="rotulo">Quem faltou · ${ausentes.length} ${salvos ? 'deputados' : 'dos eleitos que acompanhamos'}${todas.length > 1 ? ` · ${k + 1}/${todas.length}` : ''}</span>
+    <div class="grade-rostos">${parte.map(a => `<figure>${rosto(a.nome, a.slug ? gente.get(a.slug)?.foto ?? a.foto : a.foto, a.slug ? `/politico/${a.slug}/` : undefined, 'ruim')}
+      <figcaption><b>${esc(a.nome)}</b>${a.partido ? `<small>${esc(a.partido)}${a.uf ? `-${esc(a.uf)}` : ''}</small>` : ''}</figcaption></figure>`).join('')}</div>`);
+
+  return carrossel('p-presenca', [total, ...slidesPauta, ...slidesFalta], 'Presença na sessão, pauta e quem faltou; deslize pro lado');
 }
 
 /* ---------- discurso: carrossel de trechos literais ---------- */
