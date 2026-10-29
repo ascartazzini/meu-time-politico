@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 # Gera public/og.png (1200×630) e public/apple-touch-icon.png (180×180) a partir dos HTML desta pasta,
-# usando o Chrome em modo headless (as fontes da marca vêm do Google Fonts, então precisa de rede).
+# usando o Chrome em modo headless (fontes de public/fontes, sem rede).
 # Uso: sh scripts/og/render.sh   (ou CHROME=/caminho/pro/chrome sh scripts/og/render.sh)
 set -eu
 cd "$(dirname "$0")/../.."

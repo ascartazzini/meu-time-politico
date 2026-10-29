@@ -1,30 +1,60 @@
 <!doctype html>
-<!-- Imagem de compartilhamento (Open Graph / Twitter), 1200×630. Renderizar com scripts/og/render.sh → public/og.png -->
+<!-- Imagem de compartilhamento (Open Graph / Twitter), 1200×630, no visual claro do site.
+     Os posts de exemplo são genéricos (cargo, sem nome): a imagem não afirma nada sobre político real.
+     Renderizar com scripts/og/render.sh → public/og.png (fontes locais de public/fontes, sem rede). -->
 <html lang="pt-BR"><head><meta charset="UTF-8">
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Chivo+Mono:wght@400;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
+  @font-face{font-family:Anton;src:url(../../public/fontes/anton-400-latin.woff2) format('woff2');font-weight:400}
+  @font-face{font-family:Barlow;src:url(../../public/fontes/barlow-400-latin.woff2) format('woff2');font-weight:400}
+  @font-face{font-family:Barlow;src:url(../../public/fontes/barlow-600-latin.woff2) format('woff2');font-weight:600}
+  @font-face{font-family:Barlow;src:url(../../public/fontes/barlow-700-latin.woff2) format('woff2');font-weight:700}
   *{margin:0;padding:0;box-sizing:border-box}
-  html,body{width:1200px;height:630px;overflow:hidden;background:#080A08;color:#F2F5F0;font-family:Barlow,system-ui,sans-serif}
-  body::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(115deg,transparent 0 70px,rgba(0,230,118,.045) 70px 140px)}
-  body::after{content:'';position:absolute;left:50%;top:40%;width:1400px;height:900px;transform:translate(-50%,-50%);
-    background:radial-gradient(closest-side,rgba(0,230,118,.14),rgba(0,230,118,0))}
-  .wrap{position:relative;z-index:1;height:100%;padding:56px 64px 48px;display:flex;flex-direction:column;justify-content:space-between}
-  .top{display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #243020;padding-bottom:22px}
-  .brand{font-family:Anton,Impact,sans-serif;font-size:44px;text-transform:uppercase;line-height:1;letter-spacing:.01em}
-  .brand span{color:#FFD100}.brand em{font-style:normal;font-family:'Chivo Mono',monospace;font-weight:700;font-size:26px;color:#00E676;margin-left:10px;vertical-align:4px}
-  .kicker{font-family:'Chivo Mono',monospace;font-size:20px;letter-spacing:.22em;color:#00E676;text-transform:uppercase}
-  h1{font-family:Anton,Impact,sans-serif;font-size:104px;line-height:1.06;margin-top:6px;text-transform:uppercase;letter-spacing:.005em}
-  h1 .hl{color:#FFD100}
-  .foot{display:flex;align-items:flex-end;justify-content:space-between;gap:40px}
-  .lead{font-size:27px;line-height:1.3;color:#B9C4B2;max-width:720px}
-  .lead b{color:#F2F5F0;font-weight:600}
-  .url{font-family:'Chivo Mono',monospace;font-weight:700;font-size:26px;color:#080A08;background:#FFD100;padding:14px 22px;border-radius:4px;white-space:nowrap}
+  html,body{width:1200px;height:630px;overflow:hidden;background:#F4F4F1;color:#16181A;font-family:Barlow,system-ui,sans-serif}
+  .wrap{height:100%;padding:56px 60px;display:flex;gap:48px;align-items:center}
+  .esq{flex:1 1 0;display:flex;flex-direction:column;justify-content:space-between;height:100%}
+  .logo{font-family:Anton,Impact,sans-serif;font-size:40px;text-transform:uppercase;line-height:1;letter-spacing:.01em}
+  .logo span{background:#FFD100;padding:0 .12em}
+  h1{font-family:Anton,Impact,sans-serif;font-size:88px;line-height:1.02;text-transform:uppercase}
+  h1 span{background:linear-gradient(#FFD100,#FFD100) 0 60%/100% .8em no-repeat;padding:0 .06em}
+  .lead{font-size:28px;line-height:1.3;color:#3A4047;margin-top:22px}
+  .lead b{color:#16181A}
+  .url{font-weight:700;font-size:24px;color:#5F6670}
+  .dir{flex:none;width:470px;display:flex;flex-direction:column;gap:16px}
+  .post{background:#fff;border:1px solid #E3E4E0;border-radius:22px;padding:20px 22px;box-shadow:0 10px 30px rgba(22,24,26,.07)}
+  .post:nth-child(2){margin-left:34px}
+  .cab{display:flex;gap:14px;align-items:center}
+  .ava{width:52px;height:52px;border-radius:50%;background:#E9EAE6;display:grid;place-items:center;font-size:26px}
+  .quem b{display:block;font-size:22px}
+  .quem small{display:block;color:#5F6670;font-size:17px}
+  .acao{margin-top:12px;font-size:22px}
+  .acao .ruim{color:#D7263D;font-weight:700}
+  .acao .bom{color:#0A8F4E;font-weight:700}
+  .fonte{margin-top:10px;border:1px solid #E3E4E0;border-radius:14px;padding:10px 14px;font-size:17px;color:#5F6670}
+  .fonte b{color:#0A8F4E;font-size:13px;letter-spacing:.06em}
+  .fonte b.imp{color:#B07A00}
+  .reacoes{display:flex;gap:22px;margin-top:12px;font-size:19px;color:#5F6670}
 </style></head>
 <body><div class="wrap">
-  <div class="top"><div class="brand">Meu Time <span>Político</span><em>2026</em></div><div class="kicker">Brasil · 27 estados · 4 de outubro</div></div>
-  <h1>Você escala 6.<br><span class="hl">Quantos jogam<br>contra você?</span></h1>
-  <div class="foot">
-    <p class="lead">Presidente, governador, dois senadores e deputados como um <b>time</b>. Eles jogam junto? <b>Têm cadeira pra aprovar alguma coisa?</b> Voto nominal e bancada real, sem cadastro.</p>
+  <div class="esq">
+    <div class="logo">Meu time <span>político</span></div>
+    <div>
+      <h1>O jogo não<br><span>acaba na urna.</span></h1>
+      <p class="lead">Tudo o que os <b>1.678 eleitos</b> fazem, numa timeline. Siga quem você quer cobrar. <b>Com a fonte de cada coisa.</b></p>
+    </div>
     <div class="url">meutimepolitico.com</div>
+  </div>
+  <div class="dir">
+    <div class="post">
+      <div class="cab"><span class="ava">🏛</span><div class="quem"><b>Deputado federal</b><small>sessão deliberativa do plenário</small></div></div>
+      <p class="acao"><span class="ruim">faltou</span></p>
+      <div class="fonte"><b>OFICIAL</b> · Câmara dos Deputados</div>
+      <div class="reacoes"><span>👍 128</span><span>👎 342</span><span>💬 57</span></div>
+    </div>
+    <div class="post">
+      <div class="cab"><span class="ava">📰</span><div class="quem"><b>Governadora</b><small>notícia</small></div></div>
+      <p class="acao">apareceu na <b>imprensa</b></p>
+      <div class="fonte"><b class="imp">IMPRENSA</b> · grande veículo</div>
+      <div class="reacoes"><span>👍 211</span><span>👎 64</span><span>💬 23</span></div>
+    </div>
   </div>
 </div></body></html>
