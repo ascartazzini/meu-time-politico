@@ -1,0 +1,122 @@
+---
+/* <head> comum dos dois layouts: GA (só em produção), metatags, Open Graph, fontes e dados estruturados. */
+interface Props { title: string; description?: string; noindex?: boolean; corTema?: string }
+const {
+  title,
+  description = 'Tudo o que os políticos eleitos em 2026 fazem, numa timeline: votos, presença, projetos, agenda e o que sai na imprensa, com a fonte de cada coisa. Siga quem você quer cobrar, reaja e comente.',
+  noindex = false,
+  corTema = '#FFFFFF'
+} = Astro.props;
+
+// Domínio canônico (o mesmo de astro.config.mjs; o fallback só vale no dev sem `site`).
+const SITE = 'https://www.meutimepolitico.com';
+const site = Astro.site ?? new URL(SITE);
+const canonical = new URL(Astro.url.pathname, site).toString();
+const ogImage = new URL('/og.png', site).toString();
+const NOME = 'Meu Time Político';
+const GA_ID = 'G-EQMVHHWH9C';
+// O measurement ID é fixo no código, então dev, preview e qualquer outro host mandariam hits
+// pra propriedade real (foi o que sujou os relatórios em 07/09/2026). A tag só existe aqui.
+// Apex e o subdomínio antigo caem em 301 pro www (nginx.conf), então só o www renderiza página.
+const HOSTS_ANALYTICS = ['www.meutimepolitico.com'];
+// As quatro faces que aparecem na primeira dobra. Chegando antes da primeira pintura,
+// não existe troca de fonte depois — que era a origem do CLS. As outras (Barlow 500/600,
+// Chivo Mono 700) entram normalmente, com swap, e só aparecem mais pra baixo.
+const FONTES_CRITICAS = [
+  '/fontes/anton-400-latin.woff2',
+  '/fontes/barlow-400-latin.woff2',
+  '/fontes/barlow-700-latin.woff2',
+  '/fontes/chivo-mono-400-latin.woff2'
+];
+
+
+// Dados estruturados: quem somos, o que é o app e pra qual eleição. Ajuda buscador e assistente de IA a citar certo.
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite', '@id': `${site.origin}/#site`, url: `${site.origin}/`, name: NOME, inLanguage: 'pt-BR',
+      description: 'Acompanhe os eleitos de 2026 (presidente, governadores, senadores e deputados) como um time: votos, presença, projetos e imprensa, todo dia, com fonte.',
+      publisher: { '@id': `${site.origin}/#autor` }
+    },
+    {
+      '@type': 'WebApplication', '@id': `${site.origin}/#app`, name: NOME, url: `${site.origin}/`, inLanguage: 'pt-BR',
+      applicationCategory: 'Civic tech', operatingSystem: 'Web', browserRequirements: 'Requer JavaScript',
+      isAccessibleForFree: true, offers: { '@type': 'Offer', price: '0', priceCurrency: 'BRL' },
+      description: 'Timeline diária dos políticos eleitos em 2026: votos nominais, presença, projetos, discursos, agenda e notícias dos grandes veículos, cada item com link pra fonte. Quem segue um político pode reagir e comentar.',
+      author: { '@id': `${site.origin}/#autor` }
+    },
+    { '@type': 'Person', '@id': `${site.origin}/#autor`, name: 'Artur Scartazzini', url: 'https://arturscartazzini.com', worksFor: { '@type': 'Organization', name: 'Mnova Solutions' } },
+    { '@type': 'WebPage', '@id': canonical, url: canonical, name: title, description, inLanguage: 'pt-BR', isPartOf: { '@id': `${site.origin}/#site` } }
+  ]
+};
+---
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+
+  <!-- Google tag (gtag.js) — só no domínio de produção, ver HOSTS_ANALYTICS acima -->
+  <script is:inline define:vars={{ GA_ID, HOSTS_ANALYTICS }}>
+    if (HOSTS_ANALYTICS.indexOf(location.hostname) !== -1) {
+      window.dataLayer = window.dataLayer || [];
+      // `define:vars` faz o Astro embrulhar este bloco numa IIFE, então a função não vira global
+      // sozinha — sem esta linha, todo `gtag(...)` de fora daqui (src/lib/analytics.ts) vira no-op.
+      var gtag = function () { window.dataLayer.push(arguments); };
+      window.gtag = gtag;
+      gtag('js', new Date());
+
+      /* Tráfego interno (o nosso) sem depender de IP: abrir /?internal=1 uma vez marca este
+         navegador, /?internal=0 desmarca. O parâmetro sai da barra antes do `config`, então o
+         pageview já sobe com a URL limpa e com traffic_type=internal. Do lado do GA4 tem que
+         existir o filtro de dados "internal" ATIVO (Admin → Filtros de dados). */
+      var interno = false;
+      try {
+        var q = new URLSearchParams(location.search);
+        var marca = q.get('internal');
+        if (marca === '1') localStorage.setItem('mtp_internal', '1');
+        if (marca === '0') localStorage.removeItem('mtp_internal');
+        if (marca !== null) {
+          q.delete('internal');
+          var busca = q.toString();
+          history.replaceState(null, '', location.pathname + (busca ? '?' + busca : '') + location.hash);
+        }
+        interno = localStorage.getItem('mtp_internal') === '1';
+      } catch (e) { /* navegador sem localStorage: segue como tráfego normal */ }
+
+      gtag('config', GA_ID, interno ? { traffic_type: 'internal' } : {});
+
+      var tag = document.createElement('script');
+      tag.async = true;
+      tag.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+      document.head.appendChild(tag);
+    }
+  </script>
+  <meta name="description" content={description} />
+  <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1'} />
+  <meta name="author" content="Artur Scartazzini" />
+  <meta name="application-name" content={NOME} />
+  <link rel="canonical" href={canonical} />
+
+  <meta property="og:site_name" content={NOME} />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Meu Time Político" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
+
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="sitemap" href="/sitemap-index.xml" />
+  <meta name="theme-color" content={corTema} />
+  <!-- Fontes servidas do nosso domínio (public/fontes, geradas por scripts/fetch-fontes.ts).
+       Pelo Google elas custavam ~1,4s de render-blocking no 4G, com dois handshakes externos. -->
+  {FONTES_CRITICAS.map(f => <link rel="preload" href={f} as="font" type="font/woff2" crossorigin />)}
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

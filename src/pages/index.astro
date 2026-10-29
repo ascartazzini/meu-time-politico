@@ -1,134 +1,77 @@
 ---
-import Base from '../layouts/Base.astro';
-import ListaEspera from '../components/ListaEspera.astro';
-import '../styles/landing.css';
+import Social from '../layouts/Social.astro';
 import cadastro from '../data/generated/eleitos-2027.json';
-const c = cadastro.contagem as Record<string, number>;
-const senadores = (c['senador'] ?? 0) + (c['senador (2022)'] ?? 0);
 ---
-<Base title="Meu Time Político — o que o seu time eleito fez hoje" badge="beta" description="Monte o time com os eleitos de 2026, quantos quiser por cargo, e acompanhe todo dia o que eles fazem: como votaram, se foram trabalhar, que projeto apresentaram e o que a imprensa noticiou. Com a fonte de cada coisa. Grátis, sem cadastro.">
-  <script is:inline>if (location.hash.startsWith('#s=')) location.replace('/app/' + location.hash);</script>
-  <header class="hero">
-    <div class="kicker">Mandatos 2027–2031 · {cadastro.eleitos.length.toLocaleString('pt-BR')} eleitos · 27 estados</div>
-    <h1>O jogo não<br /><span class="hl">acaba na urna.</span></h1>
-    <p class="lead">Monte o time com os eleitos de 2026, <b>quantos quiser por cargo</b>, e veja todo dia o que eles
-      fizeram: como votaram, se foram trabalhar, que projeto apresentaram, o que a imprensa noticiou.</p>
-    <a class="cta" href="/time/" data-cta="hero">Montar meu time →</a>
-    <span class="cta-note">sem cadastro · o time fica no seu aparelho · cada item com a fonte</span>
+<Social title="Meu Time Político — o que os eleitos fizeram hoje" description="Tudo o que os políticos eleitos em 2026 fazem, numa timeline: votos, presença, projetos, agenda e o que sai na imprensa, com a fonte de cada coisa. Siga quem você quer cobrar, reaja e comente.">
+  <nav class="filtros" slot="filtros" aria-label="Filtrar a timeline">
+    <button class="chip" type="button" data-f="todos" aria-pressed="true">Todos</button>
+    <button class="chip" type="button" data-f="meus" aria-pressed="false">Quem eu sigo</button>
+    <button class="chip" type="button" data-f="presidente" aria-pressed="false">Presidente</button>
+    <button class="chip" type="button" data-f="camara" aria-pressed="false">Câmara</button>
+    <button class="chip" type="button" data-f="senado" aria-pressed="false">Senado</button>
+    <button class="chip" type="button" data-f="agenda" aria-pressed="false">Agenda</button>
+    <button class="chip" type="button" data-f="imprensa" aria-pressed="false">Imprensa</button>
+  </nav>
 
-    <div class="stats">
-      <div class="stat"><div class="n" data-count>{c['deputado-federal']}</div><div class="l">deputados federais<br />de 2027 a 2031</div></div>
-      <div class="stat"><div class="n" data-count>{senadores}</div><div class="l">senadores<br />em exercício em 2027</div></div>
-      <div class="stat"><div class="n" data-count>{c['governador']}</div><div class="l">governadores<br />e o presidente</div></div>
-      <div class="stat"><div class="n" data-count>{c['deputado-estadual'].toLocaleString('pt-BR')}</div><div class="l">deputados estaduais<br />e distritais</div></div>
-    </div>
-  </header>
-
-  <section>
-    <h2>Escale. Marque os titulares.<br /><span class="out">Acompanhe o jogo.</span></h2>
-    <p class="sec-lead">Você escolhe o estado e segue quem quiser: o presidente, o governador, os senadores, os deputados.
-      Marca com ★ os <b>titulares</b>, normalmente em quem você votou. A partir daí, o feed junta tudo que o time fez.</p>
-    <div class="eixos">
-      <div class="ex" style="--c:#00E676">
-        <div class="tag">Selo verde</div><h3>Oficial</h3>
-        <p>Registro do próprio Congresso: <b>votos nominais</b>, <b>presença</b> em plenário e comissão,
-          <b>projetos apresentados</b> e <b>discursos</b>. Ligado ao político pelo id oficial da casa, sem adivinhação.</p>
-        <div class="frm">Câmara dos Deputados e Senado Federal<br />APIs de Dados Abertos</div>
-      </div>
-      <div class="ex" style="--c:#FFD100">
-        <div class="tag">Selo amarelo</div><h3>Imprensa</h3>
-        <p>Fato noticiado pelos grandes veículos que cita alguém do seu time. Só título, linha fina e link:
-          a matéria você lê lá. <b>Coluna, blog e opinião ficam de fora</b>. Nada de bastidor.</p>
-        <div class="frm">G1 · Folha · O Globo · Estadão · Poder360<br />Agência Brasil · Agência Câmara · Agência Senado</div>
-      </div>
-      <div class="ex" style="--c:#FF3B30">
-        <div class="tag">Leitura</div><h3>Presença</h3>
-        <p>Estava onde precisava estar? Na Câmara, a lista de cada <b>sessão deliberativa</b> diz quem foi e quem faltou.
-          No Senado não existe registro de presença: só dá pra dizer em dia de <b>votação nominal</b>, e a gente avisa isso.</p>
-        <div class="frm">licença médica e missão oficial<br />não contam como falta</div>
-      </div>
-    </div>
+  <section class="caixa" id="boasVindas" hidden>
+    <h1>O jogo não acaba na urna.</h1>
+    <p>Tudo o que os {cadastro.eleitos.length.toLocaleString('pt-BR')} eleitos de 2026 fazem, numa timeline: como votaram, se foram trabalhar,
+      com quem se reuniram, o que a imprensa noticiou. <b>Cada item com a fonte.</b></p>
+    <p style="margin-top:12px"><button class="btn" type="button" data-entrar>Entrar e escolher quem seguir</button></p>
   </section>
 
-  <section>
-    <h2>Regras do jogo</h2>
-    <div class="honesto">
-      <h3>Nada sem fonte, nada inventado</h3>
-      <p>Todo card tem o link de onde veio. Notícia não traz id do político, então a ligação é pelo nome de urna ou pelo nome completo;
-        quando dois eleitos têm o mesmo nome, a notícia não vai pra nenhum dos dois. O card avisa quando a ligação foi pelo nome.</p>
-      <p><b>Até a posse</b> (presidente e governadores em 5 e 6 de janeiro, Congresso e assembleias em 1º de fevereiro), registro oficial
-        só existe pra quem já tem mandato: os reeleitos e os senadores que seguem até 2031. Os novatos aparecem pela imprensa.</p>
-      <p><b>Ainda não tem</b>: agenda oficial (pública × privada), assembleias estaduais, governadores e o placar de impacto do mandato e do
-        time titular. Vêm nas próximas fases, nessa ordem, e a gente diz aqui quando cada uma entrar.</p>
-    </div>
-  </section>
-
-  <section class="fecho">
-    <h2>Monte o time.<br /><span class="hl">Cobre o jogo.</span></h2>
-    <p class="sec-lead" style="margin:24px auto 0">Não pede nome, e-mail nem título de eleitor. O time fica no seu aparelho.</p>
-    <div class="acoes">
-      <a class="cta" href="/time/" data-cta="fecho">Montar meu time →</a>
-      <a class="cta ghost" href="/metodo/">Ver o método</a>
-    </div>
-
-    <div class="share-box" id="compartilhar">
-      <button class="cta ghost" type="button" data-share-abrir aria-expanded="false" aria-controls="sharePainel">Compartilhar</button>
-      <div class="share-painel" id="sharePainel" data-share-painel hidden>
-        <div class="share-h">Escolha por onde vai</div>
-        <div class="share-canais">
-          <button class="share-canal" type="button" data-canal="whatsapp">WhatsApp</button>
-          <button class="share-canal" type="button" data-canal="instagram">Instagram</button>
-          <button class="share-canal" type="button" data-canal="linkedin">LinkedIn</button>
-        </div>
-        <p class="share-aviso" data-share-aviso role="status"></p>
-        <p class="share-nota">Cada botão gera um link marcado, então dá pra saber por onde a
-          galera chegou. No celular abre a folha de compartilhar; no computador, copia o link.</p>
-      </div>
-    </div>
-
-    <ListaEspera local="home" />
-  </section>
-
-  <footer>
-    <b>Meu Time Político</b> — tech cívica, código aberto, sem vínculo com partido, campanha ou
-    político. Cobre os 26 estados e o Distrito Federal.<br /><br />
-    <b>Fontes:</b> TSE (resultado de 2026, gerado em {cadastro.dataGeracaoTse}) · Câmara dos Deputados e Senado Federal (APIs de Dados Abertos) ·
-    RSS público dos veículos listados acima.<br /><br />
-    O quiz da eleição (escale seus 6 votos e conte os gols contra) segue no ar em <a href="/app/">/app/</a>.<br /><br />
-    Projeto criado por <a href="https://arturscartazzini.com" rel="author">Artur Scartazzini</a> (Mnova Solutions).
-  </footer>
+  <input class="busca" id="busca" type="search" placeholder="Filtrar por político: nome, partido ou estado" autocomplete="off" />
+  <div id="timeline"></div>
 
   <script>
-    import { instalarCompartilhar } from '../lib/compartilhar';
+    import { montarTimeline, eleitos } from '../lib/timeline';
+    import { usuario, seguidos } from '../lib/conta';
     import { evento } from '../lib/analytics';
 
-    // compartilhar a home: link marcado por canal, pra parar de cair tudo em Direct no GA4
-    const caixa = document.getElementById('compartilhar');
-    if (caixa) instalarCompartilhar(caixa, {
-      local: 'home',
-      link: () => `${location.origin}/`,
-      texto: link => `⚽ O jogo não acaba na urna. Monta o time com os eleitos e vê todo dia o que eles fizeram, com a fonte:\n${link}`
+    const sem = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+    const busca = document.getElementById('busca') as HTMLInputElement;
+    const FILTROS: Record<string, { tipos?: string[]; fontes?: string[] }> = {
+      camara: { fontes: ['camara-presenca', 'camara-votacoes', 'camara-proposicoes'] },
+      senado: { fontes: ['senado-votacoes', 'senado-discursos'] },
+      agenda: { tipos: ['agenda'] },
+      imprensa: { tipos: ['noticia'] },
+    };
+    let filtro = 'todos';
+
+    async function slugs(): Promise<string[] | null> {
+      const gente = await eleitos();
+      const q = sem(busca.value.trim());
+      if (q) return [...gente.values()].filter(e => sem(`${e.nome} ${e.partido} ${e.uf ?? ''}`).includes(q)).map(e => e.slug).slice(0, 200);
+      if (filtro === 'meus') return [...(await seguidos())];
+      if (filtro === 'presidente') return [...gente.values()].filter(e => e.cargo === 'presidente').map(e => e.slug);
+      return null;
+    }
+    const tl = montarTimeline({
+      raiz: document.getElementById('timeline')!, local: 'home', slugs,
+      tipos: () => FILTROS[filtro]?.tipos ?? null, fontes: () => FILTROS[filtro]?.fontes ?? null,
+      vazio: () => busca.value.trim() ? 'Ninguém com esse nome, ou nada dele ainda.'
+        : filtro === 'meus' ? 'Você ainda não segue ninguém. <a href="/seguir/">Escolha quem seguir</a>.' : 'Nada por aqui ainda.',
     });
 
-    document.querySelectorAll<HTMLAnchorElement>('[data-cta]').forEach(a => {
-      a.addEventListener('click', () => evento('cta_time_click', { local: a.dataset.cta ?? 'home' }));
+    function escolher(f: string) {
+      filtro = f;
+      document.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', String((c as HTMLElement).dataset.f === f)));
+      tl.recarregar();
+    }
+    document.querySelector('.filtros')!.addEventListener('click', async e => {
+      const b = (e.target as HTMLElement).closest<HTMLButtonElement>('.chip');
+      if (!b) return;
+      if (b.dataset.f === 'meus' && !(await usuario())) { document.querySelector<HTMLButtonElement>('[data-entrar]')?.click(); return; }
+      evento('filtro', { filtro: b.dataset.f });
+      escolher(b.dataset.f!);
     });
+    let t: number | undefined;
+    busca.addEventListener('input', () => { clearTimeout(t); t = window.setTimeout(() => tl.recarregar(), 300); });
 
-    const vistos = new WeakSet<Element>();
-    const io = new IntersectionObserver(es => {
-      es.forEach(e => {
-        if (!e.isIntersecting || vistos.has(e.target)) return;
-        vistos.add(e.target);
-        const el = e.target as HTMLElement;
-        const alvo = parseInt(el.textContent!.replace(/\D/g, ''), 10), ini = performance.now();
-        const step = (now: number) => {
-          const p = Math.min(1, (now - ini) / 1000), k = 1 - Math.pow(1 - p, 3);
-          el.textContent = Math.round(alvo * k).toLocaleString('pt-BR');
-          if (p < 1) requestAnimationFrame(step);
-        };
-        requestAnimationFrame(step);
-      });
-    }, { threshold: .5 });
-    document.querySelectorAll('[data-count]').forEach(n => io.observe(n));
+    // Quem já segue alguém abre direto em "Quem eu sigo"; quem não tem conta vê a caixa de boas-vindas.
+    usuario().then(async u => {
+      if (!u) { document.getElementById('boasVindas')!.hidden = false; return; }
+      if ((await seguidos()).size) escolher('meus');
+    });
   </script>
-</Base>
+</Social>

@@ -1,0 +1,136 @@
+/* Meu Time Político — visual claro, uma coluna, cara de rede social. */
+:root{
+  --bg:#F4F4F1; --card:#FFFFFF; --ink:#16181A; --sub:#5F6670; --line:#E3E4E0; --hover:#F1F2EE;
+  --marca:#FFD100; --oficial:#0A8F4E; --imprensa:#B07A00; --ruim:#D7263D; --bom:#0A8F4E; --link:#1A5FD0;
+  --display:'Anton', Impact, 'Arial Narrow', sans-serif;
+  --body:'Barlow', 'Barlow medidas', system-ui, -apple-system, sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+[hidden]{display:none !important}
+html{color-scheme:light}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--link);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none !important}}
+
+/* ---- topo ---- */
+.topo{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.topo-in{max-width:640px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
+.logo{font-family:var(--display);font-size:20px;text-transform:uppercase;letter-spacing:.01em;text-decoration:none;line-height:1}
+.logo span{background:var(--marca);padding:0 .12em}
+.conta{margin-left:auto;display:flex;align-items:center;gap:8px}
+.entrar{display:flex;align-items:center;gap:8px;background:var(--ink);color:#fff;border:0;border-radius:999px;padding:9px 16px;font-weight:700;font-size:14px}
+.eu{display:flex;align-items:center;gap:8px;background:none;border:1px solid var(--line);border-radius:999px;padding:3px 12px 3px 3px;font-size:14px;font-weight:600}
+.eu img,.eu .ini{width:30px;height:30px;border-radius:50%;object-fit:cover;background:var(--hover);display:grid;place-items:center;font-size:13px}
+.menu{position:absolute;right:16px;top:54px;background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.08);padding:6px;min-width:180px}
+.menu a,.menu button{display:block;width:100%;text-align:left;background:none;border:0;border-radius:8px;padding:10px 12px;text-decoration:none;font-size:15px}
+.menu a:hover,.menu button:hover{background:var(--hover)}
+
+/* ---- filtros ---- */
+.filtros{max-width:640px;margin:0 auto;padding:0 16px 10px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.filtros::-webkit-scrollbar{display:none}
+.chip{flex:none;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:14px;font-weight:600;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+
+/* ---- página ---- */
+main{max-width:640px;margin:0 auto;padding:12px 16px 80px}
+.busca{width:100%;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font:inherit;margin-bottom:12px}
+.caixa{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
+.caixa h1{font-size:22px;line-height:1.2}
+.caixa h2{font-size:18px;line-height:1.25;margin-bottom:6px}
+.caixa p{color:var(--sub);margin-top:6px}
+.caixa p b{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;font-size:15px;text-decoration:none}
+.btn.leve{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.btn.seguindo{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.vazio{color:var(--sub);text-align:center;padding:40px 0}
+.mais{display:block;margin:16px auto;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:10px 20px;font-weight:600}
+.rodape{max-width:640px;margin:0 auto;padding:8px 16px 60px;color:var(--sub);font-size:13px}
+.rodape a{color:var(--sub)}
+
+/* ---- post ---- */
+.post{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:10px}
+.post-cab{display:flex;gap:10px;align-items:center}
+.ava{flex:none;width:42px;height:42px;border-radius:50%;background:#E9EAE6;display:grid;place-items:center;font-weight:700;color:var(--sub);overflow:hidden;font-size:15px;text-decoration:none}
+.ava img{width:100%;height:100%;object-fit:cover;object-position:top}
+.ava.casa{background:#EEF6F1;color:var(--oficial)}
+.ava.jornal{background:#FBF4E2;color:var(--imprensa)}
+.quem{min-width:0;flex:1}
+.quem b{display:block;font-size:15.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.quem a{text-decoration:none}
+.quem a:hover{text-decoration:underline}
+.quem small{display:block;color:var(--sub);font-size:13px}
+.quando{flex:none;color:var(--sub);font-size:13px;align-self:flex-start}
+.acao{margin-top:10px;font-size:16px}
+.ruim{color:var(--ruim);font-weight:700}
+.bom{color:var(--bom);font-weight:700}
+.fonte{display:block;margin-top:10px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;text-decoration:none}
+.fonte:hover{background:#FAFAF8}
+.fonte b{display:block;font-size:15px;line-height:1.35}
+.fonte span.resumo{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--sub);font-size:14px;margin-top:4px}
+.fonte small{display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center;margin-top:6px;color:var(--sub);font-size:12.5px}
+.selo{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.selo.oficial{color:var(--oficial)}
+.selo.imprensa{color:var(--imprensa)}
+.nat{font-size:11px;font-weight:700;border-radius:999px;padding:1px 8px;background:var(--hover)}
+.nat-publica{color:var(--oficial)}
+.nat-privada{color:#B85C00}
+.nat-partidaria{color:#7A3EA8}
+.gente{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.gente a{font-size:13px;text-decoration:none;background:var(--hover);border-radius:999px;padding:3px 10px}
+.gente a.ruim{background:#FDECEE;color:var(--ruim);font-weight:600}
+.pista{font-size:11.5px;color:var(--sub)}
+
+/* ---- reações e comentários ---- */
+.reacoes{display:flex;gap:4px;margin-top:10px;margin-left:-8px}
+.reacoes button{display:flex;align-items:center;gap:6px;background:none;border:0;border-radius:999px;padding:6px 10px;color:var(--sub);font-size:14px}
+.reacoes button:hover{background:var(--hover);color:var(--ink)}
+.reacoes button[aria-pressed="true"].gostei{color:var(--bom);font-weight:700}
+.reacoes button[aria-pressed="true"].odiei{color:var(--ruim);font-weight:700}
+.aviso-post{margin-top:8px;font-size:14px;background:var(--hover);border-radius:10px;padding:8px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.aviso-post button{background:var(--ink);color:#fff;border:0;border-radius:999px;padding:5px 12px;font-size:13px;font-weight:700}
+.conversa{margin-top:10px;border-top:1px solid var(--line);padding-top:10px}
+.coment{padding:6px 0;font-size:15px}
+.coment b{font-size:14px}
+.coment time{color:var(--sub);font-size:12.5px;margin-left:6px}
+.coment p{margin-top:2px}
+.coment .acoes-c{display:inline-flex;gap:10px;margin-left:8px}
+.coment .acoes-c button{background:none;border:0;color:var(--sub);font-size:12.5px;padding:0}
+.coment .acoes-c button:hover{color:var(--ink);text-decoration:underline}
+.escrever{display:flex;gap:8px;margin-top:8px;align-items:flex-end}
+.escrever textarea{flex:1;font:inherit;font-size:15px;border:1px solid var(--line);border-radius:12px;padding:9px 12px;resize:none;min-height:42px;max-height:140px}
+.escrever button{background:var(--ink);color:#fff;border:0;border-radius:999px;padding:10px 16px;font-weight:700;font-size:14px}
+.regras{font-size:12.5px;color:var(--sub);margin-top:6px}
+
+/* ---- toast ---- */
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:12px;padding:10px 16px;font-size:14.5px;z-index:50;max-width:calc(100% - 32px);box-shadow:0 8px 24px rgba(0,0,0,.18)}
+
+/* ---- lista de políticos (seguir) ---- */
+.ufs{display:grid;grid-template-columns:repeat(auto-fill,minmax(56px,1fr));gap:8px;margin-top:12px}
+.uf{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 0;font-weight:700}
+.uf[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.cargo-t{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--sub);margin:18px 4px 8px}
+.pessoas{list-style:none;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.pessoas li{display:flex;align-items:center;gap:10px;padding:10px 14px;border-top:1px solid var(--line)}
+.pessoas li:first-child{border-top:0}
+.pessoas .quem b{font-size:15px}
+.pessoas .btn{padding:7px 14px;font-size:14px;flex:none}
+
+/* ---- página do político ---- */
+.perfil{display:flex;gap:14px;align-items:center}
+.perfil .ava{width:72px;height:72px;font-size:24px}
+.perfil h1{font-size:24px}
+.placar{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin-top:12px;list-style:none}
+.placar li{background:var(--bg);border-radius:12px;padding:10px 12px}
+.placar span{display:block;font-size:12px;color:var(--sub);font-weight:600}
+.placar b{display:block;font-size:18px;margin-top:2px}
+.placar small{display:block;font-size:12px;color:var(--sub);margin-top:2px}
+
+/* ---- texto corrido (método, regras) ---- */
+.texto h1{font-size:26px;line-height:1.15;margin-bottom:8px}
+.texto h2{font-size:19px;margin:22px 0 6px}
+.texto p,.texto li{color:#2E3338;margin-top:8px}
+.texto ul{padding-left:20px}
+.texto a{color:var(--link)}
+.texto code{font-size:13px;background:var(--hover);border-radius:4px;padding:1px 4px}

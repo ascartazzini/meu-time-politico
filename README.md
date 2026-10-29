@@ -50,10 +50,16 @@ scripts/carregar-cadastro.ts `npm run cadastro:carregar`: sobe o cadastro pro Su
 scripts/coletores/           camara.ts (presença, votos, projetos) · senado.ts (votos, discursos) · presidente.ts (agenda do Planalto) · imprensa.ts (RSS) · citacoes.ts e agenda.ts (regras puras, testadas) · banco.ts (escrita no Supabase)
 src/lib/mandato.ts           placar do mandato na página do político (função placar_mandato), em partes, sem nota única
 docs/pendencias.md           o que o plano prevê e ainda não está no ar, com o motivo
-src/lib/time.ts              o time pós-eleição: seguir, titulares por cargo, localStorage (puro, testado)
-src/lib/feed.ts · feed-ui.ts busca do feed (função feed do Supabase, por slug), texto de cada papel, placar de presença; e a camada de DOM
+src/layouts/Social.astro     layout claro do site (topo, conta); Base.astro ficou só pro quiz em /app/
+src/components/Cabeca.astro  <head> comum: GA (só em produção), metatags, fontes, dados estruturados
+src/lib/conta.ts             login com Google (supabase-js), quem a pessoa segue, reações e comentários (funções do banco)
+src/lib/timeline.ts          a timeline: posts, like/odiei, comentários, denúncia; home e página do político
+src/lib/time.ts              time antigo salvo no aparelho; só lido pra trazer pra conta no primeiro login
+src/lib/feed.ts              texto de cada papel, rótulos, placar de presença e de agenda (puro, testado)
 src/lib/eleitos.ts           cadastro → linha leve, nome bonito, cargo principal, links oficiais
-src/pages/time/              /time/: escolher UF, seguir, titular, feed · src/pages/politico/[slug].astro: 1.678 páginas estáticas · src/pages/eleitos/[uf].json.ts: lista por UF
+src/pages/index.astro        timeline com filtros · seguir.astro: escolher quem seguir · politico/[slug].astro: 1.678 páginas · metodo.astro: como funciona, regras, privacidade
+src/pages/eleitos/           [uf].json (quem dá pra seguir na UF) e todos.json (nome, partido e foto dos 1.678)
+src/pages/app.astro · app/metodo.astro  o quiz da eleição de 2026 e o método dele (arquivo)
 .github/workflows/manter-supabase.yml  leitura diária pro plano gratuito não pausar o projeto (pausa com 7 dias parado)
 src/pages/index.astro        landing (como funciona) · app.astro (o app: capa + primeira pergunta na mesma tela) · metodo.astro · sobre.astro (redireciona pra /)
 ```

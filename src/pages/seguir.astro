@@ -1,0 +1,95 @@
+---
+import Social from '../layouts/Social.astro';
+import ufs from '../data/ufs.json';
+---
+<Social title="Quem eu sigo — Meu Time Político" description="Escolha os eleitos de 2026 que você quer acompanhar: presidente, governador, senadores e deputados do seu estado." noindex>
+  <section class="caixa" id="semConta" hidden>
+    <h1>Quem você quer cobrar?</h1>
+    <p>Entre com o Google e escolha os eleitos que quer acompanhar. Quem você segue aparece em "Quem eu sigo", e só nesses posts dá pra reagir e comentar.</p>
+    <p style="margin-top:12px"><button class="btn" type="button" data-entrar>Entrar com Google</button></p>
+  </section>
+
+  <div id="comConta" hidden>
+    <section class="caixa">
+      <h1>Quem você quer cobrar?</h1>
+      <p id="contagem">Escolha o estado e siga quantos quiser, de qualquer cargo.</p>
+      <div class="ufs" id="ufs">{ufs.ufs.map(u => <button class="uf" type="button" data-uf={u.sigla} aria-pressed="false" title={u.nome}>{u.sigla}</button>)}</div>
+    </section>
+    <input class="busca" id="busca" type="search" placeholder="Buscar por nome ou partido" autocomplete="off" hidden />
+    <div id="lista"></div>
+    <p style="text-align:center;margin-top:18px"><a class="btn" href="/">Ver a timeline</a></p>
+  </div>
+
+  <script>
+    import { usuario, seguidos, seguir, mensagemDeErro } from '../lib/conta';
+    import { carregarTime } from '../lib/time';
+    import { eleitos, avatar, sobre } from '../lib/timeline';
+    import { cargoEmTexto, type EleitoLeve } from '../lib/eleitos';
+    import { CARGOS } from '../lib/time';
+    import { toast } from '../lib/toast';
+    import { evento } from '../lib/analytics';
+
+    const esc = (s: string) => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+    const sem = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+    const lista = document.getElementById('lista')!, busca = document.getElementById('busca') as HTMLInputElement;
+    let uf: string | null = null, daUf: EleitoLeve[] = [];
+
+    const linha = (e: EleitoLeve, s: Set<string>) => `<li>${avatar(e, e.slug)}<div class="quem"><b><a href="/politico/${esc(e.slug)}/">${esc(e.nome)}</a></b><small>${sobre(e)}${e.suplente ? ' · suplente em exercício' : ''}</small></div>
+      <button type="button" class="btn ${s.has(e.slug) ? 'seguindo' : ''}" data-slug="${esc(e.slug)}">${s.has(e.slug) ? 'Seguindo' : 'Seguir'}</button></li>`;
+
+    async function desenhar() {
+      const s = await seguidos(), gente = await eleitos();
+      document.getElementById('contagem')!.innerHTML = s.size
+        ? `Você segue <b>${s.size}</b>. Siga mais ou toque em "Seguindo" pra deixar de seguir.`
+        : 'Escolha o estado e siga quantos quiser, de qualquer cargo.';
+      const q = sem(busca.value.trim());
+      const meus = [...s].map(x => gente.get(x)).filter((e): e is EleitoLeve => !!e);
+      let html = meus.length && !q ? `<h2 class="cargo-t">Você segue</h2><ul class="pessoas">${meus.map(e => linha(e, s)).join('')}</ul>` : '';
+      if (uf) {
+        const filtrados = daUf.filter(e => !q || sem(`${e.nome} ${e.partido}`).includes(q));
+        html += CARGOS.map(c => {
+          const doCargo = filtrados.filter(e => e.cargo === c);
+          return doCargo.length ? `<h2 class="cargo-t">${esc(cargoEmTexto(c, uf, true))} · ${doCargo.length}</h2><ul class="pessoas">${doCargo.map(e => linha(e, s)).join('')}</ul>` : '';
+        }).join('') || '<p class="vazio">Ninguém com esse nome ou partido.</p>';
+      }
+      lista.innerHTML = html;
+    }
+
+    async function escolherUf(sigla: string) {
+      uf = sigla;
+      document.querySelectorAll('.uf').forEach(b => b.setAttribute('aria-pressed', String((b as HTMLElement).dataset.uf === sigla)));
+      busca.hidden = false;
+      lista.innerHTML = '<p class="vazio">Carregando…</p>';
+      daUf = (await (await fetch(`/eleitos/${sigla}.json`)).json()).eleitos;
+      try { localStorage.setItem('mtp:uf', sigla); } catch { /* sem storage */ }
+      evento('seguir_uf', { uf: sigla });
+      desenhar();
+    }
+
+    document.getElementById('ufs')!.addEventListener('click', e => {
+      const b = (e.target as HTMLElement).closest<HTMLElement>('[data-uf]');
+      if (b) escolherUf(b.dataset.uf!);
+    });
+    busca.addEventListener('input', () => desenhar());
+    lista.addEventListener('click', async e => {
+      const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-slug]');
+      if (!b) return;
+      const ligado = !b.classList.contains('seguindo');
+      b.disabled = true;
+      try {
+        await seguir([b.dataset.slug!], ligado);
+        evento('seguir', { local: 'seguir', ligado });
+        await desenhar();
+      } catch (err) { toast(mensagemDeErro(err)); b.disabled = false; }
+    });
+
+    usuario().then(u => {
+      document.getElementById(u ? 'comConta' : 'semConta')!.hidden = false;
+      if (!u) return;
+      let lembrada: string | null = null;
+      try { lembrada = localStorage.getItem('mtp:uf'); } catch { /* sem storage */ }
+      const sigla = lembrada ?? carregarTime().uf;
+      if (sigla) escolherUf(sigla); else desenhar();
+    });
+  </script>
+</Social>

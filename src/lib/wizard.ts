@@ -409,10 +409,10 @@ function renderResultado(p: Placar, d: Dataset) {
     <code>força = 2 × (coerência × peso) ÷ (coerência + peso)</code> — média harmônica. Ela <b>derruba</b> quem é ótimo num eixo e péssimo no outro. Um time 100% coerente e 10% pesado dá <code>18</code>, não <code>55</code>. A leitura logo abaixo do placar diz qual eixo está segurando o seu e quanto cada 10 pontos valeriam hoje.
     <h4>Sugestões de troca</h4>
     Simulação, não recomendação de voto. Pra cada vaga do time (as duas de senador contam separado), trocamos o escalado por cada candidato (quem tem partido e posições idênticos entra como um grupo), mantemos os outros cinco, recalculamos o placar inteiro e mostramos a troca que mais sobe a força — desde que o novo vista a sua camisa pelo menos tanto quanto o atual (tolerância de <code>${TOLERANCIA_CAMISA}</code> pontos). Quem deixaria o time mais forte te afastando do que você pensa não aparece.
-    Método completo, votações usadas e cobertura por pauta em <a href="/metodo/">/metodo</a>.`;
+    Método completo, votações usadas e cobertura por pauta em <a href="/app/metodo/">/app/metodo</a>.`;
 
   const fontes = document.getElementById('fontes');
-  if (fontes) fontes.innerHTML = '<b>Fontes:</b> ' + d.fontes.map(f => `<b>${esc(f.rotulo)}:</b> ${esc(f.detalhe)}`).join(' · ') + '. Método completo e lista das votações usadas em <a href="/metodo/">/metodo</a>.';
+  if (fontes) fontes.innerHTML = '<b>Fontes:</b> ' + d.fontes.map(f => `<b>${esc(f.rotulo)}:</b> ${esc(f.detalhe)}`).join(' · ') + '. Método completo e lista das votações usadas em <a href="/app/metodo/">/app/metodo</a>.';
 }
 
 /* ---------- leitura da força: por que o número é esse ---------- */

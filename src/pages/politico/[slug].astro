@@ -1,7 +1,6 @@
 ---
-/* Uma página por eleito (1.678): estática, boa pra busca, com o feed dele carregado no navegador. */
-import Base from '../../layouts/Base.astro';
-import '../../styles/time.css';
+/* Uma página por eleito (1.678): estática, boa pra busca. Placar e timeline carregam no navegador. */
+import Social from '../../layouts/Social.astro';
 import cadastro from '../../data/generated/eleitos-2027.json';
 import { leve, cargoEmTexto, nomeBonito, paginaOficial, type EleitoBruto, type MandatoBruto } from '../../lib/eleitos';
 
@@ -11,102 +10,71 @@ export function getStaticPaths() {
 const { e } = Astro.props as { e: EleitoBruto };
 const l = leve(e);
 const cargo = cargoEmTexto(l.cargo, e.uf);
-const onde = l.cargo === 'presidente' ? 'Brasil' : e.uf;
-const data = (d: string) => new Date(`${d}T12:00:00-03:00`).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' });
-const mandato = (m: MandatoBruto) => `${cargoEmTexto(m.cargo, m.uf)}${m.uf ? ` (${m.uf})` : ''}${m.suplente ? ', suplente em exercício' : ''}: ${data(m.inicio)} a ${data(m.fim)} · eleito em ${m.eleicao}`;
+const presidente = l.cargo === 'presidente';
+const data = (d: string) => new Date(`${d}T12:00:00-03:00`).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', year: 'numeric' }).replace(/ de /g, ' ').replace('.', '');
+const mandato = (m: MandatoBruto) => `${cargoEmTexto(m.cargo, m.uf)}${m.uf ? ` (${m.uf})` : ''}${m.suplente ? ', suplente em exercício' : ''}: ${data(m.inicio)} a ${data(m.fim)}`;
 const links = paginaOficial(e);
-const iniciais = l.nome.split(' ').filter(w => w.length > 2).slice(0, 2).map(w => w[0]).join('');
+const iniciais = l.nome.split(' ').filter(w => w.length > 2).slice(0, 2).map(w => w[0]).join('') || l.nome[0];
 ---
-<Base title={`${l.nome} (${e.partido}${l.cargo === 'presidente' ? '' : `-${e.uf}`}) — ${cargo} · Meu Time Político`}
-  description={`O que ${l.nome}, ${cargo.toLowerCase()} ${l.cargo === 'presidente' ? 'do Brasil' : `por ${e.uf}`}, fez no mandato: votos, presença, projetos e o que saiu na imprensa, com a fonte de cada coisa.`}>
-  <section class="pol-topo">
-    <div class="pol-foto">{e.fotoUrl ? <img src={e.fotoUrl} alt="" width="96" height="128" loading="eager" referrerpolicy="no-referrer" /> : <span>{iniciais}</span>}</div>
-    <div>
-      <div class="kicker">{cargo} · {onde}</div>
-      <h1 class="pol-nome">{l.nome}</h1>
-      <p class="pol-sub"><b>{e.partido}</b> · {nomeBonito(e.nome)}</p>
-      <div class="pol-acoes" data-politico={JSON.stringify({ slug: l.slug, nome: l.nome, partido: l.partido, uf: l.uf, cargo: l.cargo })}>
-        <button type="button" class="cta b-seguir" aria-pressed="false">Seguir</button>
-        <button type="button" class="cta ghost b-titular" aria-pressed="false">★ Titular</button>
-        <a class="link" href="/time/">ver meu time →</a>
+<Social title={`${l.nome} (${e.partido}${presidente ? '' : `-${e.uf}`}) — ${cargo} · Meu Time Político`}
+  description={`O que ${l.nome}, ${cargo.toLowerCase()} ${presidente ? 'do Brasil' : `por ${e.uf}`}, fez no mandato: votos, presença, projetos, agenda e o que saiu na imprensa, com a fonte de cada coisa.`}>
+  <section class="caixa">
+    <div class="perfil">
+      <span class="ava">{e.fotoUrl ? <img src={e.fotoUrl} alt="" referrerpolicy="no-referrer" /> : iniciais}</span>
+      <div class="quem">
+        <h1>{l.nome}</h1>
+        <small>{e.partido}{presidente ? '' : `-${e.uf}`} · {cargo.toLowerCase()}{l.suplente ? ' · suplente em exercício' : ''}</small>
       </div>
     </div>
+    <p style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <button class="btn" type="button" id="seguir" data-slug={l.slug}>Seguir</button>
+      {links.map(x => <a class="btn leve" href={x.url} target="_blank" rel="noopener">{x.rotulo}</a>)}
+    </p>
+    <p>{nomeBonito(e.nome)}. {e.mandatos.map(mandato).join(' · ')}.</p>
+    <ul class="placar" id="placar"></ul>
+    <p id="placarNota" style="font-size:13px"></p>
   </section>
 
-  <section class="bloco">
-    <h2 class="bloco-t">Mandatos</h2>
-    <ul class="mandatos">{e.mandatos.map(m => <li>{mandato(m)}</li>)}</ul>
-    {links.length > 0 && <p class="pol-links">{links.map((x, i) => <>{i > 0 && ' · '}<a href={x.url} target="_blank" rel="noopener">{x.rotulo}</a></>)}</p>}
-  </section>
-
-  <section class="bloco">
-    <h2 class="bloco-t">Placar do mandato</h2>
-    <p class="nota" id="placarDesde">Somando…</p>
-    <ul class="placar-mandato" id="placarMandato"></ul>
-    <p class="nota">Cada linha mede uma coisa; não existe nota única. Ainda não entra se o projeto andou, relatoria, emenda paga e gasto de cota
-      (<a href="/metodo/#acompanhamento">o que falta e por quê</a>).</p>
-  </section>
-
-  <section class="bloco">
-    <h2 class="bloco-t">O que fez</h2>
-    <p class="nota">Registro oficial da Câmara e do Senado (votos, presença, projetos, discursos) e notícias dos grandes veículos que citam {l.nome}.
-      Até a posse, registro oficial só existe pra quem já tem mandato.</p>
-    <div id="feed"></div>
-  </section>
-
-  <footer>
-    <b>Meu Time Político</b> — tech cívica, sem vínculo com partido, campanha ou político. Dados do TSE, da Câmara, do Senado e de RSS público
-    de imprensa. Achou algo ligado à pessoa errada? <a href="https://github.com/ascartazzini/meu-time-politico/issues" rel="noopener">Avise aqui</a>. <a href="/metodo/">Método</a>.
-  </footer>
+  <div id="timeline"></div>
 
   <script>
-    import { carregarTime, salvarTime, seguir, deixarDeSeguir, alternarTitular, segue, ehTitular, type Escalado } from '../../lib/time';
-    import { montarFeed } from '../../lib/feed-ui';
+    import { usuario, seguidos, seguir, entrar, mensagemDeErro } from '../../lib/conta';
+    import { montarTimeline } from '../../lib/timeline';
     import { buscarPlacar, linhasDoPlacar, desdeEmTexto } from '../../lib/mandato';
+    import { toast } from '../../lib/toast';
     import { evento } from '../../lib/analytics';
 
-    const caixa = document.querySelector<HTMLElement>('[data-politico]')!;
-    const p = JSON.parse(caixa.dataset.politico!) as Omit<Escalado, 'titular'>;
-    const bSeguir = caixa.querySelector<HTMLButtonElement>('.b-seguir')!;
-    const bTitular = caixa.querySelector<HTMLButtonElement>('.b-titular')!;
+    const esc = (s: string) => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+    const b = document.getElementById('seguir') as HTMLButtonElement;
+    const slug = b.dataset.slug!;
 
-    function pintar() {
-      const t = carregarTime();
-      const s = segue(t, p.slug), ti = ehTitular(t, p.slug);
-      bSeguir.setAttribute('aria-pressed', String(s));
-      bSeguir.textContent = s ? 'Seguindo' : 'Seguir';
-      bTitular.setAttribute('aria-pressed', String(ti));
-      bTitular.textContent = ti ? '★ Titular' : '☆ Titular';
+    async function pintar() {
+      const s = (await seguidos()).has(slug);
+      b.textContent = s ? 'Seguindo' : 'Seguir';
+      b.classList.toggle('seguindo', s);
     }
-    bSeguir.addEventListener('click', () => {
-      const t = carregarTime();
-      const novo = segue(t, p.slug) ? deixarDeSeguir(t, p.slug) : seguir({ ...t, uf: t.uf ?? (p.uf ?? undefined) }, p);
-      salvarTime(novo);
-      evento('time_seguir', { cargo: p.cargo, ligado: segue(novo, p.slug), local: 'politico' });
-      pintar();
-    });
-    bTitular.addEventListener('click', () => {
-      const t = carregarTime();
-      const novo = alternarTitular({ ...t, uf: t.uf ?? (p.uf ?? undefined) }, p);
-      salvarTime(novo);
-      evento('time_titular', { cargo: p.cargo, ligado: ehTitular(novo, p.slug), local: 'politico' });
-      pintar();
+    b.addEventListener('click', async () => {
+      if (!(await usuario())) return entrar();
+      const ligado = !b.classList.contains('seguindo');
+      b.disabled = true;
+      try { await seguir([slug], ligado); evento('seguir', { local: 'politico', ligado }); await pintar(); }
+      catch (err) { toast(mensagemDeErro(err)); }
+      b.disabled = false;
     });
     pintar();
 
-    const esc = (s: string) => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
-    buscarPlacar(p.slug).then(placar => {
-      const linhas = linhasDoPlacar(placar);
-      document.getElementById('placarDesde')!.textContent = desdeEmTexto(placar.desde);
-      document.getElementById('placarMandato')!.innerHTML = linhas.length ? linhas.map(l =>
-        `<li><span class="pm-r">${esc(l.rotulo)}</span><b class="${l.tom ? `tom-${l.tom}` : ''}">${esc(l.valor)}</b>${l.nota ? `<small>${esc(l.nota)}</small>` : ''}</li>`).join('')
-        : '<li class="feed-vazio">Nada coletado ainda pra somar.</li>';
-    }).catch(() => { document.getElementById('placarDesde')!.textContent = 'Não deu pra somar agora.'; });
+    buscarPlacar(slug).then(p => {
+      const linhas = linhasDoPlacar(p);
+      document.getElementById('placar')!.innerHTML = linhas.map(l =>
+        `<li><span>${esc(l.rotulo)}</span><b class="${l.tom ?? ''}">${esc(l.valor)}</b>${l.nota ? `<small>${esc(l.nota)}</small>` : ''}</li>`).join('');
+      document.getElementById('placarNota')!.innerHTML = linhas.length
+        ? `${esc(desdeEmTexto(p.desde))} Cada número mede uma coisa; não existe nota única. <a href="/metodo/#placar">Como contamos</a>.` : '';
+    }).catch(() => {});
 
-    montarFeed({
-      raiz: document.getElementById('feed')!, local: 'politico',
-      slugs: () => [p.slug], nome: () => p.nome,
-      vazio: 'Nada registrado ainda. Os coletores rodam de hora em hora; novatos só ganham registro oficial depois da posse.',
+    montarTimeline({
+      raiz: document.getElementById('timeline')!, local: 'politico', umaPessoa: slug,
+      slugs: async () => [slug], tipos: () => null,
+      vazio: () => 'Nada registrado ainda. Novatos só ganham registro oficial depois da posse; a imprensa vale desde já.',
     });
   </script>
-</Base>
+</Social>

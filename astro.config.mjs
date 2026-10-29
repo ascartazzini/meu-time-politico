@@ -5,16 +5,16 @@ import sitemap from '@astrojs/sitemap';
 // Domínio canônico do site. Mudou? Ajustar também public/robots.txt, public/llms.txt e nginx.conf.
 export const SITE = 'https://www.meutimepolitico.com';
 
-// Páginas na raiz valem mais pro buscador; /sobre/ só redireciona (noindex) e não entra no sitemap.
+// Páginas na raiz valem mais pro buscador; /sobre/ e /time/ só redirecionam e /seguir/ é da conta: fora do sitemap.
 // As 1.678 páginas /politico/<slug>/ ficam no padrão (0,5) e mudam todo dia com o feed.
-const PRIORIDADE = { '/': 1.0, '/time/': 0.9, '/metodo/': 0.6, '/app/': 0.4 };
+const PRIORIDADE = { '/': 1.0, '/metodo/': 0.6, '/app/': 0.3, '/app/metodo/': 0.3 };
 
 export default defineConfig({
   site: SITE,
   trailingSlash: 'always',
   integrations: [
     sitemap({
-      filter: page => !page.endsWith('/sobre/'),
+      filter: page => !/\/(sobre|time|seguir)\/$/.test(page),
       serialize(item) {
         const caminho = new URL(item.url).pathname;
         item.lastmod = new Date().toISOString();

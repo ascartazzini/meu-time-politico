@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
+    "@supabase/supabase-js": "2.117.3",
     "astro": "^7.2.10"
   },
   "devDependencies": {

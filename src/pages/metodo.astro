@@ -1,115 +1,53 @@
 ---
-import Base from '../layouts/Base.astro';
-import '../styles/landing.css';
-import indice from '../data/generated/indice.json';
-import temasJson from '../data/temas.json';
-import camara from '../data/generated/camara.json';
-import senado from '../data/generated/senado.json';
-import type { Tema } from '../lib/tipos';
-const temas = temasJson.temas as Tema[];
-const cob = Object.fromEntries(indice.cobertura.map(c => [c.temaId, c]));
-const camaraVot = camara.votacoes as Record<string, { data: string; descricao: string; totais: Record<string, number> }>;
-const senadoVot = senado.votacoes as Record<string, { data: string; identificacao: string; descricao: string; totais: Record<string, number> }>;
-const somaCam = Object.values(indice.bancadas.camara).reduce((a, b) => a + b, 0);
-const somaSen = Object.values(indice.bancadas.senado).reduce((a, b) => a + b, 0);
-const ordenar = (o: object) => Object.entries(o as Record<string, number>).filter(([, n]) => n > 0).sort((a, b) => b[1] - a[1]);
-const bancCam = ordenar(indice.bancadas.camara), bancSen = ordenar(indice.bancadas.senado);
-const n = indice.nacional;
+import Social from '../layouts/Social.astro';
+import cadastro from '../data/generated/eleitos-2027.json';
 ---
-<Base title="Método e fontes — Meu Time Político" badge="método" description="Como o feed dos eleitos é montado: fontes, ligação de cada item ao político, presença, agenda pública × privada e placar do mandato. E as fórmulas do quiz da eleição de 2026.">
-  <style>
-    .m{padding:48px 0 0}
-    .m h2{margin-top:56px}
-    .m h2:first-of-type{margin-top:0}
-    .m p a{color:var(--stance)}
-    .m p{margin-top:14px;max-width:680px;color:#B9C4B2;font-size:15.5px}
-    .m p b,.m li b{color:var(--ink)}
-    .m code{font-family:var(--mono);font-size:12.5px;color:var(--data);background:#0B0E09;padding:1px 6px;border-radius:2px}
-    .tab{width:100%;border-collapse:collapse;margin-top:22px;font-size:13.5px}
-    .tab th{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:left;padding:10px 8px;border-bottom:1px solid var(--line)}
-    .tab td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top;color:#C2CCBB}
-    .tab td.n{font-family:var(--display);font-size:22px;color:var(--stance);text-align:right;white-space:nowrap}
-    .tab td.n.real{color:var(--data)}
-    .tab small{display:block;font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:4px;line-height:1.6}
-    .tab.ufs td{padding:7px 8px;font-family:var(--mono);font-size:12px}
-    .tab.ufs td.n{font-size:16px}
-    .scroll{overflow-x:auto}
-    .bancadas{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:22px}
-    .banc{background:var(--surface);border:1px solid var(--line);border-radius:3px;padding:14px 16px;font-family:var(--mono);font-size:12px;line-height:1.9;color:#C2CCBB}
-    .banc h4{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--data);margin-bottom:6px}
-    .banc span{color:var(--stance)}
-  </style>
-  <div class="m">
-    <div class="kicker">Método · fontes · o que é real e o que é estimativa</div>
-    <h2 id="acompanhamento">Acompanhamento<br /><span class="out">dos eleitos</span></h2>
-    <p>O time que você monta em <a href="/time/">/time/</a> vê um feed com o que cada eleito fez. Todo item tem link pra fonte e um selo: <b>oficial</b> (registro da Câmara, do Senado ou do Planalto) ou <b>imprensa</b> (fato noticiado por G1, Folha, O Globo, Estadão, Poder360, Agência Brasil, Agência Câmara ou Agência Senado). Coluna, blog, análise e opinião ficam de fora pelo endereço da matéria. Da imprensa guardamos só título, linha fina e link.</p>
-    <p><b>Quem é quem.</b> Voto, presença, projeto e discurso chegam com o id oficial do parlamentar na casa, e é por ele que ligamos. A agenda do presidente é dele por construção. Notícia não traz id: ligamos pelo nome de urna (duas palavras ou mais; uma palavra só vale pra presidente, governador e senador, fora prenomes comuns), pelo nome civil completo ou por prenome + sobrenome pouco comum. Se dois eleitos têm o mesmo nome, a notícia não vai pra nenhum. O card avisa quando a ligação foi pelo nome.</p>
-    <p><b>Presença.</b> Na Câmara, a lista de cada sessão deliberativa do plenário diz quem foi; quem está em exercício e não está na lista faltou. Em comissão só contamos quem foi, porque só os membros são esperados. No Senado não existe registro de presença: só dá pra dizer em votação nominal, pela sigla oficial. Licença médica, missão oficial, representação e atividade parlamentar (AP, LS, MIS, REP) não contam como falta; NCom e licença particular contam.</p>
-    <p id="agenda"><b>Agenda pública × privada.</b> Cada compromisso é classificado pelo texto da agenda, ou seja, por com quem foi. Nesta ordem: <b>pessoal</b> (médico, velório, família), <b>partidária</b> (partido, diretório, campanha), <b>setor privado / sociedade</b> (empresa, CEO, banco privado, confederação patronal, sindicato, associação, ONG, artista) e <b>pública</b> (ministro, governador, parlamentar, chefe de Estado, órgão público, cerimônia, despacho). Se nada bate, fica <b>sem classificação</b>: viagem, por exemplo. As regras estão em <code>scripts/coletores/agenda.ts</code>, com teste. Hoje só a agenda do presidente entra.</p>
-    <p><b>Placar do mandato.</b> Na página de cada eleito, as contagens do que foi coletado: presença no plenário, votações nominais, projetos como autor e coautor, discursos, agenda por natureza e citações na imprensa. Não existe nota única nem ranking, e a página diz desde quando conta. Ainda não entram: se o projeto andou, relatorias, emendas pagas e gasto de cota (veja as <a href="https://github.com/ascartazzini/meu-time-politico/blob/main/docs/pendencias.md">pendências</a>).</p>
-    <p><b>Antes da posse</b> (5 e 6 de janeiro para presidente e governadores, 1º de fevereiro para o Congresso), só tem registro oficial quem já tem mandato. Achou algo ligado à pessoa errada? <a href="https://github.com/ascartazzini/meu-time-politico/issues">Avise aqui</a>.</p>
+<Social title="Como funciona — Meu Time Político" description="De onde vem cada post da timeline, como ligamos cada ação ao político, presença, agenda pública × privada, placar do mandato, regras dos comentários e privacidade.">
+  <article class="caixa texto">
+    <h1>Como funciona</h1>
+    <p>A timeline junta o que os {cadastro.eleitos.length.toLocaleString('pt-BR')} eleitos de 2026 fazem. Todo post tem link pra fonte e um selo:
+      <b>oficial</b> (registro da Câmara, do Senado ou do Planalto) ou <b>imprensa</b> (fato noticiado por G1, Folha, O Globo, Estadão, Poder360,
+      Agência Brasil, Agência Câmara ou Agência Senado). Coluna, blog, análise e opinião ficam de fora. Da imprensa guardamos só título, linha fina e link.</p>
 
-    <h2>Como o placar<br /><span class="out">é calculado</span></h2>
-    <p><i>As seções abaixo são do quiz da eleição de 2026, que segue no ar como arquivo em <a href="/app/">/app/</a>.</i></p>
-    <p>Este app não tem opinião sobre candidato. Ele cruza <b>três coisas públicas</b>: o que você respondeu, a posição registrada (ou estimada) de cada candidato em 14 pautas, e o tamanho das bancadas nas casas que aprovam lei. Cada critério está aberto aqui, de propósito. Critério escondido é editorial disfarçado de dado.</p>
+    <h2 id="ligacao">Quem é quem</h2>
+    <p>Voto, presença, projeto e discurso chegam com o id oficial do parlamentar na casa, e é por ele que ligamos. A agenda do presidente é dele por construção.
+      Notícia não traz id: ligamos pelo nome de urna (duas palavras ou mais; uma palavra só vale pra presidente, governador e senador, fora prenomes comuns),
+      pelo nome civil completo ou por prenome + sobrenome pouco comum. Se dois eleitos têm o mesmo nome, a notícia não vai pra nenhum. O post avisa quando a
+      ligação foi pelo nome.</p>
 
-    <h2>1. Camisa</h2>
-    <p>Concordância ponderada entre as suas respostas e a posição do candidato. Igual = <code>1</code>, candidato/partido dividido = <code>0,5</code>, oposto = <code>0</code>. As três pautas que você marca como decisivas pesam <code>3×</code>. "Tanto faz" sai da conta em vez de virar meio-termo falso.</p>
+    <h2 id="presenca">Presença</h2>
+    <p>Na Câmara, a lista de cada sessão deliberativa do plenário diz quem foi; quem está em exercício e não está na lista faltou. Em comissão só contamos quem foi,
+      porque só os membros são esperados. No Senado não existe registro de presença: só dá pra dizer em votação nominal, pela sigla oficial. Licença médica,
+      missão oficial, representação e atividade parlamentar não contam como falta; "não compareceu" e licença particular contam.</p>
 
-    <h2>2. Bolso</h2>
-    <p>Seu perfil (renda, trabalho, saúde, escola, transporte, moradia) ativa só as pautas que batem em você, e pra cada uma há um juízo explícito de <b>qual lado protege quem está na sua situação</b>. O score é a fração dessas pautas em que o candidato está do seu lado (dividido conta metade). Se a sua própria vida puxa pros dois lados numa pauta — renda baixa contra privatizar, ter empresa a favor — ela sai do score e vira "pauta que divide você". A tabela completa de impactos está em <code>src/data/temas.json</code>.</p>
+    <h2 id="agenda">Agenda pública × privada</h2>
+    <p>Cada compromisso é classificado pelo texto da agenda, ou seja, por com quem foi. Nesta ordem: <b>pessoal</b> (médico, velório, família),
+      <b>partidária</b> (partido, diretório, campanha), <b>setor privado / sociedade</b> (empresa, CEO, banco privado, entidade patronal, sindicato,
+      associação, ONG) e <b>pública</b> (ministro, governador, parlamentar, chefe de Estado, órgão público, cerimônia, despacho). Se nada bate, fica
+      <b>sem classificação</b>. As regras estão em <code>scripts/coletores/agenda.ts</code>, com teste. Hoje só a agenda do presidente entra.</p>
 
-    <h2>3. Coerência e gol contra</h2>
-    <p>Concordância média entre os <b>15 pares</b> possíveis dos 6 escalados (os dois senadores entram como dois jogadores), medida nas suas pautas decisivas. Onde um está a favor e o outro contra, é gol contra: dois dos seus votos anulando um ao outro.</p>
+    <h2 id="placar">Placar do mandato</h2>
+    <p>Na página de cada eleito: presença no plenário, votações nominais, projetos como autor e coautor, discursos, agenda por natureza e citações na imprensa.
+      Não existe nota única nem ranking, e a página diz desde quando conta. Ainda não entram: se o projeto andou, relatorias, emendas pagas e gasto de cota.</p>
+    <p><b>Antes da posse</b> (5 e 6 de janeiro para presidente e governadores, 1º de fevereiro para o Congresso), só tem registro oficial quem já tem mandato.</p>
 
-    <h2>4. Peso</h2>
-    <p>Um deputado sozinho vale 1 voto em 513. O que aprova é a bancada. Pra deputado federal, senador e deputado estadual, o peso é <code>bancada do partido ÷ quórum de maioria absoluta</code> na casa respectiva (Câmara 257 de 513, Senado 41 de 81, assembleia: metade mais um das cadeiras do estado). Pra presidente e governador, que não têm bancada própria, conta o <b>campo ideológico inteiro</b> (esquerda, centro, direita) na Câmara e na assembleia do estado. Partido novo ou sem orientação pública consolidada não é classificado em campo nenhum e entra com zero, em vez de chute. Média ponderada: presidente 25%, governador 15%, senadores 20% (10% cada um dos dois), deputado federal 30%, deputado estadual 10%. Em 2026 cada estado renova duas das três cadeiras no Senado, então o time tem seis escalados pra cinco cargos.</p>
+    <h2 id="regras">Regras pra reagir e comentar</h2>
+    <ul>
+      <li>Precisa entrar com o Google e seguir ao menos um dos políticos daquele post. Quem segue o mesmo político conversa ali.</li>
+      <li>Ninguém vê quem deu like ou odiei; aparece só a contagem.</li>
+      <li>O comentário mostra o seu primeiro nome e a inicial do sobrenome. Até 500 caracteres, no máximo 10 a cada 10 minutos.</li>
+      <li>Sem palavrão, ofensa, ameaça, discurso de ódio, dado pessoal de terceiros nem acusação sem fonte. O filtro barra palavrão na hora.</li>
+      <li>Qualquer pessoa com conta pode denunciar. Com 3 denúncias o comentário some pra todo mundo (menos pro autor) até ser revisado.</li>
+      <li>Você pode apagar o seu comentário quando quiser.</li>
+    </ul>
 
-    <h2>5. Força</h2>
-    <p><code>força = 2 × (coerência × peso) ÷ (coerência + peso)</code> — média harmônica, escolhida porque derruba quem é ótimo num eixo e péssimo no outro. Um time 100% coerente e 10% pesado dá 18, não 55. Veredito: coerência ≥ 55 e peso ≥ 55 é <b>time campeão</b>; só coerência é <b>torcida organizada</b>; só peso é <b>elenco caro, time rachado</b>; nenhum dos dois é <b>time rebaixado</b>.</p>
-    <p>Abaixo do placar, a <b>leitura</b> diz qual eixo está segurando a força (quando os dois diferem em 10 pontos ou mais), quanto ela chegaria se só o outro eixo fosse a 100, quanto cada 10 pontos de coerência ou de peso valeriam hoje, em qual cargo o peso mais vaza (o cargo cujo <code>(100 − cobertura) × peso no placar</code> é maior) e qual escalado aparece em mais gols contra.</p>
+    <h2 id="privacidade">Privacidade</h2>
+    <p>Do Google guardamos o que o login traz: nome, e-mail e foto. O e-mail não aparece pra ninguém e não vai pra partido, campanha nem empresa.
+      Guardamos também quem você segue, suas reações e seus comentários. Pra apagar a conta e tudo isso,
+      <a href="https://github.com/ascartazzini/meu-time-politico/issues">peça aqui</a>.</p>
 
-    <h2>6. Sugestões na escalação</h2>
-    <p>Na hora de escalar, cada vaga vazia mostra as <code>3</code> melhores camisas entre os candidatos daquele cargo no seu estado: o eixo CAMISA calculado com as suas respostas, antes de o time existir, com quantas das pautas respondidas batem e quantas das decisivas. Não é recomendação de voto — é só quem mais concorda com o que você respondeu, e cada sugestão carrega o selo de <b>voto nominal</b> ou <b>estimativa do partido</b>. Quem tem o mesmo partido e as mesmas posições nas 14 pautas tem a mesma camisa, então entra como um grupo representado pelo candidato com mais votos nominais (depois por ordem alfabética), com o tamanho do grupo à vista. Na segunda vaga de senador, quem já ocupa a primeira não aparece. Se você marcou "tanto faz" em tudo, não há com o que comparar e a vaga fica sem sugestão.</p>
-
-    <h2>7. Sugestões de troca</h2>
-    <p>Simulação, não recomendação de voto. Pra cada vaga do time (as duas de senador contam separado), o app troca o escalado por cada candidato (quem tem o mesmo partido e as mesmas posições nas 14 pautas entra como um grupo, porque tem o mesmo efeito no placar), mantém os outros cinco, recalcula tudo e guarda a troca que mais sobe a força. Só entra quem veste a sua camisa pelo menos tanto quanto o atual, com tolerância de <code>5</code> pontos: uma troca que deixa o time mais forte te afastando do que você pensa não aparece. "Testar essa troca" reescala na hora e dá pra desfazer; o grupo é representado pelo candidato com mais votos nominais, depois por ordem alfabética, e a troca vale pra qualquer um dos iguais.</p>
-
-    <h2>De onde vem<br /><span class="out">a posição de cada um</span></h2>
-    <p>Regra: <b>voto nominal real</b> sempre que existe; <b>estimativa pela orientação pública do partido</b> quando não existe — e cada card diz qual é qual. Quem tem mandato na Câmara é casado com o registro do TSE pelo <b>CPF</b> (a API da Câmara publica o CPF do deputado); no Senado, pelo nome completo. Abstenção, obstrução e ausência não contam como posição. Se a pessoa votou dos dois lados em votações da mesma pauta, fica "dividido". No país, <b>{n.comMandato}</b> candidatos têm mandato casado e <b>{n.comVotoNominal}</b> têm ao menos um voto nominal nas pautas.</p>
-    <div class="scroll"><table class="tab">
-      <thead><tr><th>pauta</th><th>votações nominais mapeadas</th><th style="text-align:right">candidatos com voto real</th><th style="text-align:right">estimados</th></tr></thead>
-      <tbody>{temas.map(t => <tr>
-        <td><b>{t.s}</b><small>{t.t}</small></td>
-        <td>{t.votacoes.length ? t.votacoes.map(v => {
-              const det = v.casa === 'camara' ? camaraVot[v.id!] : senadoVot[String(v.codigoSessaoVotacao)];
-              const tot = det ? Object.entries(det.totais).filter(([k]) => k === 'Sim' || k === 'Não').map(([k, x]) => `${k} ${x}`).join(' · ') : 'sem registro';
-              const link = v.casa === 'camara' ? `https://dadosabertos.camara.leg.br/api/v2/votacoes/${v.id}/votos` : `https://legis.senado.leg.br/dadosabertos/votacao?sigla=${v.sigla}&numero=${v.numero}&ano=${v.ano}`;
-              return <div>{v.rotulo}<small>SIM = {v.ladoSim === 'F' ? 'a favor' : 'contra'} da pauta · {tot} · <a href={link} target="_blank" rel="noopener">dados abertos ↗</a></small></div>;
-            }) : <small>nenhuma votação nominal em plenário nesta legislatura — só estimativa partidária</small>}</td>
-        <td class={'n' + (cob[t.id].nominal ? ' real' : '')}>{cob[t.id].nominal}</td>
-        <td class="n">{cob[t.id].estimativa.toLocaleString('pt-BR')}</td>
-      </tr>)}</tbody>
-    </table></div>
-    <p>A tabela de estimativas por partido está em <code>src/data/partidos.json</code>, aberta a revisão. Sugestão de votação nominal que falta pra alguma pauta é o pull request mais útil que este projeto pode receber.</p>
-
-    <h2>Bancadas<br /><span class="out">usadas no peso</span></h2>
-    <div class="bancadas">
-      <div class="banc"><h4>Câmara · {somaCam} cadeiras · API {indice.atualizacoes.camara.slice(0, 10)}</h4>{bancCam.map(([s, x]) => <div>{s} <span>{x}</span></div>)}</div>
-      <div class="banc"><h4>Senado · {somaSen} cadeiras · API {indice.atualizacoes.senado.slice(0, 10)}</h4>{bancSen.map(([s, x]) => <div>{s} <span>{x}</span></div>)}</div>
-    </div>
-    <p>{indice.avisoAssembleias} Fonte: TSE, consulta_cand_2022, situação "eleito".</p>
-    <div class="scroll"><table class="tab ufs">
-      <thead><tr><th>UF</th><th style="text-align:right">candidatos</th><th style="text-align:right">federais</th><th style="text-align:right">estaduais</th><th style="text-align:right">com mandato</th><th style="text-align:right">cadeiras na assembleia</th><th>maiores bancadas (eleitas em 2022)</th></tr></thead>
-      <tbody>{indice.ufs.map(u => <tr>
-        <td><b>{u.uf}</b> {u.nome}</td><td class="n">{u.candidatos.toLocaleString('pt-BR')}</td><td class="n">{u.federais}</td><td class="n">{u.estaduais}</td><td class="n real">{u.comMandato}</td><td class="n">{u.cadeirasAssembleia}</td>
-        <td>{ordenar(u.bancadasAssembleia).slice(0, 6).map(([s, x]) => `${s} ${x}`).join(' · ')}</td>
-      </tr>)}</tbody>
-    </table></div>
-
-    <h2>Candidatos</h2>
-    <p>Lista oficial do TSE (<code>consulta_cand_2026</code>, gerada em {indice.dataTse}): {n.candidatos.toLocaleString('pt-BR')} candidaturas aos 5 cargos nos 27 estados, mais {n.presidenciais} presidenciais. Vices e suplentes de senador ficam de fora. Todos os registros ainda estão em julgamento pela Justiça Eleitoral; inaptos, renúncias, indeferidos e cassados são excluídos a cada reimportação.</p>
-    <p style="margin-top:28px"><a class="cta ghost" href="/app/">Escalar meu time →</a></p>
-  </div>
-  <footer><b>Meu Time Político 2026</b> — dataset gerado em {indice.geradoEm.slice(0, 19).replace('T', ' ')} UTC. Código aberto; sem vínculo com partido, campanha ou candidato. Projeto criado por <a href="https://arturscartazzini.com" rel="author">Artur Scartazzini</a> (Mnova Solutions).</footer>
-</Base>
+    <h2 id="erro">Achou um erro?</h2>
+    <p>Post ligado à pessoa errada, dado desatualizado ou fonte quebrada: <a href="https://github.com/ascartazzini/meu-time-politico/issues">avise aqui</a>.
+      O código é aberto. O quiz da eleição de 2026 e o método dele seguem como arquivo em <a href="/app/">/app/</a> e <a href="/app/metodo/">/app/metodo/</a>.</p>
+  </article>
+</Social>

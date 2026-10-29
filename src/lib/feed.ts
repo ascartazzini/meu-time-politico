@@ -49,7 +49,7 @@ export function papelEmTexto(tipo: string, papel: string, casa?: unknown): { tex
     const t = (casa === 'senado' ? SENADO : CAMARA)[papel];
     return t ? { texto: t[0], tom: t[1] } : { texto: papel, tom: 'neutro' };
   }
-  if (tipo === 'proposicao') return { texto: papel === 'autor' ? 'apresentou' : 'assinou junto', tom: 'neutro' };
+  if (tipo === 'proposicao') return { texto: papel === 'autor' ? 'apresentou um projeto' : 'assinou um projeto junto', tom: 'neutro' };
   if (tipo === 'discurso') return { texto: 'discursou', tom: 'neutro' };
   if (tipo === 'noticia') return { texto: 'citado na imprensa', tom: 'neutro' };
   if (tipo === 'agenda') return { texto: 'na agenda oficial', tom: 'neutro' };
