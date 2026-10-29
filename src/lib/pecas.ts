@@ -171,3 +171,31 @@ export function peca(i: ItemPeca, gente: Map<string, EleitoLeve>, solo?: Ligacao
     default: return `<a class="peca painel" href="${esc(i.url)}" target="_blank" rel="noopener"><p class="manchete">${esc(i.titulo)}</p></a>`;
   }
 }
+
+/* ---------- notícias do mesmo dia num bloco só ---------- */
+
+/** AAAA-MM-DD no horário de Brasília. */
+export const diaBr = (iso: string) => new Date(new Date(iso).getTime() - 3 * 36e5).toISOString().slice(0, 10);
+
+export type Bloco<T> = { item: T } | { dia: string; noticias: T[] };
+
+/** As notícias de um mesmo dia viram um bloco, no lugar da mais recente; o resto fica onde está. */
+export function agruparPorDia<T extends { tipo: string; quando: string }>(itens: T[]): Bloco<T>[] {
+  const out: Bloco<T>[] = [];
+  const porDia = new Map<string, { dia: string; noticias: T[] }>();
+  for (const i of itens) {
+    if (i.tipo !== 'noticia') { out.push({ item: i }); continue; }
+    const dia = diaBr(i.quando);
+    const b = porDia.get(dia);
+    if (b) b.noticias.push(i);
+    else { const novo = { dia, noticias: [i] }; porDia.set(dia, novo); out.push(novo); }
+  }
+  return out;
+}
+
+/** "hoje", "ontem" ou "quinta, 29 de outubro". */
+export function diaEmTexto(dia: string, agora = new Date()): string {
+  if (dia === diaBr(agora.toISOString())) return 'hoje';
+  if (dia === diaBr(new Date(agora.getTime() - 864e5).toISOString())) return 'ontem';
+  return new Date(`${dia}T12:00:00Z`).toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' }).replace('-feira', '');
+}

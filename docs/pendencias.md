@@ -1,7 +1,7 @@
 # Pendências
 
 O que o [plano](plano-pos-eleicao.md) prevê e ainda não está no ar, com o motivo e o que destrava.
-Já entregue até 30/10/2026: timeline um post por vez (capa de jornal com a foto da matéria, projeto em linguagem simples, presença com o total da sessão, discurso em carrossel de trechos literais, agenda com o rosto de quem se encontra), timeline com filtros, notícias agrupadas, cor por tipo, conta com Google, seguir, quatro reações (amei, gostei, odiei, odiei muito), landing page de cada eleito com site e redes (e "insira aqui"), resumo da semana (/semana/) gerado sozinho, páginas dos eleitos com placar do mandato, agenda do presidente com pública × privada.
+Já entregue até 30/10/2026: pergunta do resumo por e-mail depois do login (e troca pelo menu), notícias do mesmo dia num carrossel (Todos, Quem eu sigo, Presidente e resumo da semana), timeline um post por vez (capa de jornal com a foto da matéria, projeto em linguagem simples, presença com o total da sessão, discurso em carrossel de trechos literais, agenda com o rosto de quem se encontra), timeline com filtros, notícias agrupadas, cor por tipo, conta com Google, seguir, quatro reações (amei, gostei, odiei, odiei muito), landing page de cada eleito com site e redes (e "insira aqui"), resumo da semana (/semana/) gerado sozinho, páginas dos eleitos com placar do mandato, agenda do presidente com pública × privada.
 Atualizar quando algo entrar ou mudar de motivo.
 
 ## Precisa de você
@@ -10,7 +10,7 @@ Atualizar quando algo entrar ou mudar de motivo.
 | --- | --- | --- |
 | Coletores rodando sozinhos | o GitHub Actions precisa da chave secreta | `grep '^SUPABASE_SECRET_KEY=' .env \| cut -d= -f2- \| gh secret set SUPABASE_SECRET_KEY` |
 | Login com Google | o provedor Google precisa ser ligado no Supabase com um cliente OAuth criado no Google Cloud (conta sua) | guia em [login-google.md](login-google.md); até lá o botão Entrar não funciona |
-| Resumo diário por e-mail | precisa de conta num serviço de envio com plano gratuito (ex.: Resend, Brevo); criar conta é seu | escolher o serviço e criar a conta; o resto (modelo do e-mail, job diário, descadastro) a gente faz |
+| Envio do resumo por e-mail | quem tem conta já escolhe receber depois do login (`newsletter_escolha` → `lista_espera`); falta mandar: precisa de conta num serviço de envio com plano gratuito (ex.: Resend, Brevo); criar conta é seu | escolher o serviço e criar a conta; o resto (modelo do e-mail, job diário, descadastro) a gente faz |
 
 ## Próximas na fila
 

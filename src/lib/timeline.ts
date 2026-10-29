@@ -2,7 +2,7 @@
    Sem login dá pra ler tudo; pra reagir precisa entrar e seguir alguém ligado ao post. */
 import { rpc } from './supabase';
 import { papelEmTexto, quandoEmTexto, ROTULO_TIPO } from './feed';
-import { peca, type ItemPeca } from './pecas';
+import { peca, agruparPorDia, diaEmTexto, type ItemPeca } from './pecas';
 import { cargoEmTexto, type EleitoLeve } from './eleitos';
 import {
   usuario, seguir, interacoes, reagir, mensagemDeErro, REACOES, type Interacao, type Reacao,
@@ -63,6 +63,15 @@ export function post(i: Item, gente: Map<string, EleitoLeve>, umaPessoa?: string
     ${peca(i, gente, solo)}${fichas}${rodape}</article>`;
 }
 
+/** Bloco das notícias de um dia: carrossel de capas, cada capa com as reações dela. */
+function blocoDoDia(dia: string, ns: Item[], gente: Map<string, EleitoLeve>, rotulo: string): string {
+  return `<section class="dia-imprensa" data-dia="${esc(dia)}">
+    <div class="post-cab"><span class="ava jornal" aria-hidden="true">N</span>
+      <div class="quem"><b>${esc(rotulo)}</b><small>${esc(diaEmTexto(dia))} · <span class="n">${ns.length}</span> ${ns.length === 1 ? 'notícia' : 'notícias'}</small></div>
+      <div class="canto"><span class="contador">1/${ns.length}</span><span class="setas"><button type="button" data-seta="-1" aria-label="Notícia anterior">‹</button><button type="button" data-seta="1" aria-label="Próxima notícia">›</button></span></div></div>
+    <div class="carrossel capas" tabindex="0" aria-label="Notícias do dia, deslize pro lado">${ns.map(i => post(i, gente)).join('')}</div></section>`;
+}
+
 export interface OpcoesTimeline {
   raiz: HTMLElement;
   /** null = todos os políticos */
@@ -72,6 +81,8 @@ export interface OpcoesTimeline {
   vazio: () => string;
   local: string;
   umaPessoa?: string;
+  /** Junta as notícias de cada dia num carrossel (home: Todos, Quem eu sigo, Presidente). Devolve o nome do bloco, ou null pra não juntar. */
+  agruparNoticias?: () => string | null;
 }
 
 export function montarTimeline(o: OpcoesTimeline): { recarregar: () => void } {
@@ -90,9 +101,19 @@ export function montarTimeline(o: OpcoesTimeline): { recarregar: () => void } {
       const novos = await rpc<Item[]>('feed', { p_slugs: slugs, p_tipos: o.tipos(), p_antes: acrescentar ? itens.at(-1)?.quando ?? null : null, p_limite: POR_PAGINA, p_fontes: o.fontes?.() ?? null });
       if (meu !== pedido) return;
       itens = acrescentar ? [...itens, ...novos] : novos;
-      const html = novos.map(i => post(i, gente, o.umaPessoa)).join('');
-      if (acrescentar) lista.insertAdjacentHTML('beforeend', html);
-      else lista.innerHTML = html || `<p class="vazio">${o.vazio()}</p>`;
+      const rotulo = o.agruparNoticias?.() ?? null;
+      if (!acrescentar) lista.innerHTML = novos.length ? '' : `<p class="vazio">${o.vazio()}</p>`;
+      if (!rotulo) lista.insertAdjacentHTML('beforeend', novos.map(i => post(i, gente, o.umaPessoa)).join(''));
+      else for (const b of agruparPorDia(novos)) {
+        if ('item' in b) { lista.insertAdjacentHTML('beforeend', post(b.item, gente, o.umaPessoa)); continue; }
+        // a página seguinte pode trazer mais notícias de um dia que já tem bloco: entram no mesmo carrossel
+        const ja = lista.querySelector<HTMLElement>(`.dia-imprensa[data-dia="${b.dia}"]`);
+        if (!ja) { lista.insertAdjacentHTML('beforeend', blocoDoDia(b.dia, b.noticias, gente, rotulo)); continue; }
+        ja.querySelector('.capas')!.insertAdjacentHTML('beforeend', b.noticias.map(i => post(i, gente)).join(''));
+        const n = ja.querySelectorAll('.capas > .post').length;
+        ja.querySelector('.n')!.textContent = String(n);
+        atualizarContador(ja.querySelector<HTMLElement>('.capas')!);
+      }
       mais.hidden = novos.length < POR_PAGINA;
       if (novos.length) pintarInteracoes(novos.map(i => i.id));
     } catch {
@@ -169,13 +190,24 @@ export function montarTimeline(o: OpcoesTimeline): { recarregar: () => void } {
     }
   });
 
-  // carrossel de discurso: o ponto aceso acompanha o slide (scroll não sobe, por isso a captura)
+  // carrossel (discurso e notícias do dia): ponto aceso e contador acompanham o slide (scroll não sobe, por isso a captura)
+  function atualizarContador(c: HTMLElement) {
+    const passo = (c.firstElementChild as HTMLElement | null)?.offsetWidth ?? c.clientWidth;
+    const k = Math.round(c.scrollLeft / (passo + parseFloat(getComputedStyle(c).columnGap || '0')));
+    c.parentElement?.querySelectorAll('.pontos i').forEach((p, j) => p.classList.toggle('on', j === k));
+    const cont = c.parentElement?.querySelector('.contador');
+    if (cont) cont.textContent = `${Math.min(k + 1, c.children.length)}/${c.children.length}`;
+  }
   o.raiz.addEventListener('scroll', e => {
     const c = e.target as HTMLElement;
-    if (!c.classList?.contains('carrossel')) return;
-    const k = Math.round(c.scrollLeft / c.clientWidth);
-    c.parentElement?.querySelectorAll('.pontos i').forEach((p, j) => p.classList.toggle('on', j === k));
+    if (c.classList?.contains('carrossel')) atualizarContador(c);
   }, true);
+  o.raiz.addEventListener('click', e => {
+    const seta = (e.target as HTMLElement).closest<HTMLElement>('[data-seta]');
+    if (!seta) return;
+    const c = seta.closest('.dia-imprensa')!.querySelector<HTMLElement>('.capas')!;
+    c.scrollBy({ left: Number(seta.dataset.seta) * ((c.firstElementChild as HTMLElement).offsetWidth + 10), behavior: 'smooth' });
+  });
 
   mais.addEventListener('click', () => carregar(true));
   addEventListener('mtp:seguidos', () => { if (itens.length) pintarInteracoes(itens.map(i => i.id)); });

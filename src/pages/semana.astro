@@ -26,6 +26,7 @@ import { CONSENTIMENTO } from '../lib/lista-espera';
     import { SUPABASE_URL, SUPABASE_CHAVE_PUBLICA } from '../lib/supabase';
     import { dataLonga, CASA, type Edicao } from '../lib/edicao';
     import { separarReferencia, explicarEmenta, maiuscula } from '../lib/linguagem';
+    import { diaBr, diaEmTexto } from '../lib/pecas';
     import { inscrever } from '../lib/lista-espera';
     import { seguidos } from '../lib/conta';
     import { eleitos } from '../lib/timeline';
@@ -46,13 +47,20 @@ import { CONSENTIMENTO } from '../lib/lista-espera';
       const ed = linha.dados;
       document.getElementById('quando')!.innerHTML = `Semana de <b>${esc(dataLonga(ed.semana))}</b>. Tudo com a fonte; toque pra abrir.`;
       const dataCurta = new Date(`${ed.semana}T12:00:00Z`).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
-      const noticias = ed.noticias.length ? ed.noticias.map(n => `<article class="post t-noticia">
+      const capa = (n: Edicao['noticias'][number]) => `<article class="post t-noticia">
           <a class="peca capa ${n.imagem ? 'com-foto' : 'sem-foto'}" href="${esc(n.url)}" target="_blank" rel="noopener">
-            <span class="capa-topo"><b>${esc(n.fonte)}</b><small>semana de ${esc(dataCurta)}</small></span>
+            <span class="capa-topo"><b>${esc(n.fonte)}</b><small>${n.quando ? esc(diaEmTexto(diaBr(n.quando))) : `semana de ${esc(dataCurta)}`}</small></span>
             ${n.imagem ? `<img class="capa-foto" src="${esc(n.imagem)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.closest('.capa').classList.replace('com-foto','sem-foto');this.remove()" />` : ''}
             <span class="capa-texto"><strong>${esc(n.titulo)}</strong></span></a>
           ${n.outras.length ? `<p class="tambem">Também na capa de ${n.outras.map(o => `<a href="${esc(o.url)}" target="_blank" rel="noopener">${esc(o.fonte)}</a>`).join(' · ')}</p>` : ''}
-          ${n.politicos.length ? `<div class="gente">${n.politicos.map(p => `<a href="/politico/${esc(p.slug)}/">${esc(p.nome)}</a>`).join('')}</div>` : ''}</article>`).join('')
+          ${n.politicos.length ? `<div class="gente">${n.politicos.map(p => `<a href="/politico/${esc(p.slug)}/">${esc(p.nome)}</a>`).join('')}</div>` : ''}</article>`;
+      // as do mesmo dia num carrossel; dias do mais recente pro mais antigo, e dentro do dia na ordem de importância
+      const dias = new Map<string, Edicao['noticias']>();
+      for (const n of ed.noticias) { const d = n.quando ? diaBr(n.quando) : ed.semana; dias.set(d, [...(dias.get(d) ?? []), n]); }
+      const noticias = ed.noticias.length ? [...dias].sort((x, y) => y[0].localeCompare(x[0])).map(([d, ns]) => `<section class="dia-imprensa" data-dia="${esc(d)}">
+          <div class="post-cab"><span class="ava jornal" aria-hidden="true">N</span><div class="quem"><b>${esc(maiuscula(diaEmTexto(d)))}</b><small>${ns.length} ${ns.length === 1 ? 'notícia' : 'notícias'}</small></div>
+          <div class="canto"><span class="contador">1/${ns.length}</span>${ns.length > 1 ? '<span class="setas"><button type="button" data-seta="-1" aria-label="Notícia anterior">‹</button><button type="button" data-seta="1" aria-label="Próxima notícia">›</button></span>' : ''}</div></div>
+          <div class="carrossel capas">${ns.map(capa).join('')}</div></section>`).join('')
         : '<p class="vazio">Semana fraca de notícia sobre os eleitos nos veículos que acompanhamos.</p>';
       const pauta = ed.pauta.length ? ed.pauta.map(d => `<p class="dia-semana">${esc(dataLonga(d.dia))} · ${CASA[d.casa]}</p>
           ${d.itens.map(i => { const r = separarReferencia(`${i.materia}: ${i.ementa ?? ''}`); return `<a class="item-pauta" href="${esc(i.url)}" target="_blank" rel="noopener">
@@ -70,6 +78,19 @@ import { CONSENTIMENTO } from '../lib/lista-espera';
         + `<section class="caixa" style="background:var(--marca);border-color:var(--marca)"><h2>Cobre quem você elegeu.</h2>${cobrar}</section>`;
       evento('semana_abrir', { semana: ed.semana });
     }
+    // contador do carrossel de cada dia
+    document.getElementById('edicao')!.addEventListener('scroll', e => {
+      const c = e.target as HTMLElement;
+      if (!c.classList?.contains('capas')) return;
+      const k = Math.round(c.scrollLeft / ((c.firstElementChild as HTMLElement).offsetWidth + 10));
+      c.parentElement!.querySelector('.contador')!.textContent = `${Math.min(k + 1, c.children.length)}/${c.children.length}`;
+    }, true);
+    document.getElementById('edicao')!.addEventListener('click', e => {
+      const seta = (e.target as HTMLElement).closest<HTMLElement>('[data-seta]');
+      if (!seta) return;
+      const c = seta.closest('.dia-imprensa')!.querySelector<HTMLElement>('.capas')!;
+      c.scrollBy({ left: Number(seta.dataset.seta) * ((c.firstElementChild as HTMLElement).offsetWidth + 10), behavior: 'smooth' });
+    });
     abrir().catch(() => { document.getElementById('quando')!.textContent = 'Não deu pra carregar agora. Tenta de novo daqui a pouco.'; });
 
     document.getElementById('formEmail')!.addEventListener('submit', async e => {

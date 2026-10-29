@@ -71,3 +71,8 @@ export type Interacao = { item_id: string; minha: Reacao | null; pode: boolean }
 
 export const interacoes = (itens: string[]) => chamar<Interacao[]>('interacoes', { p_itens: itens });
 export const reagir = (item: string, tipo: Reacao | null) => chamar<void>('reagir', { p_item: item, p_tipo: tipo });
+
+/* Resumo da semana por e-mail pra quem tem conta: null = ainda não escolheu (aí o site pergunta uma vez). */
+export const newsletterMinha = () => chamar<boolean | null>('newsletter_minha', {});
+export const newsletterEscolher = (quer: boolean, consentimento: string | null) =>
+  chamar<void>('newsletter_escolher', { p_quer: quer, p_consentimento: consentimento });

@@ -4,6 +4,7 @@ import '../styles/fontes.css';
 import '../styles/fontes-fallback.css';
 import '../styles/social.css';
 import Cabeca from '../components/Cabeca.astro';
+import { CONSENTIMENTO } from '../lib/lista-espera';
 interface Props { title: string; description?: string; noindex?: boolean }
 const { title, description, noindex = false } = Astro.props;
 ---
@@ -22,18 +23,26 @@ const { title, description, noindex = false } = Astro.props;
           Entrar
         </button>
         <button class="eu" type="button" id="eu" aria-haspopup="true" aria-expanded="false" hidden></button>
+        <div class="menu" id="menu" hidden>
+          <a href="/seguir/">Quem eu sigo</a>
+          <a href="/semana/">Resumo da semana</a>
+          <button type="button" id="mNews" hidden>Receber o resumo por e-mail</button>
+          <a href="/metodo/">Como funciona</a>
+          <button type="button" id="sair">Sair</button>
+        </div>
       </div>
-    </div>
-    <div class="menu" id="menu" hidden>
-      <a href="/seguir/">Quem eu sigo</a>
-      <a href="/semana/">Resumo da semana</a>
-      <a href="/metodo/">Como funciona</a>
-      <button type="button" id="sair">Sair</button>
     </div>
     <slot name="filtros" />
   </header>
 
   <main><slot /></main>
+
+  <div class="pergunta" id="pNews" role="dialog" aria-labelledby="pNewsT" hidden>
+    <p class="pergunta-t" id="pNewsT">Quer o resumo da semana no seu e-mail?</p>
+    <p>Toda sexta: as notícias que mais saíram sobre os eleitos, as votações marcadas e os marcos que vêm aí. Vai pra <b id="pNewsEmail"></b>.</p>
+    <small>{CONSENTIMENTO}</small>
+    <div class="pergunta-b"><button class="btn" type="button" data-news="sim">Quero receber</button><button class="btn leve" type="button" data-news="nao">Agora não</button></div>
+  </div>
 
   <footer class="rodape">
     Meu Time Político — tech cívica, código aberto, sem vínculo com partido, campanha ou político. Cada item tem link pra fonte.
@@ -41,7 +50,8 @@ const { title, description, noindex = false } = Astro.props;
   </footer>
 
   <script>
-    import { cliente, entrar, sair, seguidos, trazerTimeDoAparelho } from '../lib/conta';
+    import { cliente, entrar, sair, seguidos, trazerTimeDoAparelho, newsletterMinha, newsletterEscolher, mensagemDeErro } from '../lib/conta';
+    import { CONSENTIMENTO } from '../lib/lista-espera';
     import { evento } from '../lib/analytics';
     import { toast } from '../lib/toast';
 
@@ -66,6 +76,7 @@ const { title, description, noindex = false } = Astro.props;
       if (!u) return;
       const nome = String(u.user_metadata.full_name ?? u.user_metadata.name ?? 'Você').split(' ')[0];
       const foto = u.user_metadata.avatar_url as string | undefined;
+      verNewsletter(u.email ?? '');
       eu.innerHTML = `${foto ? `<img src="${esc(foto)}" alt="" referrerpolicy="no-referrer" />` : `<span class="ini">${esc(nome[0])}</span>`}${esc(nome)}`;
       if (ev === 'SIGNED_IN' && new URLSearchParams(location.search).has('code')) {
         history.replaceState(null, '', location.pathname);
@@ -75,6 +86,28 @@ const { title, description, noindex = false } = Astro.props;
         if (!(await seguidos()).size && location.pathname !== '/seguir/') location.href = '/seguir/';
       }
     });
+    // Resumo por e-mail: quem tem conta escolhe uma vez (a pergunta aparece até responder); depois troca pelo menu.
+    const pNews = document.getElementById('pNews')!, mNews = document.getElementById('mNews')!;
+    let querNews: boolean | null = null, perguntou = false;
+    const rotuloNews = () => { mNews.hidden = false; mNews.textContent = querNews ? 'Parar o resumo por e-mail' : 'Receber o resumo por e-mail'; };
+    async function verNewsletter(email: string) {
+      if (perguntou) return;
+      perguntou = true;
+      querNews = await newsletterMinha().catch(() => false);
+      rotuloNews();
+      if (querNews === null) { document.getElementById('pNewsEmail')!.textContent = email; pNews.hidden = false; evento('newsletter_pergunta', {}); }
+    }
+    async function escolherNews(quer: boolean, local: string) {
+      try {
+        await newsletterEscolher(quer, quer ? CONSENTIMENTO : null);
+        querNews = quer; rotuloNews(); pNews.hidden = true;
+        evento('newsletter_escolha', { quer: String(quer), local });
+        toast(quer ? 'Pronto: o resumo chega toda sexta no seu e-mail.' : local === 'menu' ? 'Feito: você saiu da lista.' : 'Tudo bem. Dá pra mudar depois pelo menu.');
+      } catch (err) { toast(mensagemDeErro(err)); }
+    }
+    pNews.addEventListener('click', e => { const b = (e.target as HTMLElement).closest<HTMLElement>('[data-news]'); if (b) escolherNews(b.dataset.news === 'sim', 'login'); });
+    mNews.addEventListener('click', () => { menu.hidden = true; escolherNews(!querNews, 'menu'); });
+
     cliente().auth.getSession().then(({ data }) => { if (!data.session) bEntrar.hidden = false; });
   </script>
 </body>

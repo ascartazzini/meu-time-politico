@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { peca, type ItemPeca } from '../src/lib/pecas';
+import { peca, agruparPorDia, diaEmTexto, type ItemPeca } from '../src/lib/pecas';
 import { imagemDoHtml } from '../scripts/coletores/imagem';
 import type { EleitoLeve } from '../src/lib/eleitos';
 
@@ -87,5 +87,25 @@ describe('imagemDoHtml', () => {
     expect(imagemDoHtml('<meta content="https://a.com/f.jpg" property="og:image" />')).toBe('https://a.com/f.jpg');
     expect(imagemDoHtml('<meta property="og:image" content="https://camara.leg.br/imagem-padrao.jpg">')).toBeNull();
     expect(imagemDoHtml('<meta property="og:image" content="http://inseguro/f.jpg">')).toBeNull();
+  });
+});
+
+describe('agruparPorDia', () => {
+  const it_ = (id: string, tipo: string, quando: string) => ({ id, tipo, quando });
+  it('notícias do mesmo dia (Brasília) num bloco, no lugar da mais recente; o resto não sai do lugar', () => {
+    const bs = agruparPorDia([
+      it_('n1', 'noticia', '2026-10-29T20:00:00Z'), it_('v1', 'voto', '2026-10-29T19:00:00Z'), it_('n2', 'noticia', '2026-10-29T10:00:00Z'),
+      it_('n3', 'noticia', '2026-10-29T02:00:00Z'),   // 23h do dia 28 em Brasília
+      it_('a1', 'agenda', '2026-10-28T15:00:00Z'), it_('n4', 'noticia', '2026-10-28T12:00:00Z'),
+    ]);
+    expect(bs.map(b => ('item' in b ? b.item.id : `${b.dia}:${b.noticias.map(n => n.id).join(',')}`))).toEqual([
+      '2026-10-29:n1,n2', 'v1', '2026-10-28:n3,n4', 'a1',
+    ]);
+  });
+  it('dia em texto', () => {
+    const agora = new Date('2026-10-29T15:00:00Z');
+    expect(diaEmTexto('2026-10-29', agora)).toBe('hoje');
+    expect(diaEmTexto('2026-10-28', agora)).toBe('ontem');
+    expect(diaEmTexto('2026-10-26', agora)).toBe('segunda, 26 de outubro');
   });
 });

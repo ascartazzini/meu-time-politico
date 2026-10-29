@@ -24,7 +24,8 @@ button{font:inherit;color:inherit;cursor:pointer}
 .entrar{display:flex;align-items:center;gap:8px;background:var(--ink);color:#fff;border:0;border-radius:999px;padding:9px 16px;font-weight:700;font-size:14px}
 .eu{display:flex;align-items:center;gap:8px;background:none;border:1px solid var(--line);border-radius:999px;padding:3px 12px 3px 3px;font-size:14px;font-weight:600}
 .eu img,.eu .ini{width:30px;height:30px;border-radius:50%;object-fit:cover;background:var(--hover);display:grid;place-items:center;font-size:13px}
-.menu{position:absolute;right:16px;top:54px;background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.08);padding:6px;min-width:180px}
+.conta{position:relative}
+.menu{position:absolute;right:0;top:calc(100% + 8px);z-index:20;background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.08);padding:6px;min-width:180px}
 .menu a,.menu button{display:block;width:100%;text-align:left;background:none;border:0;border-radius:8px;padding:10px 12px;text-decoration:none;font-size:15px}
 .menu a:hover,.menu button:hover{background:var(--hover)}
 
@@ -152,6 +153,24 @@ main{max-width:640px;margin:0 auto;padding:12px 16px 80px}
 .icone-grande{font-size:70px;line-height:1}
 .painel .nat{align-self:flex-start;background:rgba(255,255,255,.18);color:#fff}
 
+/* notícias do dia: carrossel de capas, a próxima aparecendo na borda */
+.dia-imprensa{padding:20px 0 6px;border-bottom:1px solid var(--line);--tipo:#16181A}
+.dia-imprensa > .post-cab .quem b{font-size:16px}
+.contador{font-size:12px;font-weight:700;color:var(--sub)}
+.setas{display:flex;gap:4px}
+.setas button{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:18px;line-height:1}
+.setas button:hover{background:var(--hover)}
+@media (hover:none){.setas{display:none}}
+.capas{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
+.capas::-webkit-scrollbar{display:none}
+.capas > .post{flex:0 0 100%;scroll-snap-align:start;padding:0 0 4px;border-bottom:0;min-width:0}
+.capas > .post .peca{margin:0;border-radius:18px}
+.capas > .post .canto .tipo{display:none}
+@media (max-width:600px){
+  .capas{margin:0 -16px;padding:0 16px;scroll-padding:0 16px}
+  .capas > .post{flex-basis:calc(100% - 28px)}
+}
+
 /* embaixo da peça */
 .ref{margin-top:10px;font-size:13.5px;color:var(--sub)}
 .ref summary{cursor:pointer;list-style:none}
@@ -202,6 +221,16 @@ main{max-width:640px;margin:0 auto;padding:12px 16px 80px}
 .reacoes button[aria-pressed="true"].r-odiei,.reacoes button[aria-pressed="true"].r-odiei_muito{color:var(--ruim)}
 .aviso-post{margin-top:8px;font-size:14px;background:var(--hover);border-radius:10px;padding:8px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .aviso-post button{background:var(--ink);color:#fff;border:0;border-radius:999px;padding:5px 12px;font-size:13px;font-weight:700}
+
+/* ---- pergunta depois do login (resumo por e-mail) ---- */
+.pergunta{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:40;width:min(560px,calc(100% - 24px));background:var(--ink);color:#fff;border-radius:20px;padding:18px 18px 16px;box-shadow:0 16px 40px rgba(0,0,0,.25)}
+.pergunta-t{font-family:var(--display);text-transform:uppercase;font-size:24px;line-height:1.05}
+.pergunta p{margin-top:8px;font-size:15px;color:#DADDE0}
+.pergunta p b{color:#fff}
+.pergunta small{display:block;margin-top:8px;font-size:12px;color:#9AA0A6;line-height:1.35}
+.pergunta-b{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.pergunta .btn{background:var(--marca);color:var(--ink)}
+.pergunta .btn.leve{background:transparent;color:#fff;border-color:#4A5057}
 
 /* ---- toast ---- */
 .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:12px;padding:10px 16px;font-size:14.5px;z-index:50;max-width:calc(100% - 32px);box-shadow:0 8px 24px rgba(0,0,0,.18)}

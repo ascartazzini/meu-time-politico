@@ -49,6 +49,8 @@ import cadastro from '../data/generated/eleitos-2027.json';
     const tl = montarTimeline({
       raiz: document.getElementById('timeline')!, local: 'home', slugs,
       tipos: () => FILTROS[filtro]?.tipos ?? null, fontes: () => FILTROS[filtro]?.fontes ?? null,
+      // notícias do mesmo dia num carrossel só; nas abas que são só de um tipo (imprensa, casa, agenda) não
+      agruparNoticias: () => busca.value.trim() ? null : filtro === 'presidente' ? 'O presidente na imprensa' : filtro === 'meus' ? 'Seu time na imprensa' : filtro === 'todos' ? 'Na imprensa' : null,
       vazio: () => busca.value.trim() ? 'Ninguém com esse nome, ou nada dele ainda.'
         : filtro === 'meus' ? 'Você ainda não segue ninguém. <a href="/seguir/">Escolha quem seguir</a>.' : 'Nada por aqui ainda.',
     });
