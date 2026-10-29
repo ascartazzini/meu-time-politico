@@ -13,6 +13,10 @@ npm test               # motor de cálculo, codificação do link, casamento de 
 npm run cadastro       # eleitos de 2026 (TSE) → src/data/generated/eleitos-2027.json
 npm run cadastro:carregar  # sobe o cadastro pro Supabase (precisa de SUPABASE_SECRET_KEY no .env)
 npm run coletar        # coletores do feed: Câmara, Senado e imprensa → Supabase (mesmo .env)
+npm run coletar:pauta  # pauta futura do plenário (Câmara e Senado), pra newsletter
+npm run newsletter     # monta a edição da semana em `edicoes` (página /semana/ + HTML do e-mail)
+npm run links          # site e redes de cada eleito (TSE, Câmara, sugestões aprovadas) → links-eleitos.json
+npm run sugestoes      # lista as sugestões de link ("insira aqui"); --aprovar=ID,ID · --recusar=ID
 ```
 
 Os coletores rodam sozinhos no GitHub Actions (`.github/workflows/coletar.yml`): imprensa de hora em hora; Câmara, Senado e agenda do presidente a cada 3 horas. Precisam do secret `SUPABASE_SECRET_KEY` no repositório.
@@ -49,6 +53,10 @@ scripts/cadastro-eleitos.ts  `npm run cadastro`: eleitos de 2026 (TSE) + senador
 scripts/carregar-cadastro.ts `npm run cadastro:carregar`: sobe o cadastro pro Supabase (upsert); precisa de SUPABASE_SECRET_KEY no .env
 scripts/coletores/           camara.ts (presença, votos, projetos) · senado.ts (votos, discursos) · presidente.ts (agenda do Planalto) · imprensa.ts (RSS) · citacoes.ts, agenda.ts e agrupar.ts (mesma notícia em vários veículos vira um card; regras puras, testadas) · banco.ts (escrita no Supabase)
 src/lib/mandato.ts           placar do mandato na página do político (função placar_mandato), em partes, sem nota única
+src/lib/edicao.ts            newsletter: monta a edição (notícias agrupadas, pauta, marcos, chamada) e o HTML do e-mail (puro, testado)
+src/data/marcos.json         datas que são regra (posses, sessão legislativa, prazos do Orçamento), com a fonte
+scripts/links.ts             normaliza e escolhe os links de cada eleito (puro, testado) · links-eleitos.ts monta o arquivo
+src/pages/semana.astro       resumo da semana (lê a última edição do banco) · politico/[slug].astro: landing page do eleito
 docs/pendencias.md           o que o plano prevê e ainda não está no ar, com o motivo
 src/layouts/Social.astro     layout claro do site (topo, conta); Base.astro ficou só pro quiz em /app/
 src/components/Cabeca.astro  <head> comum: GA (só em produção), metatags, fontes, dados estruturados

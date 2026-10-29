@@ -1,0 +1,14 @@
+{
+  "$comment": "Marcos políticos que entram na newsletter quando faltam até 60 dias. Só data que é regra (Constituição, ADCT, EC 111/2021), nada de previsão. Fonte em cada um.",
+  "marcos": [
+    { "data": "2026-12-22", "titulo": "Fim da sessão legislativa de 2026", "detalhe": "Último dia de trabalho do Congresso no ano; o Orçamento de 2027 precisa ser votado até aqui. Depois vem o recesso.", "fonte": "Constituição, art. 57; ADCT, art. 35" },
+    { "data": "2027-01-05", "titulo": "Posse do presidente", "detalhe": "O presidente eleito em 2026 assume o mandato de 2027 a 2031.", "fonte": "Constituição, art. 82 (EC 111/2021)" },
+    { "data": "2027-01-06", "titulo": "Posse dos governadores", "detalhe": "Os 27 governadores eleitos assumem.", "fonte": "Constituição, art. 28 (EC 111/2021)" },
+    { "data": "2027-02-01", "titulo": "Posse de deputados federais e senadores e eleição das Mesas", "detalhe": "Começa a nova legislatura. No mesmo período, Câmara e Senado elegem quem vai presidir cada casa.", "fonte": "Constituição, art. 57, § 4º" },
+    { "data": "2027-02-02", "titulo": "Abertura dos trabalhos do Congresso", "detalhe": "Começa a primeira sessão legislativa da nova legislatura.", "fonte": "Constituição, art. 57" },
+    { "data": "2027-04-15", "titulo": "Prazo do governo pra mandar a LDO de 2028", "detalhe": "A Lei de Diretrizes Orçamentárias define as regras do Orçamento do ano seguinte.", "fonte": "ADCT, art. 35, § 2º, II" },
+    { "data": "2027-07-17", "titulo": "Fim do primeiro semestre legislativo", "detalhe": "O Congresso só entra em recesso de julho depois de aprovar a LDO.", "fonte": "Constituição, art. 57, § 2º" },
+    { "data": "2027-08-31", "titulo": "Prazo do governo pra mandar o Orçamento de 2028", "detalhe": "O projeto da Lei Orçamentária chega ao Congresso.", "fonte": "ADCT, art. 35, § 2º, III" },
+    { "data": "2027-12-22", "titulo": "Fim da sessão legislativa de 2027", "detalhe": "Prazo pra votar o Orçamento de 2028.", "fonte": "Constituição, art. 57; ADCT, art. 35" }
+  ]
+}

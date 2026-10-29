@@ -48,3 +48,24 @@ export function desdeEmTexto(desde: string | null): string {
   if (!desde) return 'Ainda não há nada coletado.';
   return `Contado desde ${new Date(desde).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' })}, quando a coleta começou. Não é o mandato inteiro.`;
 }
+
+export interface Destaque { numero: number; sufixo?: string; rotulo: string; nota?: string; tom?: 'bom' | 'ruim' }
+
+/** Os mesmos números do placar, no formato da página do político: um número grande por bloco. */
+export function destaquesDoPlacar(p: PlacarMandato): Destaque[] {
+  const out: Destaque[] = [];
+  const sessoes = p.plenario_esteve + p.plenario_faltou;
+  if (sessoes) out.push({
+    numero: Math.round((p.plenario_esteve / sessoes) * 100), sufixo: '%', rotulo: 'de presença no plenário',
+    nota: `${p.plenario_esteve} de ${sessoes} sessões deliberativas`, tom: p.plenario_faltou / sessoes > 0.2 ? 'ruim' : 'bom',
+  });
+  const chamadas = p.votos + p.votos_faltou;
+  if (chamadas) out.push({ numero: p.votos, rotulo: 'votações nominais', nota: `de ${chamadas} em que foi chamado`, tom: p.votos_faltou / chamadas > 0.2 ? 'ruim' : undefined });
+  if (p.projetos_autor) out.push({ numero: p.projetos_autor, rotulo: p.projetos_autor === 1 ? 'projeto apresentado' : 'projetos apresentados', nota: p.projetos_coautor ? `e assinou junto ${p.projetos_coautor}` : undefined });
+  else if (p.projetos_coautor) out.push({ numero: p.projetos_coautor, rotulo: 'projetos que assinou junto' });
+  if (p.discursos) out.push({ numero: p.discursos, rotulo: p.discursos === 1 ? 'discurso em plenário' : 'discursos em plenário' });
+  const ag = p.agenda, totalAg = ag.publica + ag.privada + ag.partidaria + ag.pessoal + ag.sem;
+  if (totalAg) out.push({ numero: totalAg, rotulo: 'compromissos na agenda', nota: `${ag.publica} com órgão público${ag.privada ? `, ${ag.privada} com setor privado` : ''}` });
+  if (p.imprensa) out.push({ numero: p.imprensa, rotulo: p.imprensa === 1 ? 'notícia nos grandes veículos' : 'notícias nos grandes veículos', nota: 'mede exposição, não trabalho' });
+  return out;
+}

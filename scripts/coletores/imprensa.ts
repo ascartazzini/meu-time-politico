@@ -1,7 +1,8 @@
 /* Coletor de imprensa: RSS de política dos grandes veículos aprovados na Fase 0 (docs/fase0/README.md).
    Guarda título, link, data e a linha fina do próprio feed; nunca o texto da matéria.
    Liga ao político pelo nome (citacoes.ts). Os feeds cobrem 1 a 2 dias, então roda de hora em hora.
-   Depois de gravar, junta a mesma notícia de veículos diferentes num grupo (agrupar.ts).
+   Depois de gravar, refaz as ligações por nome da última semana com a regra atual (uma regra
+   melhor corrige o passado) e junta a mesma notícia de veículos diferentes num grupo (agrupar.ts).
    Uso: npm run coletar:imprensa */
 import { UA } from '../util';
 import { gravar, hash, politicos, emLotes, pedir, type ItemNovo } from './banco';
@@ -36,9 +37,11 @@ async function baixar(url: string): Promise<string | null> {
   } finally { clearTimeout(timer); }
 }
 
+let idx: ReturnType<typeof indiceDeNomes>;
+
 async function main() {
   console.log('▶ Imprensa');
-  const idx = indiceDeNomes(await politicos());
+  idx = indiceDeNomes(await politicos());
   const itens: ItemNovo[] = [];
   const vistos = new Set<string>();
   await emLotes(FEEDS, 4, async f => {
@@ -63,6 +66,22 @@ async function main() {
   });
   const r = await gravar(itens);
   console.log(`  ✓ imprensa: ${r.itens} itens, ${r.ligacoes} ligações`);
+}
+
+/** Remove ligação por nome que a regra atual não confirma mais (só das notícias dos últimos 7 dias). */
+async function revisarLigacoes() {
+  const desde = new Date(Date.now() - 7 * 864e5).toISOString();
+  const ns = await pedir<{ id: string; titulo: string; resumo: string | null; item_politico: { politico_id: string; metodo: string }[] }[]>(
+    `itens?tipo=eq.noticia&quando=gte.${desde}&select=id,titulo,resumo,item_politico(politico_id,metodo)&limit=5000`);
+  let removidas = 0;
+  for (const n of ns) {
+    const valem = new Set(citados(`${n.titulo}. ${n.resumo ?? ''}`, idx).map(c => c.id));
+    const sobrando = n.item_politico.filter(ip => ip.metodo === 'nome' && !valem.has(ip.politico_id)).map(ip => ip.politico_id);
+    if (!sobrando.length) continue;
+    await pedir(`item_politico?item_id=eq.${n.id}&politico_id=in.(${sobrando.join(',')})`, { method: 'DELETE', headers: { Prefer: 'return=minimal' } });
+    removidas += sobrando.length;
+  }
+  console.log(`  ✓ ligações revistas: ${removidas} removidas`);
 }
 
 /** Reagrupa as notícias dos últimos 4 dias e grava só o que mudou. Quem já tinha grupo mantém. */
@@ -90,4 +109,4 @@ async function reagrupar() {
   console.log(`  ✓ grupos: ${linhas.length} notícias em ${cards} cards (${[...mudou.values()].flat().length} atualizadas)`);
 }
 
-main().then(reagrupar).catch(e => { console.error('✗ coletor de imprensa falhou:', e.message); process.exit(1); });
+main().then(revisarLigacoes).then(reagrupar).catch(e => { console.error('✗ coletor de imprensa falhou:', e.message); process.exit(1); });

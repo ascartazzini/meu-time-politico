@@ -1,0 +1,75 @@
+---
+/* Resumo da semana (a newsletter na web). Lê a última edição de `edicoes` no navegador: a edição nova
+   aparece sem republicar o site. ?s=AAAA-MM-DD abre uma semana anterior. */
+import Social from '../layouts/Social.astro';
+import { CONSENTIMENTO } from '../lib/lista-espera';
+---
+<Social title="Resumo da semana — Meu Time Político" description="As notícias da semana sobre os eleitos, as votações marcadas no Congresso e os marcos que vêm aí. Toda sexta, com a fonte de cada coisa.">
+  <section class="caixa">
+    <h1>Resumo da semana</h1>
+    <p id="quando">Carregando…</p>
+  </section>
+  <div id="edicao"></div>
+
+  <section class="caixa" id="assinar">
+    <h2>Receber por e-mail</h2>
+    <p>Toda sexta, o resumo na sua caixa de entrada. Sem spam, e dá pra sair a qualquer hora.</p>
+    <form id="formEmail" style="margin-top:10px;display:flex;flex-direction:column;gap:10px">
+      <input class="busca" style="margin:0" type="email" name="email" required autocomplete="email" placeholder="voce@exemplo.com" />
+      <label style="font-size:13px;color:var(--sub);display:flex;gap:8px;align-items:flex-start"><input type="checkbox" name="ok" required style="margin-top:3px" /> {CONSENTIMENTO}</label>
+      <button class="btn" type="submit" style="align-self:flex-start">Quero receber</button>
+      <p id="msgEmail" role="status" style="font-size:14px"></p>
+    </form>
+  </section>
+
+  <script>
+    import { SUPABASE_URL, SUPABASE_CHAVE_PUBLICA } from '../lib/supabase';
+    import { dataLonga, CASA, type Edicao } from '../lib/edicao';
+    import { inscrever } from '../lib/lista-espera';
+    import { seguidos } from '../lib/conta';
+    import { eleitos } from '../lib/timeline';
+    import { evento } from '../lib/analytics';
+
+    const esc = (s: string) => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+    const caixa = (titulo: string, corpo: string, cor = 'var(--line)') =>
+      `<section class="caixa" style="border-left:4px solid ${cor}"><h2>${titulo}</h2>${corpo}</section>`;
+
+    async function abrir() {
+      const s = new URLSearchParams(location.search).get('s');
+      const filtro = s && /^\d{4}-\d{2}-\d{2}$/.test(s) ? `semana=eq.${s}` : 'order=semana.desc&limit=1';
+      const r = await fetch(`${SUPABASE_URL}/rest/v1/edicoes?select=dados&${filtro}`, { headers: { apikey: SUPABASE_CHAVE_PUBLICA } });
+      const [linha] = (await r.json()) as { dados: Edicao }[];
+      const alvo = document.getElementById('edicao')!;
+      if (!linha) { document.getElementById('quando')!.textContent = 'Ainda não tem edição publicada.'; return; }
+      const ed = linha.dados;
+      document.getElementById('quando')!.innerHTML = `Semana de <b>${esc(dataLonga(ed.semana))}</b>. Tudo com a fonte; toque pra abrir.`;
+      const noticias = ed.noticias.length ? ed.noticias.map(n => `<div class="post t-noticia" style="margin:10px 0 0">
+          <a class="fonte" style="margin:0" href="${esc(n.url)}" target="_blank" rel="noopener"><b>${esc(n.titulo)}</b><small><span class="selo imprensa">imprensa</span> · ${esc(n.fonte)}</small></a>
+          ${n.outras.length ? `<p class="tambem">Também em ${n.outras.map(o => `<a href="${esc(o.url)}" target="_blank" rel="noopener">${esc(o.fonte)}</a>`).join(', ')}</p>` : ''}
+          ${n.politicos.length ? `<div class="gente">${n.politicos.map(p => `<a href="/politico/${esc(p.slug)}/">${esc(p.nome)}</a>`).join('')}</div>` : ''}</div>`).join('')
+        : '<p>Semana fraca de notícia sobre os eleitos nos veículos que acompanhamos.</p>';
+      const pauta = ed.pauta.length ? ed.pauta.map(d => `<p style="margin-top:12px"><b style="color:#1A5FD0">${esc(dataLonga(d.dia))} · ${CASA[d.casa]}</b></p>
+          <ul style="padding-left:18px">${d.itens.map(i => `<li style="margin-top:4px"><a href="${esc(i.url)}" target="_blank" rel="noopener"><b>${esc(i.materia)}</b></a>${i.ementa ? `: ${esc(i.ementa.slice(0, 180))}${i.ementa.length > 180 ? '…' : ''}` : ''}</li>`).join('')}</ul>`).join('')
+        : '<p>A Câmara e o Senado ainda não publicaram a pauta de votações dos próximos dias. Ela costuma sair na véspera; a timeline mostra quando acontecer.</p>';
+      const marcos = ed.marcos.length ? ed.marcos.map(m => `<p style="margin-top:12px"><b style="color:#7A3EA8">${esc(dataLonga(m.data))}${m.faltam ? ` · faltam ${m.faltam} dias` : ' · hoje'}</b><br>
+          <b style="color:var(--ink)">${esc(m.titulo)}.</b> ${esc(m.detalhe)} <small>(${esc(m.fonte)})</small></p>`).join('')
+        : '<p>Nenhum marco nos próximos 60 dias.</p>';
+      const [meus, gente] = await Promise.all([seguidos().catch(() => new Set<string>()), eleitos()]);
+      const cobrar = `<p>Siga seus políticos, reaja ao que eles fazem e mande a página deles pra quem votou junto: quanto mais gente olhando, menos dá pra sumir do plenário.</p>
+        <p style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><a class="btn" href="${meus.size ? '/?f=meus' : '/seguir/'}">${meus.size ? 'Ver o que meu time fez' : 'Escolher quem seguir'}</a>
+        ${[...meus].slice(0, 3).map(s => `<a class="btn leve" href="/politico/${esc(s)}/#cobre">Compartilhar ${esc(gente.get(s)?.nome ?? s)}</a>`).join('')}</p>`;
+      alvo.innerHTML = caixa('As notícias da semana', noticias, '#E0A800') + caixa('Votações pela frente', pauta, '#1A5FD0')
+        + caixa('Marcos que vêm aí', marcos, '#7A3EA8') + `<section class="caixa" style="background:var(--marca);border-color:var(--marca)"><h2>Cobre quem você elegeu.</h2>${cobrar}</section>`;
+      evento('semana_abrir', { semana: ed.semana });
+    }
+    abrir().catch(() => { document.getElementById('quando')!.textContent = 'Não deu pra carregar agora. Tenta de novo daqui a pouco.'; });
+
+    document.getElementById('formEmail')!.addEventListener('submit', async e => {
+      e.preventDefault();
+      const f = e.target as HTMLFormElement, msg = document.getElementById('msgEmail')!;
+      const r = await inscrever((f.elements.namedItem('email') as HTMLInputElement).value, undefined, 'semana');
+      msg.textContent = r === 'ok' ? 'Pronto. Quando o envio começar, o resumo chega toda sexta.' : r === 'invalido' ? 'Confere o e-mail.' : 'Não deu agora; tenta de novo.';
+      if (r === 'ok') { f.querySelector('button')!.disabled = true; evento('lista_espera_inscricao', { local: 'semana' }); }
+    });
+  </script>
+</Social>

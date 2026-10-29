@@ -1,79 +1,243 @@
 ---
-/* Uma página por eleito (1.678): estática, boa pra busca. Placar e timeline carregam no navegador. */
+/* Página de cada eleito (1.678), estática, como landing page: feita pra ser compartilhada.
+   Abertura em tela cheia, placar em números grandes, redes (com "insira aqui" no que falta),
+   últimas ações, linha do tempo do mandato e chamada pra cobrar. Placar e timeline carregam no navegador. */
 import Social from '../../layouts/Social.astro';
+import '../../styles/politico.css';
 import cadastro from '../../data/generated/eleitos-2027.json';
-import { leve, cargoEmTexto, nomeBonito, paginaOficial, type EleitoBruto, type MandatoBruto } from '../../lib/eleitos';
+import linksGerados from '../../data/generated/links-eleitos.json';
+import { leve, cargoEmTexto, nomeBonito, paginaOficial, cargoPrincipal, type EleitoBruto } from '../../lib/eleitos';
+import { principais, ESSENCIAIS, type Link, type TipoLink } from '../../../scripts/links';
 
 export function getStaticPaths() {
   return (cadastro.eleitos as EleitoBruto[]).map(e => ({ params: { slug: e.slug }, props: { e } }));
 }
 const { e } = Astro.props as { e: EleitoBruto };
 const l = leve(e);
+const m = cargoPrincipal(e);
 const cargo = cargoEmTexto(l.cargo, e.uf);
 const presidente = l.cargo === 'presidente';
-const data = (d: string) => new Date(`${d}T12:00:00-03:00`).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', year: 'numeric' }).replace(/ de /g, ' ').replace('.', '');
-const mandato = (m: MandatoBruto) => `${cargoEmTexto(m.cargo, m.uf)}${m.uf ? ` (${m.uf})` : ''}${m.suplente ? ', suplente em exercício' : ''}: ${data(m.inicio)} a ${data(m.fim)}`;
-const links = paginaOficial(e);
+const onde = presidente ? 'Brasil' : (e.uf ?? '');
 const iniciais = l.nome.split(' ').filter(w => w.length > 2).slice(0, 2).map(w => w[0]).join('') || l.nome[0];
+const dataCurta = (d: string) => new Date(`${d}T12:00:00-03:00`).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', year: 'numeric' }).replace(/ de /g, ' ').replace('.', '');
+
+// links: um por rede (o mais provável de ser o oficial) + páginas oficiais da casa
+const meus = principais(((linksGerados.links as Record<string, Link[]>)[e.slug] ?? []), e.nomeUrna);
+const REDE: Record<TipoLink, { nome: string; cor: string; ico: string }> = {
+  site: { nome: 'Site', cor: '#16181A', ico: '🌐' }, instagram: { nome: 'Instagram', cor: '#D62976', ico: '◎' },
+  x: { nome: 'X', cor: '#000', ico: '𝕏' }, facebook: { nome: 'Facebook', cor: '#1877F2', ico: 'f' },
+  youtube: { nome: 'YouTube', cor: '#FF0000', ico: '▶' }, tiktok: { nome: 'TikTok', cor: '#111', ico: '♪' },
+  threads: { nome: 'Threads', cor: '#000', ico: '@' }, bluesky: { nome: 'Bluesky', cor: '#1185FE', ico: '☁' },
+  linkedin: { nome: 'LinkedIn', cor: '#0A66C2', ico: 'in' }, kwai: { nome: 'Kwai', cor: '#FF7A00', ico: 'K' },
+  telegram: { nome: 'Telegram', cor: '#229ED9', ico: '✈' },
+};
+const temTipo = new Set(meus.map(x => x.tipo));
+const faltam = ESSENCIAIS.filter(t => !temTipo.has(t));
+const oficiais = paginaOficial(e);
+const mostrar = (u: string) => u.replace(/^https:\/\/(www\.)?/, '').replace(/\/$/, '');
+
+// linha do tempo do mandato (o "hoje" é corrigido no navegador)
+const ini = new Date(`${m.inicio}T12:00:00-03:00`).getTime(), fim = new Date(`${m.fim}T12:00:00-03:00`).getTime();
+const titulo = `${l.nome} (${e.partido}${presidente ? '' : `-${e.uf}`}) — ${cargo} · Meu Time Político`;
 ---
-<Social title={`${l.nome} (${e.partido}${presidente ? '' : `-${e.uf}`}) — ${cargo} · Meu Time Político`}
-  description={`O que ${l.nome}, ${cargo.toLowerCase()} ${presidente ? 'do Brasil' : `por ${e.uf}`}, fez no mandato: votos, presença, projetos, agenda e o que saiu na imprensa, com a fonte de cada coisa.`}>
-  <section class="caixa">
-    <div class="perfil">
-      <span class="ava">{e.fotoUrl ? <img src={e.fotoUrl} alt="" referrerpolicy="no-referrer" /> : iniciais}</span>
-      <div class="quem">
-        <h1>{l.nome}</h1>
-        <small>{e.partido}{presidente ? '' : `-${e.uf}`} · {cargo.toLowerCase()}{l.suplente ? ' · suplente em exercício' : ''}</small>
+<Social title={titulo}
+  description={`O que ${l.nome}, ${cargo.toLowerCase()} ${presidente ? 'do Brasil' : `por ${e.uf}`}, faz no mandato: presença, votos, projetos, agenda e o que sai na imprensa, com a fonte de cada coisa. Siga e cobre.`}>
+  <div class="lp-barra" id="barra" aria-hidden="true">
+    <div class="lp-in"><b>{l.nome}</b><button class="lp-btn amarelo" type="button" data-seguir>Seguir</button></div>
+  </div>
+
+  <section class="lp-largo lp-hero" id="abertura">
+    <div class="lp-in">
+      <div>
+        <div class="lp-k">{cargo} · {onde}</div>
+        <h1 class="lp-nome">{l.nome}</h1>
+        <p class="lp-sub"><b>{e.partido}</b> · {nomeBonito(e.nome)}{l.suplente ? ' · suplente em exercício' : ''}.
+          Mandato de {dataCurta(m.inicio)} a {dataCurta(m.fim)}.</p>
+        <div class="lp-acoes">
+          <button class="lp-btn amarelo" type="button" data-seguir>Seguir</button>
+          <a class="lp-btn contorno" href="#cobre">Compartilhar</a>
+        </div>
       </div>
+      <div class="lp-foto">{e.fotoUrl ? <img src={e.fotoUrl} alt={`Foto de ${l.nome}`} referrerpolicy="no-referrer" /> : iniciais}</div>
+      <span class="lp-rolar">role pra ver o placar ↓</span>
     </div>
-    <p style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-      <button class="btn" type="button" id="seguir" data-slug={l.slug}>Seguir</button>
-      {links.map(x => <a class="btn leve" href={x.url} target="_blank" rel="noopener">{x.rotulo}</a>)}
-    </p>
-    <p>{nomeBonito(e.nome)}. {e.mandatos.map(mandato).join(' · ')}.</p>
-    <ul class="placar" id="placar"></ul>
-    <p id="placarNota" style="font-size:13px"></p>
   </section>
 
-  <div id="timeline"></div>
+  <section class="lp-sec" data-revela>
+    <div class="lp-k">O placar do mandato</div>
+    <h2 class="lp-t">O que <span>{l.nome.split(' ')[0]}</span> já fez</h2>
+    <div class="lp-numeros" id="numeros"></div>
+    <div class="lp-espera" id="espera" hidden>
+      <b id="dias">—</b>
+      <p id="esperaTexto"></p>
+    </div>
+    <p class="lp-nota" id="placarNota">Somando…</p>
+  </section>
 
+  <section class="lp-sec" data-revela>
+    <div class="lp-k">Onde acompanhar</div>
+    <h2 class="lp-t">Na <span>rede</span></h2>
+    <div class="lp-redes" id="redes" data-slug={l.slug}>
+      {oficiais.map(o => <a class="lp-rede" href={o.url} target="_blank" rel="noopener" style="--c:#0A8F4E"><i>🏛</i><span>{o.rotulo}<small>{mostrar(o.url)}</small></span></a>)}
+      {meus.map(x => <a class="lp-rede" href={x.url} target="_blank" rel="noopener nofollow" style={`--c:${REDE[x.tipo].cor}`}><i>{REDE[x.tipo].ico}</i><span>{REDE[x.tipo].nome}<small>{mostrar(x.url)}</small></span></a>)}
+      {faltam.map(t => <button class="lp-rede falta" type="button" data-falta={t}><i>{REDE[t].ico}</i><span>{REDE[t].nome}<small>Insira aqui</small></span></button>)}
+    </div>
+    <p class="lp-nota">Redes declaradas pelo próprio político ao TSE na candidatura e pela Câmara. Quando houver mais de uma conta, mostramos a que parece oficial.
+      Conhece a que falta? Toque em "Insira aqui": a sugestão é revisada antes de entrar.</p>
+  </section>
+
+  <section class="lp-sec" data-revela>
+    <div class="lp-k">Últimas jogadas</div>
+    <h2 class="lp-t">Dia a <span>dia</span></h2>
+    <div id="timeline" style="margin-top:28px"></div>
+  </section>
+
+  <section class="lp-sec" data-revela>
+    <div class="lp-k">O mandato</div>
+    <h2 class="lp-t">Quatro anos <span>de jogo</span></h2>
+    <div class="lp-linha">
+      <div class="lp-trilho" id="trilho" data-ini={ini} data-fim={fim}><div style="width:0%"></div><em style="left:0%">hoje</em></div>
+      <div class="lp-datas"><span>Posse<br /><b>{dataCurta(m.inicio)}</b></span><span style="text-align:right">Fim do mandato<br /><b>{dataCurta(m.fim)}</b></span></div>
+      {e.mandatos.length > 1 && <p class="lp-nota">Também: {e.mandatos.filter(x => x !== m).map(x => `${cargoEmTexto(x.cargo, x.uf)} até ${dataCurta(x.fim)}`).join(' · ')}.</p>}
+    </div>
+  </section>
+
+  <section class="lp-largo lp-fecho" id="cobre" data-revela>
+    <div class="lp-in">
+      <h2 class="lp-t">Cobre {l.nome}.</h2>
+      <p>Mande esta página pra quem votou junto com você. Quanto mais gente acompanha, menos dá pra sumir do plenário.</p>
+      <div class="lp-acoes share-box" id="compartilhar">
+        <button class="lp-btn escuro" type="button" data-share-abrir aria-expanded="false" aria-controls="sharePainel">Compartilhar esta página</button>
+        <button class="lp-btn contorno" style="border-color:#111;color:#111" type="button" data-seguir>Seguir</button>
+        <div class="share-painel" id="sharePainel" data-share-painel hidden style="flex-basis:100%">
+          <div class="share-canais">
+            <button class="share-canal" type="button" data-canal="whatsapp">WhatsApp</button>
+            <button class="share-canal" type="button" data-canal="instagram">Instagram</button>
+            <button class="share-canal" type="button" data-canal="linkedin">LinkedIn</button>
+          </div>
+          <p class="share-aviso" data-share-aviso role="status"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script define:vars={{ slug: l.slug, nome: l.nome, cargoTxt: cargo.toLowerCase(), uf: l.uf, cargo: l.cargo, partido: l.partido, posse: ini }}>
+    window.__politico = { slug, nome, cargoTxt, uf, cargo, partido, posse };
+  </script>
   <script>
     import { usuario, seguidos, seguir, entrar, mensagemDeErro } from '../../lib/conta';
     import { montarTimeline } from '../../lib/timeline';
-    import { buscarPlacar, linhasDoPlacar, desdeEmTexto } from '../../lib/mandato';
+    import { buscarPlacar, destaquesDoPlacar, desdeEmTexto } from '../../lib/mandato';
+    import { instalarCompartilhar } from '../../lib/compartilhar';
+    import { rpc } from '../../lib/supabase';
     import { toast } from '../../lib/toast';
     import { evento } from '../../lib/analytics';
 
+    const P = (window as unknown as { __politico: { slug: string; nome: string; cargoTxt: string; uf: string | null; cargo: string; partido: string; posse: number } }).__politico;
     const esc = (s: string) => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
-    const b = document.getElementById('seguir') as HTMLButtonElement;
-    const slug = b.dataset.slug!;
+    const semMovimento = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    // ---- seguir (três botões: abertura, barra fixa, fecho) ----
+    const botoes = [...document.querySelectorAll<HTMLButtonElement>('[data-seguir]')];
     async function pintar() {
-      const s = (await seguidos()).has(slug);
-      b.textContent = s ? 'Seguindo' : 'Seguir';
-      b.classList.toggle('seguindo', s);
+      const s = (await seguidos()).has(P.slug);
+      for (const b of botoes) { b.textContent = s ? 'Seguindo' : 'Seguir'; b.classList.toggle('seguindo', s); }
     }
-    b.addEventListener('click', async () => {
+    for (const b of botoes) b.addEventListener('click', async () => {
       if (!(await usuario())) return entrar();
       const ligado = !b.classList.contains('seguindo');
-      b.disabled = true;
-      try { await seguir([slug], ligado); evento('seguir', { local: 'politico', ligado }); await pintar(); }
+      botoes.forEach(x => (x.disabled = true));
+      try { await seguir([P.slug], ligado); evento('seguir', { local: 'politico', ligado }); await pintar(); if (ligado) toast(`Seguindo ${P.nome}.`); }
       catch (err) { toast(mensagemDeErro(err)); }
-      b.disabled = false;
+      botoes.forEach(x => (x.disabled = false));
     });
     pintar();
 
-    buscarPlacar(slug).then(p => {
-      const linhas = linhasDoPlacar(p);
-      document.getElementById('placar')!.innerHTML = linhas.map(l =>
-        `<li><span>${esc(l.rotulo)}</span><b class="${l.tom ?? ''}">${esc(l.valor)}</b>${l.nota ? `<small>${esc(l.nota)}</small>` : ''}</li>`).join('');
-      document.getElementById('placarNota')!.innerHTML = linhas.length
-        ? `${esc(desdeEmTexto(p.desde))} Cada número mede uma coisa; não existe nota única. <a href="/metodo/#placar">Como contamos</a>.` : '';
-    }).catch(() => {});
+    // ---- barra fixa aparece quando a abertura sai da tela ----
+    const barra = document.getElementById('barra')!;
+    new IntersectionObserver(([x]) => barra.classList.toggle('visivel', !x.isIntersecting), { rootMargin: '-60px 0px 0px 0px' })
+      .observe(document.getElementById('abertura')!);
+
+    // ---- revelação na rolagem e números que contam ----
+    function contar(el: HTMLElement) {
+      const alvo = Number(el.dataset.alvo), suf = el.dataset.suf ?? '';
+      if (semMovimento) { el.textContent = alvo.toLocaleString('pt-BR') + suf; return; }
+      const t0 = performance.now();
+      const passo = (t: number) => {
+        const p = Math.min(1, (t - t0) / 1100), k = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(alvo * k).toLocaleString('pt-BR') + suf;
+        if (p < 1) requestAnimationFrame(passo);
+      };
+      requestAnimationFrame(passo);
+    }
+    const revela = new IntersectionObserver(es => es.forEach(x => {
+      if (!x.isIntersecting) return;
+      x.target.classList.add('visivel');
+      x.target.querySelectorAll<HTMLElement>('[data-alvo]:not([data-contado])').forEach(n => { n.dataset.contado = '1'; contar(n); });
+      revela.unobserve(x.target);
+    }), { threshold: 0.15 });
+    document.querySelectorAll('[data-revela]').forEach(s => revela.observe(s));
+
+    // ---- placar ----
+    const dias = Math.ceil((P.posse - Date.now()) / 864e5);
+    buscarPlacar(P.slug).then(p => {
+      const ds = destaquesDoPlacar(p);
+      const numeros = document.getElementById('numeros')!;
+      numeros.innerHTML = ds.map(d => `<div class="lp-num ${d.tom ?? ''}"><b data-alvo="${d.numero}" data-suf="${d.sufixo ?? ''}">0${d.sufixo ?? ''}</b>
+        <span>${esc(d.rotulo)}</span>${d.nota ? `<small>${esc(d.nota)}</small>` : ''}</div>`).join('');
+      const secao = numeros.closest('[data-revela]')!;
+      if (secao.classList.contains('visivel')) numeros.querySelectorAll<HTMLElement>('[data-alvo]').forEach(n => { n.dataset.contado = '1'; contar(n); });
+      if (dias > 0) {
+        document.getElementById('espera')!.hidden = false;
+        document.getElementById('dias')!.textContent = `${dias} dia${dias > 1 ? 's' : ''}`;
+        document.getElementById('esperaTexto')!.textContent = `pra posse. Até lá, o placar mostra o que ${P.nome} faz no mandato atual, se tiver um, e o que sai na imprensa.`;
+      }
+      document.getElementById('placarNota')!.innerHTML = ds.length
+        ? `${esc(desdeEmTexto(p.desde))} Cada número mede uma coisa; não existe nota única. <a href="/metodo/#placar">Como contamos</a>.`
+        : 'Ainda não há registro pra somar.';
+    }).catch(() => { document.getElementById('placarNota')!.textContent = 'Não deu pra somar agora.'; });
+
+    // ---- linha do tempo ----
+    const trilho = document.getElementById('trilho')!;
+    const ini = Number(trilho.dataset.ini), fim = Number(trilho.dataset.fim);
+    const pct = Math.max(0, Math.min(100, ((Date.now() - ini) / (fim - ini)) * 100));
+    (trilho.firstElementChild as HTMLElement).style.width = `${pct}%`;
+    (trilho.querySelector('em') as HTMLElement).style.left = `${Math.max(4, Math.min(96, pct))}%`;
+    (trilho.querySelector('em') as HTMLElement).textContent = pct <= 0 ? 'antes da posse' : pct >= 100 ? 'encerrado' : `hoje · ${Math.round(pct)}%`;
+
+    // ---- "insira aqui": sugestão de link vai pro admin ----
+    const redes = document.getElementById('redes')!;
+    redes.addEventListener('click', e => {
+      const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-falta]');
+      if (!b) return;
+      redes.querySelector('.lp-insira')?.remove();
+      const tipo = b.dataset.falta!, nomeRede = b.querySelector('span')!.firstChild!.textContent!.trim();
+      b.insertAdjacentHTML('afterend', `<form class="lp-insira"><input name="url" type="url" inputmode="url" required placeholder="Link do ${esc(nomeRede)} de ${esc(P.nome)}" />
+        <button type="submit">Enviar</button><p>Vai pra revisão antes de aparecer aqui. Só perfil oficial do próprio político.</p></form>`);
+      const form = redes.querySelector<HTMLFormElement>('.lp-insira')!;
+      form.querySelector('input')!.focus();
+      form.addEventListener('submit', async ev => {
+        ev.preventDefault();
+        const url = (form.elements.namedItem('url') as HTMLInputElement).value;
+        try {
+          await rpc('sugerir_link', { p_slug: P.slug, p_tipo: tipo, p_url: url });
+          form.innerHTML = '<p style="color:var(--ink)">Obrigado! A sugestão foi pra revisão.</p>';
+          b.querySelector('small')!.textContent = 'sugestão enviada';
+          evento('sugerir_link', { tipo });
+        } catch { toast(`Esse link não parece ser do ${nomeRede}. Confere e tenta de novo.`); }
+      });
+    });
+
+    // ---- compartilhar ----
+    instalarCompartilhar(document.getElementById('compartilhar')!, {
+      local: 'politico', titulo: `${P.nome} · Meu Time Político`,
+      link: () => `${location.origin}/politico/${P.slug}/`,
+      texto: link => `Tô de olho no que ${P.nome} (${P.partido}) faz no mandato: presença, votos, agenda e imprensa, com fonte. Cobra junto:\n${link}`,
+    });
 
     montarTimeline({
-      raiz: document.getElementById('timeline')!, local: 'politico', umaPessoa: slug,
-      slugs: async () => [slug], tipos: () => null,
+      raiz: document.getElementById('timeline')!, local: 'politico', umaPessoa: P.slug,
+      slugs: async () => [P.slug], tipos: () => null,
       vazio: () => 'Nada registrado ainda. Novatos só ganham registro oficial depois da posse; a imprensa vale desde já.',
     });
   </script>

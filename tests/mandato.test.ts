@@ -28,3 +28,16 @@ describe('linhasDoPlacar', () => {
     expect(desdeEmTexto('2026-10-16T12:00:00Z')).toContain('16 de outubro de 2026');
   });
 });
+
+import { destaquesDoPlacar } from '../src/lib/mandato';
+describe('destaquesDoPlacar', () => {
+  it('presença vira porcentagem com tom; sem dado, sem bloco', () => {
+    expect(destaquesDoPlacar(zero)).toEqual([]);
+    const [d] = destaquesDoPlacar({ ...zero, plenario_esteve: 3, plenario_faltou: 1 });
+    expect(d).toMatchObject({ numero: 75, sufixo: '%', tom: 'ruim' });
+  });
+  it('singular e plural', () => {
+    expect(destaquesDoPlacar({ ...zero, projetos_autor: 1 })[0].rotulo).toBe('projeto apresentado');
+    expect(destaquesDoPlacar({ ...zero, imprensa: 5 })[0].rotulo).toBe('notícias nos grandes veículos');
+  });
+});

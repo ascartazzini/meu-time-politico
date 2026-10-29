@@ -71,7 +71,9 @@ import cadastro from '../data/generated/eleitos-2027.json';
     // Quem já segue alguém abre direto em "Quem eu sigo"; quem não tem conta vê a caixa de boas-vindas.
     usuario().then(async u => {
       if (!u) { document.getElementById('boasVindas')!.hidden = false; return; }
-      if ((await seguidos()).size) escolher('meus');
+      const pedido = new URLSearchParams(location.search).get('f');
+      if (pedido && document.querySelector(`.chip[data-f="${CSS.escape(pedido)}"]`)) escolher(pedido);
+      else if ((await seguidos()).size) escolher('meus');
     });
   </script>
 </Social>

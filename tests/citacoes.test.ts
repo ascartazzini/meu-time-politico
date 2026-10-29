@@ -24,6 +24,10 @@ describe('citados', () => {
   it('não casa pedaço de palavra', () => {
     expect(citados('Lulalivre e Hugo Mottaes', idx)).toEqual([]);
   });
+  it('partícula não conta como palavra: "Da Vitória" não casa com "a vitória de Lula"', () => {
+    const i = indiceDeNomes([{ id: 'dv', nome: 'JOSE DA VITORIA SILVA SOUZA', nome_urna: 'DA VITÓRIA', cargos: ['deputado-federal'] }]);
+    expect(citados('Partidos reafirmam legitimidade da vitória de Lula', i)).toEqual([]);
+  });
   it('homônimo entre UFs não liga ninguém', () => {
     expect(citados('Professor Zezé apresenta projeto', idx)).toEqual([]);
   });

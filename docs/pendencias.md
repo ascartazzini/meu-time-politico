@@ -1,7 +1,7 @@
 # Pendências
 
 O que o [plano](plano-pos-eleicao.md) prevê e ainda não está no ar, com o motivo e o que destrava.
-Já entregue até 29/10/2026: timeline com filtros, conta com Google, seguir, quatro reações (amei, gostei, odiei, odiei muito), páginas dos eleitos com placar do mandato, agenda do presidente com pública × privada.
+Já entregue até 29/10/2026: timeline com filtros, notícias agrupadas, cor por tipo, conta com Google, seguir, quatro reações (amei, gostei, odiei, odiei muito), landing page de cada eleito com site e redes (e "insira aqui"), resumo da semana (/semana/) gerado sozinho, páginas dos eleitos com placar do mandato, agenda do presidente com pública × privada.
 Atualizar quando algo entrar ou mudar de motivo.
 
 ## Precisa de você
@@ -30,8 +30,8 @@ Atualizar quando algo entrar ou mudar de motivo.
 | Titular (em quem votei) | 4 | saiu da tela pra simplificar; volta quando o impacto do time titular existir |
 | "Isso não é sobre ele" | 3 | botão no card pra apontar ligação errada; precisa de tabela e função pública de denúncia | hoje o caminho é abrir issue no GitHub |
 | Assembleias estaduais | 5 | sem API na maioria; MG tem API completa, SP dados abertos pesados, BA bloqueia IP de fora | medir as outras 24 com o método da Fase 0 |
-| Newsletter semanal | — | pedida em 29/10: principais notícias (grupos), votações pela frente, marcos, chamada pra cobrar | o envio depende do serviço de e-mail (acima) |
-| Links externos do político + "insira aqui" | 1 | pedido em 29/10; fonte: redes declaradas ao TSE e páginas oficiais; o que faltar vira sugestão pro admin | |
-| Página do político como landing page | 1 | pedido em 29/10: gráfica, títulos grandes, efeitos de rolagem, feita pra compartilhar | |
+| Envio da newsletter por e-mail | — | a edição sai sozinha toda sexta (página /semana/ e HTML pronto em `edicoes.html`); falta o serviço de envio (acima) | quando houver conta, um job lê `edicoes.html`, troca `{{descadastro}}` e manda pra `lista_espera` |
+| Revisar sugestões de link | — | o "insira aqui" manda pra `sugestoes_link`; aprovar é manual | `npm run sugestoes`, depois `npm run links` e publicar |
+| Imagem de compartilhamento por político | 1 | a landing já está no ar; a imagem que aparece no WhatsApp ainda é a geral do site | gerar 1.678 imagens no build (Chrome headless) ou sob demanda |
 | Ligação de notícia por IA | 3 | hoje só por nome exato; perde apelidos e menções indiretas | só onde o nome não resolve, com teto de custo |
 | Fotos de quem não é deputado federal | 1 | só a Câmara dá foto pelo id; TSE não tem URL estável de foto | 1.300 eleitos aparecem com iniciais |

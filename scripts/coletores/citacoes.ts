@@ -41,9 +41,11 @@ export function indiceDeNomes(pessoas: Citavel[]): Map<string, { ids: Set<string
   for (const p of pessoas) {
     const urna = p.nome_urna ? normalizarNome(p.nome_urna) : '';
     if (urna) {
-      const uma = urna.split(' ').length === 1;
+      // partícula não conta: "Da Vitória" é nome de uma palavra (senão casaria com "…da vitória de Lula")
+      const uma = tokensNome(urna).length <= 1;
       const destaque = p.cargos.some(c => CARGOS_DE_DESTAQUE.has(c));
-      if (!uma || (destaque && urna.length >= 4 && !PRENOMES.has(urna))) add(urna, p.id);
+      const nucleo = tokensNome(urna).join(' ');
+      if (!uma || (destaque && nucleo.length >= 4 && !PRENOMES.has(nucleo))) add(urna, p.id);
     }
     // nome civil completo raramente aparece em notícia, mas quando aparece é inequívoco
     const civil = tokensNome(p.nome);
