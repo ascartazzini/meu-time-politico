@@ -164,12 +164,15 @@ main{max-width:640px;margin:0 auto;padding:12px 16px 80px}
 .capas::-webkit-scrollbar{display:none}
 .capas > .post{flex:0 0 100%;scroll-snap-align:start;padding:0 0 4px;border-bottom:0;min-width:0}
 .capas > .post .peca{margin:0;border-radius:18px}
-.capas > .post .canto .tipo{display:none}
+/* no carrossel o veículo já está no alto da capa: some o cabeçalho do post e fica só "sobre … · há 9 h" embaixo */
+.capas > .post > .post-cab{display:none}
+.sobre-capa{display:none}
+.capas .sobre-capa{display:block;margin-top:10px;font-size:13.5px;color:var(--sub)}
+.sobre-capa a{color:var(--ink);font-weight:700;text-decoration:none}
 /* no celular a capa vai de borda a borda, uma por vez (sem a próxima espiando, que parecia corte) */
 @media (max-width:600px){
   .capas{margin:0 -16px}
-  .capas > .post > .post-cab{padding:0 16px}
-  .capas > .post > .tambem,.capas > .post > .gente,.capas > .post > .post-pe{padding:0 16px}
+  .capas > .post > .tambem,.capas > .post > .gente,.capas > .post > .post-pe,.capas > .post > .sobre-capa{padding:0 16px}
   .capas > .post .peca{border-radius:0}
   .setas button{width:34px;height:34px}
 }

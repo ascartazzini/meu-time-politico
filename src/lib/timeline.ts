@@ -39,10 +39,12 @@ export function post(i: Item, gente: Map<string, EleitoLeve>, umaPessoa?: string
   const slugs = ps.map(p => p.slug).slice(0, 12).join(',');
   const solo = umaPessoa ? ps.find(p => p.slug === umaPessoa) : (i.n_politicos === 1 || ps.length === 1) ? ps[0] : undefined;
   let cab: string;
+  let sobreNoticia = '';
   if (i.tipo === 'noticia') {
     const nomes = ps.slice(0, 3).map(p => `<a href="/politico/${esc(p.slug)}/">${esc(gente.get(p.slug)?.nome ?? p.slug)}</a>`);
+    sobreNoticia = `sobre ${nomes.join(', ')}${i.n_politicos > 3 ? ` e mais ${i.n_politicos - 3}` : ''}`;
     cab = `<span class="ava jornal" aria-hidden="true">${esc(i.fonte_nome.replace(/^(O|A)\s+/, '')[0] ?? '')}</span>
-      <div class="quem"><b>${esc(i.fonte_nome)}</b><small>sobre ${nomes.join(', ')}${i.n_politicos > 3 ? ` e mais ${i.n_politicos - 3}` : ''}</small></div>`;
+      <div class="quem"><b>${esc(i.fonte_nome)}</b><small>${sobreNoticia}</small></div>`;
   } else if (solo) {
     const e = gente.get(solo.slug);
     cab = `${avatar(e, solo.slug)}<div class="quem"><b><a href="/politico/${esc(solo.slug)}/">${esc(e?.nome ?? solo.slug)}</a></b><small>${e ? sobre(e) : ''}</small></div>`;
@@ -60,7 +62,7 @@ export function post(i: Item, gente: Map<string, EleitoLeve>, umaPessoa?: string
     `<button type="button" class="r-${r.tipo}" data-r="${r.tipo}" aria-pressed="false" aria-label="${r.rotulo}" title="${r.rotulo}">${r.emoji} <span>0</span></button>`).join('')}</div>${fonte}</div>`;
   return `<article class="post t-${esc(i.tipo)}" data-id="${esc(i.id)}" data-slugs="${esc(slugs)}">
     <div class="post-cab">${cab}<div class="canto">${etiqueta(i)}${quando}</div></div>
-    ${peca(i, gente, solo)}${fichas}${rodape}</article>`;
+    ${peca(i, gente, solo)}${sobreNoticia ? `<p class="sobre-capa">${sobreNoticia} · ${esc(quandoEmTexto(i.quando))}</p>` : ''}${fichas}${rodape}</article>`;
 }
 
 /** Bloco das notícias de um dia: carrossel de capas, cada capa com as reações dela. */

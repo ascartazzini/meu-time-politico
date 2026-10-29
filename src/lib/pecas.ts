@@ -14,7 +14,9 @@ const esc = (s: string) => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt
 const num = (v: unknown) => (typeof v === 'number' && Number.isFinite(v) ? v : null);
 const FUSO = 'America/Sao_Paulo';
 export const hora = (iso: string) => new Date(iso).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: FUSO }).replace(':', 'h');
-const dataCapa = (iso: string) => new Date(iso).toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: FUSO });
+/** "qua, 28 out 2026": curta, pra caber o nome do veículo inteiro no alto da capa */
+const dataCapa = (iso: string) => new Date(iso).toLocaleDateString('pt-BR', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', timeZone: FUSO })
+  .replace(/\./g, '').replace(/ de /g, ' ').replace(/^(\p{L}+),?\s/u, '$1, ');
 const iniciais = (n: string) => n.split(' ').filter(w => w.length > 2).slice(0, 2).map(w => w[0]).join('').toUpperCase() || n[0] || '?';
 const CASA: Record<string, string> = { camara: 'Câmara', senado: 'Senado', executivo: 'Planalto' };
 
