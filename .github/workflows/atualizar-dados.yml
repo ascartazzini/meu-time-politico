@@ -3,6 +3,11 @@ name: atualizar-dados
 on:
   schedule: [{ cron: '0 9 * * 1' }]
   workflow_dispatch:
+# O padrão do repositório é só leitura; o create-pull-request precisa empurrar o branch e abrir o PR.
+# Também exige Settings → Actions → General → "Allow GitHub Actions to create and approve pull requests".
+permissions:
+  contents: write
+  pull-requests: write
 jobs:
   fetch:
     runs-on: ubuntu-latest
