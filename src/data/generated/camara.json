@@ -1,35 +1,33 @@
 {
- "atualizadoEm": "2026-09-03T07:53:05.870Z",
+ "atualizadoEm": "2026-11-18T09:06:09.900Z",
  "fonte": "https://dadosabertos.camara.leg.br/api/v2",
  "bancadas": {
   "AVANTE": 5,
   "CIDADANIA": 2,
-  "DC": 0,
   "MDB": 38,
   "MISSÃO": 1,
   "NOVO": 5,
   "PCdoB": 11,
-  "PDT": 10,
-  "PL": 98,
+  "PDT": 9,
+  "PL": 97,
   "PODE": 27,
-  "PP": 46,
+  "PP": 47,
   "PRD": 3,
   "PSB": 17,
-  "PSD": 48,
-  "PSDB": 18,
+  "PSD": 49,
+  "PSDB": 17,
   "PSOL": 13,
-  "PT": 64,
+  "PT": 66,
   "PV": 6,
   "REDE": 3,
-  "REPUBLICANOS": 42,
+  "REPUBLICANOS": 43,
   "SOLIDARIEDADE": 4,
-  "UNIÃO": 52
+  "UNIÃO": 50
  },
  "bancadasData": {
   "AVANTE": "2026-04-15T21:26",
   "CIDADANIA": "2021-03-02T13:23",
-  "DC": "",
-  "MDB": "2026-05-14T09:14",
+  "MDB": "2026-10-06T15:47",
   "MISSÃO": "2026-03-10T12:14",
   "NOVO": "2026-05-19T17:03",
   "PCdoB": "2023-12-22T18:10",
@@ -40,12 +38,12 @@
   "PRD": "2024-04-16T20:47",
   "PSB": "2026-01-02T14:23",
   "PSD": "2026-08-17T10:05",
-  "PSDB": "2026-04-22T08:53",
+  "PSDB": "2026-11-03T08:38",
   "PSOL": "2026-02-05T18:21",
   "PT": "2026-04-15T08:37",
   "PV": "2022-10-25T18:27",
   "REDE": "2022-12-13T20:41",
-  "REPUBLICANOS": "2026-06-23T19:23",
+  "REPUBLICANOS": "2026-09-10T08:19",
   "SOLIDARIEDADE": "2025-10-21T20:48",
   "UNIÃO": "2026-06-09T08:29"
  },
@@ -668,15 +666,6 @@
     "nomeCivil": "PAULO ROBERTO FREIRE DA COSTA"
    },
    {
-    "id": 154700,
-    "nome": "Paulo Soares",
-    "siglaPartido": "PODE",
-    "siglaUf": "SP",
-    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/154700.jpg",
-    "cpf": "33635782882",
-    "nomeCivil": "PAULO ROMEIRO DE ALMEIDA SOARES"
-   },
-   {
     "id": 141488,
     "nome": "Paulo Teixeira",
     "siglaPartido": "PT",
@@ -702,6 +691,15 @@
     "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/221338.jpg",
     "cpf": "28202400899",
     "nomeCivil": "LUCIENE CAVALCANTE DA SILVA"
+   },
+   {
+    "id": 178989,
+    "nome": "Renata Abreu",
+    "siglaPartido": "PODE",
+    "siglaUf": "SP",
+    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/178989.jpg",
+    "cpf": "30669688800",
+    "nomeCivil": "RENATA HELLMEISTER DE ABREU MELO"
    },
    {
     "id": 175765,
@@ -985,13 +983,13 @@
     "nomeCivil": "JOÃO CARLOS PAOLILO BACELAR FILHO"
    },
    {
-    "id": 235800,
-    "nome": "Jorge Araújo",
+    "id": 74550,
+    "nome": "João Leão",
     "siglaPartido": "PP",
     "siglaUf": "BA",
-    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/235800.jpg",
-    "cpf": "27903464884",
-    "nomeCivil": "JORGE SILVA DE ARAÚJO"
+    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/74550.jpg",
+    "cpf": "03905756587",
+    "nomeCivil": "JOÃO FELIPE DE SOUZA LEÃO"
    },
    {
     "id": 178857,
@@ -1001,15 +999,6 @@
     "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/178857.jpg",
     "cpf": "19530773587",
     "nomeCivil": "JORGE JOSE SANTOS PEREIRA SOLLA"
-   },
-   {
-    "id": 74140,
-    "nome": "José Carlos Araujo",
-    "siglaPartido": "DC",
-    "siglaUf": "BA",
-    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/74140.jpg",
-    "cpf": "04820991515",
-    "nomeCivil": "JOSÉ CARLOS LEÃO DE ARAÚJO"
    },
    {
     "id": 74554,
@@ -1028,6 +1017,15 @@
     "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/209189.jpg",
     "cpf": "15963330572",
     "nomeCivil": "JOSEILDO RIBEIRO RAMOS"
+   },
+   {
+    "id": 80815,
+    "nome": "Leo Prates",
+    "siglaPartido": "REPUBLICANOS",
+    "siglaUf": "BA",
+    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/80815.jpg",
+    "cpf": "94328145568",
+    "nomeCivil": "LEONARDO SILVA PRATES"
    },
    {
     "id": 92102,
@@ -1511,13 +1509,13 @@
     "nomeCivil": "GILBERTO APARECIDO ABRAMO"
    },
    {
-    "id": 236284,
-    "nome": "Glaycon Franco",
-    "siglaPartido": "PSDB",
+    "id": 74581,
+    "nome": "Gilmar Machado",
+    "siglaPartido": "PT",
     "siglaUf": "MG",
-    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/236284.jpg",
-    "cpf": "50785931600",
-    "nomeCivil": "GLYCON MOREIRA FRANCO"
+    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/74581.jpg",
+    "cpf": "44272600630",
+    "nomeCivil": "GILMAR ALVES MACHADO"
    },
    {
     "id": 198197,
@@ -2145,15 +2143,6 @@
     "nomeCivil": "HUGO MOTTA WANDERLEY DA NÓBREGA"
    },
    {
-    "id": 122195,
-    "nome": "Leonardo Gadelha",
-    "siglaPartido": "PODE",
-    "siglaUf": "PB",
-    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/122195.jpg",
-    "cpf": "76553787115",
-    "nomeCivil": "LEONARDO DE MELO GADELHA"
-   },
-   {
     "id": 74041,
     "nome": "Luiz Couto",
     "siglaPartido": "PT",
@@ -2172,13 +2161,22 @@
     "nomeCivil": "FRANCISCO EMERSON ASSIS DE LUCENA"
    },
    {
-    "id": 115200,
-    "nome": "Raniery Paulino",
+    "id": 220584,
+    "nome": "Murilo Galdino",
     "siglaPartido": "REPUBLICANOS",
     "siglaUf": "PB",
-    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/115200.jpg",
-    "cpf": "02367160422",
-    "nomeCivil": "ROBERTO RANIERY DE AQUINO PAULINO"
+    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/220584.jpg",
+    "cpf": "03182571494",
+    "nomeCivil": "CÁSSIO MURILO GALDINO DE ARAÚJO"
+   },
+   {
+    "id": 160629,
+    "nome": "Romero Rodrigues",
+    "siglaPartido": "PODE",
+    "siglaUf": "PB",
+    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/160629.jpg",
+    "cpf": "45107793487",
+    "nomeCivil": "ROMERO RODRIGUES VEIGA"
    },
    {
     "id": 160635,
@@ -2190,15 +2188,6 @@
     "nomeCivil": "RUY MANUEL CARNEIRO BARBOSA DE ACA BELCHIOR"
    },
    {
-    "id": 236423,
-    "nome": "Valdir Trindade",
-    "siglaPartido": "REPUBLICANOS",
-    "siglaUf": "PB",
-    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/236423.jpg",
-    "cpf": "82604657449",
-    "nomeCivil": "VALDIR TRINDADE DOS SANTOS"
-   },
-   {
     "id": 74043,
     "nome": "Wellington Roberto",
     "siglaPartido": "PSD",
@@ -2206,6 +2195,15 @@
     "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/74043.jpg",
     "cpf": "26254166453",
     "nomeCivil": "JOSÉ WELLINGTON ROBERTO"
+   },
+   {
+    "id": 74044,
+    "nome": "Wilson Santiago",
+    "siglaPartido": "REPUBLICANOS",
+    "siglaUf": "PB",
+    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/74044.jpg",
+    "cpf": "16159977415",
+    "nomeCivil": "JOSÉ WILSON SANTIAGO"
    }
   ],
   "PA": [
@@ -2555,7 +2553,7 @@
    },
    {
     "id": 220660,
-    "nome": "Yury do Paredão",
+    "nome": "Yury Bruno",
     "siglaPartido": "MDB",
     "siglaUf": "CE",
     "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/220660.jpg",
@@ -2850,13 +2848,13 @@
     "nomeCivil": "MARX BELTRÃO LIMA SIQUEIRA"
    },
    {
-    "id": 194260,
-    "nome": "Nivaldo Albuquerque",
-    "siglaPartido": "UNIÃO",
+    "id": 171617,
+    "nome": "Paulão",
+    "siglaPartido": "PT",
     "siglaUf": "AL",
-    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/194260.jpg",
-    "cpf": "06923503493",
-    "nomeCivil": "NIVALDO FERREIRA DE ALBUQUERQUE NETO"
+    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/171617.jpg",
+    "cpf": "14433290459",
+    "nomeCivil": "PAULO FERNANDO DOS SANTOS"
    },
    {
     "id": 220586,
@@ -2960,6 +2958,15 @@
     "nomeCivil": "GERALDO GABRIEL MENDES"
    },
    {
+    "id": 74383,
+    "nome": "Giacobo",
+    "siglaPartido": "PSD",
+    "siglaUf": "PR",
+    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/74383.jpg",
+    "cpf": "71827404949",
+    "nomeCivil": "FERNANDO LÚCIO GIACOBO"
+   },
+   {
     "id": 107283,
     "nome": "Gleisi Hoffmann",
     "siglaPartido": "PT",
@@ -2967,15 +2974,6 @@
     "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/107283.jpg",
     "cpf": "67677061915",
     "nomeCivil": "GLEISI HELENA HOFFMANN"
-   },
-   {
-    "id": 225846,
-    "nome": "Itamar Paim",
-    "siglaPartido": "PL",
-    "siglaUf": "PR",
-    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/225846.jpg",
-    "cpf": "87672510991",
-    "nomeCivil": "ITAMAR PAIM PRUCH"
    },
    {
     "id": 178832,
@@ -3023,6 +3021,15 @@
     "nomeCivil": "LUIZ HILOSHI NISHIMORI"
    },
    {
+    "id": 220706,
+    "nome": "Padovani",
+    "siglaPartido": "PP",
+    "siglaUf": "PR",
+    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/220706.jpg",
+    "cpf": "01984308920",
+    "nomeCivil": "NELSON FERNANDO PADOVANI"
+   },
+   {
     "id": 220685,
     "nome": "Paulo Litro",
     "siglaPartido": "UNIÃO",
@@ -3057,15 +3064,6 @@
     "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/160621.jpg",
     "cpf": "77535405991",
     "nomeCivil": "SANDRO ALEX CRUZ DE OLIVEIRA"
-   },
-   {
-    "id": 236518,
-    "nome": "Santin Roveda",
-    "siglaPartido": "UNIÃO",
-    "siglaUf": "PR",
-    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/236518.jpg",
-    "cpf": "03041940930",
-    "nomeCivil": "HILTON SANTIN ROVEDA"
    },
    {
     "id": 204387,
@@ -3376,6 +3374,15 @@
     "nomeCivil": "LUIZ LINDBERGH FARIAS FILHO"
    },
    {
+    "id": 220616,
+    "nome": "Luciano Vieira",
+    "siglaPartido": "PSDB",
+    "siglaUf": "RJ",
+    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/220616.jpg",
+    "cpf": "12188750705",
+    "nomeCivil": "LUCIANO VIEIRA MENDES"
+   },
+   {
     "id": 204455,
     "nome": "Luiz Lima",
     "siglaPartido": "NOVO",
@@ -3401,15 +3408,6 @@
     "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/160161.jpg",
     "cpf": "11004696728",
     "nomeCivil": "MARCELO ANDRE CID HERACLITO DO PORTO QUEIROZ"
-   },
-   {
-    "id": 236375,
-    "nome": "Marcos Braz",
-    "siglaPartido": "PSDB",
-    "siglaUf": "RJ",
-    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/236375.jpg",
-    "cpf": "01201703700",
-    "nomeCivil": "MARCOS TEIXEIRA BRAZ"
    },
    {
     "id": 178943,
@@ -7376,7 +7374,7 @@
      "uf": "CE"
     },
     "220660": {
-     "nome": "Yury do Paredão",
+     "nome": "Yury Bruno",
      "partido": "MDB",
      "uf": "CE"
     },
@@ -10345,7 +10343,7 @@
      "uf": "CE"
     },
     "220660": {
-     "nome": "Yury do Paredão",
+     "nome": "Yury Bruno",
      "partido": "MDB",
      "uf": "CE"
     },
@@ -13272,7 +13270,7 @@
      "uf": "CE"
     },
     "220660": {
-     "nome": "Yury do Paredão",
+     "nome": "Yury Bruno",
      "partido": "MDB",
      "uf": "CE"
     },
@@ -21026,7 +21024,7 @@
      "uf": "CE"
     },
     "220660": {
-     "nome": "Yury do Paredão",
+     "nome": "Yury Bruno",
      "partido": "MDB",
      "uf": "CE"
     },
