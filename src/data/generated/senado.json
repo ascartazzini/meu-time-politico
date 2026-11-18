@@ -1,19 +1,20 @@
 {
- "atualizadoEm": "2026-09-02T21:57:50.173Z",
+ "atualizadoEm": "2026-11-18T09:06:41.325Z",
  "fonte": "https://legis.senado.leg.br/dadosabertos",
  "bancadas": {
   "REPUBLICANOS": 6,
   "MDB": 9,
-  "PL": 16,
+  "PSB": 7,
+  "PL": 15,
   "PT": 9,
   "PSD": 14,
-  "PSB": 7,
-  "PP": 7,
+  "PP": 8,
   "UNIÃO": 3,
   "PSDB": 4,
   "PODE": 3,
-  "PDT": 2,
-  "AVANTE": 1
+  "AVANTE": 1,
+  "S/PARTIDO": 1,
+  "PDT": 1
  },
  "senadores": [
   {
@@ -29,6 +30,13 @@
    "nomeCompleto": "Alessandro Vieira",
    "partido": "MDB",
    "uf": "SE"
+  },
+  {
+   "codigo": 6358,
+   "nome": "Ana Paula Lobato",
+   "nomeCompleto": "Ana Paula Dias Lobato Nova Alves",
+   "partido": "PSB",
+   "uf": "MA"
   },
   {
    "codigo": 5967,
@@ -311,18 +319,11 @@
    "uf": "SE"
   },
   {
-   "codigo": 5979,
-   "nome": "Leila Barros",
-   "nomeCompleto": "Leila Gomes de Barros Rêgo",
-   "partido": "PDT",
-   "uf": "DF"
-  },
-  {
-   "codigo": 6359,
-   "nome": "Lourdinha Pereira",
-   "nomeCompleto": "Maria de Lourdes Pereira e Pereira",
+   "codigo": 5977,
+   "nome": "Leany Lemos",
+   "nomeCompleto": "Leany Barreiro de Sousa Lemos",
    "partido": "PSB",
-   "uf": "MA"
+   "uf": "DF"
   },
   {
    "codigo": 5926,
@@ -451,18 +452,18 @@
    "uf": "AL"
   },
   {
+   "codigo": 5257,
+   "nome": "Renzo Braz",
+   "nomeCompleto": "Renzo do Amaral Braz",
+   "partido": "PP",
+   "uf": "MG"
+  },
+  {
    "codigo": 6025,
    "nome": "Roberta Acioly",
    "nomeCompleto": "Roberta Leontina Xisto Acioly",
    "partido": "REPUBLICANOS",
    "uf": "RR"
-  },
-  {
-   "codigo": 5732,
-   "nome": "Rodrigo Pacheco",
-   "nomeCompleto": "Rodrigo Otavio Soares Pacheco",
-   "partido": "PSB",
-   "uf": "MG"
   },
   {
    "codigo": 4694,
@@ -482,7 +483,7 @@
    "codigo": 5322,
    "nome": "Romário",
    "nomeCompleto": "Romario de Souza Faria",
-   "partido": "PL",
+   "partido": "S/PARTIDO",
    "uf": "RJ"
   },
   {
