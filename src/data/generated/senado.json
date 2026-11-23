@@ -1,13 +1,13 @@
 {
- "atualizadoEm": "2026-11-18T09:06:41.325Z",
+ "atualizadoEm": "2026-11-23T21:02:15.508Z",
  "fonte": "https://legis.senado.leg.br/dadosabertos",
  "bancadas": {
   "REPUBLICANOS": 6,
   "MDB": 9,
   "PSB": 7,
   "PL": 15,
-  "PT": 9,
-  "PSD": 14,
+  "PT": 10,
+  "PSD": 13,
   "PP": 8,
   "UNIÃO": 3,
   "PSDB": 4,
@@ -305,13 +305,6 @@
    "uf": "SC"
   },
   {
-   "codigo": 6369,
-   "nome": "Jussara Lima",
-   "nomeCompleto": "Antônia Jussara Gomes Alves Sousa Lima",
-   "partido": "PSD",
-   "uf": "PI"
-  },
-  {
    "codigo": 4811,
    "nome": "Laércio Oliveira",
    "nomeCompleto": "Laércio José de Oliveira",
@@ -548,6 +541,13 @@
    "nomeCompleto": "Veneziano Vital do Rêgo Segundo Neto",
    "partido": "MDB",
    "uf": "PB"
+  },
+  {
+   "codigo": 5016,
+   "nome": "Wellington Dias",
+   "nomeCompleto": "José Wellington Barroso de Araujo Dias",
+   "partido": "PT",
+   "uf": "PI"
   },
   {
    "codigo": 1173,
