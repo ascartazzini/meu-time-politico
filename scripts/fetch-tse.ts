@@ -77,6 +77,8 @@ async function main() {
   const antes = candidatos.length;
   for (let i = candidatos.length - 1; i >= 0; i--) if (!candidatos[i]) candidatos.splice(i, 1);
   if (antes !== candidatos.length) console.log(`  ${antes - candidatos.length} registros duplicados removidos`);
+  // o CSV do TSE muda de ordem a cada geração; ordenar pelo SQ deixa o diff semanal só com o que mudou
+  candidatos.sort((a, b) => a.sq.length - b.sq.length || (a.sq < b.sq ? -1 : a.sq > b.sq ? 1 : 0));
   const porCargo: Record<string, number> = {}; for (const c of candidatos) porCargo[c.cargo] = (porCargo[c.cargo] ?? 0) + 1;
   console.log(`  ${candidatos.length} candidaturas — ${JSON.stringify(porCargo)} — gerado pelo TSE em ${dataGeracao}`);
   escreverJson(resolve(GERADO, 'tse-2026.json'), { atualizadoEm: agoraIso(), dataGeracaoTse: dataGeracao, fonte: `${CDN}/consulta_cand_2026.zip`, candidatos });
@@ -92,6 +94,11 @@ async function main() {
     const a = (assembleias[r.SG_UF] ??= { cadeiras: 0, bancadas: {}, federais: 0 });
     if (r.DS_CARGO === 'DEPUTADO ESTADUAL' || r.DS_CARGO === 'DEPUTADO DISTRITAL') { a.cadeiras++; const p = canonizarSigla(r.SG_PARTIDO, aliases); a.bancadas[p] = (a.bancadas[p] ?? 0) + 1; }
     else if (r.DS_CARGO === 'DEPUTADO FEDERAL') a.federais++;
+  }
+  // mesma razão: UFs e partidos em ordem alfabética, não na ordem em que aparecem no CSV
+  for (const uf of Object.keys(assembleias).sort()) {
+    const a = assembleias[uf]; delete assembleias[uf];
+    assembleias[uf] = { ...a, bancadas: Object.fromEntries(Object.entries(a.bancadas).sort(([x], [y]) => x.localeCompare(y))) };
   }
   console.log(`  ${Object.keys(assembleias).length} UFs · ${Object.values(assembleias).reduce((s, a) => s + a.cadeiras, 0)} cadeiras estaduais · ${Object.values(assembleias).reduce((s, a) => s + a.federais, 0)} federais`);
   escreverJson(resolve(GERADO, 'assembleias.json'), { atualizadoEm: agoraIso(), fonte: `${CDN}/consulta_cand_2022.zip (DS_SIT_TOT_TURNO = ELEITO*)`, aviso: 'Composição eleita em 2022 por partido (siglas extintas mapeadas pra sucessoras). Não reflete trocas de partido posteriores.', assembleias });
