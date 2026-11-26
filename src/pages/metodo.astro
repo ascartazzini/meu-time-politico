@@ -41,6 +41,16 @@ import cadastro from '../data/generated/eleitos-2027.json';
       Não existe nota única nem ranking, e a página diz desde quando conta. Ainda não entram: se o projeto andou, relatorias, emendas pagas e gasto de cota.</p>
     <p><b>Antes da posse</b> (5 e 6 de janeiro para presidente e governadores, 1º de fevereiro para o Congresso), só tem registro oficial quem já tem mandato.</p>
 
+    <h2 id="causas">Causas votadas</h2>
+    <p>Acompanhamos 14 pautas (as mesmas do quiz da eleição). Algumas estão ligadas a votações nominais reais da Câmara e do Senado, listadas em
+      <code>src/data/temas.json</code>. Na página do eleito, cada voto dele nessas votações aparece com o link da matéria e o placar da casa.
+      Um “Sim” vira “a favor” ou “contra” conforme o que aquela votação significa pra frase da pauta; abstenção e ausência aparecem, mas não contam lado.
+      Quem não estava na casa na data não ganha registro: não dá pra afirmar ausência.</p>
+    <p><b>Quem a pauta protege</b> é um juízo nosso, explícito e igual pra todos: pra cada pauta, marcamos qual lado protege quem tem renda até 2 salários,
+      é CLT, tem empresa, usa só o SUS e assim por diante. Pautas de valores (arma, anistia, licenciamento ambiental) ficam sem essa leitura.
+      O resumo conta em quantas pautas votadas o voto caiu do lado que protege cada grupo; não é nota nem ranking.</p>
+    <p><b>Sem voto</b>, mostramos a estimativa pela orientação pública do partido (<code>src/data/partidos.json</code>), sempre com o selo “estimativa”.</p>
+
     <h2 id="regras">Regras pra reagir</h2>
     <ul>
       <li>Quatro reações: ❤️ amei, 👍 gostei, 👎 odiei e 🤬 odiei muito. Uma por post; tocar de novo desfaz, tocar em outra troca.</li>

@@ -10,6 +10,12 @@ import og from '../../data/generated/og.json';
 import { SUPABASE_URL } from '../../lib/supabase';
 import { leve, cargoEmTexto, nomeBonito, paginaOficial, cargoPrincipal, type EleitoBruto } from '../../lib/eleitos';
 import { principais, ESSENCIAIS, type Link, type TipoLink } from '../../../scripts/links';
+import temasJson from '../../data/temas.json';
+import partidosJson from '../../data/partidos.json';
+import perfilJson from '../../data/perfil.json';
+import camaraJson from '../../data/generated/camara.json';
+import senadoJson from '../../data/generated/senado.json';
+import { causasDe, resumoPorGrupo, type Fontes, type Causa } from '../../lib/causas';
 
 export function getStaticPaths() {
   return eleitos.map(e => ({ params: { slug: e.slug }, props: { e } }));
@@ -43,6 +49,18 @@ const ini = new Date(`${m.inicio}T12:00:00-03:00`).getTime(), fim = new Date(`${
 // imagem de compartilhamento: a abertura desta página (npm run og); sem ela, a geral do site
 const versaoOg = (og.imagens as Record<string, string>)[e.slug];
 const imagem = versaoOg ? `${SUPABASE_URL}/storage/v1/object/public/og/${e.slug}.jpg?v=${versaoOg}` : undefined;
+// causas votadas: voto nominal real nas pautas de temas.json; sem voto, estimativa do partido (com selo)
+const fontesCausas = {
+  temas: temasJson.temas, camara: camaraJson.votacoes, senado: senadoJson.votacoes,
+  partidos: partidosJson.partidos, ordemTemas: partidosJson.ordemTemas, aliases: partidosJson.aliases, rotulos: perfilJson.rotulos,
+} as unknown as Fontes;
+const causas = causasDe({ partido: e.partido, ids: e.ids }, fontesCausas);
+const votadas = causas.filter(c => c.origem === 'voto'), estimadas = causas.filter(c => c.origem === 'partido');
+const resumo = resumoPorGrupo(causas);
+const primeiro = l.nome.split(' ')[0];
+const LADO: Record<string, string> = { F: 'A favor', C: 'Contra', D: 'Dos dois lados' };
+const ladoTxt = (c: Causa) => c.lado ? (c.origem === 'partido' && c.lado === 'D' ? 'Partido dividido' : LADO[c.lado]) : 'Não tomou lado';
+const lista = (xs: string[]) => xs.length <= 1 ? xs.join('') : `${xs.slice(0, -1).join(', ')} e ${xs.at(-1)}`;
 const titulo = `${l.nome} (${e.partido}${presidente ? '' : `-${e.uf}`}) — ${cargo} · Meu Time Político`;
 ---
 <Social title={titulo} imagem={imagem}
@@ -78,6 +96,61 @@ const titulo = `${l.nome} (${e.partido}${presidente ? '' : `-${e.uf}`}) — ${ca
     </div>
     <p class="lp-nota" id="placarNota">Somando…</p>
   </section>
+
+
+  {causas.length > 0 && (
+  <section class="lp-sec" data-revela id="causas">
+    <div class="lp-k">Causas votadas</div>
+    <h2 class="lp-t">De que lado <span>{primeiro}</span> joga</h2>
+    {votadas.length > 0 ? (
+      <p class="lp-nota" style="font-size:17px;color:var(--ink)">{l.nome} votou em <b>{votadas.length} das {fontesCausas.temas.length} pautas</b> que acompanhamos: {lista(([['F', 'a favor da proposta'], ['C', 'contra'], ['D', 'dos dois lados'], [null, 'sem tomar lado']] as const)
+        .map(([k, t]) => [votadas.filter(c => c.lado === k).length, t] as const).filter(([n]) => n > 0).map(([n, t]) => `${n} ${t}`))}.</p>
+    ) : (
+      <p class="lp-nota" style="font-size:17px;color:var(--ink)">{['presidente', 'governador'].includes(l.cargo)
+        ? `${cargo} não vota no Congresso, e ${l.nome} não tem voto registrado nas ${fontesCausas.temas.length} pautas que acompanhamos.`
+        : `${l.nome} não tem voto registrado nas ${fontesCausas.temas.length} pautas que acompanhamos (não estava na casa na época ou não aparece na lista de votantes).`} Abaixo, só a posição estimada do partido.</p>
+    )}
+
+    {resumo.length > 0 && (
+      <div class="cz-resumo">
+        <h3>Quem saiu protegido pelos votos</h3>
+        <p>Em quantas das pautas votadas o voto foi pro lado que protege cada grupo. Leitura editorial, não nota.</p>
+        <ul>{resumo.map(r => (
+          <li><span>{r.grupo}</span><i style={`--p:${Math.round((r.aFavor / r.pautas) * 100)}%`}></i><b>{r.aFavor} de {r.pautas}</b></li>
+        ))}</ul>
+      </div>
+    )}
+
+    <div class="cz-lista">
+      {votadas.map(c => (
+        <article class={`cz lado-${c.lado ?? 'n'}`}>
+          <div class="cz-topo"><span class="cz-tema">{c.tema.s}</span><span class="cz-selo real">voto nominal</span></div>
+          <p class="cz-frase">“{c.tema.t}”</p>
+          <p class="cz-lado">{ladoTxt(c)}{c.lado === 'F' || c.lado === 'C' ? <small>{c.lado === 'F' ? 'votou pela proposta acima' : 'votou contra a proposta acima'}</small> : null}</p>
+          {c.protege.length > 0 && <div class="cz-imp"><span>Esse lado protege</span><ul class="cz-grupos bom">{c.protege.map(g => <li>{g}</li>)}</ul>
+            {c.pesaContra.length > 0 && <><span>e pesa contra</span><ul class="cz-grupos ruim">{c.pesaContra.map(g => <li>{g}</li>)}</ul></>}</div>}
+          {c.protege.length === 0 && c.lado && c.lado !== 'D' && <p class="cz-imp cz-valores">Pauta de valores: não medimos efeito no bolso de nenhum grupo.</p>}
+          <ul class="cz-votos">{c.votos.map(v => (
+            <li><b>{v.voto}</b> · <a href={v.url} target="_blank" rel="noopener">{v.rotulo}</a> <small>Placar {v.casa === 'camara' ? 'na Câmara' : 'no Senado'}: {v.placar}</small></li>
+          ))}</ul>
+        </article>
+      ))}
+    </div>
+
+    {estimadas.length > 0 && (
+      <details class="cz-est" open={votadas.length === 0}>
+        <summary>{votadas.length ? `Nas outras ${estimadas.length} pautas` : `As ${estimadas.length} pautas`}: estimativa pelo partido ({e.partido})</summary>
+        <p class="lp-nota">Sem voto de {primeiro}, mostramos a orientação pública do partido. É estimativa, não posição dele: pode votar diferente.</p>
+        <ul>{estimadas.map(c => (
+          <li><span class="cz-tema">{c.tema.s}</span><span class="cz-selo est">estimativa</span><b>{ladoTxt(c)}</b>
+            <small>“{c.tema.t}”{c.protege.length > 0 && <> · esse lado protege: {c.protege.join(', ')}</>}</small></li>
+        ))}</ul>
+      </details>
+    )}
+    <p class="lp-nota">Quem cada pauta protege é juízo nosso, aberto e o mesmo pra todos os políticos. Voto “Sim” em requerimento de urgência conta como apoio à pauta.
+      <a href="/metodo/#causas">Como lemos os votos</a>.</p>
+  </section>
+  )}
 
   <section class="lp-sec" data-revela>
     <div class="lp-k">Onde acompanhar</div>
