@@ -288,3 +288,37 @@ main{max-width:640px;margin:0 auto;padding:12px 16px 80px}
 .texto ul{padding-left:20px}
 .texto a{color:var(--link)}
 .texto code{font-size:13px;background:var(--hover);border-radius:4px;padding:1px 4px}
+
+/* ---- home: busca de político, convite e painel da imprensa ---- */
+.achar{position:relative}
+#resultados{margin:-4px 0 16px}
+#resultados .cargo-t{margin-top:4px}
+.convite h1{font-size:24px}
+.convite-uf{display:flex;align-items:center;gap:10px;margin-top:14px;font-weight:700;font-size:14px}
+.convite-uf select{font:inherit;font-weight:600;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+.convite .pessoas{border-radius:12px}
+.convite-mais{font-size:14px}
+.convite-mais a{color:var(--link)}
+.sub-filtros{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 0 12px}
+.sub-filtros::-webkit-scrollbar{display:none}
+.chip.mini{padding:5px 11px;font-size:13px}
+.imprensa{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 0 4px;margin-bottom:14px}
+.imp-cab{display:flex;align-items:center;gap:10px;padding:0 14px 10px}
+.imp-cab .quem b{font-size:16px}
+.imp-lista{list-style:none}
+.imp-lista > li{border-top:1px solid var(--line)}
+.imp-lista summary{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;list-style:none}
+.imp-lista summary::-webkit-details-marker{display:none}
+.imp-lista summary:hover{background:var(--hover)}
+.imp-lista summary .quem{flex:1;min-width:0}
+.imp-ult{display:block;font-size:13.5px;color:var(--ink);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+details[open] .imp-ult{display:none}
+.imp-n{flex:none;min-width:28px;height:28px;border-radius:999px;background:var(--ink);color:#fff;font-weight:700;font-size:13px;display:grid;place-items:center;padding:0 8px}
+.imp-manchetes{list-style:none;padding:0 14px 6px 60px}
+.imp-manchetes li{padding:7px 0;border-top:1px dashed var(--line)}
+.imp-manchetes li:first-child{border-top:0}
+.imp-manchetes a{color:var(--ink);font-weight:600;font-size:14.5px;line-height:1.3;text-decoration:none}
+.imp-manchetes a:hover{text-decoration:underline}
+.imp-manchetes small{display:block;color:var(--sub);font-size:12.5px;margin-top:2px}
+.imp-perfil{display:block;padding:2px 14px 12px 60px;font-size:13.5px;font-weight:700;color:var(--link);text-decoration:none}
+.imp-tudo{display:block;width:100%;border:0;border-top:1px solid var(--line);background:none;padding:11px 14px 8px;font:inherit;font-weight:700;font-size:14px;color:var(--link);text-align:left}
