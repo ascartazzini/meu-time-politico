@@ -10,7 +10,7 @@ Atualizar quando algo entrar ou mudar de motivo.
 | --- | --- | --- |
 | Coletores rodando sozinhos | o GitHub Actions precisa da chave secreta | `grep '^SUPABASE_SECRET_KEY=' .env \| cut -d= -f2- \| gh secret set SUPABASE_SECRET_KEY` |
 | Login com Google | o provedor Google precisa ser ligado no Supabase com um cliente OAuth criado no Google Cloud (conta sua) | guia em [login-google.md](login-google.md); até lá o botão Entrar não funciona |
-| Envio do resumo por e-mail | quem tem conta já escolhe receber depois do login (`newsletter_escolha` → `lista_espera`); falta mandar: precisa de conta num serviço de envio com plano gratuito (ex.: Resend, Brevo); criar conta é seu | escolher o serviço e criar a conta; o resto (modelo do e-mail, job diário, descadastro) a gente faz |
+| Envio do resumo por e-mail | o envio está pronto (`newsletter.yml` toda sexta, registro em `envios`, descadastro em /sair/); falta a conta na Resend (plano gratuito: 100/dia, 3.000/mês) com o domínio verificado | criar a conta, verificar `meutimepolitico.com` (registros DNS que a Resend mostra), criar a chave e `gh secret set RESEND_API_KEY`; testar com `npm run newsletter:enviar -- --para=seu@email` |
 
 ## Próximas na fila
 
@@ -30,7 +30,7 @@ Atualizar quando algo entrar ou mudar de motivo.
 | Titular (em quem votei) | 4 | saiu da tela pra simplificar; volta quando o impacto do time titular existir |
 | "Isso não é sobre ele" | 3 | botão no card pra apontar ligação errada; precisa de tabela e função pública de denúncia | hoje o caminho é abrir issue no GitHub |
 | Assembleias estaduais | 5 | sem API na maioria; MG tem API completa, SP dados abertos pesados, BA bloqueia IP de fora | medir as outras 24 com o método da Fase 0 |
-| Envio da newsletter por e-mail | — | a edição sai sozinha toda sexta (página /semana/ e HTML pronto em `edicoes.html`); falta o serviço de envio (acima) | quando houver conta, um job lê `edicoes.html`, troca `{{descadastro}}` e manda pra `lista_espera` |
+| Confirmação do e-mail (opt-in duplo) | — | quem se inscreve pelo formulário de /semana/ entra sem confirmar o e-mail (quem entra pela conta Google já vem verificado) | mandar um e-mail de confirmação na inscrição e só enviar a newsletter pra quem confirmou |
 | Revisar sugestões de link | — | o "insira aqui" manda pra `sugestoes_link`; aprovar é manual | `npm run sugestoes`, depois `npm run links` e publicar |
 | Ligação de notícia por IA | 3 | hoje só por nome exato; perde apelidos e menções indiretas | só onde o nome não resolve, com teto de custo |
 | Fotos de deputados estaduais e novatos | 1 | só Câmara e Senado dão foto pelo id; TSE barra IP de fora; a Wikipédia (`npm run fotos`) cobre só presidente, governadores e senadores (33 de 44 sem foto) | ~1.270 eleitos aparecem com iniciais; estaduais quase nunca têm página na Wikipédia |

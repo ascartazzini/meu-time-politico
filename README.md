@@ -18,6 +18,7 @@ npm run enriquecer     # depois da coleta: imagem da matéria, trechos de discur
 npm run fotos          # foto da Wikipédia pra presidente, governador e senador sem foto (src/data/generated/fotos-wiki.json)
 npm run og             # imagem de compartilhamento de cada eleito = a abertura da página dele (Chrome local → bucket og do Supabase; só refaz quem mudou)
 npm run newsletter     # monta a edição da semana em `edicoes` (página /semana/ + HTML do e-mail)
+npm run newsletter:enviar  # manda a edição pela Resend pra `lista_espera` (--seco conta, --para=x@y manda teste)
 npm run links          # site e redes de cada eleito (TSE, Câmara, sugestões aprovadas) → links-eleitos.json
 npm run sugestoes      # lista as sugestões de link ("insira aqui"); --aprovar=ID,ID · --recusar=ID
 ```
@@ -57,6 +58,7 @@ scripts/carregar-cadastro.ts `npm run cadastro:carregar`: sobe o cadastro pro Su
 scripts/coletores/           camara.ts (presença, votos, projetos) · senado.ts (votos, discursos) · presidente.ts (agenda do Planalto) · imprensa.ts (RSS) · citacoes.ts, agenda.ts e agrupar.ts (mesma notícia em vários veículos vira um card; regras puras, testadas) · banco.ts (escrita no Supabase)
 src/lib/mandato.ts           placar do mandato na página do político (função placar_mandato), em partes, sem nota única
 src/lib/edicao.ts            newsletter: monta a edição (notícias agrupadas, pauta, marcos, chamada) e o HTML do e-mail (puro, testado)
+src/lib/envio.ts             newsletter: uma mensagem por inscrito, com link de descadastro (/sair/) e List-Unsubscribe (puro, testado)
 src/data/marcos.json         datas que são regra (posses, sessão legislativa, prazos do Orçamento), com a fonte
 scripts/links.ts             normaliza e escolhe os links de cada eleito (puro, testado) · links-eleitos.ts monta o arquivo
 src/pages/semana.astro       resumo da semana (lê a última edição do banco) · politico/[slug].astro: landing page do eleito

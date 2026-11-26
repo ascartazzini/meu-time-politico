@@ -36,6 +36,7 @@
     "enriquecer": "tsx scripts/coletores/enriquecer.ts",
     "fotos": "tsx scripts/fotos-wiki.ts",
     "newsletter": "tsx scripts/newsletter.ts",
+    "newsletter:enviar": "tsx scripts/enviar-newsletter.ts",
     "og": "tsx scripts/og-politicos.ts"
   },
   "dependencies": {
