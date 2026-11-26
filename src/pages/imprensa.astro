@@ -1,0 +1,59 @@
+---
+/* Release de imprensa. Texto aprovado pelo Artur em 26/11/2026; o número de eleitos sai do cadastro, igual ao resto do site. */
+import Social from '../layouts/Social.astro';
+import cadastro from '../data/generated/eleitos-2027.json';
+const n = cadastro.eleitos.length.toLocaleString('pt-BR');
+---
+<Social title="Imprensa — Meu Time Político" description={`Release: site gratuito reúne, com a fonte de cada registro, o que fazem os ${n} políticos com mandato a partir de 2027. Sem nota nem ranking.`}>
+  <article class="caixa texto release">
+    <p class="selo-r">Release · 26 de novembro de 2026</p>
+    <h1>Site gratuito reúne, com a fonte de cada registro, o que fazem os {n} políticos com mandato a partir de 2027</h1>
+    <p class="fina">Meu Time Político junta votos, presença, projetos e notícias numa linha do tempo, sem nota nem ranking. Presidente e governadores tomam posse em 5 e 6 de janeiro; o Congresso, em 1º de fevereiro.</p>
+
+    <p>O site gratuito Meu Time Político, criado pelo estrategista de comunicação Artur Scartazzini, reúne o que fazem os {n} políticos com mandato a partir de 2027: votos, presença, projetos e notícias, cada item com link para a fonte.</p>
+
+    <p>O cadastro parte do resultado oficial do TSE de 2026, mais os senadores eleitos em 2022 que seguem no mandato. Cada político tem uma página com o cargo, o período do mandato, as redes sociais que declarou ao TSE e à Câmara e um placar do mandato.</p>
+
+    <p>O placar soma presença no plenário, votações nominais, projetos como autor e coautor, discursos, agenda e citações na imprensa. Não há nota única nem ranking. Os registros oficiais vêm da Câmara, do Senado e do Planalto. As notícias vêm de G1, Folha, O Globo, Estadão, Poder360, Agência Brasil, Agência Câmara e Agência Senado; coluna, blog, análise e opinião ficam de fora, e da imprensa o site guarda só título, linha fina e link.</p>
+
+    <blockquote>
+      <p>“Depois da eleição, a atenção some justamente quando o mandato começa. O que cada eleito faz já é dado público, só que espalhado em vários sites. Juntei num lugar só, com o link da fonte em cada item, pra qualquer pessoa conferir.”</p>
+      <footer>Artur Scartazzini, estrategista de comunicação e criador de ferramentas com dado público</footer>
+    </blockquote>
+
+    <p>O site publica o que ainda não cobre. Antes da posse, só tem registro oficial quem já exerce mandato. Hoje só a agenda do presidente entra. Andamento de projeto, relatorias, emendas pagas e gasto de cota ainda não entram. No Senado não existe registro de presença, só o voto nominal.</p>
+
+    <p>A leitura é aberta, sem cadastro. Quem entra com uma conta Google pode seguir os políticos que quer acompanhar e reagir a cada item. O projeto é de código aberto e não tem vínculo com partido, campanha ou político.</p>
+
+    <h2 id="servico">Serviço</h2>
+    <ul>
+      <li>Site: <a href="/">www.meutimepolitico.com</a></li>
+      <li>Método e o que ainda não entra: <a href="/metodo/">meutimepolitico.com/metodo</a></li>
+      <li>Código: <a href="https://github.com/ascartazzini/meu-time-politico">github.com/ascartazzini/meu-time-politico</a></li>
+      <li>Contato: Artur Scartazzini, <a href="mailto:artur.scartazzini@gmail.com">artur.scartazzini@gmail.com</a></li>
+    </ul>
+
+    <h2 id="sobre">Sobre</h2>
+    <p>Artur Scartazzini é estrategista de comunicação. Cofundou a Shoot, agência certificada Empresa B, e passou mais de 12 anos conectando marcas a causas sociais e ambientais. De Barcelona, publica ferramentas gratuitas com dado público, como Meu Time Político e The Immigrant Factor. Palestrante TEDx.</p>
+
+    <p class="acoes"><button class="btn leve" type="button" id="pdf">Salvar em PDF</button></p>
+  </article>
+</Social>
+
+<script>
+  document.getElementById('pdf')?.addEventListener('click', () => window.print());
+</script>
+
+<style>
+  .selo-r { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; opacity: .65; margin: 0 0 10px; }
+  .release h1 { text-wrap: balance; }
+  .fina { font-size: 1.12em; font-weight: 600; }
+  blockquote { margin: 22px 0; padding: 4px 0 4px 16px; border-left: 4px solid currentColor; }
+  blockquote p { font-size: 1.1em; font-weight: 600; margin: 0 0 8px; }
+  blockquote footer { font-size: .9em; opacity: .7; }
+  .acoes { margin-top: 26px; }
+  @media print {
+    :global(.topo), :global(.rodape), :global(.pergunta), .acoes { display: none !important; }
+    .release { border: 0; box-shadow: none; padding: 0; }
+  }
+</style>
