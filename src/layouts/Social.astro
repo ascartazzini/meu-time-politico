@@ -50,7 +50,7 @@ const { title, description, noindex = false, imagem } = Astro.props;
   </footer>
 
   <script>
-    import { cliente, entrar, sair, seguidos, trazerTimeDoAparelho, newsletterMinha, newsletterEscolher, mensagemDeErro } from '../lib/conta';
+    import { cliente, entrar, sair, seguidos, trazerTimeDoAparelho, seguirPendentes, newsletterMinha, newsletterEscolher, mensagemDeErro } from '../lib/conta';
     import { CONSENTIMENTO } from '../lib/lista-espera';
     import { evento } from '../lib/analytics';
     import { toast } from '../lib/toast';
@@ -82,8 +82,12 @@ const { title, description, noindex = false, imagem } = Astro.props;
         history.replaceState(null, '', location.pathname);
         evento('login_ok', {});
         const trazidos = await trazerTimeDoAparelho().catch(() => 0);
-        if (trazidos) toast(`Trouxemos os ${trazidos} políticos que você seguia neste aparelho.`);
-        if (!(await seguidos()).size && location.pathname !== '/seguir/') location.href = '/seguir/';
+        const pedidos = await seguirPendentes().catch(() => 0);
+        if (pedidos) toast(pedidos === 1 ? 'Pronto: você já está seguindo.' : `Pronto: você já segue os ${pedidos} que escolheu.`);
+        else if (trazidos) toast(`Trouxemos os ${trazidos} políticos que você seguia neste aparelho.`);
+        // a home já convida a escolher quem seguir; nas outras páginas, quem não segue ninguém vai pra /seguir/
+        if (!(await seguidos()).size && !['/', '/seguir/'].includes(location.pathname)) location.href = '/seguir/';
+        dispatchEvent(new CustomEvent('mtp:entrou'));
       }
     });
     // Resumo por e-mail: quem tem conta escolhe uma vez (a pergunta aparece até responder); depois troca pelo menu.

@@ -258,3 +258,21 @@ export function diaEmTexto(dia: string, agora = new Date()): string {
   if (dia === diaBr(new Date(agora.getTime() - 864e5).toISOString())) return 'ontem';
   return new Date(`${dia}T12:00:00Z`).toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' }).replace('-feira', '');
 }
+
+/** Painel "Na imprensa": as notícias juntadas por político, quem mais saiu primeiro (desempate: a mais recente).
+ *  Notícia sobre duas pessoas conta pras duas. Só entra quem está em `politicos` do item (o feed já filtra por quem a pessoa segue). */
+export interface GrupoImprensa<T> { slug: string; noticias: T[]; veiculos: string[] }
+export function agruparPorPolitico<T extends { tipo: string; quando: string; fonte_nome: string; politicos?: { slug: string }[] | null }>(itens: T[]): GrupoImprensa<T>[] {
+  const g = new Map<string, GrupoImprensa<T>>();
+  for (const i of itens) {
+    if (i.tipo !== 'noticia') continue;
+    for (const p of new Set((i.politicos ?? []).map(x => x.slug))) {
+      const b = g.get(p) ?? { slug: p, noticias: [], veiculos: [] };
+      b.noticias.push(i);
+      if (!b.veiculos.includes(i.fonte_nome)) b.veiculos.push(i.fonte_nome);
+      g.set(p, b);
+    }
+  }
+  const recente = (b: GrupoImprensa<T>) => Math.max(...b.noticias.map(n => +new Date(n.quando)));
+  return [...g.values()].sort((a, b) => b.noticias.length - a.noticias.length || recente(b) - recente(a));
+}

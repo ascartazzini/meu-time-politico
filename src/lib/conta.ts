@@ -59,6 +59,25 @@ export async function trazerTimeDoAparelho(): Promise<number> {
   return 0;
 }
 
+/* Quem toca "Seguir" sem conta: o pedido fica guardado no aparelho, a pessoa entra com o Google
+   e, na volta, segue de verdade (Social.astro chama seguirPendentes). */
+const PENDENTES = 'mtp:seguir-depois';
+export function guardarPendente(slug: string): void {
+  try {
+    const xs = new Set<string>(JSON.parse(localStorage.getItem(PENDENTES) ?? '[]'));
+    xs.add(slug);
+    localStorage.setItem(PENDENTES, JSON.stringify([...xs]));
+  } catch { /* sem storage: só entra */ }
+}
+export async function seguirPendentes(): Promise<number> {
+  let xs: string[] = [];
+  try { xs = JSON.parse(localStorage.getItem(PENDENTES) ?? '[]'); localStorage.removeItem(PENDENTES); } catch { return 0; }
+  const s = await seguidos();
+  const novos = xs.filter(x => typeof x === 'string' && !s.has(x));
+  if (novos.length) await seguir(novos, true);
+  return novos.length;
+}
+
 /** As quatro reações, na ordem em que aparecem no post. Uma por pessoa por post. */
 export const REACOES = [
   { tipo: 'amei', emoji: '❤️', rotulo: 'Amei' },

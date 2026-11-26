@@ -1,11 +1,12 @@
 ---
 import Social from '../layouts/Social.astro';
 import cadastro from '../data/generated/eleitos-2027.json';
+import ufs from '../data/ufs.json';
 ---
 <Social title="Meu Time Político — o que os eleitos fizeram hoje" description="Tudo o que os políticos eleitos em 2026 fazem, numa timeline: votos, presença, projetos, agenda e o que sai na imprensa, com a fonte de cada coisa. Siga quem você quer cobrar e reaja.">
   <nav class="filtros" slot="filtros" aria-label="Filtrar a timeline">
-    <button class="chip" type="button" data-f="todos" aria-pressed="true">Todos</button>
-    <button class="chip" type="button" data-f="meus" aria-pressed="false">Quem eu sigo</button>
+    <button class="chip" type="button" data-f="meus" aria-pressed="true">Quem eu sigo</button>
+    <button class="chip" type="button" data-f="todos" aria-pressed="false">Todos</button>
     <button class="chip" type="button" data-f="presidente" aria-pressed="false">Presidente</button>
     <button class="chip" type="button" data-f="camara" aria-pressed="false">Câmara</button>
     <button class="chip" type="button" data-f="senado" aria-pressed="false">Senado</button>
@@ -13,69 +14,163 @@ import cadastro from '../data/generated/eleitos-2027.json';
     <button class="chip" type="button" data-f="imprensa" aria-pressed="false">Imprensa</button>
   </nav>
 
-  <section class="caixa" id="boasVindas" hidden>
-    <h1>O jogo não acaba na urna.</h1>
-    <p>Tudo o que os {cadastro.eleitos.length.toLocaleString('pt-BR')} eleitos de 2026 fazem, numa timeline: como votaram, se foram trabalhar,
-      com quem se reuniram, o que a imprensa noticiou. <b>Cada item com a fonte.</b></p>
-    <p style="margin-top:12px"><button class="btn" type="button" data-entrar>Entrar e escolher quem seguir</button></p>
+  <div class="achar">
+    <input class="busca" id="busca" type="search" placeholder="Buscar político pra seguir: nome, partido, estado ou cargo" autocomplete="off" aria-controls="resultados" />
+    <div id="resultados" hidden></div>
+  </div>
+
+  <section class="caixa convite" id="convite" hidden>
+    <h1>Monte seu time.</h1>
+    <p>Siga os eleitos que você quer cobrar e a timeline mostra só o que eles fazem: como votaram, se foram trabalhar,
+      com quem se reuniram, o que a imprensa noticiou. São {cadastro.eleitos.length.toLocaleString('pt-BR')} eleitos de 2026. <b>Cada item com a fonte.</b></p>
+    <label class="convite-uf">Seu estado
+      <select id="conviteUf"><option value="">Escolha</option>{ufs.ufs.map(u => <option value={u.sigla}>{u.nome}</option>)}</select>
+    </label>
+    <div id="sugestoes"></div>
+    <p class="convite-mais">Procurando alguém? Use a busca acima, ou <a href="/seguir/">veja todos os eleitos do seu estado</a>.</p>
   </section>
 
-  <input class="busca" id="busca" type="search" placeholder="Filtrar por político: nome, partido ou estado" autocomplete="off" />
+  <h2 class="cargo-t" id="enquanto" hidden>Enquanto isso, o que rolou com todos os eleitos</h2>
+  <nav class="sub-filtros" id="veiculos" aria-label="Filtrar por veículo" hidden></nav>
+  <section class="imprensa" id="imprensa" hidden></section>
   <div id="timeline"></div>
 
   <script>
     import { montarTimeline, eleitos } from '../lib/timeline';
+    import { montarImprensa } from '../lib/painel-imprensa';
+    import { buscarPoliticos, sugestoes } from '../lib/busca';
+    import { lista, ligarSeguir } from '../lib/seletor';
     import { usuario, seguidos } from '../lib/conta';
+    import { carregarTime } from '../lib/time';
+    import { rpc } from '../lib/supabase';
+    import { ROTULO_TIPO } from '../lib/feed';
     import { evento } from '../lib/analytics';
 
-    const sem = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
-    const busca = document.getElementById('busca') as HTMLInputElement;
+    const esc = (s: string) => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+    const $ = (id: string) => document.getElementById(id)!;
+    const busca = $('busca') as HTMLInputElement, resultados = $('resultados'), convite = $('convite');
+    const selUf = $('conviteUf') as HTMLSelectElement, veiculos = $('veiculos');
+
+    // Notícia sai o tempo todo: nas abas gerais ela fica no painel "Na imprensa" e a timeline traz o resto.
+    const SEM_NOTICIA = Object.keys(ROTULO_TIPO).filter(t => t !== 'noticia');
     const FILTROS: Record<string, { tipos?: string[]; fontes?: string[] }> = {
+      meus: { tipos: SEM_NOTICIA }, todos: { tipos: SEM_NOTICIA }, presidente: { tipos: SEM_NOTICIA },
       camara: { fontes: ['camara-presenca', 'camara-votacoes', 'camara-proposicoes'] },
       senado: { fontes: ['senado-votacoes', 'senado-discursos'] },
       agenda: { tipos: ['agenda'] },
       imprensa: { tipos: ['noticia'] },
     };
-    let filtro = 'todos';
+    let filtro = 'meus', veiculo: string | null = null;
+    let segueAlguem = false;
+
+    const ufLembrada = () => { try { return localStorage.getItem('mtp:uf'); } catch { return null; } } ;
+    const lembrarUf = (uf: string) => { try { localStorage.setItem('mtp:uf', uf); } catch { /* sem storage */ } };
+
+    /** "Quem eu sigo" sem ninguém seguido mostra o convite e, embaixo, a timeline de todos. */
+    const efetivo = () => filtro === 'meus' && !segueAlguem ? 'todos' : filtro;
 
     async function slugs(): Promise<string[] | null> {
-      const gente = await eleitos();
-      const q = sem(busca.value.trim());
-      if (q) return [...gente.values()].filter(e => sem(`${e.nome} ${e.partido} ${e.uf ?? ''}`).includes(q)).map(e => e.slug).slice(0, 200);
-      if (filtro === 'meus') return [...(await seguidos())];
-      if (filtro === 'presidente') return [...gente.values()].filter(e => e.cargo === 'presidente').map(e => e.slug);
+      const f = efetivo();
+      if (f === 'meus') return [...(await seguidos())];
+      if (f === 'presidente') return [...(await eleitos()).values()].filter(e => e.cargo === 'presidente').map(e => e.slug);
       return null;
     }
     const tl = montarTimeline({
-      raiz: document.getElementById('timeline')!, local: 'home', slugs,
-      tipos: () => FILTROS[filtro]?.tipos ?? null, fontes: () => FILTROS[filtro]?.fontes ?? null,
-      // notícias do mesmo dia num carrossel só; nas abas que são só de um tipo (imprensa, casa, agenda) não
-      agruparNoticias: () => busca.value.trim() ? null : filtro === 'presidente' ? 'O presidente na imprensa' : filtro === 'meus' ? 'Seu time na imprensa' : filtro === 'todos' ? 'Na imprensa' : null,
-      vazio: () => busca.value.trim() ? 'Ninguém com esse nome, ou nada dele ainda.'
-        : filtro === 'meus' ? 'Você ainda não segue ninguém. <a href="/seguir/">Escolha quem seguir</a>.' : 'Nada por aqui ainda.',
+      raiz: $('timeline'), local: 'home', slugs,
+      tipos: () => FILTROS[efetivo()]?.tipos ?? null,
+      fontes: () => efetivo() === 'imprensa' && veiculo ? [veiculo] : FILTROS[efetivo()]?.fontes ?? null,
+      vazio: () => efetivo() === 'meus' ? 'Nada de quem você segue ainda. As notícias sobre eles ficam no painel acima.'
+        : efetivo() === 'imprensa' ? 'Nenhuma notícia desse veículo por enquanto.' : 'Nada por aqui ainda.',
+    });
+    const painel = montarImprensa({
+      raiz: $('imprensa'), slugs,
+      rotulo: () => ({ meus: 'Seu time na imprensa', presidente: 'O presidente na imprensa' } as Record<string, string>)[efetivo()] ?? 'Na imprensa',
+      verTudo: () => { escolher('imprensa'); scrollTo({ top: 0, behavior: 'smooth' }); },
     });
 
-    function escolher(f: string) {
-      filtro = f;
-      document.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', String((c as HTMLElement).dataset.f === f)));
+    /** Aba Imprensa: um chip por veículo, dos que mais publicaram nas últimas notícias. */
+    async function desenharVeiculos() {
+      const ns = await rpc<{ fonte_id: string; fonte_nome: string }[]>('feed', { p_slugs: null, p_tipos: ['noticia'], p_antes: null, p_limite: 100, p_fontes: null }).catch(() => []);
+      const conta = new Map<string, { nome: string; n: number }>();
+      for (const n of ns) { const c = conta.get(n.fonte_id) ?? { nome: n.fonte_nome, n: 0 }; c.n++; conta.set(n.fonte_id, c); }
+      const vs = [...conta].sort((a, b) => b[1].n - a[1].n);
+      veiculos.innerHTML = `<button class="chip mini" type="button" data-v="" aria-pressed="${!veiculo}">Todos os veículos</button>` +
+        vs.map(([id, c]) => `<button class="chip mini" type="button" data-v="${esc(id)}" aria-pressed="${veiculo === id}">${esc(c.nome)}</button>`).join('');
+    }
+    veiculos.addEventListener('click', e => {
+      const b = (e.target as HTMLElement).closest<HTMLElement>('[data-v]');
+      if (!b) return;
+      veiculo = b.dataset.v || null;
+      veiculos.querySelectorAll('[data-v]').forEach(x => x.setAttribute('aria-pressed', String((x as HTMLElement).dataset.v === (veiculo ?? ''))));
+      evento('filtro_veiculo', { veiculo: veiculo ?? 'todos' });
+      tl.recarregar();
+    });
+
+    async function desenharConvite() {
+      const vazio = filtro === 'meus' && !segueAlguem;
+      convite.hidden = !vazio;
+      $('enquanto').hidden = !vazio;
+      if (!vazio) return;
+      const uf = selUf.value || null;
+      const [gente, s] = await Promise.all([eleitos(), seguidos()]);
+      const sug = sugestoes(gente.values(), uf);
+      $('sugestoes').innerHTML = `<h2 class="cargo-t">${uf ? 'Comece por aqui' : 'Comece pelo presidente'}</h2>${lista(sug, s)}${uf ? '' : '<p class="convite-mais">Escolha o estado pra ver governador e senadores.</p>'}`;
+    }
+
+    function aplicar() {
+      document.querySelectorAll('.filtros .chip').forEach(c => c.setAttribute('aria-pressed', String((c as HTMLElement).dataset.f === filtro)));
+      const imprensa = efetivo() === 'imprensa';
+      veiculos.hidden = !imprensa;
+      if (imprensa) { painel.esconder(); desenharVeiculos(); } else { veiculo = null; painel.recarregar(); }
+      desenharConvite();
       tl.recarregar();
     }
-    document.querySelector('.filtros')!.addEventListener('click', async e => {
+    function escolher(f: string) { filtro = f; aplicar(); }
+
+    document.querySelector('.filtros')!.addEventListener('click', e => {
       const b = (e.target as HTMLElement).closest<HTMLButtonElement>('.chip');
       if (!b) return;
-      if (b.dataset.f === 'meus' && !(await usuario())) { document.querySelector<HTMLButtonElement>('[data-entrar]')?.click(); return; }
       evento('filtro', { filtro: b.dataset.f });
       escolher(b.dataset.f!);
     });
-    let t: number | undefined;
-    busca.addEventListener('input', () => { clearTimeout(t); t = window.setTimeout(() => tl.recarregar(), 300); });
 
-    // Quem já segue alguém abre direto em "Quem eu sigo"; quem não tem conta vê a caixa de boas-vindas.
-    usuario().then(async u => {
-      if (!u) { document.getElementById('boasVindas')!.hidden = false; return; }
+    // Busca: acha o político e segue dali mesmo (ou abre a página dele). Sem texto, volta a timeline.
+    async function desenharBusca() {
+      const q = busca.value.trim();
+      resultados.hidden = !q;
+      if (!q) return;
+      const [gente, s] = await Promise.all([eleitos(), seguidos()]);
+      const achados = buscarPoliticos(gente.values(), q, { uf: selUf.value || ufLembrada() || carregarTime().uf || null, limite: 20 });
+      resultados.innerHTML = achados.length
+        ? `<h2 class="cargo-t">${achados.length === 20 ? 'Os 20 que mais batem' : `${achados.length} ${achados.length === 1 ? 'político' : 'políticos'}`}</h2>${lista(achados, s)}`
+        : `<p class="vazio">Ninguém com “${esc(q)}”. Tente o nome de urna, o partido (PT, PL) ou o estado (SP, Bahia).</p>`;
+    }
+    let t: number | undefined;
+    busca.addEventListener('input', () => { clearTimeout(t); t = window.setTimeout(() => { desenharBusca(); if (busca.value.trim()) evento('busca_politico', {}); }, 180); });
+    busca.addEventListener('keydown', e => { if (e.key === 'Escape') { busca.value = ''; desenharBusca(); } });
+
+    selUf.addEventListener('change', () => { if (selUf.value) { lembrarUf(selUf.value); evento('seguir_uf', { uf: selUf.value, local: 'home' }); } desenharConvite(); });
+
+    // Seguir/deixar de seguir pela busca ou pelo convite: o primeiro seguido já troca a home pra "Quem eu sigo" de verdade.
+    async function mudouSeguidos() {
+      const antes = segueAlguem;
+      segueAlguem = (await seguidos()).size > 0;
+      desenharBusca();
+      if (antes !== segueAlguem) aplicar(); else if (filtro === 'meus') { desenharConvite(); if (segueAlguem) { painel.recarregar(); tl.recarregar(); } }
+    }
+    ligarSeguir(resultados, 'home:busca', () => {});
+    ligarSeguir(convite, 'home:convite', () => {});
+    addEventListener('mtp:seguidos', mudouSeguidos);
+    addEventListener('mtp:entrou', mudouSeguidos);
+
+    // Sempre abre em "Quem eu sigo" (?f= escolhe outra aba). Sem conta ou sem ninguém seguido, essa aba é o convite.
+    selUf.value = ufLembrada() ?? carregarTime().uf ?? '';
+    (async () => {
+      const u = await usuario();
+      segueAlguem = !!u && (await seguidos()).size > 0;
       const pedido = new URLSearchParams(location.search).get('f');
-      if (pedido && document.querySelector(`.chip[data-f="${CSS.escape(pedido)}"]`)) escolher(pedido);
-      else if ((await seguidos()).size) escolher('meus');
-    });
+      if (pedido && document.querySelector(`.filtros .chip[data-f="${CSS.escape(pedido)}"]`)) filtro = pedido;
+      aplicar();
+    })();
   </script>
 </Social>

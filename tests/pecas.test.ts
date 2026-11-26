@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { peca, agruparPorDia, diaEmTexto, type ItemPeca } from '../src/lib/pecas';
+import { peca, agruparPorDia, agruparPorPolitico, diaEmTexto, type ItemPeca } from '../src/lib/pecas';
 import { imagemDoHtml } from '../scripts/coletores/imagem';
 import type { EleitoLeve } from '../src/lib/eleitos';
 
@@ -142,5 +142,21 @@ describe('agruparPorDia', () => {
     expect(diaEmTexto('2026-10-29', agora)).toBe('hoje');
     expect(diaEmTexto('2026-10-28', agora)).toBe('ontem');
     expect(diaEmTexto('2026-10-26', agora)).toBe('segunda, 26 de outubro');
+  });
+});
+
+describe('agruparPorPolitico', () => {
+  const n = (id: string, fonte: string, quando: string, ...ps: string[]) => ({ id, tipo: 'noticia', quando, fonte_nome: fonte, politicos: ps.map(slug => ({ slug })) });
+  it('quem mais saiu primeiro; empate pela mais recente; notícia de dois conta pros dois; o resto fica de fora', () => {
+    const gs = agruparPorPolitico([
+      n('a', 'O Globo', '2026-11-26T10:00:00Z', 'lula'),
+      n('b', 'G1', '2026-11-26T09:00:00Z', 'motta', 'lula'),
+      { id: 'v', tipo: 'voto', quando: '2026-11-26T08:00:00Z', fonte_nome: 'Câmara', politicos: [{ slug: 'motta' }] },
+      n('c', 'O Globo', '2026-11-26T07:00:00Z', 'lula'),
+      n('d', 'Folha', '2026-11-26T11:00:00Z', 'alcolumbre'),
+      n('e', 'Folha', '2026-11-26T06:00:00Z', 'motta'),
+    ]);
+    expect(gs.map(g => `${g.slug}:${g.noticias.map(x => x.id).join('')}`)).toEqual(['lula:abc', 'motta:be', 'alcolumbre:d']);
+    expect(gs[0].veiculos).toEqual(['O Globo', 'G1']);
   });
 });

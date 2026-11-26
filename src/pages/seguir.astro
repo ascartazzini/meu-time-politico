@@ -3,62 +3,55 @@ import Social from '../layouts/Social.astro';
 import ufs from '../data/ufs.json';
 ---
 <Social title="Quem eu sigo — Meu Time Político" description="Escolha os eleitos de 2026 que você quer acompanhar: presidente, governador, senadores e deputados do seu estado." noindex>
-  <section class="caixa" id="semConta" hidden>
+  <section class="caixa">
     <h1>Quem você quer cobrar?</h1>
-    <p>Entre com o Google e escolha os eleitos que quer acompanhar. Quem você segue aparece em "Quem eu sigo", e só nesses posts dá pra reagir.</p>
-    <p style="margin-top:12px"><button class="btn" type="button" data-entrar>Entrar com Google</button></p>
+    <p id="contagem">Busque pelo nome ou escolha o estado. Siga quantos quiser, de qualquer cargo.</p>
+    <input class="busca" id="busca" type="search" placeholder="Buscar em todo o Brasil: nome, partido, estado ou cargo" autocomplete="off" style="margin:12px 0 0" />
+    <div class="ufs" id="ufs">{ufs.ufs.map(u => <button class="uf" type="button" data-uf={u.sigla} aria-pressed="false" title={u.nome}>{u.sigla}</button>)}</div>
   </section>
-
-  <div id="comConta" hidden>
-    <section class="caixa">
-      <h1>Quem você quer cobrar?</h1>
-      <p id="contagem">Escolha o estado e siga quantos quiser, de qualquer cargo.</p>
-      <div class="ufs" id="ufs">{ufs.ufs.map(u => <button class="uf" type="button" data-uf={u.sigla} aria-pressed="false" title={u.nome}>{u.sigla}</button>)}</div>
-    </section>
-    <input class="busca" id="busca" type="search" placeholder="Buscar por nome ou partido" autocomplete="off" hidden />
-    <div id="lista"></div>
-    <p style="text-align:center;margin-top:18px"><a class="btn" href="/">Ver a timeline</a></p>
-  </div>
+  <div id="lista"></div>
+  <p style="text-align:center;margin-top:18px"><a class="btn" href="/">Ver a timeline</a></p>
 
   <script>
-    import { usuario, seguidos, seguir, mensagemDeErro } from '../lib/conta';
-    import { carregarTime } from '../lib/time';
-    import { eleitos, avatar, sobre } from '../lib/timeline';
+    import { usuario, seguidos } from '../lib/conta';
+    import { carregarTime, CARGOS } from '../lib/time';
+    import { eleitos } from '../lib/timeline';
     import { cargoEmTexto, type EleitoLeve } from '../lib/eleitos';
-    import { CARGOS } from '../lib/time';
-    import { toast } from '../lib/toast';
+    import { buscarPoliticos } from '../lib/busca';
+    import { lista as listaHtml, ligarSeguir } from '../lib/seletor';
     import { evento } from '../lib/analytics';
 
     const esc = (s: string) => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
-    const sem = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
     const lista = document.getElementById('lista')!, busca = document.getElementById('busca') as HTMLInputElement;
-    let uf: string | null = null, daUf: EleitoLeve[] = [];
-
-    const linha = (e: EleitoLeve, s: Set<string>) => `<li>${avatar(e, e.slug)}<div class="quem"><b><a href="/politico/${esc(e.slug)}/">${esc(e.nome)}</a></b><small>${sobre(e)}${e.suplente ? ' · suplente em exercício' : ''}</small></div>
-      <button type="button" class="btn ${s.has(e.slug) ? 'seguindo' : ''}" data-slug="${esc(e.slug)}">${s.has(e.slug) ? 'Seguindo' : 'Seguir'}</button></li>`;
+    let uf: string | null = null, daUf: EleitoLeve[] = [], logado = false;
 
     async function desenhar() {
       const s = await seguidos(), gente = await eleitos();
       document.getElementById('contagem')!.innerHTML = s.size
         ? `Você segue <b>${s.size}</b>. Siga mais ou toque em "Seguindo" pra deixar de seguir.`
-        : 'Escolha o estado e siga quantos quiser, de qualquer cargo.';
-      const q = sem(busca.value.trim());
-      const meus = [...s].map(x => gente.get(x)).filter((e): e is EleitoLeve => !!e);
-      let html = meus.length && !q ? `<h2 class="cargo-t">Você segue</h2><ul class="pessoas">${meus.map(e => linha(e, s)).join('')}</ul>` : '';
-      if (uf) {
-        const filtrados = daUf.filter(e => !q || sem(`${e.nome} ${e.partido}`).includes(q));
-        html += CARGOS.map(c => {
-          const doCargo = filtrados.filter(e => e.cargo === c);
-          return doCargo.length ? `<h2 class="cargo-t">${esc(cargoEmTexto(c, uf, true))} · ${doCargo.length}</h2><ul class="pessoas">${doCargo.map(e => linha(e, s)).join('')}</ul>` : '';
-        }).join('') || '<p class="vazio">Ninguém com esse nome ou partido.</p>';
+        : logado ? 'Busque pelo nome ou escolha o estado. Siga quantos quiser, de qualquer cargo.'
+        : 'Busque pelo nome ou escolha o estado. Pra seguir, você entra com o Google na hora.';
+      const q = busca.value.trim();
+      // com texto, a busca vale pro Brasil todo; sem texto, a lista é do estado escolhido
+      if (q) {
+        const achados = buscarPoliticos(gente.values(), q, { uf, limite: 40 });
+        lista.innerHTML = achados.length ? `<h2 class="cargo-t">${achados.length === 40 ? 'Os 40 que mais batem' : `${achados.length} ${achados.length === 1 ? 'político' : 'políticos'}`}</h2>${listaHtml(achados, s)}`
+          : `<p class="vazio">Ninguém com “${esc(q)}”. Tente o nome de urna, o partido (PT, PL) ou o estado (SP, Bahia).</p>`;
+        return;
       }
+      const meus = [...s].map(x => gente.get(x)).filter((e): e is EleitoLeve => !!e).sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+      let html = meus.length ? `<h2 class="cargo-t">Você segue · ${meus.length}</h2>${listaHtml(meus, s)}` : '';
+      if (uf) html += CARGOS.map(c => {
+        const doCargo = daUf.filter(e => e.cargo === c);
+        return doCargo.length ? `<h2 class="cargo-t">${esc(cargoEmTexto(c, uf, true))} · ${doCargo.length}</h2>${listaHtml(doCargo, s)}` : '';
+      }).join('');
       lista.innerHTML = html;
     }
 
     async function escolherUf(sigla: string) {
       uf = sigla;
       document.querySelectorAll('.uf').forEach(b => b.setAttribute('aria-pressed', String((b as HTMLElement).dataset.uf === sigla)));
-      busca.hidden = false;
+      busca.value = '';
       lista.innerHTML = '<p class="vazio">Carregando…</p>';
       daUf = (await (await fetch(`/eleitos/${sigla}.json`)).json()).eleitos;
       try { localStorage.setItem('mtp:uf', sigla); } catch { /* sem storage */ }
@@ -70,26 +63,22 @@ import ufs from '../data/ufs.json';
       const b = (e.target as HTMLElement).closest<HTMLElement>('[data-uf]');
       if (b) escolherUf(b.dataset.uf!);
     });
-    busca.addEventListener('input', () => desenhar());
-    lista.addEventListener('click', async e => {
-      const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-slug]');
-      if (!b) return;
-      const ligado = !b.classList.contains('seguindo');
-      b.disabled = true;
-      try {
-        await seguir([b.dataset.slug!], ligado);
-        evento('seguir', { local: 'seguir', ligado });
-        await desenhar();
-      } catch (err) { toast(mensagemDeErro(err)); b.disabled = false; }
-    });
+    let t: number | undefined;
+    busca.addEventListener('input', () => { clearTimeout(t); t = window.setTimeout(() => { desenhar(); if (busca.value.trim()) evento('busca_politico', { local: 'seguir' }); }, 150); });
+    ligarSeguir(lista, 'seguir', () => {});
+    addEventListener('mtp:seguidos', () => desenhar());
+    addEventListener('mtp:entrou', () => { logado = true; desenhar(); });
+
+    // ?q= abre já buscando (link "seguir fulano")
+    const q0 = new URLSearchParams(location.search).get('q');
+    if (q0) busca.value = q0;
 
     usuario().then(u => {
-      document.getElementById(u ? 'comConta' : 'semConta')!.hidden = false;
-      if (!u) return;
+      logado = !!u;
       let lembrada: string | null = null;
       try { lembrada = localStorage.getItem('mtp:uf'); } catch { /* sem storage */ }
       const sigla = lembrada ?? carregarTime().uf;
-      if (sigla) escolherUf(sigla); else desenhar();
+      if (sigla && !q0) escolherUf(sigla); else desenhar();
     });
   </script>
 </Social>
