@@ -16,6 +16,8 @@ import perfilJson from '../../data/perfil.json';
 import camaraJson from '../../data/generated/camara.json';
 import senadoJson from '../../data/generated/senado.json';
 import { causasDe, resumoPorGrupo, type Fontes, type Causa } from '../../lib/causas';
+import campanhaJson from '../../data/generated/campanha-2026.json';
+import { leitura, reais, reaisCurto, type ArquivoCampanha, type Par } from '../../lib/campanha';
 
 export function getStaticPaths() {
   return eleitos.map(e => ({ params: { slug: e.slug }, props: { e } }));
@@ -61,6 +63,23 @@ const primeiro = l.nome.split(' ')[0];
 const LADO: Record<string, string> = { F: 'A favor', C: 'Contra', D: 'Dos dois lados' };
 const ladoTxt = (c: Causa) => c.lado ? (c.origem === 'partido' && c.lado === 'D' ? 'Partido dividido' : LADO[c.lado]) : 'Não tomou lado';
 const lista = (xs: string[]) => xs.length <= 1 ? xs.join('') : `${xs.slice(0, -1).join(', ')} e ${xs.at(-1)}`;
+// gastos de campanha de 2026: prestação de contas ao TSE (npm run fetch:campanha); comparação com os eleitos do mesmo cargo e UF
+const arqCampanha = campanhaJson as unknown as ArquivoCampanha;
+const par = (x: EleitoBruto): Par | null => {
+  const m26 = x.mandatos.find(mm => mm.eleicao === 2026);
+  return x.ids.tse2026 && m26 ? { sq: x.ids.tse2026, cargo: m26.cargo, uf: m26.uf } : null;
+};
+const meuPar = par(e);
+const paresCampanha = eleitos.map(par).filter((x): x is Par => !!x);
+const camp = meuPar ? leitura(meuPar, paresCampanha, arqCampanha.candidatos) : null;
+const cargo26 = meuPar ? cargoEmTexto(meuPar.cargo as typeof l.cargo, meuPar.uf, true).toLowerCase() : '';
+const pct = (v: number, t: number) => (t > 0 ? Math.round((v / t) * 100) : 0);
+const ORIGEM: Record<string, string> = {
+  'Recursos de partido político': 'Do partido', 'Recursos de pessoas físicas': 'Doação de pessoas', 'Recursos próprios': 'Do próprio bolso',
+  'Recursos de outros candidatos': 'De outros candidatos', 'Recursos de Financiamento Coletivo': 'Vaquinha (financiamento coletivo)',
+  'Recursos de origens não identificadas': 'Origem não identificada', 'Fundo Especial de Financiamento de Campanha': 'Fundo eleitoral',
+};
+const cnpj = (d: string) => d.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5');
 const titulo = `${l.nome} (${e.partido}${presidente ? '' : `-${e.uf}`}) — ${cargo} · Meu Time Político`;
 ---
 <Social title={titulo} imagem={imagem}
@@ -151,6 +170,59 @@ const titulo = `${l.nome} (${e.partido}${presidente ? '' : `-${e.uf}`}) — ${ca
       <a href="/metodo/#causas">Como lemos os votos</a>.</p>
   </section>
   )}
+
+  <section class="lp-sec" data-revela id="campanha">
+    <div class="lp-k">Campanha de 2026</div>
+    <h2 class="lp-t">Quanto custou <span>a campanha</span></h2>
+    {camp ? (<>
+      <div class="lp-numeros">
+        <div class="lp-num"><b>{reaisCurto(camp.c.despesas.total)}</b><span>gastos contratados</span><small>{reais(camp.c.despesas.total)}</small></div>
+        <div class="lp-num"><b>{reaisCurto(camp.c.receitas.total)}</b><span>arrecadados</span><small>{reais(camp.c.receitas.total)}{camp.c.receitas.estimavel > 0 && `, dos quais ${reaisCurto(camp.c.receitas.estimavel)} em bens e serviços doados`}</small></div>
+        <div class="lp-num"><b>{camp.publicoPct}%</b><span>de dinheiro público</span><small>fundo eleitoral {reaisCurto(camp.c.receitas.porFonte.fundoEleitoral)} · fundo partidário {reaisCurto(camp.c.receitas.porFonte.fundoPartidario)}</small></div>
+      </div>
+      {camp.comparacao && (
+        <p class="lp-nota" style="font-size:17px;color:var(--ink)">Entre os {camp.comparacao.de} {cargo26} eleitos {meuPar!.uf ? `em ${meuPar!.uf}` : ''} com contas entregues, a campanha do meio custou <b>{reaisCurto(camp.comparacao.mediana)}</b>.
+          A de {primeiro} foi a <b>{camp.comparacao.posicao === 1 ? 'mais cara de todas' : `${camp.comparacao.posicao}ª mais cara de ${camp.comparacao.de}`}</b>.</p>
+      )}
+      <div class="gc-grade">
+        {camp.c.despesas.porTipo.length > 0 && (
+          <div class="gc-bloco">
+            <h3>No que gastou</h3>
+            <ul class="gc-barras">{camp.c.despesas.porTipo.map(([t, v]) => (
+              <li><span>{t}</span><i style={`--p:${pct(v, camp.c.despesas.total)}%`}></i><b>{reaisCurto(v)}</b></li>
+            ))}</ul>
+          </div>
+        )}
+        {camp.c.receitas.porOrigem.length > 0 && (
+          <div class="gc-bloco">
+            <h3>De onde veio o dinheiro</h3>
+            <ul class="gc-barras">{camp.c.receitas.porOrigem.map(([o, v]) => (
+              <li><span>{ORIGEM[o] ?? o}</span><i style={`--p:${pct(v, camp.c.receitas.total)}%`}></i><b>{reaisCurto(v)}</b></li>
+            ))}</ul>
+            <p class="gc-mini">O partido repassa, em geral, dinheiro do fundo eleitoral: por isso o “dinheiro público” acima conta a fonte, não quem repassou.</p>
+          </div>
+        )}
+      </div>
+      {(camp.c.despesas.empresas.length > 0 || camp.c.despesas.pessoas.quantas > 0) && (
+        <div class="gc-bloco" style="margin-top:12px">
+          <h3>Quem recebeu mais</h3>
+          <ol class="gc-forn">
+            {camp.c.despesas.empresas.map(([n, v, d]) => <li><span>{n}{d && <small>CNPJ {cnpj(d)}</small>}</span><b>{reaisCurto(v)}</b></li>)}
+          </ol>
+          {camp.c.despesas.pessoas.quantas > 0 && (
+            <p class="gc-mini">Mais {reaisCurto(camp.c.despesas.pessoas.valor)} pagos a {camp.c.despesas.pessoas.quantas.toLocaleString('pt-BR')} {camp.c.despesas.pessoas.quantas === 1 ? 'pessoa física' : 'pessoas físicas'} (militância de rua, pessoal, serviços). Nome de pessoa física não aparece aqui; está no TSE.</p>
+          )}
+        </div>
+      )}
+      <p class="lp-nota">Prestação de contas {camp.c.prestacao.toLowerCase()} entregue por {primeiro} ao TSE em {dataCurta(camp.c.entregueEm)}, no arquivo gerado pelo TSE em {arqCampanha.dataGeracaoTse}.
+        É o que o próprio candidato declarou: a Justiça Eleitoral ainda julga as contas, e retificação muda os números. Gasto contratado não é o mesmo que gasto pago.{' '}
+        <a href="/metodo/#campanha">Como lemos</a> · <a href={arqCampanha.fonte} rel="noopener">dados do TSE</a>.</p>
+    </>) : (
+      <p class="lp-nota" style="font-size:17px;color:var(--ink)">{meuPar
+        ? `Não achamos a prestação de contas de ${l.nome} no arquivo do TSE gerado em ${arqCampanha.dataGeracaoTse}. Pode ter sido entregue depois: a página atualiza quando o TSE publicar.`
+        : `${l.nome} não concorreu em 2026: está no meio de um mandato que vai até ${dataCurta(m.fim)}. Aqui só entram os gastos das campanhas de 2026.`}</p>
+    )}
+  </section>
 
   <section class="lp-sec" data-revela>
     <div class="lp-k">Onde acompanhar</div>

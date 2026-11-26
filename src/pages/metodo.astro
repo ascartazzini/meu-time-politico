@@ -51,6 +51,15 @@ import cadastro from '../data/generated/eleitos-2027.json';
       O resumo conta em quantas pautas votadas o voto caiu do lado que protege cada grupo; não é nota nem ranking.</p>
     <p><b>Sem voto</b>, mostramos a estimativa pela orientação pública do partido (<code>src/data/partidos.json</code>), sempre com o selo “estimativa”.</p>
 
+    <h2 id="campanha">Gastos de campanha</h2>
+    <p>Vêm da prestação de contas que cada candidato entrega ao TSE (arquivo aberto <code>prestacao_de_contas_eleitorais_candidatos_2026</code>, atualizado pelo TSE todo dia).
+      Mostramos o que ele declarou: <b>gastos contratados</b> (somados por tipo de despesa, como o TSE classifica) e <b>receitas</b> (separadas pela fonte: fundo eleitoral,
+      fundo partidário ou outros recursos, e por quem repassou: partido, pessoas, o próprio candidato). Bens e serviços doados (o comitê cedido, o carro emprestado) entram pelo valor estimado declarado.</p>
+    <p><b>Dinheiro público</b> é a soma do fundo eleitoral com o fundo partidário, dividida pela receita total. A comparação é com os outros eleitos do mesmo cargo
+      na mesma UF que entregaram contas: “a campanha do meio” é a mediana. Não é ranking de honestidade: campanha cara pode ser legal, e barata pode ter caixa dois que nenhum dado mostra.</p>
+    <p><b>Quem recebeu</b>: empresas aparecem com nome e CNPJ. Pagamento a pessoa física (militância, pessoal) aparece só somado, sem nome. Doador não aparece por nome.
+      A Justiça Eleitoral ainda julga as contas, e retificação muda os números; o gasto pago pode ser menor que o contratado.</p>
+
     <h2 id="regras">Regras pra reagir</h2>
     <ul>
       <li>Quatro reações: ❤️ amei, 👍 gostei, 👎 odiei e 🤬 odiei muito. Uma por post; tocar de novo desfaz, tocar em outra troca.</li>

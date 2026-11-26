@@ -37,7 +37,8 @@
     "fotos": "tsx scripts/fotos-wiki.ts",
     "newsletter": "tsx scripts/newsletter.ts",
     "newsletter:enviar": "tsx scripts/enviar-newsletter.ts",
-    "og": "tsx scripts/og-politicos.ts"
+    "og": "tsx scripts/og-politicos.ts",
+    "fetch:campanha": "tsx scripts/fetch-campanha.ts"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

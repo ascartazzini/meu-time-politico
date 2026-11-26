@@ -132,3 +132,22 @@ main:has(.lp-hero){padding-top:0}
 .cz-grupos.bom li{background:#E3F4EA;color:#075C33}
 .cz-grupos.ruim li{background:#FBE4E7;color:#9E1428}
 .cz-lado small{display:block;font-family:var(--body,inherit);text-transform:none;font-size:13px;color:var(--sub);margin-top:4px;font-weight:600;letter-spacing:0}
+
+/* ---- gastos de campanha ---- */
+.gc-grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin-top:20px}
+.gc-bloco{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px}
+.gc-bloco h3{font-family:var(--display);text-transform:uppercase;font-weight:400;font-size:26px;line-height:1}
+.gc-barras{list-style:none;margin-top:14px;display:grid;gap:10px}
+.gc-barras li{display:grid;grid-template-columns:1fr auto;gap:4px 12px;font-size:14.5px;align-items:baseline}
+.gc-barras i{grid-column:1/-1;height:8px;border-radius:999px;background:linear-gradient(90deg,var(--marca) var(--p),var(--hover) var(--p))}
+.gc-barras b,.gc-forn b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.gc-forn{margin-top:12px;padding-left:22px;display:grid;gap:8px;font-size:14.5px}
+.gc-forn li{padding-top:8px;border-top:1px solid var(--line)}
+.gc-forn li:first-child{border-top:0;padding-top:0}
+.gc-forn li{display:list-item}
+.gc-forn li > span{display:inline-block;width:calc(100% - 90px);vertical-align:top}
+.gc-forn li > b{float:right}
+.gc-forn small{display:block;color:var(--sub);font-size:12.5px}
+.gc-mini{color:var(--sub);font-size:13px;margin-top:12px}
+.gc-barras b{grid-row:1;grid-column:2}
+#campanha .lp-num b{font-size:clamp(40px,5.4vw,60px);white-space:nowrap}

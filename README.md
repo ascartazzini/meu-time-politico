@@ -7,6 +7,7 @@ Depois da eleição: a pessoa monta o time com os eleitos de 2026 (vários por c
 ```bash
 npm install
 npm run fetch-data     # Câmara + Senado (APIs oficiais) + TSE (CDN, com fallback pro Wayback Machine)
+npm run fetch:campanha # gastos de campanha de 2026 dos eleitos (prestação de contas no TSE, ~370 MB) → campanha-2026.json
 npm run build          # build-data → validate-data → astro build
 npm run dev            # servidor local em http://localhost:4321
 npm test               # motor de cálculo, codificação do link, casamento de nomes, time, feed, citações
@@ -39,6 +40,7 @@ public/dados/<UF>.json       um dataset por UF, gerado no build (gitignored) —
 scripts/fetch-camara.ts      bancadas + 513 deputados (com CPF e nome civil) + votos nominais (API da Câmara)
 scripts/fetch-senado.ts      senadores + bancadas + votos nominais (API do Senado)
 scripts/fetch-tse.ts         consulta_cand_2026 → tse-2026.json · consulta_cand_2022 (eleitos) → assembleias.json
+scripts/fetch-campanha.ts    prestação de contas de 2026 (despesas contratadas + receitas) dos eleitos → campanha-2026.json; regra em src/lib/campanha.ts (testada)
 scripts/build-dataset.ts     casa candidato ↔ mandato (CPF na Câmara, nome no Senado), resolve votos, gera 27 datasets + índice
 scripts/validate-dataset.ts  zod + invariantes em cada UF (soma de bancadas, quórum, ids, UF dos candidatos)
 scripts/fetch-fontes.ts      baixa os woff2 do Google pra public/fontes/ e gera src/styles/fontes.css
