@@ -3,7 +3,7 @@
 # horário agendado) e mandam pra quem a cota do dia não alcançou. Quem já recebeu não recebe de novo (`envios`).
 # Minuto quebrado de propósito: horário cheio é o que o GitHub mais atrasa ou pula.
 # Secrets: SUPABASE_SECRET_KEY e RESEND_API_KEY (sem esta, monta a edição e avisa que não enviou).
-# Rodar à mão: Actions → newsletter → Run workflow (refaz a edição da semana e manda pra quem falta).
+# Rodar à mão: Actions → newsletter → Run workflow (ou gh workflow run newsletter.yml) (refaz a edição da semana e manda pra quem falta).
 # Com "para" preenchido, só manda uma cópia de teste da última edição pra esse e-mail: não monta nada nem toca na lista.
 name: newsletter
 on:
