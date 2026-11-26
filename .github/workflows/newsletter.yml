@@ -4,12 +4,15 @@
 # Minuto quebrado de propósito: horário cheio é o que o GitHub mais atrasa ou pula.
 # Secrets: SUPABASE_SECRET_KEY e RESEND_API_KEY (sem esta, monta a edição e avisa que não enviou).
 # Rodar à mão: Actions → newsletter → Run workflow (refaz a edição da semana e manda pra quem falta).
+# Com "para" preenchido, só manda uma cópia de teste da última edição pra esse e-mail: não monta nada nem toca na lista.
 name: newsletter
 on:
   schedule:
     - cron: '41 11 * * 5'     # sexta, 8h41 em Brasília
     - cron: '41 11 * * 6,0'   # reserva
   workflow_dispatch:
+    inputs:
+      para: { description: 'Teste: mandar só uma cópia pra este e-mail (vazio = envio normal)', default: '' }
 concurrency: { group: newsletter, cancel-in-progress: false }
 jobs:
   newsletter:
@@ -24,8 +27,12 @@ jobs:
       - uses: actions/setup-node@v5
         with: { node-version: 22, cache: npm }
       - run: npm ci --no-audit --no-fund
-      - if: github.event.schedule != '41 11 * * 6,0'
+      - if: inputs.para != ''
+        run: npm run newsletter:enviar -- "--para=$PARA"
+        env: { PARA: '${{ inputs.para }}' }
+      - if: inputs.para == '' && github.event.schedule != '41 11 * * 6,0'
         run: npm run coletar:pauta && npm run newsletter
-      - if: github.event.schedule == '41 11 * * 6,0'
+      - if: inputs.para == '' && github.event.schedule == '41 11 * * 6,0'
         run: npm run coletar:pauta && npm run newsletter -- --se-faltar
-      - run: npm run newsletter:enviar
+      - if: inputs.para == ''
+        run: npm run newsletter:enviar

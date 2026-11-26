@@ -34,16 +34,18 @@ async function main() {
     if (process.env.GITHUB_ACTIONS) console.log('::warning::Falta o secret RESEND_API_KEY; a newsletter não foi enviada.');
     return;
   }
+  if (para) {   // cópia de teste: a última edição que existir, sem registrar e sem tocar na lista
+    const [ult] = await pedir<{ semana: string; html: string | null }[]>('edicoes?select=semana,html&html=not.is.null&order=semana.desc&limit=1');
+    if (!ult?.html) throw new Error('não há edição nenhuma pra testar (rode npm run newsletter antes)');
+    const [id] = await mandar([mensagem({ html: ult.html, semana: ult.semana, inscrito: { id: 'teste', email: para, token: '00000000-0000-0000-0000-000000000000' }, site: SITE, remetente: REMETENTE })]);
+    console.log(`▶ Cópia de teste da semana de ${ult.semana} enviada (${id}); o link de sair dela não tira ninguém`);
+    return;
+  }
+
   const semana = segundaDaSemana(new Date());
   const [ed] = await pedir<{ html: string | null }[]>(`edicoes?semana=eq.${semana}&select=html`);
   if (!ed?.html) throw new Error(`não há edição da semana de ${semana} (rode npm run newsletter antes)`);
   console.log(`▶ Envio da newsletter, semana de ${semana}`);
-
-  if (para) {
-    const [id] = await mandar([mensagem({ html: ed.html, semana, inscrito: { id: 'teste', email: para, token: 'teste' }, site: SITE, remetente: REMETENTE })]);
-    console.log(`  ✓ cópia de teste enviada (${id}); o link de sair dela não funciona`);
-    return;
-  }
 
   const inscritos = await pedir<Inscrito[]>('lista_espera?select=id,email,token&order=criado_em&limit=10000');
   const ja = new Set((await pedir<{ lista_id: string }[]>(`envios?semana=eq.${semana}&select=lista_id&limit=10000`)).map(e => e.lista_id));
