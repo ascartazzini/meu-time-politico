@@ -27,12 +27,12 @@ jobs:
       - uses: actions/setup-node@v5
         with: { node-version: 22, cache: npm }
       - run: npm ci --no-audit --no-fund
-      - if: inputs.para != ''
+      - if: (inputs.para || '') != ''
         run: npm run newsletter:enviar -- "--para=$PARA"
         env: { PARA: '${{ inputs.para }}' }
-      - if: inputs.para == '' && github.event.schedule != '41 11 * * 6,0'
+      - if: (inputs.para || '') == '' && github.event.schedule != '41 11 * * 6,0'
         run: npm run coletar:pauta && npm run newsletter
-      - if: inputs.para == '' && github.event.schedule == '41 11 * * 6,0'
+      - if: (inputs.para || '') == '' && github.event.schedule == '41 11 * * 6,0'
         run: npm run coletar:pauta && npm run newsletter -- --se-faltar
-      - if: inputs.para == ''
+      - if: (inputs.para || '') == ''
         run: npm run newsletter:enviar
