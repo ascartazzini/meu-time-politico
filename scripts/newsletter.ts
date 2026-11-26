@@ -1,10 +1,11 @@
 /* Monta a newsletter da semana e grava em `edicoes` (a página /semana/ lê de lá; o HTML fica pronto pro envio).
-   Regras em src/lib/edicao.ts. Roda toda sexta no GitHub Actions (coletar.yml), depois da coleta.
-   Uso: npm run newsletter */
+   Regras em src/lib/edicao.ts. Roda toda sexta no GitHub Actions (newsletter.yml), e o envio vem logo depois (enviar-newsletter.ts).
+   Uso: npm run newsletter                 monta (ou refaz) a edição desta semana
+        npm run newsletter -- --se-faltar  só monta se a semana ainda não tiver edição (rodada de reserva) */
 import { resolve } from 'node:path';
 import { RAIZ, GERADO, lerJson } from './util';
 import { pedir } from './coletores/banco';
-import { montarEdicao, htmlEmail, type NoticiaEntrada, type PautaEntrada, type Marco } from '../src/lib/edicao';
+import { montarEdicao, htmlEmail, segundaDaSemana, type NoticiaEntrada, type PautaEntrada, type Marco } from '../src/lib/edicao';
 import { leve, type EleitoBruto } from '../src/lib/eleitos';
 
 const SITE = 'https://www.meutimepolitico.com';
@@ -13,6 +14,10 @@ async function main() {
   const agora = new Date();
   const desde = new Date(agora.getTime() - 7 * 864e5).toISOString();
   console.log('▶ Newsletter da semana');
+  if (process.argv.includes('--se-faltar')) {
+    const ja = await pedir<unknown[]>(`edicoes?semana=eq.${segundaDaSemana(agora)}&select=semana`);
+    if (ja.length) { console.log('  · a edição desta semana já existe; nada a fazer'); return; }
+  }
   const linhas = await pedir<{ id: string; chave: string; grupo: string | null; titulo: string; url: string; quando: string; imagem: string | null; fontes: { nome: string }; item_politico: { politicos: { slug: string } }[] }[]>(
     `itens?tipo=eq.noticia&quando=gte.${desde}&select=id,chave,grupo,titulo,url,quando,imagem:dados->>imagem,fontes(nome),item_politico(politicos(slug))&order=quando&limit=5000`);
   const reacoes = new Map<string, number>();

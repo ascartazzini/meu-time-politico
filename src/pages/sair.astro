@@ -1,0 +1,36 @@
+---
+/* Descadastro do resumo por e-mail: o link "Sair da lista" de cada e-mail traz ?t=<token>. Sai com um clique
+   no botão, não ao abrir a página: leitor de e-mail que abre link sozinho (antivírus, prévia) não descadastra ninguém. */
+import Social from '../layouts/Social.astro';
+---
+<Social title="Sair da lista — Meu Time Político" noindex>
+  <section class="caixa">
+    <h1>Sair do resumo por e-mail</h1>
+    <p id="sairTexto">Você para de receber o resumo da semana. Dá pra voltar quando quiser, pelo site.</p>
+    <button class="btn" type="button" id="sairLista" style="margin-top:12px">Sair da lista</button>
+    <p id="sairMsg" role="status" style="font-size:14px;margin-top:10px"></p>
+  </section>
+
+  <script>
+    import { rpc } from '../lib/supabase';
+    const token = new URLSearchParams(location.search).get('t') ?? '';
+    const botao = document.getElementById('sairLista') as HTMLButtonElement;
+    const msg = document.getElementById('sairMsg')!;
+    if (!/^[0-9a-f-]{36}$/i.test(token)) {
+      botao.hidden = true;
+      document.getElementById('sairTexto')!.textContent = 'Esse link de saída está incompleto. Abra de novo pelo botão "Sair da lista" no fim do e-mail.';
+    }
+    botao.addEventListener('click', async () => {
+      botao.disabled = true;
+      try {
+        await rpc('newsletter_sair', { p_token: token });
+        botao.hidden = true;
+        document.getElementById('sairTexto')!.textContent = 'Pronto: você saiu da lista e não recebe mais o resumo por e-mail.';
+        msg.innerHTML = 'Mudou de ideia? O resumo continua em <a href="/semana/">/semana/</a>.';
+      } catch {
+        botao.disabled = false;
+        msg.textContent = 'Não deu pra tirar agora. Tenta de novo daqui a pouco.';
+      }
+    });
+  </script>
+</Social>
