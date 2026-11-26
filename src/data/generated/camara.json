@@ -1,5 +1,5 @@
 {
- "atualizadoEm": "2026-11-18T09:06:09.900Z",
+ "atualizadoEm": "2026-11-23T21:02:09.851Z",
  "fonte": "https://dadosabertos.camara.leg.br/api/v2",
  "bancadas": {
   "AVANTE": 5,
@@ -7,7 +7,7 @@
   "MDB": 38,
   "MISSÃO": 1,
   "NOVO": 5,
-  "PCdoB": 11,
+  "PCdoB": 10,
   "PDT": 9,
   "PL": 97,
   "PODE": 27,
@@ -17,7 +17,7 @@
   "PSD": 49,
   "PSDB": 17,
   "PSOL": 13,
-  "PT": 66,
+  "PT": 67,
   "PV": 6,
   "REDE": 3,
   "REPUBLICANOS": 43,
@@ -848,6 +848,15 @@
     "nomeCivil": "AFONSO BANDEIRA FLORENCE"
    },
    {
+    "id": 204571,
+    "nome": "Alex Santana",
+    "siglaPartido": "REPUBLICANOS",
+    "siglaUf": "BA",
+    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/204571.jpg",
+    "cpf": "64682420534",
+    "nomeCivil": "ALEX MARCO SANTANA SOUSA"
+   },
+   {
     "id": 74057,
     "nome": "Alice Portugal",
     "siglaPartido": "PCdoB",
@@ -1044,15 +1053,6 @@
     "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/139285.jpg",
     "cpf": "14672049515",
     "nomeCivil": "LÍDICE DA MATA E SOUZA"
-   },
-   {
-    "id": 204558,
-    "nome": "Marcelo Nilo",
-    "siglaPartido": "REPUBLICANOS",
-    "siglaUf": "BA",
-    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/204558.jpg",
-    "cpf": "11875194568",
-    "nomeCivil": "JOSÉ MARCELO DO NASCIMENTO NILO"
    },
    {
     "id": 150418,
@@ -2462,15 +2462,6 @@
     "nomeCivil": "ANTONIO IDILVAN DE LIMA ALENCAR"
    },
    {
-    "id": 74295,
-    "nome": "Inácio Arruda",
-    "siglaPartido": "PCdoB",
-    "siglaUf": "CE",
-    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/74295.jpg",
-    "cpf": "09050752349",
-    "nomeCivil": "INÁCIO FRANCISCO DE ASSIS NUNES ARRUDA"
-   },
-   {
     "id": 141464,
     "nome": "José Airton Félix Cirilo",
     "siglaPartido": "PT",
@@ -2478,6 +2469,15 @@
     "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/141464.jpg",
     "cpf": "09257357368",
     "nomeCivil": "JOSÉ AIRTON FÉLIX CIRILO DA SILVA"
+   },
+   {
+    "id": 141470,
+    "nome": "José Guimarães",
+    "siglaPartido": "PT",
+    "siglaUf": "CE",
+    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/141470.jpg",
+    "cpf": "09324577387",
+    "nomeCivil": "JOSÉ NOBRE GUIMARÃES"
    },
    {
     "id": 204550,
@@ -2531,7 +2531,7 @@
     "siglaUf": "CE",
     "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/178997.jpg",
     "cpf": "47721740363",
-    "nomeCivil": "MOSES HAENDEL MELO RODRIGUES"
+    "nomeCivil": "MOSES HAENDEL MELO SPÍNDOLA RODRIGUES"
    },
    {
     "id": 226075,
@@ -4420,7 +4420,7 @@
     "siglaUf": "RN",
     "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/220621.jpg",
     "cpf": "01217732489",
-    "nomeCivil": "EVANDRO GONÇALVES DA SILVA JÚNIOR"
+    "nomeCivil": "Evandro Gonçalves da Silva Júnior"
    }
   ],
   "MS": [

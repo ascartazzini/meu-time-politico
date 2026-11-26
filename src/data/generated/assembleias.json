@@ -1,177 +1,42 @@
 {
- "atualizadoEm": "2026-11-18T09:06:43.677Z",
+ "atualizadoEm": "2026-11-23T21:02:17.877Z",
  "fonte": "https://cdn.tse.jus.br/estatistica/sead/odsele/consulta_cand/consulta_cand_2022.zip (DS_SIT_TOT_TURNO = ELEITO*)",
  "aviso": "Composição eleita em 2022 por partido (siglas extintas mapeadas pra sucessoras). Não reflete trocas de partido posteriores.",
  "assembleias": {
-  "BA": {
-   "cadeiras": 63,
+  "CE": {
+   "cadeiras": 46,
    "bancadas": {
-    "PSB": 2,
-    "PSD": 9,
-    "SOLIDARIEDADE": 2,
-    "PT": 9,
-    "PCdoB": 4,
-    "PP": 6,
-    "UNIÃO": 10,
-    "PODE": 1,
-    "PDT": 1,
-    "PV": 4,
-    "PSDB": 3,
-    "MDB": 2,
-    "REPUBLICANOS": 3,
-    "PRD": 1,
+    "PP": 3,
+    "PT": 8,
+    "PSD": 3,
+    "PDT": 13,
+    "UNIÃO": 4,
+    "MDB": 3,
     "PL": 4,
+    "PSDB": 1,
     "PSOL": 1,
-    "AVANTE": 1
-   },
-   "federais": 39
-  },
-  "SP": {
-   "cadeiras": 94,
-   "bancadas": {
-    "PODE": 6,
-    "PSDB": 9,
-    "PSD": 4,
-    "PSOL": 5,
-    "PT": 17,
-    "REPUBLICANOS": 8,
-    "CIDADANIA": 3,
-    "PL": 19,
-    "PSB": 4,
-    "UNIÃO": 7,
-    "NOVO": 1,
-    "MDB": 4,
-    "PP": 3,
     "PCdoB": 1,
-    "REDE": 1,
-    "SOLIDARIEDADE": 1,
-    "PDT": 1
-   },
-   "federais": 70
-  },
-  "AP": {
-   "cadeiras": 24,
-   "bancadas": {
-    "MDB": 2,
-    "PP": 1,
-    "PDT": 3,
-    "UNIÃO": 3,
-    "PODE": 2,
-    "REDE": 2,
-    "PSD": 2,
-    "PCdoB": 1,
-    "PT": 1,
-    "CIDADANIA": 1,
-    "SOLIDARIEDADE": 3,
-    "PRD": 1,
-    "REPUBLICANOS": 1,
-    "PL": 1
-   },
-   "federais": 8
-  },
-  "RN": {
-   "cadeiras": 24,
-   "bancadas": {
-    "PL": 3,
-    "PSDB": 10,
-    "PT": 3,
-    "PV": 3,
-    "UNIÃO": 2,
-    "SOLIDARIEDADE": 2,
-    "MDB": 1
-   },
-   "federais": 8
-  },
-  "GO": {
-   "cadeiras": 41,
-   "bancadas": {
-    "REPUBLICANOS": 2,
-    "PT": 3,
-    "MDB": 6,
-    "PP": 3,
-    "AVANTE": 2,
-    "UNIÃO": 6,
-    "PSD": 2,
-    "PRD": 2,
-    "PODE": 1,
-    "AGIR": 2,
-    "PRTB": 4,
-    "PSDB": 2,
-    "PL": 3,
-    "PSB": 1,
-    "SOLIDARIEDADE": 1,
-    "PDT": 1
-   },
-   "federais": 17
-  },
-  "RJ": {
-   "cadeiras": 70,
-   "bancadas": {
-    "PL": 17,
-    "PODE": 3,
-    "AGIR": 1,
-    "SOLIDARIEDADE": 5,
-    "PSB": 2,
-    "MDB": 2,
-    "UNIÃO": 8,
-    "PSD": 6,
-    "PP": 4,
-    "REPUBLICANOS": 3,
-    "PT": 7,
-    "PSOL": 5,
-    "PRD": 2,
-    "PDT": 2,
-    "PCdoB": 1,
-    "MOBILIZA": 1,
-    "AVANTE": 1
-   },
-   "federais": 46
-  },
-  "RR": {
-   "cadeiras": 24,
-   "bancadas": {
-    "PMB": 2,
-    "SOLIDARIEDADE": 2,
-    "REPUBLICANOS": 4,
-    "PP": 3,
-    "PODE": 3,
-    "CIDADANIA": 1,
-    "UNIÃO": 3,
-    "MDB": 2,
-    "PL": 1,
-    "PRTB": 2,
-    "PSD": 1
-   },
-   "federais": 8
-  },
-  "AL": {
-   "cadeiras": 27,
-   "bancadas": {
-    "PT": 1,
-    "MDB": 14,
-    "UNIÃO": 3,
-    "PL": 1,
     "REPUBLICANOS": 2,
     "AVANTE": 1,
-    "PP": 4,
-    "PV": 1
+    "MOBILIZA": 1,
+    "CIDADANIA": 1
    },
-   "federais": 9
+   "federais": 22
   },
   "AC": {
    "cadeiras": 24,
    "bancadas": {
-    "PDT": 4,
     "REPUBLICANOS": 3,
-    "PCdoB": 1,
-    "UNIÃO": 2,
     "MDB": 3,
-    "PSD": 2,
-    "PP": 3,
-    "PSDB": 1,
-    "PODE": 2,
+    "PDT": 4,
     "PSB": 1,
-    "PL": 2
+    "UNIÃO": 2,
+    "PSD": 2,
+    "PODE": 2,
+    "PL": 2,
+    "PSDB": 1,
+    "PCdoB": 1,
+    "PP": 3
    },
    "federais": 8
   },
@@ -179,330 +44,465 @@
    "cadeiras": 54,
    "bancadas": {
     "PSD": 16,
-    "UNIÃO": 7,
-    "PODE": 2,
-    "REPUBLICANOS": 3,
+    "PL": 5,
     "PT": 7,
     "SOLIDARIEDADE": 3,
-    "PP": 4,
-    "PL": 5,
-    "MDB": 2,
     "PSDB": 2,
-    "PDT": 1,
+    "UNIÃO": 7,
     "PSB": 1,
-    "CIDADANIA": 1
+    "REPUBLICANOS": 3,
+    "PP": 4,
+    "CIDADANIA": 1,
+    "PODE": 2,
+    "PDT": 1,
+    "MDB": 2
    },
    "federais": 30
   },
-  "RO": {
+  "SE": {
    "cadeiras": 24,
    "bancadas": {
-    "REPUBLICANOS": 2,
+    "PSD": 5,
+    "UNIÃO": 4,
+    "PDT": 1,
+    "PP": 2,
+    "PL": 3,
+    "CIDADANIA": 2,
+    "REPUBLICANOS": 3,
+    "PV": 2,
+    "PT": 1,
+    "PSOL": 1
+   },
+   "federais": 8
+  },
+  "MA": {
+   "cadeiras": 42,
+   "bancadas": {
+    "PP": 4,
+    "PL": 5,
+    "PSD": 2,
+    "PODE": 4,
+    "PSB": 11,
     "MDB": 2,
-    "PRD": 4,
+    "PRD": 3,
+    "PCdoB": 5,
+    "REPUBLICANOS": 1,
+    "PDT": 4,
+    "UNIÃO": 1
+   },
+   "federais": 18
+  },
+  "SP": {
+   "cadeiras": 94,
+   "bancadas": {
+    "PSOL": 5,
+    "PSD": 4,
+    "PCdoB": 1,
+    "PL": 19,
+    "PODE": 6,
+    "PT": 17,
+    "NOVO": 1,
+    "UNIÃO": 7,
+    "CIDADANIA": 3,
+    "PSDB": 9,
+    "PSB": 4,
+    "REPUBLICANOS": 8,
+    "PP": 3,
+    "MDB": 4,
+    "PDT": 1,
+    "REDE": 1,
+    "SOLIDARIEDADE": 1
+   },
+   "federais": 70
+  },
+  "BA": {
+   "cadeiras": 63,
+   "bancadas": {
+    "PSD": 9,
+    "PT": 9,
+    "PL": 4,
+    "REPUBLICANOS": 3,
+    "UNIÃO": 10,
+    "MDB": 2,
+    "PV": 4,
+    "AVANTE": 1,
+    "PDT": 1,
+    "PSOL": 1,
+    "PP": 6,
+    "PSDB": 3,
+    "PSB": 2,
+    "PCdoB": 4,
+    "PODE": 1,
+    "SOLIDARIEDADE": 2,
+    "PRD": 1
+   },
+   "federais": 39
+  },
+  "RS": {
+   "cadeiras": 55,
+   "bancadas": {
+    "PT": 11,
+    "UNIÃO": 3,
+    "PL": 5,
     "PSB": 1,
+    "PSDB": 5,
+    "PDT": 4,
+    "PP": 7,
+    "PSOL": 2,
+    "PSD": 1,
+    "REPUBLICANOS": 5,
+    "PODE": 2,
+    "MDB": 6,
+    "PRD": 1,
+    "PCdoB": 1,
+    "NOVO": 1
+   },
+   "federais": 31
+  },
+  "MG": {
+   "cadeiras": 77,
+   "bancadas": {
+    "PV": 4,
+    "PT": 12,
+    "PSD": 9,
+    "PSOL": 1,
+    "REPUBLICANOS": 3,
+    "UNIÃO": 3,
+    "PRD": 3,
+    "AVANTE": 3,
+    "PL": 9,
+    "NOVO": 2,
+    "PODE": 4,
+    "PP": 6,
+    "SOLIDARIEDADE": 2,
+    "MDB": 2,
+    "MOBILIZA": 3,
+    "PDT": 2,
+    "PSB": 1,
+    "CIDADANIA": 3,
+    "REDE": 2,
+    "PSDB": 1,
+    "PCdoB": 1,
+    "DC": 1
+   },
+   "federais": 53
+  },
+  "PA": {
+   "cadeiras": 41,
+   "bancadas": {
+    "PDT": 2,
+    "PL": 3,
+    "MDB": 13,
+    "PT": 4,
+    "REPUBLICANOS": 2,
+    "PSOL": 1,
+    "PSDB": 3,
+    "PSD": 2,
+    "PP": 3,
+    "PODE": 4,
+    "PRD": 1,
+    "CIDADANIA": 1,
+    "UNIÃO": 1,
+    "PSB": 1
+   },
+   "federais": 17
+  },
+  "PE": {
+   "cadeiras": 49,
+   "bancadas": {
+    "PSB": 13,
+    "PRD": 1,
+    "PT": 3,
+    "PP": 8,
+    "PSOL": 1,
+    "PL": 5,
+    "SOLIDARIEDADE": 4,
+    "PV": 3,
+    "PSDB": 3,
     "UNIÃO": 5,
-    "PL": 2,
-    "PSD": 3,
+    "REPUBLICANOS": 2,
+    "PCdoB": 1
+   },
+   "federais": 25
+  },
+  "PB": {
+   "cadeiras": 36,
+   "bancadas": {
+    "PSB": 6,
+    "PP": 4,
+    "REPUBLICANOS": 8,
+    "SOLIDARIEDADE": 2,
+    "MDB": 2,
+    "PL": 3,
+    "PSD": 1,
+    "PSDB": 3,
+    "PT": 2,
+    "UNIÃO": 3,
+    "REDE": 1,
+    "PCdoB": 1
+   },
+   "federais": 12
+  },
+  "RJ": {
+   "cadeiras": 70,
+   "bancadas": {
+    "PDT": 2,
+    "UNIÃO": 8,
+    "PL": 17,
+    "PP": 4,
+    "SOLIDARIEDADE": 5,
+    "PT": 7,
+    "REPUBLICANOS": 3,
+    "PSOL": 5,
     "PODE": 3,
-    "PP": 1,
-    "PT": 1
+    "AGIR": 1,
+    "MDB": 2,
+    "PCdoB": 1,
+    "PSD": 6,
+    "PSB": 2,
+    "AVANTE": 1,
+    "MOBILIZA": 1,
+    "PRD": 2
+   },
+   "federais": 46
+  },
+  "TO": {
+   "cadeiras": 24,
+   "bancadas": {
+    "PCdoB": 1,
+    "PSD": 3,
+    "CIDADANIA": 1,
+    "REPUBLICANOS": 7,
+    "PL": 4,
+    "PSDB": 1,
+    "SOLIDARIEDADE": 1,
+    "PSB": 1,
+    "UNIÃO": 2,
+    "PDT": 1,
+    "PV": 1,
+    "PODE": 1
    },
    "federais": 8
   },
   "PI": {
    "cadeiras": 30,
    "bancadas": {
-    "MDB": 9,
-    "PP": 7,
     "PT": 12,
+    "MDB": 9,
     "SOLIDARIEDADE": 1,
-    "REPUBLICANOS": 1
+    "REPUBLICANOS": 1,
+    "PP": 7
    },
    "federais": 10
   },
-  "PE": {
-   "cadeiras": 49,
-   "bancadas": {
-    "PSB": 13,
-    "SOLIDARIEDADE": 4,
-    "PSDB": 3,
-    "PL": 5,
-    "REPUBLICANOS": 2,
-    "PP": 8,
-    "UNIÃO": 5,
-    "PT": 3,
-    "PSOL": 1,
-    "PV": 3,
-    "PCdoB": 1,
-    "PRD": 1
-   },
-   "federais": 25
-  },
-  "ES": {
-   "cadeiras": 30,
-   "bancadas": {
-    "PDT": 2,
-    "PSB": 3,
-    "PP": 2,
-    "PODE": 3,
-    "REPUBLICANOS": 4,
-    "PRD": 2,
-    "UNIÃO": 2,
-    "PL": 5,
-    "PT": 2,
-    "CIDADANIA": 1,
-    "PSOL": 1,
-    "PSDB": 2,
-    "REDE": 1
-   },
-   "federais": 10
-  },
-  "RS": {
-   "cadeiras": 55,
-   "bancadas": {
-    "PSOL": 2,
-    "PODE": 2,
-    "MDB": 6,
-    "PDT": 4,
-    "REPUBLICANOS": 5,
-    "PL": 5,
-    "PT": 11,
-    "PSD": 1,
-    "PP": 7,
-    "UNIÃO": 3,
-    "PSDB": 5,
-    "NOVO": 1,
-    "PSB": 1,
-    "PRD": 1,
-    "PCdoB": 1
-   },
-   "federais": 31
-  },
-  "SE": {
+  "RN": {
    "cadeiras": 24,
    "bancadas": {
-    "PSD": 5,
-    "CIDADANIA": 2,
-    "REPUBLICANOS": 3,
-    "UNIÃO": 4,
-    "PP": 2,
-    "PT": 1,
-    "PV": 2,
+    "UNIÃO": 2,
+    "PT": 3,
+    "PSDB": 10,
+    "MDB": 1,
     "PL": 3,
-    "PSOL": 1,
-    "PDT": 1
+    "PV": 3,
+    "SOLIDARIEDADE": 2
    },
    "federais": 8
   },
-  "AM": {
+  "MT": {
    "cadeiras": 24,
    "bancadas": {
-    "PODE": 3,
-    "AVANTE": 4,
-    "UNIÃO": 6,
+    "MDB": 4,
+    "PSD": 2,
+    "PSB": 4,
+    "PL": 2,
+    "UNIÃO": 4,
+    "PP": 1,
+    "PT": 2,
+    "PSDB": 1,
     "REPUBLICANOS": 2,
-    "PT": 1,
-    "PV": 1,
-    "PL": 3,
-    "CIDADANIA": 1,
     "PRD": 1,
-    "PMB": 1,
-    "MDB": 1
+    "CIDADANIA": 1
    },
    "federais": 8
   },
   "SC": {
    "cadeiras": 40,
    "bancadas": {
-    "MDB": 6,
-    "UNIÃO": 3,
-    "PL": 11,
-    "PSD": 3,
-    "PT": 4,
-    "PP": 3,
-    "REPUBLICANOS": 1,
-    "PSOL": 1,
     "PODE": 3,
-    "PDT": 1,
-    "PSDB": 2,
+    "PT": 4,
+    "MDB": 6,
+    "PL": 11,
+    "PP": 3,
+    "UNIÃO": 3,
     "NOVO": 1,
+    "PSDB": 2,
+    "PSD": 3,
+    "REPUBLICANOS": 1,
+    "PDT": 1,
+    "PSOL": 1,
     "PRD": 1
    },
    "federais": 16
   },
-  "CE": {
-   "cadeiras": 46,
+  "ES": {
+   "cadeiras": 30,
    "bancadas": {
-    "CIDADANIA": 1,
-    "MDB": 3,
-    "PDT": 13,
-    "PT": 8,
-    "UNIÃO": 4,
-    "PP": 3,
-    "AVANTE": 1,
-    "PL": 4,
-    "MOBILIZA": 1,
-    "PSD": 3,
-    "PSDB": 1,
+    "PSB": 3,
+    "PL": 5,
+    "REPUBLICANOS": 4,
+    "PDT": 2,
+    "PT": 2,
+    "PSDB": 2,
     "PSOL": 1,
-    "REPUBLICANOS": 2,
-    "PCdoB": 1
+    "PODE": 3,
+    "PRD": 2,
+    "PP": 2,
+    "UNIÃO": 2,
+    "CIDADANIA": 1,
+    "REDE": 1
    },
-   "federais": 22
+   "federais": 10
+  },
+  "GO": {
+   "cadeiras": 41,
+   "bancadas": {
+    "UNIÃO": 6,
+    "MDB": 6,
+    "PP": 3,
+    "PL": 3,
+    "PT": 3,
+    "PSD": 2,
+    "PRTB": 4,
+    "PRD": 2,
+    "PSB": 1,
+    "SOLIDARIEDADE": 1,
+    "AGIR": 2,
+    "PSDB": 2,
+    "REPUBLICANOS": 2,
+    "PODE": 1,
+    "PDT": 1,
+    "AVANTE": 2
+   },
+   "federais": 17
+  },
+  "RO": {
+   "cadeiras": 24,
+   "bancadas": {
+    "PSD": 3,
+    "UNIÃO": 5,
+    "PP": 1,
+    "PL": 2,
+    "PRD": 4,
+    "PSB": 1,
+    "PODE": 3,
+    "REPUBLICANOS": 2,
+    "MDB": 2,
+    "PT": 1
+   },
+   "federais": 8
+  },
+  "RR": {
+   "cadeiras": 24,
+   "bancadas": {
+    "PP": 3,
+    "PODE": 3,
+    "REPUBLICANOS": 4,
+    "SOLIDARIEDADE": 2,
+    "MDB": 2,
+    "UNIÃO": 3,
+    "PRTB": 2,
+    "PL": 1,
+    "PMB": 2,
+    "PSD": 1,
+    "CIDADANIA": 1
+   },
+   "federais": 8
+  },
+  "AP": {
+   "cadeiras": 24,
+   "bancadas": {
+    "PSD": 2,
+    "PODE": 2,
+    "PCdoB": 1,
+    "PDT": 3,
+    "MDB": 2,
+    "REDE": 2,
+    "SOLIDARIEDADE": 3,
+    "REPUBLICANOS": 1,
+    "UNIÃO": 3,
+    "CIDADANIA": 1,
+    "PT": 1,
+    "PP": 1,
+    "PL": 1,
+    "PRD": 1
+   },
+   "federais": 8
+  },
+  "AM": {
+   "cadeiras": 24,
+   "bancadas": {
+    "AVANTE": 4,
+    "REPUBLICANOS": 2,
+    "CIDADANIA": 1,
+    "PMB": 1,
+    "UNIÃO": 6,
+    "PODE": 3,
+    "MDB": 1,
+    "PL": 3,
+    "PV": 1,
+    "PT": 1,
+    "PRD": 1
+   },
+   "federais": 8
+  },
+  "AL": {
+   "cadeiras": 27,
+   "bancadas": {
+    "MDB": 14,
+    "UNIÃO": 3,
+    "REPUBLICANOS": 2,
+    "AVANTE": 1,
+    "PP": 4,
+    "PT": 1,
+    "PL": 1,
+    "PV": 1
+   },
+   "federais": 9
   },
   "DF": {
    "cadeiras": 24,
    "bancadas": {
-    "UNIÃO": 1,
     "PSD": 2,
-    "PP": 2,
+    "PT": 3,
     "PSOL": 2,
-    "AVANTE": 1,
-    "PL": 4,
+    "UNIÃO": 1,
+    "PP": 2,
     "PSB": 1,
     "MDB": 3,
+    "MOBILIZA": 1,
+    "PL": 4,
+    "CIDADANIA": 1,
     "AGIR": 2,
     "REPUBLICANOS": 1,
-    "MOBILIZA": 1,
-    "PT": 3,
-    "CIDADANIA": 1
-   },
-   "federais": 8
-  },
-  "PB": {
-   "cadeiras": 36,
-   "bancadas": {
-    "MDB": 2,
-    "UNIÃO": 3,
-    "PSB": 6,
-    "PP": 4,
-    "PT": 2,
-    "REPUBLICANOS": 8,
-    "PSD": 1,
-    "PSDB": 3,
-    "SOLIDARIEDADE": 2,
-    "PL": 3,
-    "PCdoB": 1,
-    "REDE": 1
-   },
-   "federais": 12
-  },
-  "MA": {
-   "cadeiras": 42,
-   "bancadas": {
-    "PSB": 11,
-    "PODE": 4,
-    "PSD": 2,
-    "PDT": 4,
-    "PCdoB": 5,
-    "PP": 4,
-    "PRD": 3,
-    "MDB": 2,
-    "UNIÃO": 1,
-    "PL": 5,
-    "REPUBLICANOS": 1
-   },
-   "federais": 18
-  },
-  "MG": {
-   "cadeiras": 77,
-   "bancadas": {
-    "AVANTE": 3,
-    "PL": 9,
-    "MOBILIZA": 3,
-    "PT": 12,
-    "UNIÃO": 3,
-    "PSD": 9,
-    "PDT": 2,
-    "REDE": 2,
-    "PP": 6,
-    "PRD": 3,
-    "SOLIDARIEDADE": 2,
-    "PV": 4,
-    "REPUBLICANOS": 3,
-    "CIDADANIA": 3,
-    "PODE": 4,
-    "PSDB": 1,
-    "PCdoB": 1,
-    "MDB": 2,
-    "DC": 1,
-    "PSB": 1,
-    "NOVO": 2,
-    "PSOL": 1
-   },
-   "federais": 53
-  },
-  "TO": {
-   "cadeiras": 24,
-   "bancadas": {
-    "UNIÃO": 2,
-    "PSD": 3,
-    "REPUBLICANOS": 7,
-    "PSDB": 1,
-    "SOLIDARIEDADE": 1,
-    "PODE": 1,
-    "PSB": 1,
-    "PL": 4,
-    "PDT": 1,
-    "PV": 1,
-    "PCdoB": 1,
-    "CIDADANIA": 1
-   },
-   "federais": 8
-  },
-  "PA": {
-   "cadeiras": 41,
-   "bancadas": {
-    "MDB": 13,
-    "REPUBLICANOS": 2,
-    "PP": 3,
-    "PSDB": 3,
-    "CIDADANIA": 1,
-    "PODE": 4,
-    "PSD": 2,
-    "PRD": 1,
-    "PDT": 2,
-    "PSB": 1,
-    "PL": 3,
-    "UNIÃO": 1,
-    "PT": 4,
-    "PSOL": 1
-   },
-   "federais": 17
-  },
-  "MT": {
-   "cadeiras": 24,
-   "bancadas": {
-    "MDB": 4,
-    "REPUBLICANOS": 2,
-    "PSD": 2,
-    "UNIÃO": 4,
-    "PSB": 4,
-    "PSDB": 1,
-    "PP": 1,
-    "PT": 2,
-    "CIDADANIA": 1,
-    "PL": 2,
-    "PRD": 1
+    "AVANTE": 1
    },
    "federais": 8
   },
   "MS": {
    "cadeiras": 24,
    "bancadas": {
-    "REPUBLICANOS": 1,
-    "PSB": 1,
-    "PSDB": 7,
-    "PDT": 1,
-    "PT": 3,
     "MDB": 3,
-    "UNIÃO": 1,
-    "PODE": 1,
+    "PSDB": 7,
     "PP": 2,
+    "REPUBLICANOS": 1,
+    "PT": 3,
+    "PSB": 1,
     "PSD": 1,
-    "PL": 2,
-    "PRD": 1
+    "UNIÃO": 1,
+    "PRD": 1,
+    "PODE": 1,
+    "PDT": 1,
+    "PL": 2
    },
    "federais": 8
   },
