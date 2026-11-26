@@ -33,6 +33,7 @@ Nenhuma posição é inventada. Cada posição vem de voto nominal real em plen�
 - [Timeline](https://www.meutimepolitico.com/): tudo o que os eleitos fizeram, com filtros por quem a pessoa segue, presidente, Câmara, Senado, agenda e imprensa, e busca por nome, partido ou estado.
 - Uma página por eleito em https://www.meutimepolitico.com/politico/<slug>/ (por exemplo /politico/lula-br/), com mandatos, links oficiais, placar do mandato e a timeline da pessoa.
 - [Como funciona](https://www.meutimepolitico.com/metodo/): fontes, ligação de cada item ao político, presença, agenda pública × privada, placar do mandato, regras das reações e privacidade.
+- [Imprensa](https://www.meutimepolitico.com/imprensa/): release com o que a ferramenta faz, as fontes, o que ainda não cobre e o contato.
 - [Quiz da eleição de 2026](https://www.meutimepolitico.com/app/) e [método do quiz](https://www.meutimepolitico.com/app/metodo/): arquivo.
 
 ## Como citar
